@@ -39,7 +39,7 @@ class HouseType extends AbstractType
                 'required' => true,
             ))
             ->add('number_floors', null, array(
-                'label' => 'Liczba wszystkich pięter budynku',
+                'label' => 'Liczba wszystkich kondygnacji budynku',
                 'attr' => array(
                     'help_text' => 'Wlicz tutaj piwnicę, parter, każde z pięter, poddasze/strych - obojętnie czy ogrzewane, czy nie.',
                 )

@@ -196,7 +196,6 @@ function updateConstructionType() {
     $('#wall_isolation_layer').toggle(isCanadian);
     $('#calculation_walls_0_has_isolation_inside').parent().parent().toggle(!isCanadian);
     $('#calculation_walls_0_has_another_layer').parent().parent().toggle(!isCanadian);
-    $('#calculation_walls_0_has_isolation_outside').parent().parent().toggle(!isCanadian);
     $('#calculation_walls_0_construction_layer_material').parent().parent().toggle(!isCanadian);
     $('#calculation_walls_0_construction_layer_size').parent().parent().parent().toggle(!isCanadian);
     $('#calculation_walls_0_outside_layer_material').parent().parent().toggle(!isCanadian);
