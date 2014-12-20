@@ -156,11 +156,14 @@ function calculateWallSize() {
     var extraIsolationLayerSize = makeInteger($('#calculation_walls_0_extra_isolation_layer_size').val());
     
     if (isCanadian) {
-        //var sizeLeft = totalSize - extraIsolationLayerSize;
-
         $('#calculation_walls_0_construction_layer_size').val(6);
     } else {      
         var sizeLeft = totalSize - (isolationLayerSize + outsideLayerSize + extraIsolationLayerSize);
+
+        if (sizeLeft < 6) {
+            sizeLeft = 6;
+            $('#calculation_wall_size').val(totalSize + 6)
+        }
 
         $('#calculation_walls_0_construction_layer_size').val(sizeLeft);
     }
