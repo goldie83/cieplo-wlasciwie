@@ -1085,10 +1085,17 @@ div.lead {
         position: relative;
         text-align: left;
         background-size: cover;
+        padding-left: 60px;
+        padding-right: 60px;
+        border-radius: 6px;
 }
 
 div.lead h1 {
         font-size: 64px;
+      font-weight: bold;
+      letter-spacing: -1px;
+      line-height: 1;
+        text-shadow: 0 1px 3px rgba(0,0,0,.4), 0 0 30px rgba(0,0,0,.075);
 }
 
 div.lead .btn {
