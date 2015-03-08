@@ -296,7 +296,7 @@ class Building implements BuildingInterface
             ($floors-$heatedFloors == 1
                 && $this->getHouse()->getWhatsUnheated() != 'attic'
                 && $this->getHouse()->getWhatsUnheated() != ''
-                && !$this->getHouse()->getHasBasement());
+                && !$this->isBasementHeated());
     }
 
     public function getEnergyLossToOutside()
