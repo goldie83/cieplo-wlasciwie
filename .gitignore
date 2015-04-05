@@ -1,3 +1,5 @@
+/trash/
+/.idea/
 /web/bundles/
 /app/bootstrap.php.cache
 /app/config/parameters.yml
@@ -10,3 +12,5 @@
 /composer.phar
 *.kdev4
 *.php~
+/web/css/*
+/web/js/*
