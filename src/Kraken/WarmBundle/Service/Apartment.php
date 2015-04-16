@@ -61,7 +61,7 @@ class Apartment extends Building implements BuildingInterface
 
     public function getFloorEnergyLossToUnheated()
     {
-        $house = $this->instance->getHouse();
+        $house = $this->getInstance()->getHouse();
         $whatsUnder = $house->getApartment()->getWhatsUnder();
 
         if ($whatsUnder != 'unheated_room') {
@@ -79,7 +79,7 @@ class Apartment extends Building implements BuildingInterface
 
     public function getCeilingEnergyLossToUnheated()
     {
-        $house = $this->instance->getHouse();
+        $house = $this->getInstance()->getHouse();
         $whatsOver = $house->getApartment()->getWhatsOver();
 
         if ($whatsOver != 'unheated_room') {
@@ -97,19 +97,19 @@ class Apartment extends Building implements BuildingInterface
 
     public function getNumberOfWalls()
     {
-        return $this->instance->getHouse()->getApartment()->getNumberExternalWalls();
+        return $this->getInstance()->getHouse()->getApartment()->getNumberExternalWalls();
     }
 
     public function getWallsEnergyLossToUnheated($addIsolation = false)
     {
-        $internalWall = $this->wall_factory->getInternalWall($this->instance, $addIsolation);
+        $internalWall = $this->wall_factory->getInternalWall($this->getInstance(), $addIsolation);
 
         return $this->wall->getThermalConductance($internalWall) * $this->getInternalWallArea($internalWall);
     }
 
     public function getWallsEnergyLossFactor()
     {
-        $externalWall = $this->instance->getHouse()->getWalls()->first();
+        $externalWall = $this->getInstance()->getHouse()->getWalls()->first();
 
         return $this->wall->getThermalConductance($externalWall) * $this->getRealWallArea($externalWall)
             + $this->getDoorsEnergyLossFactor($externalWall)
@@ -120,10 +120,10 @@ class Apartment extends Building implements BuildingInterface
     {
         $houseHeight = $this->getHouseHeight();
 
-        $l = $this->instance->getHouse()->getBuildingLength();
-        $w = $this->instance->getHouse()->getBuildingWidth();
+        $l = $this->getInstance()->getHouse()->getBuildingLength();
+        $w = $this->getInstance()->getHouse()->getBuildingWidth();
 
-        $walls = $this->instance->getHouse()->getApartment()->getNumberUnheatedWalls();
+        $walls = $this->getInstance()->getHouse()->getApartment()->getNumberUnheatedWalls();
         $sum = 0;
 
         if ($walls > 0) {
@@ -151,7 +151,7 @@ class Apartment extends Building implements BuildingInterface
 
     public function getDoorsEnergyLossFactor(Wall $wall = null)
     {
-        $wall = $this->instance->getHouse()->getWalls()->first();
+        $wall = $this->getInstance()->getHouse()->getWalls()->first();
         $house = $wall->getHouse();
 
         return $this->doors_u_factor[$house->getDoorsType()] * $this->getDoorsArea($house);
@@ -159,7 +159,7 @@ class Apartment extends Building implements BuildingInterface
 
     public function getCeilingEnergyLossFactor()
     {
-        $house = $this->instance->getHouse();
+        $house = $this->getInstance()->getHouse();
         $whatsOver = $house->getApartment()->getWhatsOver();
 
         if ($whatsOver == 'outdoor') {
@@ -177,7 +177,7 @@ class Apartment extends Building implements BuildingInterface
 
     public function getFloorEnergyLossFactor()
     {
-        $house = $this->instance->getHouse();
+        $house = $this->getInstance()->getHouse();
         $l = $house->getBuildingLength();
         $w = $house->getBuildingWidth();
         $floorArea = $l * $w;
@@ -231,7 +231,7 @@ class Apartment extends Building implements BuildingInterface
 
     public function getNumberOfHeatedFloors()
     {
-        $house = $this->instance->getHouse();
+        $house = $this->getInstance()->getHouse();
 
         return $house->getNumberFloors();
     }

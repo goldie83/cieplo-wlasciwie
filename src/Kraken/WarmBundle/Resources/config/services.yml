@@ -9,6 +9,7 @@ services:
 
     kraken_warm.instance:
         class: Kraken\WarmBundle\Service\InstanceService
+        arguments: [@session, @doctrine.orm.entity_manager]
 
     kraken_warm.heating_season:
         class: Kraken\WarmBundle\Calculator\HeatingSeason

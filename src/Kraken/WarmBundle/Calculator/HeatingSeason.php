@@ -20,7 +20,7 @@ class HeatingSeason
 
     public function __construct(InstanceService $instance, EntityManager $em, NearestCityLocator $locator, ClimateZoneService $climate)
     {
-        $this->instance = $instance->get();
+        $this->instance = $instance;
         $this->em = $em;
         $this->locator = $locator;
         $this->seasonLength = null;

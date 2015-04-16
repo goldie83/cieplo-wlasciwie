@@ -11,7 +11,7 @@ class PunchLineGenerator
 
     public function __construct(InstanceService $instance, EnergyCalculator $calculator)
     {
-        $this->instance = $instance->get();
+        $this->instance = $instance;
         $this->calculator = $calculator;
     }
 
@@ -37,7 +37,7 @@ class PunchLineGenerator
             $efficiency = $this->calculator->getYearlyStoveEfficiency();
             $heating = "Ogrzewanie działa bardzo ekonomicznie";
 
-            if ($this->instance->isUsingSolidFuel()) {
+            if ($this->instance->get()->isUsingSolidFuel()) {
                 $bad = 0.4;
                 $quite = 0.5;
                 $good = 0.7;

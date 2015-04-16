@@ -15,7 +15,7 @@ class AdviceGenerator
     {
         $this->building = $building;
         $this->calculator = $calculator;
-        $this->instance = $instance->get();
+        $this->instance = $instance;
     }
 
     public function getAdvice()
@@ -25,14 +25,14 @@ class AdviceGenerator
         $heatingPower = $this->calculator->getMaxHeatingPower();
 
         try {
-            $fuelType = $this->instance->getFuelType();
+            $fuelType = $this->instance->get()->getFuelType();
             $usingSolidFuel = stripos($fuelType, 'gas') === false && $fuelType != 'electricity';
             $stoveEfficiency = $this->calculator->getYearlyStoveEfficiency();
 
             if ($stoveEfficiency < 0.4) {
                 if ($usingSolidFuel) {
                     $piece = 'Aktualnie większość pieniędzy wyrzucasz w atmosferę. ';
-                    if (in_array($this->instance->getStoveType(), array('', 'manual_upward'))) {
+                    if (in_array($this->instance->get()->getStoveType(), array('', 'manual_upward'))) {
                         $piece .= '<a href="http://czysteogrzewanie.pl/jak-palic-w-piecu" target="_blank">Wypróbuj palenie od góry</a> - będzie taniej i wygodniej.';
                     }
                     $advice['Naucz się palić albo kup kocioł podajnikowy'] = $piece;

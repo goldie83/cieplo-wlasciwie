@@ -12,14 +12,14 @@ class NearestCityLocator
 
     public function __construct(InstanceService $instance, EntityManager $em)
     {
-        $this->instance = $instance->get();
+        $this->instance = $instance;
         $this->em = $em;
     }
 
     public function findNearestCity()
     {
-        $lat = $this->instance->getLatitude();
-        $lon = $this->instance->getLongitude();
+        $lat = $this->instance->get()->getLatitude();
+        $lon = $this->instance->get()->getLongitude();
 
         $distance = '(6371 * acos(cos(radians('.$lat.')) * cos(radians(c.latitude)) * '
             .'cos(radians(c.longitude) - radians('.$lon.')) + sin(radians('.$lat.')) '

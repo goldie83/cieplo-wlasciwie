@@ -98,6 +98,16 @@ class Calculation
      */
     private $updated;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $heated_area;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $heating_power;
+
     public static function create()
     {
         $calc = new Calculation();
@@ -480,5 +490,51 @@ class Calculation
     public function isUsingSolidFuel()
     {
         return !stristr($this->getFuelType(), 'electricity') && !stristr($this->getFuelType(), 'gas');
+    }
+
+    /**
+     * Set heated_area
+     *
+     * @param string $heatedArea
+     * @return Calculation
+     */
+    public function setHeatedArea($heatedArea)
+    {
+        $this->heated_area = $heatedArea;
+
+        return $this;
+    }
+
+    /**
+     * Get heated_area
+     *
+     * @return string 
+     */
+    public function getHeatedArea()
+    {
+        return $this->heated_area;
+    }
+
+    /**
+     * Set heating_power
+     *
+     * @param string $heatingPower
+     * @return Calculation
+     */
+    public function setHeatingPower($heatingPower)
+    {
+        $this->heating_power = $heatingPower;
+
+        return $this;
+    }
+
+    /**
+     * Get heating_power
+     *
+     * @return string 
+     */
+    public function getHeatingPower()
+    {
+        return $this->heating_power;
     }
 }

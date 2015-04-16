@@ -16,7 +16,7 @@ class EnergyCalculator
 
     public function __construct(InstanceService $instance, HeatingSeason $heatingSeason, FuelService $fuelService, BuildingInterface $building, ClimateZoneService $climate)
     {
-        $this->instance = $instance->get();
+        $this->instance = $instance;
         $this->heating_season = $heatingSeason;
         $this->fuel_service = $fuelService;
         $this->building = $building;
@@ -110,7 +110,7 @@ class EnergyCalculator
     public function getEnergyOfSpentFuel()
     {
         // 10% as equivalent of kindling wood etc.
-        return 1.1 * $this->fuel_service->getFuelEnergy($this->instance->getFuelType(), $this->instance->getFuelConsumption());
+        return 1.1 * $this->fuel_service->getFuelEnergy($this->instance->get()->getFuelType(), $this->instance->get()->getFuelConsumption());
     }
 
     /*
@@ -156,22 +156,22 @@ class EnergyCalculator
 
     public function getTemperatureDifference($outdoorTemp)
     {
-        return $this->instance->getIndoorTemperature() - $outdoorTemp;
+        return $this->instance->get()->getIndoorTemperature() - $outdoorTemp;
     }
 
     public function isStoveOversized()
     {
-        if (!$this->instance->isUsingSolidFuel()) {
+        if (!$this->instance->get()->isUsingSolidFuel()) {
             return false;
         }
 
-        $actualStovePower = $this->instance->getStovePower();
+        $actualStovePower = $this->instance->get()->getStovePower();
 
         if (!$actualStovePower) {
             return false;
         }
 
-        if ($this->instance->getFuelType() == 'sand_coal') {
+        if ($this->instance->get()->getFuelType() == 'sand_coal') {
             return $actualStovePower > 1.5 * $this->getNecessaryStovePower('sand_coal');
         }
 

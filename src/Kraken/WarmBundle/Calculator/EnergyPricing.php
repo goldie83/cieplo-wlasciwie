@@ -15,7 +15,7 @@ class EnergyPricing
 
     public function __construct(InstanceService $instance, EnergyCalculator $calculator, EntityManager $em, HeatingSeason $heatingSeason)
     {
-        $this->instance = $instance->get();
+        $this->instance = $instance;
         $this->calculator = $calculator;
         $this->em = $em;
         $this->heatingSeason = $heatingSeason;

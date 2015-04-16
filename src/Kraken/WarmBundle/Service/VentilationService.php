@@ -9,7 +9,7 @@ class VentilationService
 
     public function __construct(InstanceService $instance)
     {
-        $this->instance = $instance->get();
+        $this->instance = $instance;
     }
 
     public function getAirStream(Building $building)
@@ -37,7 +37,7 @@ class VentilationService
         $type = $house->getVentilationType();
         $windowsType = $house->getWindowsType();
 
-        $year = $this->instance->getConstructionYear();
+        $year = $this->instance->get()->getConstructionYear();
 
         $exchangeThroughLeaks = 0;
 

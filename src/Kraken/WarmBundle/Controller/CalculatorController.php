@@ -230,17 +230,13 @@ class CalculatorController extends Controller
 
     public function breakdownAction()
     {
-        $slug = $this->get('session')->get('calculation');
-
         $calc = $this->getDoctrine()
             ->getRepository('KrakenWarmBundle:Calculation')
-            ->findOneBy(array('id' => intval($slug, 36)));
+            ->find($this->get('session')->get('calculation_id'));
 
         if (!$calc) {
             throw $this->createNotFoundException('Jakiś zły masz ten link. Nic tu nie ma.');
         }
-
-        $this->get('kraken_warm.instance')->setCalculation($calc);
 
         $data = array();
         $breakdownData = $this->get('kraken_warm.building')->getEnergyLossBreakdown();
@@ -260,17 +256,13 @@ class CalculatorController extends Controller
 
     public function fuelsAction()
     {
-        $slug = $this->get('session')->get('calculation');
-
         $calc = $this->getDoctrine()
             ->getRepository('KrakenWarmBundle:Calculation')
-            ->findOneBy(array('id' => intval($slug, 36)));
+            ->find($this->get('session')->get('calculation_id'));
 
         if (!$calc) {
             throw $this->createNotFoundException('Jakiś zły masz ten link. Nic tu nie ma.');
         }
-
-        $this->get('kraken_warm.instance')->setCalculation($calc);
 
         $data = array();
 
@@ -325,19 +317,59 @@ class CalculatorController extends Controller
         return new JsonResponse($data);
     }
 
-    public function climateAction()
+    public function resultAction($slug)
     {
-        $slug = $this->get('session')->get('calculation');
-
         $calc = $this->getDoctrine()
             ->getRepository('KrakenWarmBundle:Calculation')
             ->findOneBy(array('id' => intval($slug, 36)));
 
-        if (!$calc) {
+        if (!$calc || !$calc->getHouse()) {
             throw $this->createNotFoundException('Jakiś zły masz ten link. Nic tu nie ma.');
         }
 
-        $this->get('kraken_warm.instance')->setCalculation($calc);
+        $this->get('session')->set('calculation_id', $calc->getId());
+
+        $calculator = $this->get('kraken_warm.energy_calculator');
+        $building = $this->get('kraken_warm.building');
+        $heatingSeason = $this->get('kraken_warm.heating_season');
+        $pricing = $this->get('kraken_warm.energy_pricing');
+        $adviceGenerator = $this->get('kraken_warm.advice');
+
+        if ($calc->getHeatedArea() == false) {
+            $calc->setHeatedArea($building->getHeatedHouseArea());
+            $calc->setHeatingPower($calculator->getMaxHeatingPower());
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($calc);
+            $em->flush();
+        }
+
+        return $this->render('KrakenWarmBundle:Default:result.html.twig', array(
+            'calculator' => $calculator,
+            'fuels' => $this->get('kraken_warm.energy_pricing')->getFuels(),
+            'building' => $building,
+            'pricing' => $pricing,
+            'heatingSeason' => $heatingSeason,
+            'advice' => $adviceGenerator->getAdvice(),
+            'punch' => $this->get('kraken_warm.punchline'),
+            'classifier' => $this->get('kraken_warm.building_classifier'),
+            'upgrade' => $this->get('kraken_warm.upgrade'),
+            'houseDescription' => $building->getHouseDescription(),
+            'calc' => $calc,
+            'city' => $this->get('kraken_warm.city_locator')->findNearestCity(),
+            'isAuthor' => $this->userIsAuthor($slug),
+        ));
+    }
+
+    public function climateAction()
+    {
+        $calc = $this->getDoctrine()
+            ->getRepository('KrakenWarmBundle:Calculation')
+            ->findOneBy(array('id' => $this->get('session')->get('calculation_id')));
+
+        if (!$calc) {
+            throw $this->createNotFoundException('Jakiś zły masz ten link. Nic tu nie ma.');
+        }
 
         $nearestCity = $this->get('kraken_warm.city_locator')->findNearestCity();
 
@@ -372,42 +404,6 @@ class CalculatorController extends Controller
         usort($temperatures['series'][1]['data'], $seriesSorter);
 
         return new JsonResponse($temperatures);
-    }
-
-    public function resultAction($slug)
-    {
-        $calc = $this->getDoctrine()
-            ->getRepository('KrakenWarmBundle:Calculation')
-            ->findOneBy(array('id' => intval($slug, 36)));
-
-        if (!$calc || !$calc->getHouse()) {
-            throw $this->createNotFoundException('Jakiś zły masz ten link. Nic tu nie ma.');
-        }
-
-        $this->get('session')->set('calculation', $slug);
-        $this->get('kraken_warm.instance')->setCalculation($calc);
-
-        $calculator = $this->get('kraken_warm.energy_calculator');
-        $building = $this->get('kraken_warm.building');
-        $heatingSeason = $this->get('kraken_warm.heating_season');
-        $pricing = $this->get('kraken_warm.energy_pricing');
-        $adviceGenerator = $this->get('kraken_warm.advice');
-
-        return $this->render('KrakenWarmBundle:Default:result.html.twig', array(
-            'calculator' => $calculator,
-            'fuels' => $this->get('kraken_warm.energy_pricing')->getFuels(),
-            'building' => $building,
-            'pricing' => $pricing,
-            'heatingSeason' => $heatingSeason,
-            'advice' => $adviceGenerator->getAdvice(),
-            'punch' => $this->get('kraken_warm.punchline'),
-            'classifier' => $this->get('kraken_warm.building_classifier'),
-            'upgrade' => $this->get('kraken_warm.upgrade'),
-            'houseDescription' => $building->getHouseDescription(),
-            'calc' => $calc,
-            'city' => $this->get('kraken_warm.city_locator')->findNearestCity(),
-            'isAuthor' => $this->userIsAuthor($slug),
-        ));
     }
 
     public function heatersAction($slug)

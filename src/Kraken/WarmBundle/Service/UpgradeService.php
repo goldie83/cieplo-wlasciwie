@@ -12,32 +12,33 @@ class UpgradeService
     protected $instance;
     protected $building;
     protected $wall;
+    protected $presentStyrofoamLambda = 0.035;
 
     public function __construct(InstanceService $instance, BuildingInterface $building)
     {
-        $this->instance = $instance->get();
+        $this->instance = $instance;
         $this->building = $building;
     }
 
     public function getVariants()
     {
         $variants = array();
-
         $actualEnergyLoss = $this->building->getEnergyLossToOutside() + $this->building->getEnergyLossToUnheated();
+        $originalCalculation = $this->instance->get();
 
-        $this->tryBetterWallIsolation($actualEnergyLoss, $variants);
-        $this->tryBetterRoofIsolation($actualEnergyLoss, $variants);
-        $this->tryNewWindows($actualEnergyLoss, $variants);
-        $this->tryNewDoors($actualEnergyLoss, $variants);
-        $this->tryBetterGroundFloorCeilingIsolation($actualEnergyLoss, $variants);
-        $this->tryBetterGroundFloorIsolation($actualEnergyLoss, $variants);
+        $this->tryBetterWallIsolation($originalCalculation, $actualEnergyLoss, $variants);
+        $this->tryBetterRoofIsolation($originalCalculation, $actualEnergyLoss, $variants);
+        $this->tryNewWindows($originalCalculation, $actualEnergyLoss, $variants);
+        $this->tryNewDoors($originalCalculation, $actualEnergyLoss, $variants);
+        $this->tryBetterGroundFloorCeilingIsolation($originalCalculation, $actualEnergyLoss, $variants);
+        $this->tryBetterGroundFloorIsolation($originalCalculation, $actualEnergyLoss, $variants);
 
-        $apartment = $this->instance->getHouse()->getApartment();
+        $apartment = $originalCalculation->getHouse()->getApartment();
 
         if ($apartment) {
-            $this->tryApartmentFloorIsolation($apartment, $actualEnergyLoss, $variants);
-            $this->tryApartmentCeilingIsolation($apartment, $actualEnergyLoss, $variants);
-            $this->tryApartmentWallsIsolation($apartment, $actualEnergyLoss, $variants);
+            $this->tryApartmentFloorIsolation($originalCalculation, $apartment, $actualEnergyLoss, $variants);
+            $this->tryApartmentCeilingIsolation($originalCalculation, $apartment, $actualEnergyLoss, $variants);
+            $this->tryApartmentWallsIsolation($originalCalculation, $apartment, $actualEnergyLoss, $variants);
         }
 
         $gain = array();
@@ -56,16 +57,14 @@ class UpgradeService
         return $variants;
     }
 
-    protected function tryApartmentWallsIsolation($apartment, $actualEnergyLoss, array &$variants)
+    protected function tryApartmentWallsIsolation($originalCalculation, $apartment, $actualEnergyLoss, array &$variants)
     {
-        $instance = clone unserialize(serialize($this->instance));
-        $house = $instance->getHouse();
+        $customCalculation = clone unserialize(serialize($originalCalculation));
+        $this->instance->setCustomCalculation($customCalculation);
+        $house = $customCalculation->getHouse();
   
         if ($apartment->getNumberUnheatedWalls() > 0) {
-            $building = clone $this->building;
-            $building->setInstance($instance);
-
-            $newEnergyLoss = $building->getEnergyLossToOutside() + $building->getEnergyLossToUnheated(true);
+            $newEnergyLoss = $this->building->getEnergyLossToOutside() + $this->building->getEnergyLossToUnheated(true);
 
             $variants[] = array(
                 'gain' => round(($actualEnergyLoss - $newEnergyLoss) / $actualEnergyLoss, 2),
@@ -74,17 +73,18 @@ class UpgradeService
         }
     }
 
-    protected function tryApartmentCeilingIsolation($apartment, $actualEnergyLoss, array &$variants)
+    protected function tryApartmentCeilingIsolation($originalCalculation, $apartment, $actualEnergyLoss, array &$variants)
     {
-        $instance = clone unserialize(serialize($this->instance));
-        $house = $instance->getHouse();
+        $customCalculation = clone unserialize(serialize($originalCalculation));
+        $this->instance->setCustomCalculation($customCalculation);
+        $house = $customCalculation->getHouse();
 
         if ($apartment->getWhatsOver() != 'heated_room') {
             $ceilingIsolation = $house->getHighestCeilingIsolationLayer();
 
             if (!$ceilingIsolation || $ceilingIsolation->getSize() <= 5) {
                 $m = new Material();
-                $m->setLambda(0.038);
+                $m->setLambda($this->presentStyrofoamLambda);
 
                 $l = new Layer();
                 $l->setMaterial($m);
@@ -92,9 +92,7 @@ class UpgradeService
 
                 $house->setHighestCeilingIsolationLayer($l);
                 
-                $building = clone $this->building;
-                $building->setInstance($instance);
-                $newEnergyLoss = $building->getEnergyLossToOutside() + $building->getEnergyLossToUnheated();
+                $newEnergyLoss = $this->building->getEnergyLossToOutside() + $this->building->getEnergyLossToUnheated();
 
                 $variants[] = array(
                     'gain' => round(($actualEnergyLoss - $newEnergyLoss) / $actualEnergyLoss, 2),
@@ -104,17 +102,18 @@ class UpgradeService
         }
     }
 
-    protected function tryApartmentFloorIsolation($apartment, $actualEnergyLoss, array &$variants)
+    protected function tryApartmentFloorIsolation($originalCalculation, $apartment, $actualEnergyLoss, array &$variants)
     {
-        $instance = clone unserialize(serialize($this->instance));
-        $house = $instance->getHouse();
+        $customCalculation = clone unserialize(serialize($originalCalculation));
+        $this->instance->setCustomCalculation($customCalculation);
+        $house = $customCalculation->getHouse();
 
         if ($apartment->getWhatsUnder() != 'heated_room') {
             $ceilingIsolation = $house->getLowestCeilingIsolationLayer();
 
             if (!$ceilingIsolation || $ceilingIsolation->getSize() <= 5) {
                 $m = new Material();
-                $m->setLambda(0.038);
+                $m->setLambda($this->presentStyrofoamLambda);
 
                 $l = new Layer();
                 $l->setMaterial($m);
@@ -122,9 +121,7 @@ class UpgradeService
 
                 $house->setLowestCeilingIsolationLayer($l);
                 
-                $building = clone $this->building;
-                $building->setInstance($instance);
-                $newEnergyLoss = $building->getEnergyLossToOutside() + $building->getEnergyLossToUnheated();
+                $newEnergyLoss = $this->building->getEnergyLossToOutside() + $this->building->getEnergyLossToUnheated();
 
                 $variants[] = array(
                     'gain' => round(($actualEnergyLoss - $newEnergyLoss) / $actualEnergyLoss, 2),
@@ -134,10 +131,11 @@ class UpgradeService
         }
     }
 
-    protected function tryBetterGroundFloorIsolation($actualEnergyLoss, array &$variants)
+    protected function tryBetterGroundFloorIsolation($originalCalculation, $actualEnergyLoss, array &$variants)
     {
-        $instance = clone unserialize(serialize($this->instance));
-        $house = $instance->getHouse();
+        $customCalculation = clone unserialize(serialize($originalCalculation));
+        $this->instance->setCustomCalculation($customCalculation);
+        $house = $customCalculation->getHouse();
 
         if ($this->building->isGroundFloorHeated()) {
             $groundFloorIsolation = $house->getGroundFloorIsolationLayer();
@@ -145,7 +143,7 @@ class UpgradeService
 
             if (!$groundFloorIsolation || $groundFloorIsolation->getSize() <= 10 || (!stristr($materialName, 'styropian') && !stristr($materialName, 'wełna'))) {
                 $m = new Material();
-                $m->setLambda(0.038);
+                $m->setLambda($this->presentStyrofoamLambda);
 
                 $l = new Layer();
                 $l->setMaterial($m);
@@ -153,9 +151,7 @@ class UpgradeService
 
                 $house->setGroundFloorIsolationLayer($l);
                 
-                $building = clone $this->building;
-                $building->setInstance($instance);
-                $newEnergyLoss = $building->getEnergyLossToOutside() + $building->getEnergyLossToUnheated();
+                $newEnergyLoss = $this->building->getEnergyLossToOutside() + $this->building->getEnergyLossToUnheated();
 
                 $variants[] = array(
                     'gain' => round(($actualEnergyLoss - $newEnergyLoss) / $actualEnergyLoss, 2),
@@ -165,17 +161,18 @@ class UpgradeService
         }
     }
 
-    protected function tryBetterGroundFloorCeilingIsolation($actualEnergyLoss, array &$variants)
+    protected function tryBetterGroundFloorCeilingIsolation($originalCalculation, $actualEnergyLoss, array &$variants)
     {
-        $instance = clone unserialize(serialize($this->instance));
-        $house = $instance->getHouse();
+        $customCalculation = clone unserialize(serialize($originalCalculation));
+        $this->instance->setCustomCalculation($customCalculation);
+        $house = $customCalculation->getHouse();
 
         if (!$this->building->isGroundFloorHeated()) {
             $ceilingIsolation = $house->getLowestCeilingIsolationLayer();
 
             if (!$ceilingIsolation || $ceilingIsolation->getSize() <= 5) {
                 $m = new Material();
-                $m->setLambda(0.038);
+                $m->setLambda($this->presentStyrofoamLambda);
 
                 $l = new Layer();
                 $l->setMaterial($m);
@@ -183,9 +180,7 @@ class UpgradeService
 
                 $house->setLowestCeilingIsolationLayer($l);
                 
-                $building = clone $this->building;
-                $building->setInstance($instance);
-                $newEnergyLoss = $building->getEnergyLossToOutside() + $building->getEnergyLossToUnheated();
+                $newEnergyLoss = $this->building->getEnergyLossToOutside() + $this->building->getEnergyLossToUnheated();
 
                 $variants[] = array(
                     'gain' => round(($actualEnergyLoss - $newEnergyLoss) / $actualEnergyLoss, 2),
@@ -195,18 +190,17 @@ class UpgradeService
         }
     }
 
-    protected function tryNewDoors($actualEnergyLoss, array &$variants)
+    protected function tryNewDoors($originalCalculation, $actualEnergyLoss, array &$variants)
     {
-        $instance = clone unserialize(serialize($this->instance));
-        $house = $instance->getHouse();
+        $customCalculation = clone unserialize(serialize($originalCalculation));
+        $this->instance->setCustomCalculation($customCalculation);
+        $house = $customCalculation->getHouse();
         $doorsType = $house->getDoorsType();
 
         if (stristr($doorsType, 'old')) {
-            $house->setDoorsType('new_metal');
+            $house->setDoorsType('new_wood');
             
-            $building = clone $this->building;
-            $building->setInstance($instance);
-            $newEnergyLoss = $building->getEnergyLossToOutside() + $building->getEnergyLossToUnheated();
+            $newEnergyLoss = $this->building->getEnergyLossToOutside() + $this->building->getEnergyLossToUnheated();
 
             $variants[] = array(
                 'gain' => round(($actualEnergyLoss - $newEnergyLoss) / $actualEnergyLoss, 2),
@@ -215,18 +209,17 @@ class UpgradeService
         }
     }
 
-    protected function tryNewWindows($actualEnergyLoss, array &$variants)
+    protected function tryNewWindows($originalCalculation, $actualEnergyLoss, array &$variants)
     {
-        $instance = clone unserialize(serialize($this->instance));
-        $house = $instance->getHouse();
+        $customCalculation = clone unserialize(serialize($originalCalculation));
+        $this->instance->setCustomCalculation($customCalculation);
+        $house = $customCalculation->getHouse();
         $windowsType = $house->getWindowsType();
 
         if (stristr($windowsType, 'old')) {
             $house->setWindowsType('new_double_glass');
             
-            $building = clone $this->building;
-            $building->setInstance($instance);
-            $newEnergyLoss = $building->getEnergyLossToOutside() + $building->getEnergyLossToUnheated();
+            $newEnergyLoss = $this->building->getEnergyLossToOutside() + $this->building->getEnergyLossToUnheated();
 
             $variants[] = array(
                 'gain' => round(($actualEnergyLoss - $newEnergyLoss) / $actualEnergyLoss, 2),
@@ -235,18 +228,20 @@ class UpgradeService
         }
     }
 
-    protected function tryBetterWallIsolation($actualEnergyLoss, array &$variants)
+    protected function tryBetterWallIsolation($originalCalculation, $actualEnergyLoss, array &$variants)
     {
-        $originalWall = $this->instance->getHouse()->getWalls()->first();
+        $customCalculation = clone unserialize(serialize($originalCalculation));
+        $this->instance->setCustomCalculation($customCalculation);
+
+        $originalWall = $originalCalculation->getHouse()->getWalls()->first();
 
         if (!$originalWall->getExtraIsolationLayer() || $originalWall->getExtraIsolationLayer()->getSize() < 10) {
             $isolationSize = 15;
 
-            $instance = clone unserialize(serialize($this->instance));
-            $wall = $instance->getHouse()->getWalls()->first();
+            $wall = $customCalculation->getHouse()->getWalls()->first();
 
             $m = new Material();
-            $m->setLambda(0.038);
+            $m->setLambda($this->presentStyrofoamLambda);
 
             $l = new Layer();
             $l->setMaterial($m);
@@ -254,21 +249,20 @@ class UpgradeService
 
             $wall->setExtraIsolationLayer($l);
             
-            $building = clone $this->building;
-            $building->setInstance($instance);
-            $newEnergyLoss = $building->getEnergyLossToOutside() + $building->getEnergyLossToUnheated();
+            $newEnergyLoss = $this->building->getEnergyLossToOutside() + $this->building->getEnergyLossToUnheated();
 
             $variants[] = array(
                 'gain' => round(($actualEnergyLoss - $newEnergyLoss) / $actualEnergyLoss, 2),
-                'title' => sprintf('ocieplenie ścian zewn. %scm styropianu', $isolationSize)
+                'title' => sprintf('ocieplenie ścian zewn. %scm styropianu, lambda %s', $isolationSize, $this->presentStyrofoamLambda)
             );
         }
     }
 
-    protected function tryBetterRoofIsolation($actualEnergyLoss, array &$variants)
+    protected function tryBetterRoofIsolation($originalCalculation, $actualEnergyLoss, array &$variants)
     {
-        $instance = clone unserialize(serialize($this->instance));
-        $house = $instance->getHouse();
+        $customCalculation = clone unserialize(serialize($originalCalculation));
+        $this->instance->setCustomCalculation($customCalculation);
+        $house = $customCalculation->getHouse();
         $roofType = $house->getRoofType();
 
         $flatRoof = $roofType == 'flat' || $roofType == false;
@@ -280,7 +274,7 @@ class UpgradeService
             $isolationSize = $flatRoof ? 35 : 20;
             
             $m = new Material();
-            $m->setLambda(0.038);
+            $m->setLambda($this->presentStyrofoamLambda);
 
             $l = new Layer();
             $l->setMaterial($m);
@@ -292,9 +286,7 @@ class UpgradeService
                 $house->setRoofIsolationLayer($l);
             }
             
-            $building = clone $this->building;
-            $building->setInstance($instance);
-            $newEnergyLoss = $building->getEnergyLossToOutside() + $building->getEnergyLossToUnheated();
+            $newEnergyLoss = $this->building->getEnergyLossToOutside() + $this->building->getEnergyLossToUnheated();
 
             $variants[] = array(
                 'gain' => round(($actualEnergyLoss - $newEnergyLoss) / $actualEnergyLoss, 2),

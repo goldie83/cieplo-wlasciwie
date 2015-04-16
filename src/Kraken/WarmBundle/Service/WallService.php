@@ -10,7 +10,7 @@ class WallService
 
     public function __construct(InstanceService $instance)
     {
-        $this->instance = $instance->get();
+        $this->instance = $instance;
     }
 
     /**

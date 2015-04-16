@@ -18,13 +18,13 @@ class ClimateZoneService
 
     public function __construct(InstanceService $instance)
     {
-        $this->instance = $instance->get();
+        $this->instance = $instance;
     }
 
     public function getClimateZone()
     {
-        $lat = $this->instance->getLatitude();
-        $lon = $this->instance->getLongitude();
+        $lat = $this->instance->get()->getLatitude();
+        $lon = $this->instance->get()->getLongitude();
 
         if (
             ($lat >= 49.15 && $lat <= 49.41 && $lon >= 19.79 && $lon <= 20.31) ||

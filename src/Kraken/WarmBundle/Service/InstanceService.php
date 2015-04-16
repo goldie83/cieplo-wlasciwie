@@ -2,23 +2,48 @@
 
 namespace Kraken\WarmBundle\Service;
 
+use Doctrine\ORM\EntityManager;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Kraken\WarmBundle\Entity\Calculation;
 
 class InstanceService
 {
-    protected $calculation = null;
+    protected $em;
+    protected $session;
+    protected $cachedInstance = null;
+    protected $customCalculation = null;
 
-    public function setCalculation(Calculation $calc)
+    public function __construct(SessionInterface $session, EntityManager $em)
     {
-        $this->calculation = $calc;
+        $this->session = $session;
+        $this->em = $em;
+    }
+
+    public function setCustomCalculation(Calculation $calc)
+    {
+        $this->customCalculation = $calc;
     }
 
     public function get()
     {
-        if (!$this->calculation instanceof Calculation) {
+        if ($this->customCalculation != null) {
+            return $this->customCalculation;
+        }
+
+        $instanceId = $this->session->get('calculation_id');
+
+        if ($this->cachedInstance != null && $this->cachedInstance->getId() == $instanceId) {
+            return $this->cachedInstance;
+        }
+
+        $instance = $this->em->getRepository('KrakenWarmBundle:Calculation')->find($instanceId);
+
+        if (!$instance instanceof Calculation) {
             throw new \RuntimeException('There is no Calculation instance here');
         }
 
-        return $this->calculation;
+        $this->cachedInstance = $instance;
+
+        return $instance;
     }
 }
