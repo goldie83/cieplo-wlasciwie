@@ -108,6 +108,12 @@ class Calculation
      */
     protected $heating_power;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="City", inversedBy="calculations", cascade={"persist"})
+     * @ORM\JoinColumn(name="city_id", referencedColumnName="id", nullable=true)
+     */
+    protected $city;
+
     public static function create()
     {
         $calc = new Calculation();
@@ -536,5 +542,28 @@ class Calculation
     public function getHeatingPower()
     {
         return $this->heating_power;
+    }
+
+    /**
+     * Set city
+     *
+     * @param \Kraken\WarmBundle\Entity\City $city
+     * @return Calculation
+     */
+    public function setCity(\Kraken\WarmBundle\Entity\City $city = null)
+    {
+        $this->city = $city;
+
+        return $this;
+    }
+
+    /**
+     * Get city
+     *
+     * @return \Kraken\WarmBundle\Entity\City 
+     */
+    public function getCity()
+    {
+        return $this->city;
     }
 }

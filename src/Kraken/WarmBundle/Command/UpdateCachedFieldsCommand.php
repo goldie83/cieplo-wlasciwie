@@ -32,7 +32,6 @@ class UpdateCachedFieldsCommand extends ContainerAwareCommand
             $calc = $row[0];
 
             $session->set('calculation_id', $calc->getId());
-            $this->getContainer()->get('kraken_warm.instance')->setCalculation($calc);
 
             $calculator = $this->getContainer()->get('kraken_warm.energy_calculator');
             $building = $this->getContainer()->get('kraken_warm.building');

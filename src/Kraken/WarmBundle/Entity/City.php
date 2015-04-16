@@ -36,6 +36,12 @@ class City
      * @ORM\OneToMany(targetEntity="Temperature", mappedBy="city")
      */
     protected $temperatures;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Calculation", mappedBy="city")
+     */
+    protected $calculations;
+
     /**
      * Constructor
      */
@@ -154,5 +160,38 @@ class City
     public function getTemperatures()
     {
         return $this->temperatures;
+    }
+
+    /**
+     * Add calculations
+     *
+     * @param \Kraken\WarmBundle\Entity\Calculation $calculations
+     * @return City
+     */
+    public function addCalculation(\Kraken\WarmBundle\Entity\Calculation $calculations)
+    {
+        $this->calculations[] = $calculations;
+
+        return $this;
+    }
+
+    /**
+     * Remove calculations
+     *
+     * @param \Kraken\WarmBundle\Entity\Calculation $calculations
+     */
+    public function removeCalculation(\Kraken\WarmBundle\Entity\Calculation $calculations)
+    {
+        $this->calculations->removeElement($calculations);
+    }
+
+    /**
+     * Get calculations
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCalculations()
+    {
+        return $this->calculations;
     }
 }

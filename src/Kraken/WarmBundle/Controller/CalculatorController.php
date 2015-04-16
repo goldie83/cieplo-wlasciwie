@@ -334,10 +334,12 @@ class CalculatorController extends Controller
         $heatingSeason = $this->get('kraken_warm.heating_season');
         $pricing = $this->get('kraken_warm.energy_pricing');
         $adviceGenerator = $this->get('kraken_warm.advice');
+        $nearestCity = $this->get('kraken_warm.city_locator')->findNearestCity();
 
         if ($calc->getHeatedArea() == false) {
             $calc->setHeatedArea($building->getHeatedHouseArea());
             $calc->setHeatingPower($calculator->getMaxHeatingPower());
+            $calc->setCity($nearestCity);
 
             $em = $this->getDoctrine()->getManager();
             $em->persist($calc);
@@ -356,7 +358,7 @@ class CalculatorController extends Controller
             'upgrade' => $this->get('kraken_warm.upgrade'),
             'houseDescription' => $building->getHouseDescription(),
             'calc' => $calc,
-            'city' => $this->get('kraken_warm.city_locator')->findNearestCity(),
+            'city' => $nearestCity,
             'isAuthor' => $this->userIsAuthor($slug),
         ));
     }
