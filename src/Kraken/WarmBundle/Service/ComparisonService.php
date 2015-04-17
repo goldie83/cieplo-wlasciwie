@@ -27,7 +27,7 @@ class ComparisonService
 
         $result = $this->em
             ->createQueryBuilder()
-            ->select('AVG(c.fuel_consumption) as average')
+            ->select('COUNT(c.id) as cnt, AVG(c.fuel_consumption) as average')
             ->from('KrakenWarmBundle:Calculation', 'c')
             ->where('c.city = ?0')
             ->andWhere('c.heated_area BETWEEN ?1 AND ?2')
@@ -48,7 +48,7 @@ class ComparisonService
             ->getQuery()
             ->getSingleResult();
 
-        if (!$result['average']) {
+        if (!$result['average'] || $result['cnt'] < 3) {
             return '';
         }
 
