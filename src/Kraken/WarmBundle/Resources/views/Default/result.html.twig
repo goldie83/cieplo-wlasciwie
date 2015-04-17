@@ -7,6 +7,9 @@
 {% endblock %}
 
 {% block body %}
+<script>
+    window.calculationId = {{ calc.id }};
+</script>
 {% set powerNeeded = calculator.necessaryStovePower %}
 {% set sandCoalPowerNeeded = calculator.necessaryStovePower('sand_coal') %}
 
@@ -129,6 +132,13 @@
                       Sprawność twojej instalacji grzewczej to <strong>aż ~{{ stoveEfficiency|number_format(0, ',', ' ') }}%</strong>. Znakomicie.
                   </div>
                 {% endif %}
+            {% endif %}
+            {% set fuelComparison = comparison.compareFuelConsumption %}
+            {% if fuelComparison %}
+                <div class="alert alert-info">
+                    <h4>Jak to wygląda u innych?</h4>
+                    {{ fuelComparison|raw }}
+                </div>
             {% endif %}
           {% else %}
             <div class="alert alert-danger">

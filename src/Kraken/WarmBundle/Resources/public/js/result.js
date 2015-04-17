@@ -113,7 +113,7 @@ $(function () {
         series: []
     };
 
-    $.getJSON(Routing.generate('details_breakdown'), function(data) {
+    $.getJSON(Routing.generate('details_breakdown', {id: window.calculationId}), function(data) {
             breakdownOptions.series.push(data);
             createBreakdownChart(breakdownOptions);
     });
@@ -178,7 +178,7 @@ $(function () {
             series: []
         };
 
-    $.getJSON(Routing.generate('details_fuels'), function(data) {
+    $.getJSON(Routing.generate('details_fuels', {id: window.calculationId}), function(data) {
             fuelChartOptions.series = calculateFuelCosts(data.series);
             fuelChartOptions.series[0].tooltip = {};
             fuelChartOptions.series[1].tooltip = {};

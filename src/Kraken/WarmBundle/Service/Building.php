@@ -560,7 +560,7 @@ class Building implements BuildingInterface
 
     public function getInternalWallConductance()
     {
-        $internalWall = $this->wall_factory->getInternalWall($this->instance);
+        $internalWall = $this->wall_factory->getInternalWall($this->instance->get());
 
         return $this->wall->getThermalConductance($internalWall);
     }

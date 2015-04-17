@@ -3,6 +3,7 @@
 namespace Kraken\WarmBundle\Tests\Service;
 
 use Kraken\WarmBundle\Service\FuelService;
+use Kraken\WarmBundle\Entity\Calculation;
 
 class FuelServiceTest extends \PHPUnit_Framework_TestCase
 {
@@ -22,5 +23,35 @@ class FuelServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->setExpectedException('InvalidArgumentException');
         $this->assertEquals(10, $fs->getFuelEnergy('shmoal', 10));
+    }
+
+    public function testFormatFuelAmount()
+    {
+        $fs = new FuelService();
+        $c = new Calculation();
+
+        $c->setFuelType('sand_coal');
+        $this->assertEquals('2t miału', $fs->formatFuelAmount(2, $c));
+
+        $c->setFuelType('coal');
+        $this->assertEquals('2,2t węgla kamiennego', $fs->formatFuelAmount(2.2, $c));
+
+        $c->setFuelType('wood');
+        $this->assertEquals('1,5mp drewna', $fs->formatFuelAmount(1.5, $c));
+
+        $c->setFuelType('gas_e');
+        $this->assertEquals('20m<sup>3</sup> gazu ziemnego', $fs->formatFuelAmount(20, $c));
+
+        $c->setFuelType('coke');
+        $this->assertEquals('3,3t koksu', $fs->formatFuelAmount(3.3, $c));
+
+        $c->setFuelType('pellet');
+        $this->assertEquals('4t pelletu', $fs->formatFuelAmount(4, $c));
+
+        $c->setFuelType('electricity');
+        $this->assertEquals('1567kWh prądu', $fs->formatFuelAmount(1567, $c));
+
+        $c->setFuelType('brown_coal');
+        $this->assertEquals('7,5t węgla brunatnego', $fs->formatFuelAmount(7.5, $c));
     }
 }

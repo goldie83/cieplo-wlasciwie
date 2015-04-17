@@ -15,7 +15,7 @@ details:
     defaults: { _controller: KrakenWarmBundle:Calculator:details }
 
 details_breakdown:
-    pattern:  /details/breakdown
+    pattern:  /details/breakdown/{id}
     defaults: { _controller: KrakenWarmBundle:Calculator:breakdown }
     options:
         expose: true
@@ -27,7 +27,7 @@ details_climate:
         expose: true
 
 details_fuels:
-    pattern:  /details/fuels
+    pattern:  /details/fuels/{id}
     defaults: { _controller: KrakenWarmBundle:Calculator:fuels }
     options:
         expose: true

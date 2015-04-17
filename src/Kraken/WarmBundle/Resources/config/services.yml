@@ -54,6 +54,10 @@ services:
         class: Kraken\WarmBundle\Service\UpgradeService
         arguments: [@kraken_warm.instance, @kraken_warm.building]
 
+    kraken_warm.comparison:
+        class: Kraken\WarmBundle\Service\ComparisonService
+        arguments: [@kraken_warm.instance, @doctrine.orm.entity_manager, @kraken_warm.fuel]
+
     kraken_warm.wall.factory:
         class: Kraken\WarmBundle\Service\WallFactory
 

@@ -228,11 +228,11 @@ class CalculatorController extends Controller
         $this->get('mailer')->send($message);
     }
 
-    public function breakdownAction()
+    public function breakdownAction($id)
     {
         $calc = $this->getDoctrine()
             ->getRepository('KrakenWarmBundle:Calculation')
-            ->find($this->get('session')->get('calculation_id'));
+            ->find($id);
 
         if (!$calc) {
             throw $this->createNotFoundException('Jakiś zły masz ten link. Nic tu nie ma.');
@@ -254,11 +254,11 @@ class CalculatorController extends Controller
         return new JsonResponse($breakdown);
     }
 
-    public function fuelsAction()
+    public function fuelsAction($id)
     {
         $calc = $this->getDoctrine()
             ->getRepository('KrakenWarmBundle:Calculation')
-            ->find($this->get('session')->get('calculation_id'));
+            ->find($id);
 
         if (!$calc) {
             throw $this->createNotFoundException('Jakiś zły masz ten link. Nic tu nie ma.');
@@ -309,6 +309,7 @@ class CalculatorController extends Controller
             array(
                 'name' => 'Koszty obsługi',
                 'data' => $serviceCosts,
+                'visible' => false,
                 'index' => 0,
                 'showInLegend' => true
             )
@@ -356,6 +357,7 @@ class CalculatorController extends Controller
             'punch' => $this->get('kraken_warm.punchline'),
             'classifier' => $this->get('kraken_warm.building_classifier'),
             'upgrade' => $this->get('kraken_warm.upgrade'),
+            'comparison' => $this->get('kraken_warm.comparison'),
             'houseDescription' => $building->getHouseDescription(),
             'calc' => $calc,
             'city' => $nearestCity,
@@ -418,8 +420,7 @@ class CalculatorController extends Controller
             throw $this->createNotFoundException('Jakiś zły masz ten link. Nic tu nie ma.');
         }
 
-        $this->get('session')->set('calculation', $slug);
-        $this->get('kraken_warm.instance')->setCalculation($calculation);
+        $this->get('session')->set('calculation_id', $calculation->getId());
 
         $calculationulator = $this->get('kraken_warm.energy_calculator');
         $building = $this->get('kraken_warm.building');
