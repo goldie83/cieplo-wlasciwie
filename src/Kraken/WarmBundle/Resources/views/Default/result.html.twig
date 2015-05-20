@@ -228,6 +228,7 @@
   <div class="row">
     <div class="col-md-6">
       <h3>Jakiej mocy kotła szukać?</h3>
+      <div class="alert alert-danger">Podane moce dotyczą wyłącznie ogrzewania budynku. Dla podgrzewania wody (CWU) <a href="http://czysteogrzewanie.pl/zakupy/co-za-duzo-to-niezdrowo-dobor-mocy-kotla-weglowego/#Ile_mocy_na_potrzeby_CWU" target="_blank">trzeba doliczyć odpowiednią moc</a>.</div>
       <dl>
       {% if powerNeeded > 3 %}
         <dt>{{ label_success((1.1*powerNeeded)|number_format(0, ',', ' ') ~ '-' ~ (1.25*powerNeeded)|number_format(0, ',', ' ') ~ 'kW') }} dla kotła zasypowego</dt>
@@ -247,8 +248,8 @@
           <dt>Zapomnij o kotle węglowym</dt>
           <p>Nie istnieją kotły węglowe pracujące efektywnie z tak małą mocą.</p>
       {% endif %}
-        <dt>min. {{ label_success(powerNeeded|number_format(0, ',', ' ') ~ 'kW') }} dla kotła gazowego</dt>
-        <dd>Kotły gazowe pracują z dobrą sprawnością nawet na niskich mocach, ale nie ma potrzeby, abyś płacił za 30kW, czego nie wykorzystasz nawet w połowie.<br /> 
+        <dt>min. {{ label_success(1.2*powerNeeded|number_format(0, ',', ' ') ~ 'kW') }} dla kotła gazowego</dt>
+        <dd>Kotły gazowe pracują z dobrą sprawnością nawet na niskich mocach. Nie ma potrzeby, byś płacił za dwa razy większy kocioł, chyba że taka moc jest konieczna z innych względów.<br /> 
             Instalując kocioł kondensacyjny pamiętaj o takim zaprojektowaniu instalacji, <a href="http://czysteogrzewanie.pl/zakupy/mocy-przybywaj-dobor-mocy-kotla-weglowego/#Koty_gazowe" target="_blank">aby temperatura wody nie musiała przekraczać 60&deg;C</a> - inaczej nici z kondensacji i rachunki wzrosną.</dd>
       </dl>
       {% if powerNeeded > 3 and powerNeeded <= 10 %}
