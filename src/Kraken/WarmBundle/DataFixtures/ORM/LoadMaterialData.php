@@ -10,6 +10,7 @@ class LoadMaterialData implements FixtureInterface
 {
     public function load(ObjectManager $manager)
     {
+return;
         $data = file_get_contents(dirname(__DIR__) . '/materials.json');
 
         foreach (json_decode($data, true) as $material) {

@@ -1,84 +1,10 @@
 $(function () {
 
-    var fuelChart = null;
-
     Highcharts.setOptions({
         lang: {
             decimalPoint: ',',
             thousandsSep: ' '
         }
-    });
-
-    var climateChartOptions = {
-        chart: {
-            type: 'spline',
-            marginTop: 50
-        },
-        title: {
-            text: 'Średnie dobowe temperatury',
-            x: -20 //center
-        },
-        subtitle: {
-            text: 'w twojej okolicy',
-            x: -20
-        },
-        xAxis: {
-            type: 'datetime',
-            dateTimeLabelFormats: { // don't display the dummy year
-                month: '%e.%m',
-                year: '%b'
-            },
-            title: {
-                text: 'Data'
-            }
-        },
-        yAxis: {
-            title: {
-                text: 'Temperatura (°C)'
-            },
-            plotBands : [{
-                from: -40,
-                to : 8,
-                color : 'rgba(68, 170, 213, 0.2)',
-                label : {
-                    text : 'Sezon grzewczy'
-                }
-            }]
-  
-        },
-        tooltip: {
-            formatter: function() {
-                    return '<b>'+ this.series.name +'</b><br/>'+
-                    Highcharts.dateFormat('%e.%m', this.x) +': '+ this.y +'°C';
-            }
-        },
-        plotOptions: {
-          column: {
-              pointWidth: 10,
-              pointPadding: 0,
-              groupPadding: 0
-          },
-          series: {
-              groupPadding: 0
-          },
-          spline: {
-              lineWidth: 3,
-              states: {
-                  hover: {
-                      lineWidth: 3
-                  }
-              },
-              marker: {
-                  enabled: false
-              }
-          }
-        },
-        series: []
-    };
-
-    $.getJSON(Routing.generate('details_climate'), function(data) {
-        climateChartOptions.series = data.series;
-        createClimateChart(climateChartOptions);
     });
 
     breakdownOptions = {
@@ -118,79 +44,19 @@ $(function () {
             createBreakdownChart(breakdownOptions);
     });
 
-    var fuelChartOptions = {
-            chart: {
-                type: 'bar',
-                renderTo: 'fuel_chart'
-            },
-            title: {
-                text: 'Koszty ogrzewania twojego domu różnymi paliwami'
-            },
-            xAxis: {
-                categories: [],
-                labels: {
-                  align: 'right',
-                  style: {
-                      fontSize: '12px',
-                      fontFamily: 'Verdana, sans-serif'
-                  }
-                }
-            },
-            yAxis: {
-                allowDecimals: false,
-                min: 0,
-                title: {
-                    text: 'Koszt (zł)'
-                },
-                stackLabels: {
-                    enabled: true,
-                    formatter: function() {
-                        return Highcharts.numberFormat(100 * Math.ceil(this.total / 100), 0) + 'zł';
-                    },
-                    style: {
-                        fontWeight: 'bold',
-                        color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
-                    }
-                }
-
-            },
-            tooltip: {
-                headerFormat: '<span><b>{point.key}</b></span><table>',
-                footerFormat: '</table>',
-                shared: true,
-                useHTML: true
-            },
-            plotOptions: {
-                series: {
-                    stacking: 'normal'
-                },
-                column: {
-                    dataLabels: {
-                        enabled: false,
-                        color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'black',
-                        backgroundColor: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'ccc',
-                        formatter: function() {
-                            return Highcharts.numberFormat(this.y, 0) + 'zł';
-                        }
-                    }
-                }
-            },
-            series: []
-        };
-
-    $.getJSON(Routing.generate('details_fuels', {id: window.calculationId}), function(data) {
+    /*$.getJSON(Routing.generate('details_fuels', {id: window.calculationId}), function(data) {
             fuelChartOptions.series = calculateFuelCosts(data.series);
             fuelChartOptions.series[0].tooltip = {};
             fuelChartOptions.series[1].tooltip = {};
             fuelChartOptions.series[0].tooltip.pointFormat = '<tr><td>{point.version}</td>' +
                               '<td style="padding:0">&nbsp;</td></tr>' +
-                              '<tr><td style="color:{series.color};padding:0">Sprawność spalania:</td>' +
+                              '<tr><td style="color:{series.color};padding:0">Efektywność:</td>' +
                               '<td style="padding:0">&nbsp;<b>{point.efficiency}%</b></td></tr>' +
                               '<tr><td style="color:{series.color};padding:0">Cena:</td>' +
                               '<td style="padding:0">&nbsp;<b>{point.trade_unit_price}zł/{point.trade_unit}</b></td></tr>' +
                               '<tr><td style="color:{series.color};padding:0">Zużycie:</td>' +
                               '<td style="padding:0">&nbsp;<b>{point.consumption}{point.trade_unit}</b></td></tr>' +
-                              '<tr><td style="color:{series.color};padding:0">Koszt paliwa:</td>' +
+                              '<tr><td style="color:{series.color};padding:0">Koszt:</td>' +
                               '<td style="padding:0">&nbsp;<b>{point.y}zł</b></td></tr>';
             fuelChartOptions.series[1].tooltip.pointFormat = '<tr><td style="color:{series.color};padding:0">Czas obsługi:</td>' +
                               '<td style="padding:0">&nbsp;<b>{point.hours}h</b></td></tr>' +
@@ -198,7 +64,7 @@ $(function () {
                               '<td style="padding:0">&nbsp;<b>{point.y}zł</b></td></tr>';
             fuelChartOptions.xAxis.categories = data.categories;
             createFuelChart(fuelChartOptions);
-    });
+    });*/
 
     $('#update_fuels').bind('click', function() {
         if (!fuelChart) {
@@ -272,30 +138,194 @@ $(function () {
         return false;
     });
 
-    function calculateFuelCosts(series)
+    function createBreakdownChart(options) {
+        $('#heat_loss_breakdown').highcharts(options);
+    }
+});
+
+
+var app = angular.module('warm', []).config(function($interpolateProvider){
+        $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
+    }
+);
+
+var FLOAT_REGEXP = /^\-?\d+((\.|\,)\d+)?$/;
+app.directive('smartFloat', function() {
+  return {
+    require: 'ngModel',
+    link: function(scope, elm, attrs, ctrl) {
+      ctrl.$parsers.unshift(function(viewValue) {
+        if (FLOAT_REGEXP.test(viewValue)) {
+          ctrl.$setValidity('float', true);
+          return parseFloat(viewValue.replace(',', '.'));
+        } else {
+          ctrl.$setValidity('float', false);
+          return undefined;
+        }
+      });
+    }
+  };
+});
+
+app.controller('WarmCtrl', function($scope, $http) {
+    $scope.fuelChart = null;
+    $scope.workHourPrice = 10;
+    $scope.includeWorkTime = true;
+    
+    $scope.fuelChartOptions = {
+        chart: {
+            type: 'bar',
+            renderTo: 'fuel_chart'
+        },
+        title: {
+            text: 'Roczny koszt ogrzewania twojego domu'
+        },
+        xAxis: {
+            categories: [],
+            labels: {
+              align: 'right',
+              style: {
+                  fontSize: '11px',
+                  fontFamily: 'Verdana, sans-serif'
+              }
+            }
+        },
+        yAxis: {
+            allowDecimals: false,
+            min: 0,
+            title: {
+                text: 'Roczny koszt ogrzewania (zł)'
+            },
+            stackLabels: {
+                enabled: true,
+                formatter: function() {
+                    return Highcharts.numberFormat(100 * Math.ceil(this.total / 100), 0) + 'zł';
+                },
+                style: {
+                    fontWeight: 'bold',
+                    color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                }
+            }
+
+        },
+        tooltip: {
+            headerFormat: '<span><b>{point.key}</b></span><table>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            series: {
+                stacking: 'normal'
+            },
+            column: {
+                dataLabels: {
+                    enabled: false,
+                    color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'black',
+                    backgroundColor: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'ccc',
+                    formatter: function() {
+                        return Highcharts.numberFormat(this.y, 0) + 'zł';
+                    }
+                }
+            }
+        },
+        series: []
+    };
+  
+    $http.get(Routing.generate('details_fuels', {id: window.calculationId})).
+        success(function(data, status, headers, config) {
+            $scope.heatingVariants = data.variants;
+            $scope.currentVariant = data.currentVariant;
+            
+            for (var i = 0; i < $scope.heatingVariants.length; i++) {
+                $scope.heatingVariants[i].cost = Math.round($scope.heatingVariants[i].price * $scope.heatingVariants[i].amount);
+                $scope.heatingVariants[i].savedMoney = $scope.currentVariant.cost - $scope.heatingVariants[i].cost;
+                $scope.heatingVariants[i].savedTime = $scope.currentVariant.time - $scope.heatingVariants[i].maintenance_time;
+                $scope.heatingVariants[i].roi = Math.round($scope.roiPeriod($scope.heatingVariants[i].savedMoney, $scope.heatingVariants[i].savedTime, $scope.heatingVariants[i].setup_cost)); 
+            }
+            
+            console.log($scope.heatingVariants);
+            console.log($scope.currentVariant);
+            
+            $scope.createFuelChart();
+            
+            $scope.heatingVariants.sort(function (a, b) { return a.roi - b.roi });
+        }).
+        error(function(data, status, headers, config) {
+            // log error
+        });
+        
+    $scope.calculateFuelCosts = function (data)
     {
         /*
          'price' => cena jednostkowa
          'amount' => ilosc jednostek paliwa
          'trade_amount' => mnoznik handlowy jednostek paliwa,
          'trade_unit' => nazwa jednostki handlowej,*/
-        for (var i = 0; i < series[0].data.length; i++) {
-            series[0].data[i].y = Math.round(series[0].data[i].price * series[0].data[i].amount);
-            series[0].data[i].trade_unit_price = series[0].data[i].price * series[0].data[i].trade_amount;
+        
+        data.sort(function(a, b) { return (a.price * a.amount) - (b.price * b.amount) });
+        
+        var series = [];
+        series[0] = {
+            name: 'Koszt paliwa',
+            data: [],
+            index: 1,
+            showInLegend: false
+        };
+        
+        for (var i = 0; i < data.length; i++) {
+            $scope.fuelChartOptions.xAxis.categories.push(data[i].label);
+
+            series[0]['data'][i] = data[i];
+            series[0]['data'][i].y = data[i].cost;
+            series[0]['data'][i].trade_unit_price = data[i].price * data[i].trade_amount;
         }
 
         return series;
     }
+    
+    $scope.createFuelChart = function () {
+                              
+        $scope.fuelChartOptions.series = $scope.calculateFuelCosts($scope.heatingVariants);        
+        $scope.fuelChartOptions.series[0].tooltip = {};
+        $scope.fuelChartOptions.series[0].tooltip.pointFormat = '<tr><td>{point.version}</td>' +
+                              '<td style="padding:0">&nbsp;</td></tr>' +
+                              '<tr><td style="color:{series.color};padding:0">Efektywność:</td>' +
+                              '<td style="padding:0">&nbsp;<b>{point.efficiency}%</b></td></tr>' +
+                              '<tr><td style="color:{series.color};padding:0">Cena:</td>' +
+                              '<td style="padding:0">&nbsp;<b>{point.trade_unit_price}zł/{point.trade_unit}</b></td></tr>' +
+                              '<tr><td style="color:{series.color};padding:0">Zużycie:</td>' +
+                              '<td style="padding:0">&nbsp;<b>{point.consumption}{point.trade_unit}</b></td></tr>' +
+                              '<tr><td style="color:{series.color};padding:0">Koszt:</td>' +
+                              '<td style="padding:0">&nbsp;<b>{point.y}zł</b></td></tr>';
+                              
+        $scope.fuelChart = new Highcharts.Chart($scope.fuelChartOptions);
+    };
+    
+    $scope.roiPeriod = function (savedMoney, savedTime, setupCost) {
+        var savedTimeEquivalent = savedTime * $scope.workHourPrice;
+        var savings = $scope.includeWorkTime ? savedMoney + savedTimeEquivalent : savedMoney;
 
-    function createClimateChart(options) {
-        $('#climate_chart').highcharts(options);
-    }
-
-    function createBreakdownChart(options) {
-        $('#heat_loss_breakdown').highcharts(options);
-    }
-
-    function createFuelChart(options) {
-        fuelChart = new Highcharts.Chart(options);
+        return savings > 0 ? setupCost / savings: 0;
+    };
+    
+    $scope.formatRoiPeriod = function (period) {
+        var suffix = 'lat';
+        
+        if (period < 2) {
+            suffix = 'rok';
+        }
+        
+        if (period % 10 >= 2 && period % 10 < 5) {
+            suffix = 'lata';
+        }
+        
+        return period <= 20 ? Math.round(period) + " " + suffix : 'nigdy';
+    };
+    
+    $scope.greaterThan = function(prop, val){
+        return function(item){
+            return item[prop] > val;
+        }
     }
 });

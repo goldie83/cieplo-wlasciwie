@@ -28,11 +28,6 @@ class Fuel
     protected $name;
 
     /**
-     * @ORM\Column(type="string")
-     */
-    protected $detail;
-
-    /**
      * @ORM\Column(type="string", length=3)
      */
     protected $unit;
@@ -58,14 +53,21 @@ class Fuel
     protected $energy;
 
     /**
-     * @ORM\Column(type="decimal", precision=3, scale=2)
+     * @ORM\OneToMany(targetEntity="HeatingVariant", mappedBy="fuel")
      */
-    protected $efficiency;
+    protected $heatingVariants;
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->heatingVariants = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
      * Get id
      *
-     * @return integer
+     * @return integer 
      */
     public function getId()
     {
@@ -75,7 +77,7 @@ class Fuel
     /**
      * Set type
      *
-     * @param  string $type
+     * @param string $type
      * @return Fuel
      */
     public function setType($type)
@@ -88,7 +90,7 @@ class Fuel
     /**
      * Get type
      *
-     * @return string
+     * @return string 
      */
     public function getType()
     {
@@ -98,7 +100,7 @@ class Fuel
     /**
      * Set name
      *
-     * @param  string $name
+     * @param string $name
      * @return Fuel
      */
     public function setName($name)
@@ -111,7 +113,7 @@ class Fuel
     /**
      * Get name
      *
-     * @return string
+     * @return string 
      */
     public function getName()
     {
@@ -119,32 +121,9 @@ class Fuel
     }
 
     /**
-     * Set detail
-     *
-     * @param  string $detail
-     * @return Fuel
-     */
-    public function setDetail($detail)
-    {
-        $this->detail = $detail;
-
-        return $this;
-    }
-
-    /**
-     * Get detail
-     *
-     * @return string
-     */
-    public function getDetail()
-    {
-        return $this->detail;
-    }
-
-    /**
      * Set unit
      *
-     * @param  string $unit
+     * @param string $unit
      * @return Fuel
      */
     public function setUnit($unit)
@@ -157,7 +136,7 @@ class Fuel
     /**
      * Get unit
      *
-     * @return string
+     * @return string 
      */
     public function getUnit()
     {
@@ -167,7 +146,7 @@ class Fuel
     /**
      * Set price
      *
-     * @param  integer $price
+     * @param string $price
      * @return Fuel
      */
     public function setPrice($price)
@@ -180,7 +159,7 @@ class Fuel
     /**
      * Get price
      *
-     * @return integer
+     * @return string 
      */
     public function getPrice()
     {
@@ -190,7 +169,7 @@ class Fuel
     /**
      * Set trade_amount
      *
-     * @param  integer $tradeAmount
+     * @param integer $tradeAmount
      * @return Fuel
      */
     public function setTradeAmount($tradeAmount)
@@ -203,7 +182,7 @@ class Fuel
     /**
      * Get trade_amount
      *
-     * @return integer
+     * @return integer 
      */
     public function getTradeAmount()
     {
@@ -213,7 +192,7 @@ class Fuel
     /**
      * Set trade_unit
      *
-     * @param  string $tradeUnit
+     * @param string $tradeUnit
      * @return Fuel
      */
     public function setTradeUnit($tradeUnit)
@@ -226,7 +205,7 @@ class Fuel
     /**
      * Get trade_unit
      *
-     * @return string
+     * @return string 
      */
     public function getTradeUnit()
     {
@@ -236,7 +215,7 @@ class Fuel
     /**
      * Set energy
      *
-     * @param  float $energy
+     * @param string $energy
      * @return Fuel
      */
     public function setEnergy($energy)
@@ -249,7 +228,7 @@ class Fuel
     /**
      * Get energy
      *
-     * @return float
+     * @return string 
      */
     public function getEnergy()
     {
@@ -257,25 +236,35 @@ class Fuel
     }
 
     /**
-     * Set efficiency
+     * Add heatingVariants
      *
-     * @param  float $efficiency
+     * @param \Kraken\WarmBundle\Entity\HeatingVariant $heatingVariants
      * @return Fuel
      */
-    public function setEfficiency($efficiency)
+    public function addHeatingVariant(\Kraken\WarmBundle\Entity\HeatingVariant $heatingVariants)
     {
-        $this->efficiency = $efficiency;
+        $this->heatingVariants[] = $heatingVariants;
 
         return $this;
     }
 
     /**
-     * Get efficiency
+     * Remove heatingVariants
      *
-     * @return float
+     * @param \Kraken\WarmBundle\Entity\HeatingVariant $heatingVariants
      */
-    public function getEfficiency()
+    public function removeHeatingVariant(\Kraken\WarmBundle\Entity\HeatingVariant $heatingVariants)
     {
-        return $this->efficiency;
+        $this->heatingVariants->removeElement($heatingVariants);
+    }
+
+    /**
+     * Get heatingVariants
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getHeatingVariants()
+    {
+        return $this->heatingVariants;
     }
 }

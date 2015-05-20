@@ -11,6 +11,7 @@ class LoadWeatherData implements FixtureInterface
 {
     public function load(ObjectManager $manager)
     {
+return;
         $data = file_get_contents(dirname(__DIR__) . '/cities.json');
 
         $data = json_decode($data, true);

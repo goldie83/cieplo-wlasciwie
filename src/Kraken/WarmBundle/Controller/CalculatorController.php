@@ -264,58 +264,36 @@ class CalculatorController extends Controller
             throw $this->createNotFoundException('Jakiś zły masz ten link. Nic tu nie ma.');
         }
 
-        $data = array();
-
+        $data = [];
         $raw = $this->get('kraken_warm.energy_pricing')->getEnergySourcesComparison();
-
         $fuelTypes = array_keys($raw);
 
-        $data['categories'] = array();
-        $costs = array();
-
         foreach ($fuelTypes as $fuelType) {
-            $data['categories'][] = $raw[$fuelType]['label'];
-            $costs[] = array(
+            $data[] = [
                 'fuel_type' => $fuelType,
                 'price' => $raw[$fuelType]['price'],
                 'amount' => $raw[$fuelType]['amount'],
                 'consumption' => round($raw[$fuelType]['amount']/$raw[$fuelType]['trade_amount'], 1),
                 'trade_amount' => $raw[$fuelType]['trade_amount'],
                 'trade_unit' => $raw[$fuelType]['trade_unit'],
+                'label' => $raw[$fuelType]['label'],
                 'version' => $raw[$fuelType]['detail'],
                 'efficiency' => $raw[$fuelType]['efficiency']*100,
-            );
+                'setup_cost' => $raw[$fuelType]['setup_cost'],
+                'maintenance_time' => $raw[$fuelType]['maintenance_time'],
+                'is_legacy' => $raw[$fuelType]['is_legacy'],
+            ];
         }
 
-        $serviceCosts = array();
+        $response = [
+            'variants' => $data,
+            'currentVariant' => [
+                'cost' => (double)$calc->getFuelCost(),
+                'time' => 200//FIXME (double)$calc->getMaintenanceTime()
+            ],
+        ];
 
-        foreach ($fuelTypes as $fuelType) {
-            $time = $this->get('kraken_warm.energy_pricing')->getYearlyServiceTime($fuelType);
-            $workHourPrice = $this->get('kraken_warm.energy_pricing')->getDefaultWorkHourPrice();
-
-            $serviceCosts[] = array(
-                'hours' => round($time, 0),
-                'y' => $time * $workHourPrice,
-            );
-        }
-
-        $data['series'] = array(
-            array(
-                'name' => 'Koszt paliwa',
-                'data' => $costs,
-                'index' => 1,
-                'showInLegend' => true
-            ),
-            array(
-                'name' => 'Koszty obsługi',
-                'data' => $serviceCosts,
-                'visible' => false,
-                'index' => 0,
-                'showInLegend' => true
-            )
-        );
-
-        return new JsonResponse($data);
+        return new JsonResponse($response);
     }
 
     public function resultAction($slug)
@@ -334,10 +312,9 @@ class CalculatorController extends Controller
         $building = $this->get('kraken_warm.building');
         $heatingSeason = $this->get('kraken_warm.heating_season');
         $pricing = $this->get('kraken_warm.energy_pricing');
-        $adviceGenerator = $this->get('kraken_warm.advice');
-        $nearestCity = $this->get('kraken_warm.city_locator')->findNearestCity();
 
         if ($calc->getHeatedArea() == false) {
+            $nearestCity = $this->get('kraken_warm.city_locator')->findNearestCity();
             $calc->setHeatedArea($building->getHeatedHouseArea());
             $calc->setHeatingPower($calculator->getMaxHeatingPower());
             $calc->setCity($nearestCity);
@@ -353,61 +330,15 @@ class CalculatorController extends Controller
             'building' => $building,
             'pricing' => $pricing,
             'heatingSeason' => $heatingSeason,
-            'advice' => $adviceGenerator->getAdvice(),
             'punch' => $this->get('kraken_warm.punchline'),
             'classifier' => $this->get('kraken_warm.building_classifier'),
             'upgrade' => $this->get('kraken_warm.upgrade'),
             'comparison' => $this->get('kraken_warm.comparison'),
             'houseDescription' => $building->getHouseDescription(),
             'calc' => $calc,
-            'city' => $nearestCity,
+            'city' => $calc->getCity(),
             'isAuthor' => $this->userIsAuthor($slug),
         ));
-    }
-
-    public function climateAction()
-    {
-        $calc = $this->getDoctrine()
-            ->getRepository('KrakenWarmBundle:Calculation')
-            ->findOneBy(array('id' => $this->get('session')->get('calculation_id')));
-
-        if (!$calc) {
-            throw $this->createNotFoundException('Jakiś zły masz ten link. Nic tu nie ma.');
-        }
-
-        $nearestCity = $this->get('kraken_warm.city_locator')->findNearestCity();
-
-        $lastWinter = $this->getDoctrine()
-            ->getRepository('KrakenWarmBundle:Temperature')
-            ->getLastWinterTemperatures($nearestCity);
-
-        $averageWinter = $this->getDoctrine()
-            ->getRepository('KrakenWarmBundle:Temperature')
-            ->getAverageWinterTemperatures($nearestCity);
-
-        $temperatures = array(
-            'series' => array(
-                array('showInLegend' => true, 'name' => 'Ostatnia zima', 'data' => array()),
-                array('showInLegend' => true, 'name' => 'Średnia wieloletnia', 'color' => '#888888', 'data' => array()),
-            )
-        );
-
-        $seriesSorter = function ($a, $b) { if ($a[0] == $b[0]) return 0; return ($a[0] < $b[0]) ? -1 : 1; };
-
-        foreach ($lastWinter as $d) {
-            $year = $d->getMonth() >= 9 ? 1970 : 1971;
-            $temperatures['series'][0]['data'][] = array(mktime(0,0,0, $d->getMonth(), $d->getDay(), $year)*1000, (double) $d->getValue());
-        }
-
-        foreach ($averageWinter as $d) {
-            $year = $d->getMonth() >= 9 ? 1970 : 1971;
-            $temperatures['series'][1]['data'][] = array(mktime(0,0,0, $d->getMonth(), $d->getDay(), $year)*1000, (double) $d->getValue());
-        }
-
-        usort($temperatures['series'][0]['data'], $seriesSorter);
-        usort($temperatures['series'][1]['data'], $seriesSorter);
-
-        return new JsonResponse($temperatures);
     }
 
     public function heatersAction($slug)

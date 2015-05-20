@@ -32,6 +32,7 @@ class UpgradeService
         $this->tryNewDoors($originalCalculation, $actualEnergyLoss, $variants);
         $this->tryBetterGroundFloorCeilingIsolation($originalCalculation, $actualEnergyLoss, $variants);
         $this->tryBetterGroundFloorIsolation($originalCalculation, $actualEnergyLoss, $variants);
+        $this->tryMechanicalVentilation($originalCalculation, $actualEnergyLoss, $variants);
 
         $apartment = $originalCalculation->getHouse()->getApartment();
 
@@ -293,5 +294,19 @@ class UpgradeService
                 'title' => sprintf('ocieplenie dachu %scm styropianu', $isolationSize)
             );
         }
+    }
+
+    protected function tryMechanicalVentilation($originalCalculation, $actualEnergyLoss, array &$variants)
+    {
+        $customCalculation = clone unserialize(serialize($originalCalculation));
+        $this->instance->setCustomCalculation($customCalculation);
+        
+        $customCalculation->getHouse()->setVentilationType('mechanical_recovery');
+        $newEnergyLoss = $this->building->getEnergyLossToOutside() + $this->building->getEnergyLossToUnheated();
+
+        $variants[] = array(
+            'gain' => round(($actualEnergyLoss - $newEnergyLoss) / $actualEnergyLoss, 2),
+            'title' => 'wentylacja mechaniczna z odzyskiem ciepła'
+        );
     }
 }
