@@ -14,31 +14,36 @@ class FuelConsumptionType extends AbstractType
         parent::buildForm($builder, $options);
 
         $builder
-            ->add('fuel', null/*, array(
-                'required' => $options['force_required'],
-                'label' => 'Materiał',
-                'query_builder' => function(EntityRepository $er ) use ($options) {
-                    return $er->createQueryBuilder('m')
-                        ->andWhere(sprintf('m.%s = 1', $options['material_type']))
-                        ->orderBy('m.name', 'ASC');
-                }
-            )*/)
-            ->add('consumption')
-            ->add('cost')
+            ->add('fuel', null, [
+                'label' => 'Rodzaj paliwa',
+                'required' => false,
+            ])
+            ->add('consumption', null, [
+                'label' => 'Zużycie w sezonie grzewczym',
+                'required' => false,
+                'widget_addon_append' => [
+                    'text'  => 't',
+                ],
+            ])
+            ->add('cost', null, [
+                'label' => 'Koszt',
+                'required' => false,
+                'widget_addon_append' => [
+                    'text'  => 'zł',
+                ],
+            ])
         ;
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
-        $resolver->setDefaults(array(
-            'data_class' => 'Kraken\WarmBundle\Entity\Layer',
-            'material_type' => 'for_wall_construction_layer',
-            'force_required' => false,
-        ));
+        $resolver->setDefaults([
+            'data_class' => 'Kraken\WarmBundle\Entity\FuelConsumption',
+        ]);
     }
 
     public function getName()
     {
-        return 'layer';
+        return 'fuel_consumption';
     }
 }

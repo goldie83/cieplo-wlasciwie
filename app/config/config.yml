@@ -103,11 +103,13 @@ braincrafted_bootstrap:
 
 mopa_bootstrap:
     form:
+        render_required_asterisk: true
+        render_optional_text: false
         collection:
             widget_remove_btn:
                 attr:
                     class: btn btn-danger
-                label: Remove this offer
+                label: Usuń tę pozycję z listy
                 icon: null
                 icon_inverted: false
     menu: ~ 

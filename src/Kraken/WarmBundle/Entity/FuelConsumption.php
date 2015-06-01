@@ -32,13 +32,11 @@ class FuelConsumption
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
-     * @Assert\Range(min="1", minMessage = "Nie za mało?")
      */
     protected $consumption;
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
-     * @Assert\Range(min="0.01", minMessage = "Nie za mało?")
      */
     protected $cost;
 
@@ -50,98 +48,6 @@ class FuelConsumption
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set fuel_consumption
-     *
-     * @param string $fuelConsumption
-     * @return FuelConsumption
-     */
-    public function setFuelConsumption($fuelConsumption)
-    {
-        $this->fuel_consumption = $fuelConsumption;
-
-        return $this;
-    }
-
-    /**
-     * Get fuel_consumption
-     *
-     * @return string 
-     */
-    public function getFuelConsumption()
-    {
-        return $this->fuel_consumption;
-    }
-
-    /**
-     * Set fuel_cost
-     *
-     * @param string $fuelCost
-     * @return FuelConsumption
-     */
-    public function setFuelCost($fuelCost)
-    {
-        $this->fuel_cost = $fuelCost;
-
-        return $this;
-    }
-
-    /**
-     * Get fuel_cost
-     *
-     * @return string 
-     */
-    public function getFuelCost()
-    {
-        return $this->fuel_cost;
-    }
-
-    /**
-     * Set calculation
-     *
-     * @param \Kraken\WarmBundle\Entity\Calculation $calculation
-     * @return FuelConsumption
-     */
-    public function setCalculation(\Kraken\WarmBundle\Entity\Calculation $calculation = null)
-    {
-        $this->calculation = $calculation;
-
-        return $this;
-    }
-
-    /**
-     * Get calculation
-     *
-     * @return \Kraken\WarmBundle\Entity\Calculation 
-     */
-    public function getCalculation()
-    {
-        return $this->calculation;
-    }
-
-    /**
-     * Set fuel
-     *
-     * @param \Kraken\WarmBundle\Entity\Fuel $fuel
-     * @return FuelConsumption
-     */
-    public function setFuel(\Kraken\WarmBundle\Entity\Fuel $fuel = null)
-    {
-        $this->fuel = $fuel;
-
-        return $this;
-    }
-
-    /**
-     * Get fuel
-     *
-     * @return \Kraken\WarmBundle\Entity\Fuel 
-     */
-    public function getFuel()
-    {
-        return $this->fuel;
     }
 
     /**
@@ -188,5 +94,51 @@ class FuelConsumption
     public function getCost()
     {
         return $this->cost;
+    }
+
+    /**
+     * Set calculation
+     *
+     * @param \Kraken\WarmBundle\Entity\Calculation $calculation
+     * @return FuelConsumption
+     */
+    public function setCalculation(\Kraken\WarmBundle\Entity\Calculation $calculation = null)
+    {
+        $this->calculation = $calculation;
+
+        return $this;
+    }
+
+    /**
+     * Get calculation
+     *
+     * @return \Kraken\WarmBundle\Entity\Calculation 
+     */
+    public function getCalculation()
+    {
+        return $this->calculation;
+    }
+
+    /**
+     * Set fuel
+     *
+     * @param \Kraken\WarmBundle\Entity\Fuel $fuel
+     * @return FuelConsumption
+     */
+    public function setFuel(\Kraken\WarmBundle\Entity\Fuel $fuel = null)
+    {
+        $this->fuel = $fuel;
+
+        return $this;
+    }
+
+    /**
+     * Get fuel
+     *
+     * @return \Kraken\WarmBundle\Entity\Fuel 
+     */
+    public function getFuel()
+    {
+        return $this->fuel;
     }
 }

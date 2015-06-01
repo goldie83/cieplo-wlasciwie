@@ -28,7 +28,7 @@ class CalculationFormType extends AbstractType
                 'required' => true,
                 'label' => 'Rok budowy domu',
                 'attr'  => array(
-                    'help_text' => 'Dokładność +/- 10 lat nas zadowoli',
+                    'help_text' => 'Dokładność +/- 10 lat jest wystarczająca',
                 ),
             ))
             ->add('heating_device', null, [
@@ -42,11 +42,9 @@ class CalculationFormType extends AbstractType
             ->add('stove_power', 'number', array(
                 'label' => 'Moc urządzenia grzewczego',
                 'required' => false,
-                'attr'  => array(
-                    'input_group' => array(
-                        'append'  => 'kW'
-                    )
-                ),
+                'widget_addon_append' => [
+                    'text'  => 'kW'
+                ]
             ))
             ->add('fuel_consumptions', 'collection', [
                 'label' => 'Zużycie paliw',
@@ -67,77 +65,18 @@ class CalculationFormType extends AbstractType
                     ],
                     'horizontal_input_wrapper_class' => "col-lg-8",
                 ]
-//             ])
-
-//                 'query_builder' => function(EntityRepository $er ) use ($options) {
-//                     return $er->createQueryBuilder('f')
-//                         ->orderBy('f.name', 'ASC');
-//                 }
             ])
-//             ->add('fuel_type', 'choice', array(
-//                 'choices' => array(
-//                     '' => 'Nie wiem/nie powiem',
-//                     'wood' => 'Drewno',
-//                     'gas_e' => 'Gaz ziemny typ E (GZ-50)',
-//                     'gas_ls' => 'Gaz ziemny typ Ls (GZ-35)',
-//                     'gas_lw' => 'Gaz ziemny typ Lw (GZ-41,5)',
-//                     'coke' => 'Koks',
-//                     'sand_coal' => 'Miał węglowy',
-//                     'pellet' => 'Pellet/brykiety',
-//                     'electricity' => 'Prąd elektryczny',
-//                     'brown_coal' => 'Węgiel brunatny',
-//                     'coal' => 'Węgiel kamienny',
-//                 ),
-//                 'required' => false,
-//                 'label' => 'Czym ogrzewasz dom',
-//             ))
-//             ->add('stove_type', 'choice', array(
-//                 'choices' => array(
-//                     '' => 'Nie wiem/nie powiem',
-//                     'manual_upward' => 'Kocioł zasypowy górnego spalania',
-//                     'manual_downward' => 'Kocioł zasypowy dolnego spalania',
-//                     'automatic' => 'Kocioł podajnikowy',
-//                     'fireplace' => 'Kominek',
-//                     'kitchen' => 'Piec kuchenny',
-//                     'ceramic' => 'Piec kaflowy',
-//                     'goat' => 'Piec typu koza',
-//                 ),
-//                 'required' => false,
-//                 'label' => 'Rodzaj pieca/kotła',
-//                 'attr' => array(
-//                     'help_text' => 'Nie orientujesz się? Wybierz "górne spalanie".',
-//                 ),
-//             ))
-//             ->add('fuel_consumption', 'number', array(
-//                 'label' => 'Zużycie opału ostatniej zimy',
-//                 'required' => false,
-//                 'attr'  => array(
-//                     'input_group' => array(
-//                         'append'  => 't',
-//                     )
-//                 ),
-//             ))
-//             ->add('fuel_cost', 'number', array(
-//                 'label' => 'Koszt zużytego opału',
-//                 'required' => false,
-//                 'attr'  => array(
-//                     'input_group' => array(
-//                         'append'  => 'zł'
-//                     )
-//                 ),
-//             ))
             ->add('email', null, array(
                 'label' => 'Twój adres e-mail',
                 'required' => false,
             ))
             ->add('indoor_temperature', 'number', array(
                 'label' => 'Temperatura w mieszkaniu zimą',
-                'attr'  => array(
-                    'input_group' => array(
-                        'append'  => '&deg;C',
-                    ),
-                    'help_text' => 'Podaj średnią dobową temperaturę, jaką uznajesz za komfortową w domu zimą bez noszenia swetra i kalesonów. Np. w dzień +22, w nocy +18 - wpisz 20 stopni',
-                ),
+                'required' => true,
+                'widget_addon_append' => [
+                    'text'  => '&deg;C',
+                ],
+                'help_block' => 'Podaj średnią dobową temperaturę, jaką uznajesz za komfortową w domu zimą bez noszenia swetra i kalesonów. Np. w dzień +22, w nocy +18 - wpisz 20 stopni',
             ))
             ->add('latitude', 'hidden')
             ->add('longitude', 'hidden')

@@ -1,61 +1,61 @@
 homepage:
-    pattern:  /
+    path:  /
     defaults: { _controller: KrakenWarmBundle:Default:landing }
 
 start:
-    pattern:  /start/{slug}
+    path:  /start/{slug}
     defaults: { _controller: KrakenWarmBundle:Calculator:index, slug: ~ }
 
 what:
-    pattern:  /co_to_jest
+    path:  /co_to_jest
     defaults: { _controller: KrakenWarmBundle:Default:what }
 
 details:
-    pattern:  /szczegoly/{slug}
+    path:  /szczegoly/{slug}
     defaults: { _controller: KrakenWarmBundle:Calculator:details }
 
 details_breakdown:
-    pattern:  /details/breakdown/{id}
+    path:  /details/breakdown/{id}
     defaults: { _controller: KrakenWarmBundle:Calculator:breakdown }
     options:
         expose: true
 
 details_climate:
-    pattern:  /details/climate
+    path:  /details/climate
     defaults: { _controller: KrakenWarmBundle:Calculator:climate }
     options:
         expose: true
 
 details_fuels:
-    pattern:  /details/fuels/{id}
+    path:  /details/fuels/{id}
     defaults: { _controller: KrakenWarmBundle:Calculator:fuels }
     options:
         expose: true
 
 result:
-    pattern:  /wynik/{slug}
+    path:  /wynik/{slug}
     defaults: { _controller: KrakenWarmBundle:Calculator:result }
 
 heaters:
-    pattern:  /wynik/{slug}/grzejniki
+    path:  /wynik/{slug}/grzejniki
     defaults: { _controller: KrakenWarmBundle:Calculator:heaters }
 
 old_result:
-    pattern:  /energia/{slug}
+    path:  /energia/{slug}
     defaults: { _controller: KrakenWarmBundle:Calculator:result }
 
 how_it_works:
-    pattern:  /jak-to-dziala
+    path:  /jak-to-dziala
     defaults: { _controller: KrakenWarmBundle:Default:howItWorks }
 
 why_not_works:
-    pattern:  /czemu-nie-dziala
+    path:  /czemu-nie-dziala
     defaults: { _controller: KrakenWarmBundle:Default:whyNotWorks }
 
 rules:
-    pattern:  /zasady
+    path:  /zasady
     defaults: { _controller: KrakenWarmBundle:Default:rules }
 
 my_results:
-    pattern:  /moje-wyniki
+    path:  /moje-wyniki
     defaults: { _controller: KrakenWarmBundle:Calculator:myResults }

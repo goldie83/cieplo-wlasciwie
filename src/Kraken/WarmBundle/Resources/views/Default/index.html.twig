@@ -1,6 +1,6 @@
 {% extends '::base.html.twig' %}
 
-{% form_theme form 'MopaBootstrapBundle:Form:fields.html.twig' %}
+{% form_theme form 'KrakenWarmBundle:Form:fields.html.twig' %}
 
 {% block body %}
 
@@ -32,8 +32,8 @@
           {{ form_row(form.construction_year) }}
 
           <div class="form-group">
-            <label class="required control-label col-lg-4">Lokalizacja budynku</label>
-            <div class="col-lg-8">
+            <label class="required control-label col-sm-3">Lokalizacja budynku&nbsp;<span class="required">*</span></label>
+            <div class="col-sm-9">
                 <div class="alert alert-info">
                   <strong>Spokojnie, nie zamierzamy cię nachodzić.</strong> Wystarczy przybliżenie ~50km.
                 </div>
@@ -94,8 +94,8 @@
           <div id="give_email" style="display:none">
               {{ form_row(form.email) }}
               <div class="form-group">
-                  <div class="col-lg-4"></div>
-                  <div class="col-lg-8">
+                  <div class="col-sm-3"></div>
+                  <div class="col-sm-9">
                     <div class="alert alert-info">
                         Jeśli podasz adres e-mail, wyślemy ci link do wyniku, abyś go nie zgubił.<br />Wynik znajdziesz też w zakładce "Moje wyniki", ale tylko na tym komputerze.
                     </div>
