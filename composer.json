@@ -33,9 +33,9 @@
         "jms/di-extra-bundle": "1.4.*",
         "vich/geographical-bundle": "dev-master",
         "braincrafted/bootstrap-bundle": "dev-master",
-        "twbs/bootstrap": "3.1.*@dev",
+        "twbs/bootstrap": "dev-master",
         "jquery/jquery": "1.10.*",
-        "knplabs/knp-menu-bundle": "1.1.*@dev",
+        "knplabs/knp-menu-bundle": "dev-master",
         "doctrine/doctrine-fixtures-bundle": "2.2.*@dev",
         "doctrine/data-fixtures": "1.0.*@dev",
         "stof/doctrine-extensions-bundle": "dev-master",
@@ -43,7 +43,8 @@
         "friendsofsymfony/jsrouting-bundle": "~1.1",
         "doctrine/migrations": "dev-master",
         "doctrine/doctrine-migrations-bundle": "dev-master",
-        "kunstmaan/sentry-bundle": "~2.2"
+        "kunstmaan/sentry-bundle": "~2.2",
+        "mopa/bootstrap-bundle": "dev-master"
     },
     "require-dev": {
         "behat/behat": "3.0.*@dev",
@@ -60,12 +61,14 @@
     "scripts": {
         "post-install-cmd": [
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+            "Mopa\\Bundle\\BootstrapBundle\\Composer\\ScriptHandler::postInstallSymlinkTwitterBootstrap",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
         ],
         "post-update-cmd": [
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::buildBootstrap",
+            "Mopa\\Bundle\\BootstrapBundle\\Composer\\ScriptHandler::postInstallSymlinkTwitterBootstrap",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"

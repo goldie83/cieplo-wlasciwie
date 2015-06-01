@@ -56,12 +56,23 @@ class Fuel
      * @ORM\OneToMany(targetEntity="HeatingVariant", mappedBy="fuel")
      */
     protected $heatingVariants;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Calculation", mappedBy="fuel")
+     */
+    protected $calculations;
+
     /**
      * Constructor
      */
     public function __construct()
     {
         $this->heatingVariants = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->name;
     }
 
     /**
@@ -266,5 +277,38 @@ class Fuel
     public function getHeatingVariants()
     {
         return $this->heatingVariants;
+    }
+
+    /**
+     * Add calculations
+     *
+     * @param \Kraken\WarmBundle\Entity\Calculation $calculations
+     * @return Fuel
+     */
+    public function addCalculation(\Kraken\WarmBundle\Entity\Calculation $calculations)
+    {
+        $this->calculations[] = $calculations;
+
+        return $this;
+    }
+
+    /**
+     * Remove calculations
+     *
+     * @param \Kraken\WarmBundle\Entity\Calculation $calculations
+     */
+    public function removeCalculation(\Kraken\WarmBundle\Entity\Calculation $calculations)
+    {
+        $this->calculations->removeElement($calculations);
+    }
+
+    /**
+     * Get calculations
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCalculations()
+    {
+        return $this->calculations;
     }
 }

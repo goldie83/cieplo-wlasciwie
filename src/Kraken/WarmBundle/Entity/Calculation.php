@@ -49,25 +49,26 @@ class Calculation
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     * @deprecated
      */
     protected $fuel_type;
 
     /**
-     * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
-     * @Assert\Range(min="1", minMessage = "Nie za mało?")
-     */
-    protected $fuel_consumption;
-
-    /**
-     * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
-     * @Assert\Range(min="0.01", minMessage = "Nie za mało?")
-     */
-    protected $fuel_cost;
-
-    /**
-     * @ORM\Column(type="string", columnDefinition="ENUM('manual_upward', 'manual_downward', 'automatic', 'fireplace', 'kitchen', 'ceramic', 'goat')", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
+     * @deprecated
      */
     protected $stove_type;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="HeatingDevice", inversedBy="calculations", cascade={"persist"})
+     * @ORM\JoinColumn(name="heating_device_id", referencedColumnName="id", nullable=true)
+     */
+    protected $heating_device;
+
+    /**
+     * @ORM\OneToMany(targetEntity="FuelConsumption", mappedBy="calculation", cascade={"all"})
+     */
+    protected $fuel_consumptions;
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
@@ -565,5 +566,91 @@ class Calculation
     public function getCity()
     {
         return $this->city;
+    }
+
+    /**
+     * Set fuel
+     *
+     * @param \Kraken\WarmBundle\Entity\Fuel $fuel
+     * @return Calculation
+     */
+    public function setFuel(\Kraken\WarmBundle\Entity\Fuel $fuel = null)
+    {
+        $this->fuel = $fuel;
+
+        return $this;
+    }
+
+    /**
+     * Get fuel
+     *
+     * @return \Kraken\WarmBundle\Entity\Fuel 
+     */
+    public function getFuel()
+    {
+        return $this->fuel;
+    }
+
+    /**
+     * Set heating_device
+     *
+     * @param \Kraken\WarmBundle\Entity\HeatingDevice $heatingDevice
+     * @return Calculation
+     */
+    public function setHeatingDevice(\Kraken\WarmBundle\Entity\HeatingDevice $heatingDevice = null)
+    {
+        $this->heating_device = $heatingDevice;
+
+        return $this;
+    }
+
+    /**
+     * Get heating_device
+     *
+     * @return \Kraken\WarmBundle\Entity\HeatingDevice 
+     */
+    public function getHeatingDevice()
+    {
+        return $this->heating_device;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->fuel_consumptions = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add fuel_consumptions
+     *
+     * @param \Kraken\WarmBundle\Entity\fuelConsumption $fuelConsumptions
+     * @return Calculation
+     */
+    public function addFuelConsumption(\Kraken\WarmBundle\Entity\fuelConsumption $fuelConsumptions)
+    {
+        $this->fuel_consumptions[] = $fuelConsumptions;
+
+        return $this;
+    }
+
+    /**
+     * Remove fuel_consumptions
+     *
+     * @param \Kraken\WarmBundle\Entity\fuelConsumption $fuelConsumptions
+     */
+    public function removeFuelConsumption(\Kraken\WarmBundle\Entity\fuelConsumption $fuelConsumptions)
+    {
+        $this->fuel_consumptions->removeElement($fuelConsumptions);
+    }
+
+    /**
+     * Get fuel_consumptions
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getFuelConsumptions()
+    {
+        return $this->fuel_consumptions;
     }
 }

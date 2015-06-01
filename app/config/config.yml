@@ -31,7 +31,7 @@ twig:
 assetic:
     debug:          %kernel.debug%
     use_controller: false
-    bundles:        [ ]
+    bundles:        [KrakenWarmBundle, MopaBootstrapBundle]
     #java: /usr/bin/java
     filters:
         less:
@@ -99,3 +99,15 @@ braincrafted_bootstrap:
         twig: true
         knp_menu: true
         knp_paginator: true
+    jquery_path: %kernel.root_dir%/../vendor/jquery/jquery/jquery-1.10.2.js
+
+mopa_bootstrap:
+    form:
+        collection:
+            widget_remove_btn:
+                attr:
+                    class: btn btn-danger
+                label: Remove this offer
+                icon: null
+                icon_inverted: false
+    menu: ~ 

@@ -71,12 +71,25 @@
   <div class="row">
     <div class="col-md-6">
         <h3>Jak obecnie ogrzewasz</h3>
-          <dl>
-          {% set fuelInfoProvided = calc.fuelType and calc.fuelConsumption %}
+          {% set fuelInfoProvided = calc.fuel and calc.fuelConsumption %}
           {% set stoveEfficiency = fuelInfoProvided ? calculator.yearlyStoveEfficiency*100 : 0 %}
+          <dl>
+            {% if calc.heatingDevice %}
+              <h4>{{ calc.heatingDevice.name }} {% if calc.stovePower %}o mocy {{ label_info(calc.stovePower|number_format(0, ',', ' ') ~ 'kW') }}{% endif %}</h4>
+            {% endif %}
+            {% if fuelInfoProvided %}
+              <dt>{{ calc.fuelLabel }}</dt>
+              <dd>zużycie paliwa w sezonie grzewczym</dd>
+            {% endif %}
+            {% if calc.fuelCost %}
+              <dt>{{ calc.fuelCost|number_format(0, ',', ' ') }}zł</dt>
+              <dd>roczny koszt ogrzewania</dd>
+            {% endif %}
+            <dt>{{ calc.indoorTemperature|number_format(1, ',', ' ') }}&deg;C</dt>
+            <dd>średnia temperatura w domu w ciągu zimy</dd>
+          </dl>
+
           {% if calc.stovePower %}
-            <dt>{{ label_success(calc.stovePower|number_format(0, ',', ' ') ~ 'kW') }}</dt>
-            <dd>moc nominalna twojego kotła</dd>
             {% if calculator.isStoveOversized and (not fuelInfoProvided or stoveEfficiency < 40) %}
                 <div class="alert alert-danger">
                   <h4>Zbyt duża moc kotła drenuje ci portfel</h4>
@@ -85,78 +98,20 @@
                 </div>
             {% endif %}
           {% endif %}
-            <dt>{{ calc.indoorTemperature|number_format(1, ',', ' ') }}&deg;C</dt>
-            <dd>średnia temperatura w domu w ciągu zimy</dd>
-          {% if fuelInfoProvided %}
-            <dt>{{ calc.fuelLabel }}</dt>
-            <dd>zużycie paliwa w sezonie grzewczym</dd>
-          {% endif %}
-          </dl>
-          {% if fuelInfoProvided %}
-            {% if calc.usingSolidFuel %}
-                {% if stoveEfficiency < 35 %}
-                  <div class="alert alert-danger">
-                      <h4>Ogrzewanie rujnuje twój budżet</h4>
-                      Sprawność twojej instalacji grzewczej to <strong>marne ~{{ stoveEfficiency|number_format(0, ',', ' ') }}%</strong>.
-                      To znaczy, że większość pieniędzy wydanych na ogrzewanie wyrzucasz w błoto!
-                      <br />Na szczęście możesz szybko i prawie za darmo zacząć oszczędzać.
-                      <br /><a href="http://czysteogrzewanie.pl/jak-palic-w-piecu/jak-palic-czysto-weglem/" target="_blank">Przeczytaj, jak palić ekonomicznie i wygodnie</a>.
-                  </div>
-                {% elseif stoveEfficiency < 50 %}
-                  <div class="alert alert-warning">
-                      <h4>Sporo przepłacasz za ogrzewanie</h4>
-                      Sprawność twojej instalacji grzewczej to <strong>tylko ~{{ stoveEfficiency|number_format(0, ',', ' ') }}%</strong>.
-                      <br /><a href="http://czysteogrzewanie.pl/jak-palic-w-piecu/jak-palic-czysto-weglem/" target="_blank">Zobacz, jak palić ekonomicznie oraz wygodnie i zacznij oszczędzać od zaraz!</a>
-                  </div>
-                {% elseif stoveEfficiency < 75 %}
-                  <div class="alert alert-info">
-                      <h4>Ogrzewanie jest dość efektywne</h4>
-                      Sprawność twojej instalacji grzewczej to <strong>~{{ stoveEfficiency|number_format(0, ',', ' ') }}%</strong>.
-                  </div>
-                {% elseif stoveEfficiency < 90 %}
-                  <div class="alert alert-success">
-                      <h4>Ogrzewanie jest bardzo efektywne</h4>
-                      Sprawność twojej instalacji grzewczej to <strong>aż ~{{ stoveEfficiency|number_format(0, ',', ' ') }}%</strong>.
-                  </div>
-                {% endif %}
-            {% else %}
-                {% if stoveEfficiency < 75 %}
-                  <div class="alert alert-warning">
-                      <h4>Ogrzewanie jest nieefektywne</h4>
-                      Sprawność twojej instalacji grzewczej to <strong>tylko ~{{ stoveEfficiency|number_format(0, ',', ' ') }}%</strong>. To mało jak na {{ calc.fuelType == 'electricity' ? 'prąd' : 'gaz' }}.
-                      Być może podałeś zbyt duże aktualne zużycie energii. Jeśli grzejesz także wodę użytkową, odejmij od rachunku 10-20%.
-                  </div>
-                {% elseif stoveEfficiency < 110 %}
-                  <div class="alert alert-success">
-                      <h4>Ogrzewanie jest bardzo efektywne</h4>
-                      Sprawność twojej instalacji grzewczej to <strong>aż ~{{ stoveEfficiency|number_format(0, ',', ' ') }}%</strong>. Znakomicie.
-                  </div>
-                {% endif %}
-            {% endif %}
-            {% set fuelComparison = comparison.compareFuelConsumption %}
-            {% if fuelComparison %}
-                <div class="alert alert-info">
-                    <h4>Jak to wygląda u innych?</h4>
-                    {{ fuelComparison|raw }}
-                </div>
-            {% endif %}
-          {% else %}
-            <div class="alert alert-danger">
-                <strong>Niestety</strong> nie podałeś kosztów ogrzewania, więc nie powiemy ci nic na ten temat.
-            </div>
-          {% endif %}
+
+          {{ include('KrakenWarmBundle:Default:legacySetupEfficiency.html.twig', { 'calc': calc }) }}
     </div>
     <div class="col-md-6">
-        <h3>Ile ciepła zużywa twój dom</h3>
+        <h3>Ile ciepła potrzebuje twój dom</h3>
         <dl>
           <dt>{{ label_success((calculator.maxHeatingPower/1000)|number_format(1, ',', ' ') ~ 'kW') }}</dt>
-          <dd>takiej mocy grzewczej potrzebuje twój dom w największy mróz</dd>
+          <dd>maksymalna moc grzewcza jakiej potrzebuje twój dom w największy mróz</dd>
           <dt>{{ calculator.maxHeatingPowerPerArea|number_format(0, ',', ' ') }}W/m<sup>2</sup></dt>
           <dd>wskaźnik mocy kotła względem ogrzewanego metrażu</dd>
           <dt>{{ calculator.yearlyEnergyConsumption|number_format(0, ',', ' ') }}kWh</dt>
           <dd>tyle ciepła zużyje dom w ciągu całego sezonu grzewczego</dd>
           <dt>{{ calculator.yearlyEnergyConsumptionFactor|number_format(0, ',', ' ') }}kWh/m<sup>2</sup>*rok</dt>
-          <dd>zużycie roczne energii w przeliczeniu na 1m<sup>2</sup> - zalicza twój dom do klasy energetycznej&nbsp;{{ classifier.class }}</dd>
+          <dd>zużycie roczne energii w przeliczeniu na 1m<sup>2</sup> - zalicza twój dom do klasy energetycznej&nbsp;<strong>{{ classifier.class }}</strong></dd>
         </dl>
         <h4>W najmroźniejszy dzień zimy <small>średnia dobowa {{ heatingSeason.getLowestTemperature()|number_format(0, ',', ' ') }}&deg;C na zewnątrz</small></h4>
         <dl>
@@ -251,7 +206,7 @@
       <p>Oto sposoby ogrzewania, które są najtańsze w użyciu, a wydatek na ich zakup zwróci się najszybciej.</p>
 
       <div class="panel panel-success" ng-repeat="variant in heatingVariants | filter: greaterThan('savedMoney', 0)">
-        <div class="panel-heading">{[{ variant.label }]}&nbsp;<small>{[{ variant.version }]}</small></div>
+        <div class="panel-heading"><strong>{[{ variant.label }]}</strong>&nbsp;<small>{[{ variant.version }]}</small></div>
         <div class="panel-body">
           Koszt instalacji: ~{[{ variant.setup_cost|currency }]}<br />
           Roczna oszczędność: <strong>{[{ variant.savedMoney|currency }]}</strong> oraz {[{ variant.savedTime|number }]} godzin pracy<br />

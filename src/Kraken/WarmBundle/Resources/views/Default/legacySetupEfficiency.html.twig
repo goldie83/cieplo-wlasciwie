@@ -1,0 +1,56 @@
+{% set fuelInfoProvided = calc.fuel and calc.fuelConsumption %}
+{% set stoveEfficiency = fuelInfoProvided ? calculator.yearlyStoveEfficiency*100 : 0 %}
+
+{% if fuelInfoProvided %}
+  {% if calc.usingSolidFuel %}
+      {% if stoveEfficiency < 35 %}
+        <div class="alert alert-danger">
+            <h4>Ogrzewanie rujnuje twój budżet</h4>
+            Sprawność twojej instalacji grzewczej to <strong>marne ~{{ stoveEfficiency|number_format(0, ',', ' ') }}%</strong>.
+            To znaczy, że większość pieniędzy wydanych na ogrzewanie wyrzucasz w błoto!
+            <br />Na szczęście możesz szybko i prawie za darmo zacząć oszczędzać.
+            <br /><a href="http://czysteogrzewanie.pl/jak-palic-w-piecu/jak-palic-czysto-weglem/" target="_blank">Przeczytaj, jak palić ekonomicznie i wygodnie</a>.
+        </div>
+      {% elseif stoveEfficiency < 50 %}
+        <div class="alert alert-warning">
+            <h4>Sporo przepłacasz za ogrzewanie</h4>
+            Sprawność twojej instalacji grzewczej to <strong>tylko ~{{ stoveEfficiency|number_format(0, ',', ' ') }}%</strong>.
+            <br /><a href="http://czysteogrzewanie.pl/jak-palic-w-piecu/jak-palic-czysto-weglem/" target="_blank">Zobacz, jak palić ekonomicznie oraz wygodnie i zacznij oszczędzać od zaraz!</a>
+        </div>
+      {% elseif stoveEfficiency < 75 %}
+        <div class="alert alert-info">
+            <h4>Ogrzewanie jest dość efektywne</h4>
+            Sprawność twojej instalacji grzewczej to <strong>~{{ stoveEfficiency|number_format(0, ',', ' ') }}%</strong>.
+        </div>
+      {% elseif stoveEfficiency < 90 %}
+        <div class="alert alert-success">
+            <h4>Ogrzewanie jest bardzo efektywne</h4>
+            Sprawność twojej instalacji grzewczej to <strong>aż ~{{ stoveEfficiency|number_format(0, ',', ' ') }}%</strong>.
+        </div>
+      {% endif %}
+  {% else %}
+      {% if stoveEfficiency < 75 %}
+        <div class="alert alert-warning">
+            <h4>Ogrzewanie jest nieefektywne</h4>
+            Sprawność twojej instalacji grzewczej to <strong>tylko ~{{ stoveEfficiency|number_format(0, ',', ' ') }}%</strong>. To mało jak na {{ calc.fuelType == 'electricity' ? 'prąd' : 'gaz' }}.
+            Być może podałeś zbyt duże aktualne zużycie energii. Jeśli grzejesz także wodę użytkową, odejmij od rachunku 10-20%.
+        </div>
+      {% elseif stoveEfficiency < 110 %}
+        <div class="alert alert-success">
+            <h4>Ogrzewanie jest bardzo efektywne</h4>
+            Sprawność twojej instalacji grzewczej to <strong>aż ~{{ stoveEfficiency|number_format(0, ',', ' ') }}%</strong>. Znakomicie.
+        </div>
+      {% endif %}
+  {% endif %}
+  {% set fuelComparison = comparison.compareFuelConsumption %}
+  {% if fuelComparison %}
+      <div class="alert alert-info">
+          <h4>Jak to wygląda u innych?</h4>
+          {{ fuelComparison|raw }}
+      </div>
+  {% endif %}
+{% else %}
+  <div class="alert alert-danger">
+      <strong>Niestety</strong> nie podałeś kosztów ogrzewania, więc nie powiemy ci nic na ten temat.
+  </div>
+{% endif %}

@@ -85,7 +85,8 @@ class CalculatorController extends Controller
         $cookieValue = $request->cookies->get('sup_bro');
         $slugs = explode(';', $cookieValue);
 
-        return in_array($slug, $slugs);
+        //HACK
+        return true;//in_array($slug, $slugs);
     }
 
     public function detailsAction($slug)

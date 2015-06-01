@@ -255,4 +255,14 @@ class HeatingVariant
     {
         return $this->legacy;
     }
+
+    /**
+     * Get legacy
+     *
+     * @return boolean 
+     */
+    public function getLegacy()
+    {
+        return $this->legacy;
+    }
 }

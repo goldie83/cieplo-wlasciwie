@@ -33,9 +33,24 @@ class HeatingDevice
     protected $detail;
 
     /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    protected $for_legacy_setup;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    protected $for_advice;
+
+    /**
      * @ORM\OneToMany(targetEntity="HeatingVariant", mappedBy="heatingDevice")
      */
     protected $heatingVariants;
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 
     /**
      * Get id
@@ -154,5 +169,51 @@ class HeatingDevice
     public function getHeatingVariants()
     {
         return $this->heatingVariants;
+    }
+
+    /**
+     * Set for_legacy_setup
+     *
+     * @param boolean $forLegacySetup
+     * @return HeatingDevice
+     */
+    public function setForLegacySetup($forLegacySetup)
+    {
+        $this->for_legacy_setup = $forLegacySetup;
+
+        return $this;
+    }
+
+    /**
+     * Get for_legacy_setup
+     *
+     * @return boolean 
+     */
+    public function getForLegacySetup()
+    {
+        return $this->for_legacy_setup;
+    }
+
+    /**
+     * Set for_advice
+     *
+     * @param boolean $forAdvice
+     * @return HeatingDevice
+     */
+    public function setForAdvice($forAdvice)
+    {
+        $this->for_advice = $forAdvice;
+
+        return $this;
+    }
+
+    /**
+     * Get for_advice
+     *
+     * @return boolean 
+     */
+    public function getForAdvice()
+    {
+        return $this->for_advice;
     }
 }

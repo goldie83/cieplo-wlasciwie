@@ -34,7 +34,7 @@ class EnergyPricing
             ->getResult();
 
         foreach ($heatingVariants as $variant) {
-            $amount = ($energyAmount/$variant->getEfficiency())/($variant->getFuel()->getEnergy()*0.277);
+            $amount = ($energyAmount/$variant->getEfficiency())/($variant->getFuel()->getEnergy()*0.277); // MJ to kWh
             $variantKey = isset($comparison[$variant->getType()]) ? $variant->getType().'_1' : $variant->getType();
             $comparison[$variantKey] = [
                 'label' => $variant->getName(),

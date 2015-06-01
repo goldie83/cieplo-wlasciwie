@@ -14,7 +14,7 @@ class LoadFuelData implements FixtureInterface
     {
         $brownCoal = new Fuel();
         $brownCoal->setType('brown_coal');
-        $brownCoal->setName('Węgiel brunatny');
+        $brownCoal->setName('Węgiel brunatny (lub czeski)');
         $brownCoal->setPrice(0.5);
         $brownCoal->setUnit("kg");
         $brownCoal->setTradeAmount(1000);
@@ -84,7 +84,7 @@ class LoadFuelData implements FixtureInterface
 
         $wood = new Fuel();
         $wood->setType('wood');
-        $wood->setName('Drewno bukowe');
+        $wood->setName('Drewno');
         $wood->setPrice(0.35);
         $wood->setUnit("kg");
         $wood->setTradeAmount(450);
@@ -113,58 +113,128 @@ class LoadFuelData implements FixtureInterface
         $manager->persist($propane);
 
         $heatBuffer = new HeatingDevice();
-        $heatBuffer->setType('heat_buffer');
-        $heatBuffer->setName('Bufor ciepła');
+        $heatBuffer
+            ->setType('heat_buffer')
+            ->setName('Bufor ciepła')
+            ->setForLegacySetup(false)
+            ->setForAdvice(true)
+        ;
         $manager->persist($heatBuffer);
 
         $manualStove = new HeatingDevice();
-        $manualStove->setType('manual_stove');
-        $manualStove->setName('Kocioł zasypowy');
+        $manualStove
+            ->setType('manual_stove')
+            ->setName('Kocioł zasypowy')
+            ->setForLegacySetup(true)
+            ->setForAdvice(true)
+        ;
         $manager->persist($manualStove);
 
         $manualStoveWithBuffer = new HeatingDevice();
-        $manualStoveWithBuffer->setType('manual_stove_buffer');
-        $manualStoveWithBuffer->setName('Kocioł zasypowy z buforem ciepła');
+        $manualStoveWithBuffer
+            ->setType('manual_stove_buffer')
+            ->setName('Kocioł zasypowy z buforem ciepła')
+            ->setForLegacySetup(true)
+            ->setForAdvice(true)
+        ;
         $manager->persist($manualStoveWithBuffer);
 
         $heatPumpAir = new HeatingDevice();
-        $heatPumpAir->setType('heat_pump_air');
-        $heatPumpAir->setName('Pompa ciepła powietrzna');
+        $heatPumpAir
+            ->setType('heat_pump_air')
+            ->setName('Pompa ciepła powietrzna')
+            ->setForLegacySetup(true)
+            ->setForAdvice(true)
+        ;
         $manager->persist($heatPumpAir);
 
         $heatPumpGround = new HeatingDevice();
-        $heatPumpGround->setType('heat_pump_ground');
-        $heatPumpGround->setName('Pompa ciepła gruntowa');
+        $heatPumpGround->setType('heat_pump_ground')
+            ->setName('Pompa ciepła gruntowa')
+            ->setForLegacySetup(true)
+            ->setForAdvice(true)
+        ;
         $manager->persist($heatPumpGround);
 
         $pelletStove = new HeatingDevice();
-        $pelletStove->setType('pellet_stove');
-        $pelletStove->setName('Kocioł na pellet');
+        $pelletStove
+            ->setType('pellet_stove')
+            ->setName('Kocioł na pellet')
+            ->setForLegacySetup(true)
+            ->setForAdvice(true)
+        ;
         $manager->persist($pelletStove);
 
         $holzgasStove = new HeatingDevice();
-        $holzgasStove->setType('holzgas_stove');
-        $holzgasStove->setName('Kocioł zgazowujący drewno');
+        $holzgasStove
+            ->setType('holzgas_stove')
+            ->setName('Kocioł zgazowujący drewno')
+            ->setForLegacySetup(true)
+            ->setForAdvice(true)
+        ;
         $manager->persist($holzgasStove);
 
         $automaticStove = new HeatingDevice();
-        $automaticStove->setType('automatic_stove');
-        $automaticStove->setName('Kocioł podajnikowy');
+        $automaticStove
+            ->setType('automatic_stove')
+            ->setName('Kocioł podajnikowy')
+            ->setForLegacySetup(true)
+            ->setForAdvice(true)
+        ;
         $manager->persist($automaticStove);
 
+        $tileStove = new HeatingDevice();
+        $tileStove
+            ->setType('tile_stove')
+            ->setName('Piec ceramiczny (kaflowy, kuchenny)')
+            ->setForLegacySetup(true)
+            ->setForAdvice(false)
+        ;
+        $manager->persist($tileStove);
+
+        $fireplace = new HeatingDevice();
+        $fireplace
+            ->setType('fireplace')
+            ->setName('Kominek')
+            ->setForLegacySetup(true)
+            ->setForAdvice(false)
+        ;
+        $manager->persist($fireplace);
+
+        $electricStove = new HeatingDevice();
+        $electricStove
+            ->setType('electric_stove')
+            ->setName('Elektryczny piecyk / bufor wodny grzany prądem')
+            ->setForLegacySetup(true)
+            ->setForAdvice(false)
+        ;
+        $manager->persist($electricStove);
+
         $condensing = new HeatingDevice();
-        $condensing->setType('gas_stove_condensing');
-        $condensing->setName('Kocioł gazowy kondensacyjny');
+        $condensing
+            ->setType('gas_stove_condensing')
+            ->setName('Kocioł gazowy kondensacyjny')
+            ->setForLegacySetup(true)
+            ->setForAdvice(true)
+        ;
         $manager->persist($condensing);
 
         $gasStove = new HeatingDevice();
-        $gasStove->setType('gas_stove');
-        $gasStove->setName('Kocioł gazowy niekondensacyjny');
+        $gasStove
+            ->setType('gas_stove')
+            ->setName('Kocioł gazowy niekondensacyjny')
+            ->setForLegacySetup(true)
+            ->setForAdvice(true)
+        ;
         $manager->persist($gasStove);
 
         $oldGasStove = new HeatingDevice();
-        $oldGasStove->setType('gas_stove_old');
-        $oldGasStove->setName('Kocioł gazowy starego typu');
+        $oldGasStove
+            ->setType('gas_stove_old')
+            ->setName('Kocioł gazowy niekondensacyjny starego typu')
+            ->setForLegacySetup(true)
+            ->setForAdvice(false)
+        ;
         $manager->persist($oldGasStove);
 
         $hv0 = new HeatingVariant();
