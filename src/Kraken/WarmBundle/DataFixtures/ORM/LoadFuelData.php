@@ -13,103 +13,123 @@ class LoadFuelData implements FixtureInterface
     public function load(ObjectManager $manager)
     {
         $brownCoal = new Fuel();
-        $brownCoal->setType('brown_coal');
-        $brownCoal->setName('Węgiel brunatny (lub czeski)');
-        $brownCoal->setPrice(0.5);
-        $brownCoal->setUnit("kg");
-        $brownCoal->setTradeAmount(1000);
-        $brownCoal->setTradeUnit("t");
-        $brownCoal->setEnergy(19);
+        $brownCoal
+            ->setType('brown_coal')
+            ->setName('Węgiel brunatny (lub czeski)')
+            ->setPrice(0.5)
+            ->setUnit("kg")
+            ->setTradeAmount(1000)
+            ->setTradeUnit("t")
+            ->setEnergy(19)
+        ;
         $manager->persist($brownCoal);
 
         $bituminousCoal = new Fuel();
-        $bituminousCoal->setType('bituminous_coal');
-        $bituminousCoal->setName('Węgiel kamienny');
-        $bituminousCoal->setPrice(0.75);
-        $bituminousCoal->setUnit("kg");
-        $bituminousCoal->setTradeAmount(1000);
-        $bituminousCoal->setTradeUnit("t");
-        $bituminousCoal->setEnergy(28);
+        $bituminousCoal
+            ->setType('bituminous_coal')
+            ->setName('Węgiel kamienny')
+            ->setPrice(0.75)
+            ->setUnit("kg")
+            ->setTradeAmount(1000)
+            ->setTradeUnit("t")
+            ->setEnergy(28)
+        ;
         $manager->persist($bituminousCoal);
 
         $sandCoal = new Fuel();
-        $sandCoal->setType('sand_coal');
-        $sandCoal->setName('Miał węglowy');
-        $sandCoal->setPrice(0.6);
-        $sandCoal->setUnit("kg");
-        $sandCoal->setTradeAmount(1000);
-        $sandCoal->setTradeUnit("t");
-        $sandCoal->setEnergy(20);
+        $sandCoal
+            ->setType('sand_coal')
+            ->setName('Miał węglowy')
+            ->setPrice(0.6)
+            ->setUnit("kg")
+            ->setTradeAmount(1000)
+            ->setTradeUnit("t")
+            ->setEnergy(20)
+        ;
         $manager->persist($sandCoal);
 
         $ecoCoal = new Fuel();
-        $ecoCoal->setType('eco_coal');
-        $ecoCoal->setName('Ekogroszek');
-        $ecoCoal->setPrice(0.9);
-        $ecoCoal->setUnit("kg");
-        $ecoCoal->setTradeAmount(1000);
-        $ecoCoal->setTradeUnit("t");
-        $ecoCoal->setEnergy(28);
+        $ecoCoal
+            ->setType('eco_coal')
+            ->setName('Ekogroszek')
+            ->setPrice(0.9)
+            ->setUnit("kg")
+            ->setTradeAmount(1000)
+            ->setTradeUnit("t")
+            ->setEnergy(28)
+        ;
         $manager->persist($ecoCoal);
 
         $naturalGas = new Fuel();
-        $naturalGas->setType('natural_gas');
-        $naturalGas->setName('Gaz ziemny');
-        $naturalGas->setPrice(2.2);
-        $naturalGas->setUnit("m3");
-        $naturalGas->setTradeAmount(1);
-        $naturalGas->setTradeUnit("m3");
-        $naturalGas->setEnergy(38);
+        $naturalGas
+            ->setType('natural_gas')
+            ->setName('Gaz ziemny')
+            ->setPrice(0.22)
+            ->setUnit("kWh")
+            ->setTradeAmount(1)
+            ->setTradeUnit("kWh")
+            ->setEnergy(1)
+        ;
         $manager->persist($naturalGas);
 
         $pellet = new Fuel();
-        $pellet->setType('pellet');
-        $pellet->setName('Pellet');
-        $pellet->setPrice(0.9);
-        $pellet->setUnit("kg");
-        $pellet->setTradeAmount(1000);
-        $pellet->setTradeUnit("t");
-        $pellet->setEnergy(18);
+        $pellet
+            ->setType('pellet')
+            ->setName('Pellet')
+            ->setPrice(0.9)
+            ->setUnit("kg")
+            ->setTradeAmount(1000)
+            ->setTradeUnit("t")
+            ->setEnergy(18)
+        ;
         $manager->persist($pellet);
 
         $electricity = new Fuel();
-        $electricity->setType('electricity');
-        $electricity->setName('Prąd');
-        $electricity->setPrice(0.3);
-        $electricity->setUnit("kWh");
-        $electricity->setTradeAmount(1);
-        $electricity->setTradeUnit("kWh");
-        $electricity->setEnergy(3.6);
+        $electricity
+            ->setType('electricity')
+            ->setName('Prąd')
+            ->setPrice(0.3)
+            ->setUnit("kWh")
+            ->setTradeAmount(1)
+            ->setTradeUnit("kWh")
+            ->setEnergy(3.6)
+        ;
         $manager->persist($electricity);
 
         $wood = new Fuel();
-        $wood->setType('wood');
-        $wood->setName('Drewno');
-        $wood->setPrice(0.35);
-        $wood->setUnit("kg");
-        $wood->setTradeAmount(450);
-        $wood->setTradeUnit("mp");
-        $wood->setEnergy(16);
+        $wood
+            ->setType('wood')
+            ->setName('Drewno')
+            ->setPrice(0.35)
+            ->setUnit("kg")
+            ->setTradeAmount(450)
+            ->setTradeUnit("mp")
+            ->setEnergy(16)
+        ;
         $manager->persist($wood);
 
         $coke = new Fuel();
-        $coke->setType('coke');
-        $coke->setName('Koks');
-        $coke->setPrice(1);
-        $coke->setUnit("kg");
-        $coke->setTradeAmount(1000);
-        $coke->setTradeUnit("t");
-        $coke->setEnergy(30);
+        $coke
+            ->setType('coke')
+            ->setName('Koks')
+            ->setPrice(1)
+            ->setUnit("kg")
+            ->setTradeAmount(1000)
+            ->setTradeUnit("t")
+            ->setEnergy(30)
+        ;
         $manager->persist($coke);
 
         $propane = new Fuel();
-        $propane->setType('propane');
-        $propane->setName('Propan (LPG)');
-        $propane->setPrice(3);
-        $propane->setUnit("l");
-        $propane->setTradeAmount(1);
-        $propane->setTradeUnit("l");
-        $propane->setEnergy(24);
+        $propane
+            ->setType('propane')
+            ->setName('Propan (LPG)')
+            ->setPrice(3)
+            ->setUnit("l")
+            ->setTradeAmount(1)
+            ->setTradeUnit("l")
+            ->setEnergy(24)
+        ;
         $manager->persist($propane);
 
         $heatBuffer = new HeatingDevice();
@@ -238,14 +258,16 @@ class LoadFuelData implements FixtureInterface
         $manager->persist($oldGasStove);
 
         $hv0 = new HeatingVariant();
-        $hv0->setFuel($bituminousCoal);
-        $hv0->setName("Kopcenie węglem");
-        $hv0->setDetail("Nieumiejętne palenie w zbyt dużym kotle");
-        $hv0->setHeatingDevice($manualStove);
-        $hv0->setEfficiency(0.35);
-        $hv0->setSetupCost(4000);
-        $hv0->setMaintenanceTime(400);
-        $hv0->setLegacy(true);
+        $hv0
+            ->setFuel($bituminousCoal)
+            ->setName("Kopcenie węglem")
+            ->setDetail("Nieumiejętne palenie w zbyt dużym kotle")
+            ->setHeatingDevice($manualStove)
+            ->setEfficiency(0.35)
+            ->setSetupCost(4000)
+            ->setMaintenanceTime(400)
+            ->setLegacy(true)
+        ;
         $manager->persist($hv0);
 
         $hv1 = new HeatingVariant();

@@ -32,7 +32,7 @@ class CalculationFormType extends AbstractType
                 ),
             ))
             ->add('heating_device', null, [
-                'label' => 'Urządzenie grzewcze',
+                'label' => 'Podstawowe urządzenie grzewcze',
                 'query_builder' => function(EntityRepository $er ) use ($options) {
                     return $er->createQueryBuilder('hd')
                         ->andWhere('hd.for_legacy_setup = 1')
@@ -63,7 +63,7 @@ class CalculationFormType extends AbstractType
                     'widget_addon_prepend' => [
                         'text' => '@',
                     ],
-                    'horizontal_input_wrapper_class' => "col-lg-8",
+                    'horizontal_input_wrapper_class' => "col-sm-9",
                 ]
             ])
             ->add('email', null, array(

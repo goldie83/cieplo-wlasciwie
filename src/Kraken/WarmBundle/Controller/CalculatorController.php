@@ -2,16 +2,18 @@
 
 namespace Kraken\WarmBundle\Controller;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
 use Kraken\WarmBundle\Form\CalculationFormType;
 use Kraken\WarmBundle\Form\HouseApartmentType;
 use Kraken\WarmBundle\Form\HouseType;
 use Kraken\WarmBundle\Entity\Calculation;
 use Kraken\WarmBundle\Entity\House;
 use Kraken\WarmBundle\Entity\Layer;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Cookie;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class CalculatorController extends Controller
 {
@@ -38,10 +40,26 @@ class CalculatorController extends Controller
         $form = $this->createForm(new CalculationFormType(), $calc);
 
         if ($this->getRequest()->getMethod() == 'POST') {
+            $originalFuelConsumptions = new ArrayCollection();
+
+            foreach ($calc->getFuelConsumptions() as $fc) {
+                $originalFuelConsumptions->add($fc);
+            }
+
             $form->bind($this->getRequest());
 
             if ($form->isValid()) {
                 $obj = $form->getData();
+
+                foreach ($originalFuelConsumptions as $fc) {
+                    if (false === $obj->getFuelConsumptions()->contains($fc)) {
+                        $em->remove($fc);
+                    }
+                }
+
+                foreach ($obj->getFuelConsumptions() as $fc) {
+                    $fc->setCalculation($obj);
+                }
 
                 $isEditing = $obj->getId() != null;
 
@@ -293,6 +311,38 @@ class CalculatorController extends Controller
                 'time' => 200//FIXME (double)$calc->getMaintenanceTime()
             ],
         ];
+
+        return new JsonResponse($response);
+    }
+
+    public function fuelsForDeviceAction($id)
+    {
+        $device = $this->getDoctrine()
+            ->getRepository('KrakenWarmBundle:HeatingDevice')
+            ->find($id);
+
+        if (!$device) {
+            throw $this->createNotFoundException('nope');
+        }
+
+        $fuels = $this->getDoctrine()
+            ->getManager()
+            ->createQueryBuilder()
+            ->select('f, hv')
+            ->from('KrakenWarmBundle:HeatingVariant', 'hv')
+            ->join('hv.fuel', 'f')
+            ->where('hv.heatingDevice = (?1)')
+            ->orderBy('f.name', 'ASC')
+            ->setParameters([
+                1 => $device
+            ])
+            ->getQuery()
+            ->getResult();
+
+        $response = [];
+        foreach ($fuels as $f) {
+            $response[$f->getFuel()->getId()] = $f->getFuel()->getName();
+        }
 
         return new JsonResponse($response);
     }

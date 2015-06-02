@@ -32,6 +32,12 @@ details_fuels:
     options:
         expose: true
 
+fuels_for_device:
+    path:  /fuels_for_device/{id}
+    defaults: { _controller: KrakenWarmBundle:Calculator:fuelsForDevice }
+    options:
+        expose: true
+
 result:
     path:  /wynik/{slug}
     defaults: { _controller: KrakenWarmBundle:Calculator:result }
