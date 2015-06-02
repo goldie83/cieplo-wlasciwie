@@ -124,34 +124,32 @@ class Calculation
         return $calc;
     }
 
+    public function isFuelConsumptionProvided()
+    {
+        return count($this->getFuelConsumptions()) > 0;
+    }
+
     public function getFuelLabel()
     {
-        $labels = array(
-          'coal' => 'Węgiel kamienny',
-          'coke' => 'Koks',
-          'sand_coal' => 'Miał węglowy',
-          'brown_coal' => 'Węgiel brunatny',
-          'wood' => 'Drewno',
-          'pellet' => 'Pellet/brykiety',
-          'gas_e' => 'Gaz ziemny typ E (GZ-50)',
-          'gas_ls' => 'Gaz ziemny typ Ls (GZ-35)',
-          'gas_lw' => 'Gaz ziemny typ Lw (GZ-41,5)',
-          'electricity' => 'Prąd elektryczny',
-        );
+        $labels = [];
 
-        $amount = round($this->getFuelConsumption(), 1);
-
-        if (stristr($this->getFuelType(), 'coal') || $this->getFuelType() == 'pellet' || $this->getFuelType() == 'coke') {
-            $amount .= 't';
-        } elseif (stristr($this->getFuelType(), 'gas')) {
-            $amount .= 'm3';
-        } elseif ($this->getFuelType() == 'wood') {
-            $amount .= 'mp';
-        } else {
-            $amount .= 'kWh';
+        foreach ($this->getFuelConsumptions() as $fc) {
+            $amount = round($fc->getConsumption(), 1);
+            $labels[] = $fc->getFuel()->getName() . ' ' . $amount . $fc->getFuel()->getTradeUnit();
         }
 
-        return $labels[$this->getFuelType()].', '.$amount;
+        return implode(', ', $labels);
+    }
+
+    public function getFuelCost()
+    {
+        $cost = 0;
+
+        foreach ($this->getFuelConsumptions() as $fc) {
+            $cost += $fc->getCost();
+        }
+
+        return $cost;
     }
 
     public function getLabel()
@@ -385,57 +383,6 @@ class Calculation
     public function getStoveType()
     {
         return $this->stove_type;
-    }
-
-    /**
-     * Set fuel_consumption
-     *
-     * @param  float       $fuelConsumption
-     * @return Calculation
-     */
-    public function setFuelConsumption($fuelConsumption)
-    {
-        $this->fuel_consumption = $fuelConsumption;
-
-        return $this;
-    }
-
-    /**
-     * Get fuel_consumption
-     *
-     * @return float
-     */
-    public function getFuelConsumption()
-    {
-        // in case someone put amount in kgs, not in tons
-        if ((stristr($this->getFuelType(), 'coal') || $this->getFuelType() == 'pellet' || $this->getFuelType() == 'coke') && $this->fuel_consumption >= 1000) {
-            return $this->fuel_consumption/1000;
-        }
-
-        return $this->fuel_consumption;
-    }
-
-    /**
-     * Set fuel_cost
-     *
-     * @param  float       $fuelCost
-     * @return Calculation
-     */
-    public function setFuelCost($fuelCost)
-    {
-        $this->fuel_cost = $fuelCost;
-
-        return $this;
-    }
-
-    /**
-     * Get fuel_cost
-     *
-     * @return float
-     */
-    public function getFuelCost()
-    {
-        return $this->fuel_cost;
     }
 
     /**

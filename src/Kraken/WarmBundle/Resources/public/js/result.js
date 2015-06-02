@@ -44,28 +44,6 @@ $(function () {
             createBreakdownChart(breakdownOptions);
     });
 
-    /*$.getJSON(Routing.generate('details_fuels', {id: window.calculationId}), function(data) {
-            fuelChartOptions.series = calculateFuelCosts(data.series);
-            fuelChartOptions.series[0].tooltip = {};
-            fuelChartOptions.series[1].tooltip = {};
-            fuelChartOptions.series[0].tooltip.pointFormat = '<tr><td>{point.version}</td>' +
-                              '<td style="padding:0">&nbsp;</td></tr>' +
-                              '<tr><td style="color:{series.color};padding:0">Efektywność:</td>' +
-                              '<td style="padding:0">&nbsp;<b>{point.efficiency}%</b></td></tr>' +
-                              '<tr><td style="color:{series.color};padding:0">Cena:</td>' +
-                              '<td style="padding:0">&nbsp;<b>{point.trade_unit_price}zł/{point.trade_unit}</b></td></tr>' +
-                              '<tr><td style="color:{series.color};padding:0">Zużycie:</td>' +
-                              '<td style="padding:0">&nbsp;<b>{point.consumption}{point.trade_unit}</b></td></tr>' +
-                              '<tr><td style="color:{series.color};padding:0">Koszt:</td>' +
-                              '<td style="padding:0">&nbsp;<b>{point.y}zł</b></td></tr>';
-            fuelChartOptions.series[1].tooltip.pointFormat = '<tr><td style="color:{series.color};padding:0">Czas obsługi:</td>' +
-                              '<td style="padding:0">&nbsp;<b>{point.hours}h</b></td></tr>' +
-                              '<tr><td style="color:{series.color};padding:0">Koszt obsługi:</td>' +
-                              '<td style="padding:0">&nbsp;<b>{point.y}zł</b></td></tr>';
-            fuelChartOptions.xAxis.categories = data.categories;
-            createFuelChart(fuelChartOptions);
-    });*/
-
     $('#update_fuels').bind('click', function() {
         if (!fuelChart) {
             return;  

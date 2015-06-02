@@ -71,13 +71,12 @@
   <div class="row">
     <div class="col-md-6">
         <h3>Jak obecnie ogrzewasz</h3>
-          {% set fuelInfoProvided = calc.fuel and calc.fuelConsumption %}
-          {% set stoveEfficiency = fuelInfoProvided ? calculator.yearlyStoveEfficiency*100 : 0 %}
+          {% set stoveEfficiency = calc.fuelConsumptionProvided ? calculator.yearlyStoveEfficiency*100 : 0 %}
           <dl>
             {% if calc.heatingDevice %}
               <h4>{{ calc.heatingDevice.name }} {% if calc.stovePower %}o mocy {{ label_info(calc.stovePower|number_format(0, ',', ' ') ~ 'kW') }}{% endif %}</h4>
             {% endif %}
-            {% if fuelInfoProvided %}
+            {% if calc.fuelConsumptionProvided %}
               <dt>{{ calc.fuelLabel }}</dt>
               <dd>zużycie paliwa w sezonie grzewczym</dd>
             {% endif %}

@@ -76,7 +76,7 @@ class CalculationFormType extends AbstractType
                 'widget_addon_append' => [
                     'text'  => '&deg;C',
                 ],
-                'help_block' => 'Podaj średnią dobową temperaturę, jaką uznajesz za komfortową w domu zimą bez noszenia swetra i kalesonów. Np. w dzień +22, w nocy +18 - wpisz 20 stopni',
+                'help_block' => 'Podaj temperaturę jaką uznajesz za komfortową bez noszenia dwóch swetrów i kalesonów. Za standardową temperaturę pokojową przyjmuje się 20 st.C',
             ))
             ->add('latitude', 'hidden')
             ->add('longitude', 'hidden')

@@ -109,8 +109,14 @@ class EnergyCalculator
      */
     public function getEnergyOfSpentFuel()
     {
+        $totalEnergy = 0;
+
+        foreach ($this->instance->get()->getFuelConsumptions() as $fc) {
+            $totalEnergy += $this->fuel_service->getFuelEnergy($fc->getFuel(), $fc->getConsumption());
+        }
+
         // 10% as equivalent of kindling wood etc.
-        return 1.1 * $this->fuel_service->getFuelEnergy($this->instance->get()->getFuelType(), $this->instance->get()->getFuelConsumption());
+        return 1.1 * $totalEnergy;
     }
 
     /*

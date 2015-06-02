@@ -1,4 +1,4 @@
-{% set fuelInfoProvided = calc.fuel and calc.fuelConsumption %}
+{% set fuelInfoProvided = calc.fuelConsumptionProvided %}
 {% set stoveEfficiency = fuelInfoProvided ? calculator.yearlyStoveEfficiency*100 : 0 %}
 
 {% if fuelInfoProvided %}
@@ -6,7 +6,7 @@
       {% if stoveEfficiency < 35 %}
         <div class="alert alert-danger">
             <h4>Ogrzewanie rujnuje twój budżet</h4>
-            Sprawność twojej instalacji grzewczej to <strong>marne ~{{ stoveEfficiency|number_format(0, ',', ' ') }}%</strong>.
+            Wykorzystujesz jedynie <strong>marne ~{{ stoveEfficiency|number_format(0, ',', ' ') }}%</strong> energii dostępnej w paliwie.
             To znaczy, że większość pieniędzy wydanych na ogrzewanie wyrzucasz w błoto!
             <br />Na szczęście możesz szybko i prawie za darmo zacząć oszczędzać.
             <br /><a href="http://czysteogrzewanie.pl/jak-palic-w-piecu/jak-palic-czysto-weglem/" target="_blank">Przeczytaj, jak palić ekonomicznie i wygodnie</a>.
@@ -14,40 +14,45 @@
       {% elseif stoveEfficiency < 50 %}
         <div class="alert alert-warning">
             <h4>Sporo przepłacasz za ogrzewanie</h4>
-            Sprawność twojej instalacji grzewczej to <strong>tylko ~{{ stoveEfficiency|number_format(0, ',', ' ') }}%</strong>.
+            Wykorzystujesz <strong>tylko ~{{ stoveEfficiency|number_format(0, ',', ' ') }}%</strong> energii dostępnej w paliwie.
             <br /><a href="http://czysteogrzewanie.pl/jak-palic-w-piecu/jak-palic-czysto-weglem/" target="_blank">Zobacz, jak palić ekonomicznie oraz wygodnie i zacznij oszczędzać od zaraz!</a>
         </div>
       {% elseif stoveEfficiency < 75 %}
         <div class="alert alert-info">
             <h4>Ogrzewanie jest dość efektywne</h4>
-            Sprawność twojej instalacji grzewczej to <strong>~{{ stoveEfficiency|number_format(0, ',', ' ') }}%</strong>.
+            Wykorzystujesz <strong>~{{ stoveEfficiency|number_format(0, ',', ' ') }}%</strong> energii dostępnej w paliwie.
         </div>
       {% elseif stoveEfficiency < 90 %}
         <div class="alert alert-success">
             <h4>Ogrzewanie jest bardzo efektywne</h4>
-            Sprawność twojej instalacji grzewczej to <strong>aż ~{{ stoveEfficiency|number_format(0, ',', ' ') }}%</strong>.
+            Wykorzystujesz <strong>aż ~{{ stoveEfficiency|number_format(0, ',', ' ') }}%</strong> energii dostępnej w paliwie.
         </div>
       {% endif %}
   {% else %}
       {% if stoveEfficiency < 75 %}
         <div class="alert alert-warning">
             <h4>Ogrzewanie jest nieefektywne</h4>
-            Sprawność twojej instalacji grzewczej to <strong>tylko ~{{ stoveEfficiency|number_format(0, ',', ' ') }}%</strong>. To mało jak na {{ calc.fuelType == 'electricity' ? 'prąd' : 'gaz' }}.
-            Być może podałeś zbyt duże aktualne zużycie energii. Jeśli grzejesz także wodę użytkową, odejmij od rachunku 10-20%.
+            Wykorzystujesz <strong>tylko ~{{ stoveEfficiency|number_format(0, ',', ' ') }}%</strong> energii dostępnej w paliwie. To bardzo mało.
+            Być może podałeś zbyt duże zużycie opału na ogrzewanie lub nie uwzględniłeś ważnych danych o konstrukcji budynku.
         </div>
       {% elseif stoveEfficiency < 110 %}
         <div class="alert alert-success">
             <h4>Ogrzewanie jest bardzo efektywne</h4>
-            Sprawność twojej instalacji grzewczej to <strong>aż ~{{ stoveEfficiency|number_format(0, ',', ' ') }}%</strong>. Znakomicie.
+            Wykorzystujesz <strong>aż ~{{ stoveEfficiency|number_format(0, ',', ' ') }}%</strong> energii dostępnej w paliwie. Znakomicie!
         </div>
       {% endif %}
   {% endif %}
-  {% set fuelComparison = comparison.compareFuelConsumption %}
-  {% if fuelComparison %}
-      <div class="alert alert-info">
-          <h4>Jak to wygląda u innych?</h4>
-          {{ fuelComparison|raw }}
-      </div>
+  <h3>Jak twój dom wypada na tle innych</h3>
+  {% set comparables = comparison.comparables %}
+  {% if comparables %}
+    <div class="alert alert-success">
+        {{ comparables }}
+    </div>
+  {% else %}
+    <div class="alert alert-info">
+        <h4>Niestety...</h4>
+        Nie mamy wystarczająco informacji o podobnych budynkach w twojej okolicy.
+    </div>
   {% endif %}
 {% else %}
   <div class="alert alert-danger">
