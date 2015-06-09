@@ -151,14 +151,20 @@
   </div>
   <div class="row">
     <div class="col-md-6">
-      <h3>Czym i za ile ogrzewać</h3>
-      <p>Tyle będzie kosztowało utrzymanie w domu temperatury {{ calc.indoorTemperature|number_format(1, ',', ' ') }}&deg;C przez cały sezon grzewczy.</p>
-      <div class="alert alert-info">
-          W wyliczeniach przyjęto orientacyjne ceny paliw. Aby wyniki lepiej pasowały do twojej sytuacji, w każdej chwili <a href="#custom_fuel_prices" data-toggle="modal"><strong>możesz zmienić ceny paliw</strong></a>.</p>  
-      </div>  
+        <h3>Czym i za ile ogrzewać</h3>
+        <p>Poniżej zebrane zostały roczne koszty ogrzewania różnymi paliwami (zakładając utrzymanie w domu temperatury {{ calc.indoorTemperature|number_format(1, ',', ' ') }}&deg;C przez cały sezon grzewczy) oraz koszty inwestycji w przypadku zmiany aktualnego sposobu ogrzewania na inny.</p>
+        <div class="alert alert-info">
+            W wyliczeniach przyjęto orientacyjne ceny paliw. Aby wyniki lepiej pasowały do twojej sytuacji, w każdej chwili <a href="#custom_fuel_prices" data-toggle="modal"><strong>możesz zmienić ceny paliw</strong></a>.</p>  
+        </div>
+
+        <ul id="cost_charts_navbar" class="nav nav-tabs">
+          <li role="presentation" class="active"><a href="#" onclick="openHeatingCostsTab();return false;">Koszty ogrzewania</a></li>
+          <li role="presentation"><a href="#" onclick="openSetupCostsTab();return false;">Koszty inwestycji</a></li>
+        </ul>
+  
         <div id="fuel_chart" style="height:600px"></div>
-        <p><small><strong>Kopcenie węglem</strong> to palenie "od dołu" w kotle górnego spalania, czego efektem jest <a href="http://czysteogrzewanie.pl/wp-content/uploads/2013/01/kopcur.jpg" target="_blank">syf</a> oraz wysokie koszty (lub niedogrzanie domu).<br />
-            <strong>Ekonomiczne spalanie</strong> to palenie "od góry" w kotle górnego spalania lub zgodnie z instrukcją w kotle dolnego spalania.<br />
+        <div id="setup_chart" style="height:600px;display:none"></div>
+        <p><small><strong>Ekonomiczne spalanie</strong> to palenie "od góry" w kotle górnego spalania lub zgodnie z instrukcją w kotle dolnego spalania.<br />
             <strong>Cena prądu</strong> dotyczy strefy II ("nocnej") w taryfie dwustrefowej.</small>
         </p>
         <div id="custom_fuel_prices" class="modal fade">
@@ -202,15 +208,21 @@
     <div class="col-md-6">
       <h3>Jakie ogrzewanie jest najbardziej opłacalne?</h3>
 
-      <p>Oto sposoby ogrzewania, które są najtańsze w użyciu, a wydatek na ich zakup zwróci się najszybciej.</p>
+      <p>Poniższe sposoby ogrzewania pochłaniają mniej pieniędzy i czasu niż wariant, który obecnie stosujesz, a koszty inwestycji zwracają się w niższych rachunkach.</p>
 
-      <div class="panel panel-success" ng-repeat="variant in heatingVariants | filter: greaterThan('savedMoney', 0)">
+      <div class="panel panel-success" ng-repeat="variant in filtered = (heatingVariants | filter: greaterThan('savedMoney', 0))">
         <div class="panel-heading"><strong>{[{ variant.label }]}</strong>&nbsp;<small>{[{ variant.version }]}</small></div>
         <div class="panel-body">
-          Koszt instalacji: ~{[{ variant.setup_cost|currency }]}<br />
+          Koszt instalacji: ~{[{ variant.setup_cost|currency }]} 
+          (<small ng-repeat="item in variant.setup_costs">{[{ item[0] }]}: {[{ item[1]|currency }]}<span ng-show="!$last">, </span></small>)<br />
           Roczna oszczędność: <strong>{[{ variant.savedMoney|currency }]}</strong> oraz {[{ variant.savedTime|number }]} godzin pracy<br />
           Czas zwrotu inwestycji: <strong>{[{ formatRoiPeriod(variant.roi) }]}</strong><br />
         </div>
+      </div>
+
+      <div class="alert alert-success" style="display:none" ng-show="filtered|count == 0">
+          <h4>Nie mamy lepszej propozycji</h4>
+          Wygląda na to, że obecny sposób ogrzewania domu jest najbardziej opłacalny. Żadna z alternatyw nie da znaczących oszczędności.
       </div>
 
     </div>

@@ -298,9 +298,8 @@ class CalculatorController extends Controller
                 'label' => $raw[$fuelType]['label'],
                 'version' => $raw[$fuelType]['detail'],
                 'efficiency' => $raw[$fuelType]['efficiency']*100,
-                'setup_cost' => $raw[$fuelType]['setup_cost'],
+                'setup_costs' => $raw[$fuelType]['setup_costs'],
                 'maintenance_time' => $raw[$fuelType]['maintenance_time'],
-                'is_legacy' => $raw[$fuelType]['is_legacy'],
             ];
         }
 

@@ -3,6 +3,7 @@
 namespace Kraken\WarmBundle\Calculator;
 
 use Doctrine\ORM\EntityManager;
+use Kraken\WarmBundle\Entity\HeatingVariant;
 use Kraken\WarmBundle\Service\InstanceService;
 use Kraken\WarmBundle\Calculator\HeatingSeason;
 
@@ -30,12 +31,20 @@ class EnergyPricing
             ->createQueryBuilder()
             ->select('hv')
             ->from('KrakenWarmBundle:HeatingVariant', 'hv')
+            ->where('hv.legacy = ?1')
+            ->setParameter(1, false)
             ->getQuery()
             ->getResult();
 
         foreach ($heatingVariants as $variant) {
             $amount = ($energyAmount/$variant->getEfficiency())/($variant->getFuel()->getEnergy()*0.277); // MJ to kWh
-            $variantKey = isset($comparison[$variant->getType()]) ? $variant->getType().'_1' : $variant->getType();
+            $variantKey = $variant->getType();
+            $actualHeatingDeviceType = $this->instance->get()->getHeatingDevice()->getType();
+
+            if ($actualHeatingDeviceType != 'manual_stove' && $variant->getHeatingDevice()->getType() == $actualHeatingDeviceType) {
+                continue;
+            }
+
             $comparison[$variantKey] = [
                 'label' => $variant->getName(),
                 'detail' => $variant->getDetail(),
@@ -44,13 +53,103 @@ class EnergyPricing
                 'trade_amount' => $variant->getFuel()->getTradeAmount(),
                 'trade_unit' => $variant->getFuel()->getTradeUnit(),
                 'efficiency' => $variant->getEfficiency(),
-                'setup_cost' => $variant->getSetupCost(),
+                'setup_costs' => $this->collectSetupCosts($variant),
                 'maintenance_time' => $variant->getMaintenanceTime(),
-                'is_legacy' => $variant->isLegacy(),
             ];
         }
 
         return $comparison;
+    }
+
+    protected function collectSetupCosts(HeatingVariant $variant)
+    {
+        $costs = [
+            'chimney' => ['Komin', 12000],
+            'boiler_room' => ['Kotłownia', 10000],
+            'automatic_stove' => ['Kocioł podajnikowy', 7000],
+            'gas_stove' => ['Kocioł gazowy', 5000],
+            'pellet_stove' => ['Kocioł na pellet', 9000],
+            'manual_stove' => ['Kocioł zasypowy', 3500],
+            'automated_manual_stove' => ['Kocioł zasypowy', 4500],
+            'holzgas_stove' => ['Kocioł zgazowujący', 6000],
+            'gas_network_link' => ['Przyłącze gazowe', 8000],
+            'gas_tank' => ['Zbiornik na gaz', 8000],
+            'heat_buffer' => ['Zbiornik buforowy', 6000],
+            'heaters_wires' => ['Grzałki i instalacja elektryczna', 2000],
+            'ground_heat_pump' => ['Sprzęt i robocizna', 30000],
+            'air_heat_pump' => ['Sprzęt i robocizna', 20000],
+        ];
+
+        $type = $variant->getType();
+        $totalCost = [];
+
+        $mapping = [
+            'bituminous_coal_manual_stove' => ['chimney', 'boiler_room', 'manual_stove'],
+            'brown_coal_manual_stove' => ['chimney', 'boiler_room', 'manual_stove'],
+            'wood_manual_stove' => ['chimney', 'boiler_room', 'manual_stove'],
+            'bituminous_coal_manual_stove_buffer' => ['chimney', 'boiler_room', 'manual_stove', 'heat_buffer'],
+            'wood_manual_stove_buffer' => ['chimney', 'boiler_room', 'manual_stove', 'heat_buffer'],
+            'wood_holzgas_stove' => ['chimney', 'boiler_room', 'holzgas_stove', 'heat_buffer'],
+            'sand_coal_manual_stove' => ['chimney', 'boiler_room', 'automated_manual_stove'],
+            'coke_manual_stove' => ['chimney', 'boiler_room', 'manual_stove'],
+            'eco_coal_automatic_stove' => ['chimney', 'boiler_room', 'automatic_stove'],
+            'pellet_pellet_stove' => ['chimney', 'boiler_room', 'pellet_stove'],
+            'natural_gas_gas_stove' => ['gas_network_link', 'chimney', 'gas_stove'],
+            'natural_gas_gas_stove_condensing' => ['gas_network_link', 'gas_stove'],
+            'propane_gas_stove_condensing' => ['gas_tank', 'gas_stove'],
+            'electricity_heat_buffer' => ['heat_buffer', 'heaters_wires'],
+            'electricity_heat_pump_air' => ['air_heat_pump'],
+            'electricity_heat_pump_ground' => ['ground_heat_pump'],
+        ];
+
+        $selectedMapping = isset($mapping[$variant->getType()]) 
+            ? $mapping[$variant->getType()]
+            : [];
+
+        $actualDevice = $this->instance->get()->getHeatingDevice();
+
+        if ($actualDevice) {
+            $incurredCosts = [];
+
+            // subtract costs already incurred
+            if ($actualDevice->getType() == 'manual_stove') {
+                $incurredCosts = ['chimney', 'boiler_room', 'manual_stove'];
+            }
+
+            if ($actualDevice->getType() == 'manual_stove_buffer') {
+                $incurredCosts = ['chimney', 'boiler_room', 'manual_stove', 'heat_buffer'];
+            }
+
+            if ($actualDevice->getType() == 'heat_pump_air') {
+                $incurredCosts = ['air_heat_pump'];
+            }
+
+            if ($actualDevice->getType() == 'heat_pump_ground') {
+                $incurredCosts = ['ground_heat_pump'];
+            }
+
+            if ($actualDevice->getType() == 'pellet_stove') {
+                $incurredCosts = ['chimney', 'boiler_room', 'pellet_stove'];
+            }
+
+            if ($actualDevice->getType() == 'holzgas_stove') {
+                $incurredCosts = ['chimney', 'boiler_room', 'holzgas_stove', 'heat_buffer'];
+            }
+
+            if ($actualDevice->getType() == 'automatic_stove') {
+                $incurredCosts = ['chimney', 'boiler_room', 'automatic_stove'];
+            }
+
+            if (stristr($actualDevice->getType(), 'gas')) {
+                $incurredCosts = ['gas_stove', 'gas_network_link'];
+            }
+
+            $selectedMapping = array_diff($selectedMapping, $incurredCosts);
+        }
+
+        $selectedCosts = array_values(array_intersect_key($costs, array_flip($selectedMapping)));
+
+        return $selectedCosts;
     }
 
     public function getDefaultWorkHourPrice()

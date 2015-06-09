@@ -121,6 +121,21 @@ $(function () {
     }
 });
 
+function openHeatingCostsTab() {
+    $('#cost_charts_navbar').children().last().removeClass('active');
+    $('#cost_charts_navbar').children().first().addClass('active');
+
+    $('#setup_chart').hide();
+    $('#fuel_chart').show();
+}
+
+function openSetupCostsTab() {
+    $('#cost_charts_navbar').children().first().removeClass('active');
+    $('#cost_charts_navbar').children().last().addClass('active');
+    
+    $('#fuel_chart').hide();
+    $('#setup_chart').show();
+}
 
 var app = angular.module('warm', []).config(function($interpolateProvider){
         $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
@@ -209,6 +224,66 @@ app.controller('WarmCtrl', function($scope, $http) {
         },
         series: []
     };
+    
+    $scope.setupChartOptions = {
+        chart: {
+            type: 'bar',
+            renderTo: 'setup_chart'
+        },
+        title: {
+            text: 'Koszty zmiany aktualnego sposobu ogrzewania'
+        },
+        xAxis: {
+            categories: [],
+            labels: {
+              align: 'right',
+              style: {
+                  fontSize: '11px',
+                  fontFamily: 'Verdana, sans-serif'
+              }
+            }
+        },
+        yAxis: {
+            allowDecimals: false,
+            min: 0,
+            title: {
+                text: 'Koszt instalacji (zł)'
+            },
+            stackLabels: {
+                enabled: true,
+                formatter: function() {
+                    return Highcharts.numberFormat(100 * Math.ceil(this.total / 100), 0) + 'zł';
+                },
+                style: {
+                    fontWeight: 'bold',
+                    color: (Highcharts.theme && Highcharts.theme.textColor) || 'gray'
+                }
+            }
+
+        },
+        tooltip: {
+            headerFormat: '<span><b>{point.key}</b></span><table>',
+            footerFormat: '</table>',
+            shared: true,
+            useHTML: true
+        },
+        plotOptions: {
+            series: {
+                stacking: 'normal'
+            },
+            column: {
+                dataLabels: {
+                    enabled: false,
+                    color: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'black',
+                    backgroundColor: (Highcharts.theme && Highcharts.theme.dataLabelsColor) || 'ccc',
+                    formatter: function() {
+                        return Highcharts.numberFormat(this.y, 0) + 'zł';
+                    }
+                }
+            }
+        },
+        series: []
+    };
   
     $http.get(Routing.generate('details_fuels', {id: window.calculationId})).
         success(function(data, status, headers, config) {
@@ -216,16 +291,19 @@ app.controller('WarmCtrl', function($scope, $http) {
             $scope.currentVariant = data.currentVariant;
             
             for (var i = 0; i < $scope.heatingVariants.length; i++) {
+              console.log($scope.heatingVariants[i].fuel_type);
+                $scope.heatingVariants[i].setup_cost = $scope.calculateSetupCost($scope.heatingVariants[i].setup_costs);
                 $scope.heatingVariants[i].cost = Math.round($scope.heatingVariants[i].price * $scope.heatingVariants[i].amount);
                 $scope.heatingVariants[i].savedMoney = $scope.currentVariant.cost - $scope.heatingVariants[i].cost;
                 $scope.heatingVariants[i].savedTime = $scope.currentVariant.time - $scope.heatingVariants[i].maintenance_time;
                 $scope.heatingVariants[i].roi = Math.round($scope.roiPeriod($scope.heatingVariants[i].savedMoney, $scope.heatingVariants[i].savedTime, $scope.heatingVariants[i].setup_cost)); 
             }
             
-            console.log($scope.heatingVariants);
-            console.log($scope.currentVariant);
+//             console.log($scope.heatingVariants);
+//             console.log($scope.currentVariant);
             
             $scope.createFuelChart();
+            $scope.createSetupChart();
             
             $scope.heatingVariants.sort(function (a, b) { return a.roi - b.roi });
         }).
@@ -233,8 +311,17 @@ app.controller('WarmCtrl', function($scope, $http) {
             // log error
         });
         
-    $scope.calculateFuelCosts = function (data)
-    {
+    $scope.calculateSetupCost = function (data) {
+        var sum = 0;
+//         console.log(data);
+        for (var i = 0; i < data.length; i++) {
+            sum += data[i][1];
+        }
+        
+        return sum;
+    }
+        
+    $scope.calculateFuelCosts = function (data) {
         /*
          'price' => cena jednostkowa
          'amount' => ilosc jednostek paliwa
@@ -262,8 +349,30 @@ app.controller('WarmCtrl', function($scope, $http) {
         return series;
     }
     
-    $scope.createFuelChart = function () {
-                              
+    $scope.calculateSetupCostsForChart = function (data) {
+
+      data.sort(function(a, b) { return (a.setup_cost) - (b.setup_cost) });
+        
+        var series = [];
+        series[0] = {
+            name: 'Koszt instalacji',
+            data: [],
+            color: '#FFB25A',
+            index: 1,
+            showInLegend: false
+        };
+        
+        for (var i = 0; i < data.length; i++) {
+            $scope.setupChartOptions.xAxis.categories.push(data[i].label);
+
+            series[0]['data'][i] = data[i];
+            series[0]['data'][i].y = data[i].setup_cost;
+        }
+
+        return series;
+    }
+    
+    $scope.createFuelChart = function () {             
         $scope.fuelChartOptions.series = $scope.calculateFuelCosts($scope.heatingVariants);        
         $scope.fuelChartOptions.series[0].tooltip = {};
         $scope.fuelChartOptions.series[0].tooltip.pointFormat = '<tr><td>{point.version}</td>' +
@@ -278,6 +387,11 @@ app.controller('WarmCtrl', function($scope, $http) {
                               '<td style="padding:0">&nbsp;<b>{point.y}zł</b></td></tr>';
                               
         $scope.fuelChart = new Highcharts.Chart($scope.fuelChartOptions);
+    };
+    
+    $scope.createSetupChart = function () {                              
+        $scope.setupChartOptions.series = $scope.calculateSetupCostsForChart($scope.heatingVariants);        
+        $scope.setupChart = new Highcharts.Chart($scope.setupChartOptions);
     };
     
     $scope.roiPeriod = function (savedMoney, savedTime, setupCost) {

@@ -68,7 +68,7 @@ class LoadFuelData implements FixtureInterface
             ->setUnit("kWh")
             ->setTradeAmount(1)
             ->setTradeUnit("kWh")
-            ->setEnergy(1)
+            ->setEnergy(3.6)
         ;
         $manager->persist($naturalGas);
 
@@ -257,19 +257,6 @@ class LoadFuelData implements FixtureInterface
         ;
         $manager->persist($oldGasStove);
 
-        $hv0 = new HeatingVariant();
-        $hv0
-            ->setFuel($bituminousCoal)
-            ->setName("Kopcenie węglem")
-            ->setDetail("Nieumiejętne palenie w zbyt dużym kotle")
-            ->setHeatingDevice($manualStove)
-            ->setEfficiency(0.35)
-            ->setSetupCost(4000)
-            ->setMaintenanceTime(400)
-            ->setLegacy(true)
-        ;
-        $manager->persist($hv0);
-
         $hv1 = new HeatingVariant();
         $hv1->setFuel($bituminousCoal);
         $hv1->setName("Węgiel kamienny");
@@ -304,7 +291,7 @@ class LoadFuelData implements FixtureInterface
         $hv11->setFuel($bituminousCoal);
         $hv11->setName("Węgiel (+ bufor ciepła)");
         $hv11->setDetail("Spalany w kotle zasypowym z buforem ciepła");
-        $hv11->setHeatingDevice($manualStove);
+        $hv11->setHeatingDevice($manualStoveWithBuffer);
         $hv11->setEfficiency(0.7);
         $hv11->setSetupCost(8000);
         $hv11->setMaintenanceTime(40);
@@ -314,7 +301,7 @@ class LoadFuelData implements FixtureInterface
         $hv33->setFuel($wood);
         $hv33->setName("Drewno (+ bufor ciepła)");
         $hv33->setDetail("Spalane w kotle zasypowym z buforem ciepła");
-        $hv33->setHeatingDevice($manualStove);
+        $hv33->setHeatingDevice($manualStoveWithBuffer);
         $hv33->setEfficiency(0.7);
         $hv33->setSetupCost(8000);
         $hv33->setMaintenanceTime(50);
@@ -342,8 +329,8 @@ class LoadFuelData implements FixtureInterface
 
         $hv6 = new HeatingVariant();
         $hv6->setFuel($ecoCoal);
-        $hv6->setName("Ekogroszek");
-        $hv6->setDetail("Spalany w kotle podajnikowym");
+        $hv6->setName("Kocioł podajnikowy na ekogroszek");
+        $hv6->setDetail("Ekogroszek spalany w kotle podajnikowym");
         $hv6->setHeatingDevice($automaticStove);
         $hv6->setEfficiency(0.7);
         $hv6->setSetupCost(10000);
@@ -362,7 +349,7 @@ class LoadFuelData implements FixtureInterface
 
         $hv8 = new HeatingVariant();
         $hv8->setFuel($naturalGas);
-        $hv8->setName("Gaz ziemny");
+        $hv8->setName("Gaz ziemny + zwykły kocioł");
         $hv8->setDetail("Spalany w niekondensacyjnym nowym kotle gazowym");
         $hv8->setHeatingDevice($gasStove);
         $hv8->setEfficiency(0.85);
