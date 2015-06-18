@@ -18,6 +18,12 @@
         "for_wall_facade_layer": true
     },
     {
+        "name": "Pustak keramzytowy",
+        "lambda": 0.38,
+        "for_wall_construction_layer": true,
+        "for_wall_facade_layer": true
+    },
+    {
         "name": "Beton komórkowy",
         "lambda": 0.2,
         "for_wall_construction_layer": true,

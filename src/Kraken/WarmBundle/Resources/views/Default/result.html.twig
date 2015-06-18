@@ -89,7 +89,7 @@
           </dl>
 
           {% if calc.stovePower %}
-            {% if calculator.isStoveOversized and (not fuelInfoProvided or stoveEfficiency < 40) %}
+            {% if calculator.isStoveOversized and (not calc.fuelConsumptionProvided or stoveEfficiency < 40) %}
                 <div class="alert alert-danger">
                   <h4>Zbyt duża moc kotła drenuje ci portfel</h4>
                   Przez ten zbędny zapas mocy płacisz za opał, który bez pożytku ucieka kominem.
@@ -167,7 +167,7 @@
         <p><small><strong>Ekonomiczne spalanie</strong> to palenie "od góry" w kotle górnego spalania lub zgodnie z instrukcją w kotle dolnego spalania.<br />
             <strong>Cena prądu</strong> dotyczy strefy II ("nocnej") w taryfie dwustrefowej.</small>
         </p>
-        <div id="custom_fuel_prices" class="modal fade">
+        <div id="custom_fuel_prices" class="modal fade" role="dialog" aria-labelledby="zmianaCenPaliw" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
@@ -181,49 +181,83 @@
                   <div class="form-group">
                       <label for="work_hour_cost" class="required control-label">Cena twojej pracy:</label>
                       <div class="input-group">
-                          <input type="text" id="work_hour_cost" name="work_hour_cost" value="{{ pricing.defaultWorkHourPrice }}" class="form-control" />
+                          <input type="text" id="work_hour_cost" name="work_hour_cost" ng-model="workHourPrice" class="form-control" />
                           <span class="input-group-addon">zł/h</span>
                       </div>
                   </div>
-                      {% for fuel in fuels %}
-                      <div class="form-group">
-                          <label for="fuel_{{ fuel.type }}" class="required control-label">{{ fuel.name }}:</label>
-                          <div class="input-group">
-                                <input type="text" id="fuel_{{ fuel.type }}" name="fuel_{{ fuel.type }}" value="{{ fuel.price * fuel.tradeAmount }}" class="form-control" />
-                                <span class="input-group-addon">zł/{{ fuel.tradeUnit }}</span>
-                          </div>
+                  <div class="form-group" ng-repeat="(fuel_type, fuel) in fuels">
+                      <label for="fuel_{[{ fuel_type }]}" class="required control-label">{[{ fuel.name }]}:</label>
+                      <div class="input-group">
+                            <input type="text" id="fuel_{[{ fuel_type }[}" name="fuel_{[{ fuel_type }]}" ng-model="fuel.human_price" class="form-control" />
+                            <span class="input-group-addon">zł/{[{ fuel.trade_unit }]}</span>
                       </div>
-                      {% endfor %}
+                  </div>
                   </form>
                 </div>
               </div>
               <div class="modal-footer">
                 <a href="#" class="btn" data-dismiss="modal">Zamknij</a>
-                <a href="#" class="btn btn-primary" id="update_fuels">Przelicz koszty</a>
+                <a href="#" class="btn btn-primary" id="update_fuels" ng-click="updateFuelCosts()">Przelicz koszty</a>
               </div>
             </div>
         </div>
       </div>
     </div>
     <div class="col-md-6">
+    {% if calc.fuelConsumptionProvided %}
       <h3>Jakie ogrzewanie jest najbardziej opłacalne?</h3>
 
       <p>Poniższe sposoby ogrzewania pochłaniają mniej pieniędzy i czasu niż wariant, który obecnie stosujesz, a koszty inwestycji zwracają się w niższych rachunkach.</p>
 
-      <div class="panel panel-success" ng-repeat="variant in filtered = (heatingVariants | filter: greaterThan('savedMoney', 0))">
+      <div class="panel panel-success" ng-repeat="variant in heatingVariants | filter: greaterThan('savedMoney', 0)">
         <div class="panel-heading"><strong>{[{ variant.label }]}</strong>&nbsp;<small>{[{ variant.version }]}</small></div>
         <div class="panel-body">
-          Koszt instalacji: ~{[{ variant.setup_cost|currency }]} 
-          (<small ng-repeat="item in variant.setup_costs">{[{ item[0] }]}: {[{ item[1]|currency }]}<span ng-show="!$last">, </span></small>)<br />
-          Roczna oszczędność: <strong>{[{ variant.savedMoney|currency }]}</strong> oraz {[{ variant.savedTime|number }]} godzin pracy<br />
-          Czas zwrotu inwestycji: <strong>{[{ formatRoiPeriod(variant.roi) }]}</strong><br />
+          <p ng-show="variant.setup_cost > 0">Koszt instalacji: ~{[{ variant.setup_cost|currency }]} <small>
+          (w tym: <span ng-repeat="item in variant.setup_costs">{[{ item[0] }]}: {[{ item[1]|currency }]}<span ng-show="!$last">, </span></span>)</small></p>
+          <p ng-show="variant.setup_cost == 0">Koszt instalacji: żaden (nic nie musisz zmieniać)</p>
+          <p>Roczna oszczędność: <strong>{[{ variant.savedMoney|currency }]}</strong> oraz {[{ variant.savedTime|number }]} godzin pracy</p>
+          <p ng-show="variant.setup_cost > 0">Czas zwrotu inwestycji: <strong>{[{ formatRoiPeriod(variant.roi) }]}</strong></p>
         </div>
       </div>
 
-      <div class="alert alert-success" style="display:none" ng-show="filtered|count == 0">
+      <div class="alert alert-success" style="display:none" ng-show="(heatingVariants | filter: greaterThan('savedMoney', 0)).length == 0">
           <h4>Nie mamy lepszej propozycji</h4>
           Wygląda na to, że obecny sposób ogrzewania domu jest najbardziej opłacalny. Żadna z alternatyw nie da znaczących oszczędności.
       </div>
+
+    {% else %}
+
+      <h3>Jakie ogrzewanie jest najbardziej opłacalne?</h3>
+
+      <p>Tyle kosztowałoby ogrzewanie kotłem zasypowym, powszechnie uważanym za najtańszy.</p>
+
+      <div class="panel panel-warning" ng-show="referenceVariant">
+        <div class="panel-heading"><strong>{[{ referenceVariant.label }]}</strong>&nbsp;<small>{[{ referenceVariant.version }]}</small></div>
+        <div class="panel-body">
+          <p>Koszt instalacji: {[{ referenceVariant.setup_cost|currency }]} <small>
+          (w tym: <span ng-repeat="item in referenceVariant.setup_costs">{[{ item[0] }]}: {[{ item[1]|currency }]}<span ng-show="!$last">, </span></span>)</small></p>
+          <p>Koszt ogrzewania: <strong>{[{ referenceVariant.cost|currency }]}</strong> oraz {[{ referenceVariant.maintenance_time|number }]} godzin pracy</p>
+        </div>
+      </div>
+
+      <p>Te sposoby ogrzewania będą korzystniejsze niż zwykły "śmieciuch" a wyższy koszt instalacji zwróci się w niższych rachunkach.</p>
+
+      <div class="panel panel-success" ng-repeat="variant in heatingVariants" ng-show="variant.cost < referenceVariant.cost && filterOutManualStoveVariants(variant)">
+        <div class="panel-heading"><strong>{[{ variant.label }]}</strong>&nbsp;<small>{[{ variant.version }]}</small></div>
+        <div class="panel-body">
+          <p>Różnica w kosztach instalacji: {[{ variant.setup_cost_diff|currency }]} <small>
+          (razem ~{[{ variant.setup_cost|currency }]}, w tym: <span ng-repeat="item in variant.setup_costs">{[{ item[0] }]}: {[{ item[1]|currency }]}<span ng-show="!$last">, </span></span>)</small></p>
+          <p>
+              Koszt ogrzewania: <strong>{[{ variant.cost|currency }]}</strong>
+              <span ng-show="variant.maintenance_time > 0"> oraz {[{ variant.maintenance_time|number }]} godzin pracy</span>
+              <span ng-show="variant.maintenance_time == 0"> (nie wymaga obsługi)</span>
+          </p>
+          <p>Roczna oszczędność: <strong>{[{ variant.savedMoney|currency }]}</strong> oraz {[{ variant.savedTime|number }]} godzin pracy</p>
+          <p ng-show="variant.setup_cost > 0">Czas zwrotu inwestycji: <strong>{[{ formatRoiPeriod(variant.roi) }]}</strong></p>
+        </div>
+      </div>
+
+    {% endif %}
 
     </div>
   </div>

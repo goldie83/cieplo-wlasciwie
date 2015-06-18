@@ -264,7 +264,7 @@ class LoadFuelData implements FixtureInterface
         $hv1->setHeatingDevice($manualStove);
         $hv1->setEfficiency(0.55);
         $hv1->setSetupCost(4000);
-        $hv1->setMaintenanceTime(100);
+        $hv1->setMaintenanceTime(150);
         $manager->persist($hv1);
 
         $hv2 = new HeatingVariant();
@@ -274,7 +274,7 @@ class LoadFuelData implements FixtureInterface
         $hv2->setHeatingDevice($manualStove);
         $hv2->setEfficiency(0.55);
         $hv2->setSetupCost(4000);
-        $hv2->setMaintenanceTime(100);
+        $hv2->setMaintenanceTime(150);
         $manager->persist($hv2);
 
         $hv3 = new HeatingVariant();
@@ -283,7 +283,7 @@ class LoadFuelData implements FixtureInterface
         $hv3->setDetail("Spalane ekonomicznie w kotle zasypowym");
         $hv3->setHeatingDevice($manualStove);
         $hv3->setSetupCost(4000);
-        $hv3->setMaintenanceTime(100);
+        $hv3->setMaintenanceTime(150);
         $hv3->setEfficiency(0.5);
         $manager->persist($hv3);
 
@@ -294,7 +294,7 @@ class LoadFuelData implements FixtureInterface
         $hv11->setHeatingDevice($manualStoveWithBuffer);
         $hv11->setEfficiency(0.7);
         $hv11->setSetupCost(8000);
-        $hv11->setMaintenanceTime(40);
+        $hv11->setMaintenanceTime(80);
         $manager->persist($hv11);
 
         $hv33 = new HeatingVariant();
@@ -304,7 +304,7 @@ class LoadFuelData implements FixtureInterface
         $hv33->setHeatingDevice($manualStoveWithBuffer);
         $hv33->setEfficiency(0.7);
         $hv33->setSetupCost(8000);
-        $hv33->setMaintenanceTime(50);
+        $hv33->setMaintenanceTime(80);
         $manager->persist($hv33);
 
         $hv4 = new HeatingVariant();
@@ -314,7 +314,7 @@ class LoadFuelData implements FixtureInterface
         $hv4->setHeatingDevice($manualStove);
         $hv4->setEfficiency(0.6);
         $hv4->setSetupCost(5000);
-        $hv4->setMaintenanceTime(120);
+        $hv4->setMaintenanceTime(150);
         $manager->persist($hv4);
 
         $hv5 = new HeatingVariant();
@@ -324,7 +324,7 @@ class LoadFuelData implements FixtureInterface
         $hv5->setHeatingDevice($manualStove);
         $hv5->setEfficiency(0.7);
         $hv5->setSetupCost(4000);
-        $hv5->setMaintenanceTime(100);
+        $hv5->setMaintenanceTime(120);
         $manager->persist($hv5);
 
         $hv6 = new HeatingVariant();
@@ -334,7 +334,7 @@ class LoadFuelData implements FixtureInterface
         $hv6->setHeatingDevice($automaticStove);
         $hv6->setEfficiency(0.7);
         $hv6->setSetupCost(10000);
-        $hv6->setMaintenanceTime(20);
+        $hv6->setMaintenanceTime(50);
         $manager->persist($hv6);
 
         $hv7 = new HeatingVariant();
@@ -344,7 +344,7 @@ class LoadFuelData implements FixtureInterface
         $hv7->setHeatingDevice($pelletStove);
         $hv7->setEfficiency(0.8);
         $hv7->setSetupCost(12000);
-        $hv7->setMaintenanceTime(20);
+        $hv7->setMaintenanceTime(30);
         $manager->persist($hv7);
 
         $hv8 = new HeatingVariant();
@@ -367,6 +367,24 @@ class LoadFuelData implements FixtureInterface
         $hv9->setMaintenanceTime(0);
         $hv9->setLegacy(true);
         $manager->persist($hv9);
+
+        $hv91 = new HeatingVariant();
+        $hv91->setFuel($naturalGas);
+        $hv91->setName("Piec kaflowy");
+        $hv91->setHeatingDevice($tileStove);
+        $hv91->setEfficiency(0.6);
+        $hv91->setMaintenanceTime(150);
+        $hv91->setLegacy(true);
+        $manager->persist($hv91);
+
+        $hv92 = new HeatingVariant();
+        $hv92->setFuel($naturalGas);
+        $hv92->setName("Kominek");
+        $hv92->setHeatingDevice($fireplace);
+        $hv92->setEfficiency(0.5);
+        $hv92->setMaintenanceTime(150);
+        $hv92->setLegacy(true);
+        $manager->persist($hv92);
 
         $hv10 = new HeatingVariant();
         $hv10->setFuel($naturalGas);

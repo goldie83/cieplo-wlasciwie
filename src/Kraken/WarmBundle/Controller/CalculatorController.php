@@ -284,30 +284,42 @@ class CalculatorController extends Controller
         }
 
         $data = [];
-        $raw = $this->get('kraken_warm.energy_pricing')->getEnergySourcesComparison();
-        $fuelTypes = array_keys($raw);
+        $fuels = [];
+        $variants = $this->get('kraken_warm.energy_pricing')->getHeatingVariantsComparison();
+        $fuelEntities = $this->get('kraken_warm.energy_pricing')->getFuels();
+        $variantTypes = array_keys($variants);
 
-        foreach ($fuelTypes as $fuelType) {
+        foreach ($fuelEntities as $fuelEntity) {
+            $fuels[$fuelEntity->getType()] = [
+                'name' => $fuelEntity->getName(),
+                'price' => (double) $fuelEntity->getPrice(),
+                'trade_amount' => (int) $fuelEntity->getTradeAmount(),
+                'trade_unit' => $fuelEntity->getTradeUnit(),
+            ];
+        }
+
+        foreach ($variantTypes as $variantType) {
+            $fuelType = $variants[$variantType]['fuel_type'];
+
             $data[] = [
+                'type' => $variantType,
+                'label' => $variants[$variantType]['label'],
+                'version' => $variants[$variantType]['detail'],
+                'amount' => $variants[$variantType]['amount'],
+                'consumption' => round($variants[$variantType]['amount']/$fuels[$fuelType]['trade_amount'], 1),
                 'fuel_type' => $fuelType,
-                'price' => $raw[$fuelType]['price'],
-                'amount' => $raw[$fuelType]['amount'],
-                'consumption' => round($raw[$fuelType]['amount']/$raw[$fuelType]['trade_amount'], 1),
-                'trade_amount' => $raw[$fuelType]['trade_amount'],
-                'trade_unit' => $raw[$fuelType]['trade_unit'],
-                'label' => $raw[$fuelType]['label'],
-                'version' => $raw[$fuelType]['detail'],
-                'efficiency' => $raw[$fuelType]['efficiency']*100,
-                'setup_costs' => $raw[$fuelType]['setup_costs'],
-                'maintenance_time' => $raw[$fuelType]['maintenance_time'],
+                'efficiency' => $variants[$variantType]['efficiency']*100,
+                'setup_costs' => $variants[$variantType]['setup_costs'],
+                'maintenance_time' => $variants[$variantType]['maintenance_time'],
             ];
         }
 
         $response = [
             'variants' => $data,
+            'fuels' => $fuels,
             'currentVariant' => [
-                'cost' => (double)$calc->getFuelCost(),
-                'time' => 200//FIXME (double)$calc->getMaintenanceTime()
+                'cost' => $calc->getFuelCost(),
+                'time' => $this->get('kraken_warm.energy_pricing')->getMaintenanceTime($calc),
             ],
         ];
 
@@ -376,7 +388,6 @@ class CalculatorController extends Controller
 
         return $this->render('KrakenWarmBundle:Default:result.html.twig', array(
             'calculator' => $calculator,
-            'fuels' => $this->get('kraken_warm.energy_pricing')->getFuels(),
             'building' => $building,
             'pricing' => $pricing,
             'heatingSeason' => $heatingSeason,

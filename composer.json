@@ -35,7 +35,7 @@
         "jms/di-extra-bundle": "1.4.*",
         "vich/geographical-bundle": "dev-master",
         "braincrafted/bootstrap-bundle": "dev-master",
-        "twbs/bootstrap": "dev-master",
+        "twbs/bootstrap": "3.1.*",
         "jquery/jquery": "1.10.*",
         "knplabs/knp-menu-bundle": "dev-master",
         "doctrine/data-fixtures": "1.0.*@dev",

@@ -44,82 +44,11 @@ $(function () {
             createBreakdownChart(breakdownOptions);
     });
 
-    $('#update_fuels').bind('click', function() {
-        if (!fuelChart) {
-            return;  
-        }
-        
-        var fuelIndex = 1;
-        var costsIndex = 0;
-        
-        var newData = fuelChart.series[fuelIndex].options.data;
-
-        var dataChanged = false;
-
-        for (var i = 0; i < newData.length; i++) {
-            var fuelType = newData[i].fuel_type;
-
-            var fuelField = fuelType == 'coal_cleaner'
-                ? 'coal_dirty'
-                : fuelType;
-
-            var newPrice = parseFloat($('#fuel_' + fuelField).val().replace(',','.').replace(' ',''));
-            if (newPrice < 0) {
-                continue;
-            }
-
-            var newUnitPrice = newPrice / newData[i].trade_amount;
-            if (newUnitPrice == newData[i].price) {
-                continue;
-            }
-
-            dataChanged = true;
-            newData[i].price = newUnitPrice;
-            newData[i].y = Math.round(newData[i].price * newData[i].amount);
-            newData[i].trade_unit_price = newData[i].price * newData[i].trade_amount;
-        }
-
-        if (dataChanged) {
-            fuelChart.series[fuelIndex].setVisible(false);
-            fuelChart.series[fuelIndex].setData(newData);
-            fuelChart.series[fuelIndex].setVisible(true, true);
-        }
-
-        var newData = fuelChart.series[costsIndex].options.data;
-        var dataChanged = false;
-
-        for (var i = 0; i < newData.length; i++) {
-            var fuelType = newData[i].fuel_type;
-
-            var newWorkPrice = parseFloat($('#work_hour_cost').val().replace(',','.').replace(' ',''));
-            if (newWorkPrice < 0) {
-                continue;
-            }
-
-            var newWorkCost = newWorkPrice * newData[i].hours;
-            if (newWorkCost == newData[i].y) {
-                continue;
-            }
-
-            dataChanged = true;
-            newData[i].y = Math.round(newWorkPrice * newData[i].hours);
-        }
-
-        if (dataChanged) {
-            fuelChart.series[costsIndex].setVisible(false);
-            fuelChart.series[costsIndex].setData(newData);
-            fuelChart.series[costsIndex].setVisible(true, true);
-        }
-
-        $('#custom_fuel_prices').modal('hide');
-
-        return false;
-    });
-
     function createBreakdownChart(options) {
         $('#heat_loss_breakdown').highcharts(options);
     }
 });
+
 
 function openHeatingCostsTab() {
     $('#cost_charts_navbar').children().last().removeClass('active');
@@ -164,6 +93,15 @@ app.controller('WarmCtrl', function($scope, $http) {
     $scope.fuelChart = null;
     $scope.workHourPrice = 10;
     $scope.includeWorkTime = true;
+    
+    $('#custom_fuel_prices').on('hide.bs.modal', function () {
+        // restore unit price from human input
+        for (var key in $scope.fuels) {
+            $scope.fuels[key].price = $scope.fuels[key].human_price / $scope.fuels[key].trade_amount;
+        }
+        
+        $scope.recalculateCosts();
+    });
     
     $scope.fuelChartOptions = {
         chart: {
@@ -288,32 +226,65 @@ app.controller('WarmCtrl', function($scope, $http) {
     $http.get(Routing.generate('details_fuels', {id: window.calculationId})).
         success(function(data, status, headers, config) {
             $scope.heatingVariants = data.variants;
+            $scope.fuels = data.fuels;
             $scope.currentVariant = data.currentVariant;
             
-            for (var i = 0; i < $scope.heatingVariants.length; i++) {
-              console.log($scope.heatingVariants[i].fuel_type);
-                $scope.heatingVariants[i].setup_cost = $scope.calculateSetupCost($scope.heatingVariants[i].setup_costs);
-                $scope.heatingVariants[i].cost = Math.round($scope.heatingVariants[i].price * $scope.heatingVariants[i].amount);
-                $scope.heatingVariants[i].savedMoney = $scope.currentVariant.cost - $scope.heatingVariants[i].cost;
-                $scope.heatingVariants[i].savedTime = $scope.currentVariant.time - $scope.heatingVariants[i].maintenance_time;
-                $scope.heatingVariants[i].roi = Math.round($scope.roiPeriod($scope.heatingVariants[i].savedMoney, $scope.heatingVariants[i].savedTime, $scope.heatingVariants[i].setup_cost)); 
+            //create fake variable with human-readable fuel price for settings modal
+            for (var key in $scope.fuels) {
+                var humanPrice = $scope.fuels[key].price * $scope.fuels[key].trade_amount;
+                $scope.fuels[key].human_price = humanPrice;
             }
             
-//             console.log($scope.heatingVariants);
-//             console.log($scope.currentVariant);
-            
-            $scope.createFuelChart();
-            $scope.createSetupChart();
-            
-            $scope.heatingVariants.sort(function (a, b) { return a.roi - b.roi });
+            $scope.recalculateCosts();
         }).
         error(function(data, status, headers, config) {
             // log error
         });
         
+    $scope.recalculateCosts = function () {      
+        for (var i = 0; i < $scope.heatingVariants.length; i++) {
+            if ($scope.heatingVariants[i].type == 'bituminous_coal_manual_stove') {
+                $scope.referenceVariant = $scope.heatingVariants[i];
+                $scope.referenceVariant.setup_cost = $scope.calculateSetupCost($scope.referenceVariant.setup_costs);
+                $scope.referenceVariant.cost = Math.round($scope.fuels[$scope.referenceVariant.fuel_type].price * $scope.referenceVariant.amount);
+                break;
+            }
+        }
+
+        var fuelConsumptionProvided = $scope.currentVariant.cost > 0 && $scope.currentVariant.time > 0;
+        
+        for (var i = 0; i < $scope.heatingVariants.length; i++) {
+            if (fuelConsumptionProvided) {
+                $scope.heatingVariants[i].setup_cost = $scope.calculateSetupCost($scope.heatingVariants[i].setup_costs);
+                $scope.heatingVariants[i].cost = Math.round($scope.fuels[$scope.heatingVariants[i].fuel_type].price * $scope.heatingVariants[i].amount);
+                $scope.heatingVariants[i].savedMoney = $scope.currentVariant.cost - $scope.heatingVariants[i].cost;
+                $scope.heatingVariants[i].savedTime = Math.max(0, $scope.currentVariant.maintenance_time - $scope.heatingVariants[i].maintenance_time);
+                $scope.heatingVariants[i].roi = Math.round($scope.roiPeriod($scope.heatingVariants[i].savedMoney, $scope.heatingVariants[i].savedTime, $scope.heatingVariants[i].setup_cost)); 
+            } else {
+                $scope.heatingVariants[i].setup_cost = $scope.calculateSetupCost($scope.heatingVariants[i].setup_costs);
+                $scope.heatingVariants[i].setup_cost_diff = $scope.calculateSetupCost($scope.heatingVariants[i].setup_costs) - $scope.calculateSetupCost($scope.referenceVariant.setup_costs);
+                $scope.heatingVariants[i].cost = Math.round($scope.fuels[$scope.heatingVariants[i].fuel_type].price * $scope.heatingVariants[i].amount);
+                $scope.heatingVariants[i].savedMoney = $scope.referenceVariant.cost - $scope.heatingVariants[i].cost;
+                $scope.heatingVariants[i].savedTime = Math.max(0, $scope.referenceVariant.maintenance_time - $scope.heatingVariants[i].maintenance_time);
+                $scope.heatingVariants[i].roi = Math.round($scope.roiPeriod($scope.heatingVariants[i].savedMoney, $scope.heatingVariants[i].savedTime, $scope.heatingVariants[i].setup_cost_diff)); 
+            }
+        }
+
+        $scope.createFuelChart();
+        $scope.createSetupChart();
+        
+        $scope.heatingVariants.sort(function (a, b) { return a.roi - b.roi }); 
+    }
+        
+    $scope.updateFuelCosts = function () {            
+        $('#custom_fuel_prices').modal('hide');
+        
+        return false;
+    }
+        
     $scope.calculateSetupCost = function (data) {
         var sum = 0;
-//         console.log(data);
+
         for (var i = 0; i < data.length; i++) {
             sum += data[i][1];
         }
@@ -321,41 +292,47 @@ app.controller('WarmCtrl', function($scope, $http) {
         return sum;
     }
         
-    $scope.calculateFuelCosts = function (data) {
+    $scope.calculateFuelCosts = function (heatingVariants) {
         /*
          'price' => cena jednostkowa
          'amount' => ilosc jednostek paliwa
          'trade_amount' => mnoznik handlowy jednostek paliwa,
          'trade_unit' => nazwa jednostki handlowej,*/
+        $scope.fuelChartOptions.xAxis.categories = [];
         
-        data.sort(function(a, b) { return (a.price * a.amount) - (b.price * b.amount) });
+        heatingVariants.sort(function(a, b) { return ($scope.fuels[a.fuel_type].price * a.amount) - ($scope.fuels[b.fuel_type].price * b.amount) });
         
         var series = [];
         series[0] = {
             name: 'Koszt paliwa',
-            data: [],
+            heatingVariants: [],
             index: 1,
             showInLegend: false
         };
+        series[0]['data'] = [];
         
-        for (var i = 0; i < data.length; i++) {
-            $scope.fuelChartOptions.xAxis.categories.push(data[i].label);
+        for (var i = 0; i < heatingVariants.length; i++) {
+            $scope.fuelChartOptions.xAxis.categories.push(heatingVariants[i].label);
 
-            series[0]['data'][i] = data[i];
-            series[0]['data'][i].y = data[i].cost;
-            series[0]['data'][i].trade_unit_price = data[i].price * data[i].trade_amount;
+            series[0]['data'][i] = heatingVariants[i];
+            series[0]['data'][i].y = heatingVariants[i].cost;
+            series[0]['data'][i].trade_unit_price = $scope.fuels[heatingVariants[i].fuel_type].price * $scope.fuels[heatingVariants[i].fuel_type].trade_amount;
+            series[0]['data'][i].price = $scope.fuels[heatingVariants[i].fuel_type].price;
+            series[0]['data'][i].trade_unit = $scope.fuels[heatingVariants[i].fuel_type].trade_unit;
+            series[0]['data'][i].trade_amount = $scope.fuels[heatingVariants[i].fuel_type].trade_amount;
         }
 
         return series;
     }
     
     $scope.calculateSetupCostsForChart = function (data) {
-
-      data.sort(function(a, b) { return (a.setup_cost) - (b.setup_cost) });
+        $scope.setupChartOptions.xAxis.categories = [];
+      
+        data.sort(function(a, b) { return (a.setup_cost) - (b.setup_cost) });
         
         var series = [];
         series[0] = {
-            name: 'Koszt instalacji',
+            name: 'Koszt inwestycji',
             data: [],
             color: '#FFB25A',
             index: 1,
@@ -373,7 +350,7 @@ app.controller('WarmCtrl', function($scope, $http) {
     }
     
     $scope.createFuelChart = function () {             
-        $scope.fuelChartOptions.series = $scope.calculateFuelCosts($scope.heatingVariants);        
+        $scope.fuelChartOptions.series = $scope.calculateFuelCosts($scope.heatingVariants);
         $scope.fuelChartOptions.series[0].tooltip = {};
         $scope.fuelChartOptions.series[0].tooltip.pointFormat = '<tr><td>{point.version}</td>' +
                               '<td style="padding:0">&nbsp;</td></tr>' +
@@ -390,7 +367,12 @@ app.controller('WarmCtrl', function($scope, $http) {
     };
     
     $scope.createSetupChart = function () {                              
-        $scope.setupChartOptions.series = $scope.calculateSetupCostsForChart($scope.heatingVariants);        
+        $scope.setupChartOptions.series = $scope.calculateSetupCostsForChart($scope.heatingVariants);
+        $scope.setupChartOptions.series[0].tooltip = {};
+        $scope.setupChartOptions.series[0].tooltip.pointFormat = '<tr><td>{point.version}</td>' +
+                              '<td style="padding:0">&nbsp;</td></tr>' +
+                              '<tr><td style="color:{series.color};padding:0">Koszty inwestycji:</td>' +
+                              '<td style="padding:0">&nbsp;<b>{point.y}zł</b></td></tr>';
         $scope.setupChart = new Highcharts.Chart($scope.setupChartOptions);
     };
     
@@ -406,18 +388,22 @@ app.controller('WarmCtrl', function($scope, $http) {
         
         if (period < 2) {
             suffix = 'rok';
-        }
-        
-        if (period % 10 >= 2 && period % 10 < 5) {
+        } else if (period >= 2 && period < 5) {
             suffix = 'lata';
         }
         
-        return period <= 20 ? Math.round(period) + " " + suffix : 'nigdy';
+        return period > 0 && period < 1 ? 'poniżej roku' : Math.round(period) + " " + suffix;
     };
     
     $scope.greaterThan = function(prop, val){
         return function(item){
             return item[prop] > val;
         }
+    }
+    
+    $scope.filterOutManualStoveVariants = function(variant) {
+        return variant.type != 'brown_coal_manual_stove' 
+            && variant.type != 'coke_manual_stove' 
+            && variant.type != 'wood_manual_stove';
     }
 });
