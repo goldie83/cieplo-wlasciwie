@@ -5,10 +5,10 @@
   {% if calc.usingSolidFuel %}
       {% if stoveEfficiency < 35 %}
         <div class="alert alert-danger">
-            <h4>Ogrzewanie rujnuje twój budżet</h4>
+            <h4>Wyrzucasz forsę kominem!</h4>
             Wykorzystujesz jedynie <strong>marne ~{{ stoveEfficiency|number_format(0, ',', ' ') }}%</strong> energii dostępnej w paliwie.
             To znaczy, że większość pieniędzy wydanych na ogrzewanie wyrzucasz w błoto!
-            <br />Na szczęście możesz szybko i prawie za darmo zacząć oszczędzać.
+            <br />Na szczęście możesz to zmienić łatwo i bez kosztów.
             <br /><a href="http://czysteogrzewanie.pl/jak-palic-w-piecu/jak-palic-czysto-weglem/" target="_blank">Przeczytaj, jak palić ekonomicznie i wygodnie</a>.
         </div>
       {% elseif stoveEfficiency < 50 %}

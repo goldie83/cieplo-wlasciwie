@@ -124,7 +124,7 @@ class LoadFuelData implements FixtureInterface
         $propane
             ->setType('propane')
             ->setName('Propan (LPG)')
-            ->setPrice(3)
+            ->setPrice(2.5)
             ->setUnit("l")
             ->setTradeAmount(1)
             ->setTradeUnit("l")

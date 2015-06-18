@@ -258,7 +258,8 @@ app.controller('WarmCtrl', function($scope, $http) {
                 $scope.heatingVariants[i].setup_cost = $scope.calculateSetupCost($scope.heatingVariants[i].setup_costs);
                 $scope.heatingVariants[i].cost = Math.round($scope.fuels[$scope.heatingVariants[i].fuel_type].price * $scope.heatingVariants[i].amount);
                 $scope.heatingVariants[i].savedMoney = $scope.currentVariant.cost - $scope.heatingVariants[i].cost;
-                $scope.heatingVariants[i].savedTime = Math.max(0, $scope.currentVariant.maintenance_time - $scope.heatingVariants[i].maintenance_time);
+                $scope.heatingVariants[i].savedTime = Math.max(0, $scope.currentVariant.time - $scope.heatingVariants[i].maintenance_time);
+                $scope.heatingVariants[i].savedTimeCost = $scope.heatingVariants[i].savedTime * $scope.workHourPrice;
                 $scope.heatingVariants[i].roi = Math.round($scope.roiPeriod($scope.heatingVariants[i].savedMoney, $scope.heatingVariants[i].savedTime, $scope.heatingVariants[i].setup_cost)); 
             } else {
                 $scope.heatingVariants[i].setup_cost = $scope.calculateSetupCost($scope.heatingVariants[i].setup_costs);
@@ -266,8 +267,12 @@ app.controller('WarmCtrl', function($scope, $http) {
                 $scope.heatingVariants[i].cost = Math.round($scope.fuels[$scope.heatingVariants[i].fuel_type].price * $scope.heatingVariants[i].amount);
                 $scope.heatingVariants[i].savedMoney = $scope.referenceVariant.cost - $scope.heatingVariants[i].cost;
                 $scope.heatingVariants[i].savedTime = Math.max(0, $scope.referenceVariant.maintenance_time - $scope.heatingVariants[i].maintenance_time);
+                $scope.heatingVariants[i].savedTimeCost = $scope.heatingVariants[i].savedTime * $scope.workHourPrice;
                 $scope.heatingVariants[i].roi = Math.round($scope.roiPeriod($scope.heatingVariants[i].savedMoney, $scope.heatingVariants[i].savedTime, $scope.heatingVariants[i].setup_cost_diff)); 
             }
+            
+            $scope.heatingVariants[i].totalSavings = $scope.heatingVariants[i].savedMoney + $scope.heatingVariants[i].savedTimeCost;
+        console.log($scope.heatingVariants[i]);
         }
 
         $scope.createFuelChart();
@@ -390,6 +395,10 @@ app.controller('WarmCtrl', function($scope, $http) {
             suffix = 'rok';
         } else if (period >= 2 && period < 5) {
             suffix = 'lata';
+        }
+        
+        if (period > 30) {
+            return 'nigdy';
         }
         
         return period > 0 && period < 1 ? 'poniżej roku' : Math.round(period) + " " + suffix;

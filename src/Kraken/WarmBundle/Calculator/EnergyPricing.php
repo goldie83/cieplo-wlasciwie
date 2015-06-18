@@ -142,6 +142,10 @@ class EnergyPricing
                 $incurredCosts = ['gas_stove', 'gas_network_link'];
             }
 
+            if ($actualDevice->getType() == 'tile_stove') {
+                $incurredCosts = ['chimney'];
+            }
+
             $selectedMapping = array_diff($selectedMapping, $incurredCosts);
         }
 
