@@ -184,7 +184,7 @@ class EnergyPricing
 
     public function getFuels()
     {
-        return $this->em
+        $fuels = $this->em
             ->createQueryBuilder()
             ->select('f')
             ->from('KrakenWarmBundle:Fuel', 'f')
@@ -192,5 +192,19 @@ class EnergyPricing
             ->orderBy('f.id')
             ->getQuery()
             ->getResult();
+
+        $customData = json_decode($this->instance->get()->getCustomData(), true);
+
+        if (isset($customData['fuels'])) {
+            foreach ($fuels as $fuel) {
+                foreach ($customData['fuels'] as $type => $price) {
+                    if ($fuel->getType() == $type) {
+                        $fuel->setPrice($price);
+                    }
+                }
+            }
+        }
+
+        return $fuels;
     }
 }

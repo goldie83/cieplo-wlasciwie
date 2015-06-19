@@ -83,6 +83,11 @@ class Calculation
     protected $email;
 
     /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $custom_data;
+
+    /**
      * @ORM\ManyToOne(targetEntity="House", inversedBy="calculations",cascade={"all"})
      */
     protected $house;
@@ -599,5 +604,28 @@ class Calculation
     public function getFuelConsumptions()
     {
         return $this->fuel_consumptions;
+    }
+
+    /**
+     * Set custom_data
+     *
+     * @param string $customData
+     * @return Calculation
+     */
+    public function setCustomData($customData)
+    {
+        $this->custom_data = $customData;
+
+        return $this;
+    }
+
+    /**
+     * Get custom_data
+     *
+     * @return string 
+     */
+    public function getCustomData()
+    {
+        return $this->custom_data;
     }
 }

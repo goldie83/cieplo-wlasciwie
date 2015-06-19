@@ -32,9 +32,9 @@ details_fuels:
     options:
         expose: true
 
-fuels_for_device:
-    path:  /fuels_for_device/{id}
-    defaults: { _controller: KrakenWarmBundle:Calculator:fuelsForDevice }
+details_custom_data:
+    path:  /details/custom_data/{id}
+    defaults: { _controller: KrakenWarmBundle:Calculator:customData }
     options:
         expose: true
 

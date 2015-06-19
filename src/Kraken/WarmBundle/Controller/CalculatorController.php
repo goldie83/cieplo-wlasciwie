@@ -5,6 +5,7 @@ namespace Kraken\WarmBundle\Controller;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
@@ -103,8 +104,7 @@ class CalculatorController extends Controller
         $cookieValue = $request->cookies->get('sup_bro');
         $slugs = explode(';', $cookieValue);
 
-        //HACK
-        return true;//in_array($slug, $slugs);
+        return in_array($slug, $slugs);
     }
 
     public function detailsAction($slug)
@@ -326,36 +326,33 @@ class CalculatorController extends Controller
         return new JsonResponse($response);
     }
 
-    public function fuelsForDeviceAction($id)
+    public function customDataAction($id)
     {
-        $device = $this->getDoctrine()
-            ->getRepository('KrakenWarmBundle:HeatingDevice')
+        $calc = $this->getDoctrine()
+            ->getRepository('KrakenWarmBundle:Calculation')
             ->find($id);
 
-        if (!$device) {
-            throw $this->createNotFoundException('nope');
+        if (!$calc) {
+            throw $this->createNotFoundException('Jakiś zły masz ten link. Nic tu nie ma.');
         }
 
-        $fuels = $this->getDoctrine()
-            ->getManager()
-            ->createQueryBuilder()
-            ->select('f, hv')
-            ->from('KrakenWarmBundle:HeatingVariant', 'hv')
-            ->join('hv.fuel', 'f')
-            ->where('hv.heatingDevice = (?1)')
-            ->orderBy('f.name', 'ASC')
-            ->setParameters([
-                1 => $device
-            ])
-            ->getQuery()
-            ->getResult();
-
-        $response = [];
-        foreach ($fuels as $f) {
-            $response[$f->getFuel()->getId()] = $f->getFuel()->getName();
+        $payload = json_decode(file_get_contents('php://input'), true);
+        $customFuels = [];
+        foreach ($payload['fuels'] as $type => $stuff) {
+            $customFuels[$type] = round($stuff['price'], 2);
         }
 
-        return new JsonResponse($response);
+        if (is_array($customFuels) && !empty($customFuels)) {
+            $customData = json_decode($calc->getCustomData(), true);
+            $customData['fuels'] = $customFuels;
+            $calc->setCustomData(json_encode($customData));
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($calc);
+            $em->flush();
+        }
+
+        return new Response('', 204);
     }
 
     public function resultAction($slug)

@@ -100,6 +100,16 @@ app.controller('WarmCtrl', function($scope, $http) {
             $scope.fuels[key].price = $scope.fuels[key].human_price / $scope.fuels[key].trade_amount;
         }
         
+        //store custom fuel prices
+        $http.post(Routing.generate('details_custom_data', {id: window.calculationId}), {fuels: $scope.fuels}).
+            success(function(data, status, headers, config) {
+                // good.
+                console.log('Custom data saved.' + data);
+            }).
+            error(function(data, status, headers, config) {
+                console.log('Failed to save custom data');
+            });
+        
         $scope.recalculateCosts();
     });
     
@@ -272,7 +282,6 @@ app.controller('WarmCtrl', function($scope, $http) {
             }
             
             $scope.heatingVariants[i].totalSavings = $scope.heatingVariants[i].savedMoney + $scope.heatingVariants[i].savedTimeCost;
-        console.log($scope.heatingVariants[i]);
         }
 
         $scope.createFuelChart();
@@ -398,7 +407,7 @@ app.controller('WarmCtrl', function($scope, $http) {
         }
         
         if (period > 30) {
-            return 'nigdy';
+            return '> 30 lat';
         }
         
         return period > 0 && period < 1 ? 'poniżej roku' : Math.round(period) + " " + suffix;
