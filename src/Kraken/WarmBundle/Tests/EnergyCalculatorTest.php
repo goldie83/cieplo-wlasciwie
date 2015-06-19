@@ -6,15 +6,13 @@ use Kraken\WarmBundle\Calculator\EnergyCalculator;
 use Kraken\WarmBundle\Entity\Calculation;
 use Kraken\WarmBundle\Entity\House;
 use Kraken\WarmBundle\Service\InstanceService;
-use Kraken\WarmBundle\Service\FuelService;
-use Kraken\WarmBundle\Calculator\HeatingSeason;
 use Mockery;
 
 class EnergyCalculatorTest extends \PHPUnit_Framework_TestCase
 {
     public function testVentilationEnergyLossFactor()
     {
-//         $house = new House();
+        //         $house = new House();
 //         $house->setVentilationType('natural');
 //
 //         $calc = new Calculation();

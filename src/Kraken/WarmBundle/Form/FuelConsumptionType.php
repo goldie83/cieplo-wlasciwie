@@ -2,7 +2,6 @@
 
 namespace Kraken\WarmBundle\Form;
 
-use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -22,14 +21,14 @@ class FuelConsumptionType extends AbstractType
                 'label' => 'Zużycie w sezonie grzewczym',
                 'required' => false,
                 'widget_addon_append' => [
-                    'text'  => 't',
+                    'text' => 't',
                 ],
             ])
             ->add('cost', null, [
                 'label' => 'Koszt',
                 'required' => false,
                 'widget_addon_append' => [
-                    'text'  => 'zł',
+                    'text' => 'zł',
                 ],
             ])
         ;

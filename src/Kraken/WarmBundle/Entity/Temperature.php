@@ -43,9 +43,9 @@ class Temperature
     protected $city;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -68,9 +68,10 @@ class Temperature
     }
 
     /**
-     * Set month
+     * Set month.
      *
-     * @param  integer     $month
+     * @param int $month
+     *
      * @return Temperature
      */
     public function setMonth($month)
@@ -81,9 +82,9 @@ class Temperature
     }
 
     /**
-     * Get month
+     * Get month.
      *
-     * @return integer
+     * @return int
      */
     public function getMonth()
     {
@@ -91,9 +92,10 @@ class Temperature
     }
 
     /**
-     * Set day
+     * Set day.
      *
-     * @param  integer     $day
+     * @param int $day
+     *
      * @return Temperature
      */
     public function setDay($day)
@@ -104,9 +106,9 @@ class Temperature
     }
 
     /**
-     * Get day
+     * Get day.
      *
-     * @return integer
+     * @return int
      */
     public function getDay()
     {
@@ -114,9 +116,10 @@ class Temperature
     }
 
     /**
-     * Set value
+     * Set value.
      *
-     * @param  float       $value
+     * @param float $value
+     *
      * @return Temperature
      */
     public function setValue($value)
@@ -127,7 +130,7 @@ class Temperature
     }
 
     /**
-     * Get value
+     * Get value.
      *
      * @return float
      */
@@ -137,9 +140,10 @@ class Temperature
     }
 
     /**
-     * Set city
+     * Set city.
      *
-     * @param  \Kraken\WarmBundle\Entity\City $city
+     * @param \Kraken\WarmBundle\Entity\City $city
+     *
      * @return Temperature
      */
     public function setCity(\Kraken\WarmBundle\Entity\City $city = null)
@@ -150,7 +154,7 @@ class Temperature
     }
 
     /**
-     * Get city
+     * Get city.
      *
      * @return \Kraken\WarmBundle\Entity\City
      */

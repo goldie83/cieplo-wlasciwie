@@ -1,7 +1,7 @@
 <?php
 
 /**
- * DoctrineExtensions Mysql Function Pack
+ * DoctrineExtensions Mysql Function Pack.
  *
  * LICENSE
  *
@@ -19,19 +19,17 @@ use Doctrine\ORM\Query\Lexer;
 
 class Acos extends FunctionNode
 {
-
     public $arithmeticExpression;
 
     public function getSql(\Doctrine\ORM\Query\SqlWalker $sqlWalker)
     {
-        return 'ACOS(' . $sqlWalker->walkSimpleArithmeticExpression(
+        return 'ACOS('.$sqlWalker->walkSimpleArithmeticExpression(
                 $this->arithmeticExpression
-        ) . ')';
+        ).')';
     }
 
     public function parse(\Doctrine\ORM\Query\Parser $parser)
     {
-
         $lexer = $parser->getLexer();
 
         $parser->match(Lexer::T_IDENTIFIER);
@@ -41,5 +39,4 @@ class Acos extends FunctionNode
 
         $parser->match(Lexer::T_CLOSE_PARENTHESIS);
     }
-
 }

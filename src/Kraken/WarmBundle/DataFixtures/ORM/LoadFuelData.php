@@ -17,9 +17,9 @@ class LoadFuelData implements FixtureInterface
             ->setType('brown_coal')
             ->setName('Węgiel brunatny (lub czeski)')
             ->setPrice(0.5)
-            ->setUnit("kg")
+            ->setUnit('kg')
             ->setTradeAmount(1000)
-            ->setTradeUnit("t")
+            ->setTradeUnit('t')
             ->setEnergy(19)
         ;
         $manager->persist($brownCoal);
@@ -29,9 +29,9 @@ class LoadFuelData implements FixtureInterface
             ->setType('bituminous_coal')
             ->setName('Węgiel kamienny')
             ->setPrice(0.75)
-            ->setUnit("kg")
+            ->setUnit('kg')
             ->setTradeAmount(1000)
-            ->setTradeUnit("t")
+            ->setTradeUnit('t')
             ->setEnergy(28)
         ;
         $manager->persist($bituminousCoal);
@@ -41,9 +41,9 @@ class LoadFuelData implements FixtureInterface
             ->setType('sand_coal')
             ->setName('Miał węglowy')
             ->setPrice(0.6)
-            ->setUnit("kg")
+            ->setUnit('kg')
             ->setTradeAmount(1000)
-            ->setTradeUnit("t")
+            ->setTradeUnit('t')
             ->setEnergy(20)
         ;
         $manager->persist($sandCoal);
@@ -53,9 +53,9 @@ class LoadFuelData implements FixtureInterface
             ->setType('eco_coal')
             ->setName('Ekogroszek')
             ->setPrice(0.9)
-            ->setUnit("kg")
+            ->setUnit('kg')
             ->setTradeAmount(1000)
-            ->setTradeUnit("t")
+            ->setTradeUnit('t')
             ->setEnergy(28)
         ;
         $manager->persist($ecoCoal);
@@ -65,9 +65,9 @@ class LoadFuelData implements FixtureInterface
             ->setType('natural_gas')
             ->setName('Gaz ziemny')
             ->setPrice(0.22)
-            ->setUnit("kWh")
+            ->setUnit('kWh')
             ->setTradeAmount(1)
-            ->setTradeUnit("kWh")
+            ->setTradeUnit('kWh')
             ->setEnergy(3.6)
         ;
         $manager->persist($naturalGas);
@@ -77,9 +77,9 @@ class LoadFuelData implements FixtureInterface
             ->setType('pellet')
             ->setName('Pellet')
             ->setPrice(0.9)
-            ->setUnit("kg")
+            ->setUnit('kg')
             ->setTradeAmount(1000)
-            ->setTradeUnit("t")
+            ->setTradeUnit('t')
             ->setEnergy(18)
         ;
         $manager->persist($pellet);
@@ -89,9 +89,9 @@ class LoadFuelData implements FixtureInterface
             ->setType('electricity')
             ->setName('Prąd')
             ->setPrice(0.3)
-            ->setUnit("kWh")
+            ->setUnit('kWh')
             ->setTradeAmount(1)
-            ->setTradeUnit("kWh")
+            ->setTradeUnit('kWh')
             ->setEnergy(3.6)
         ;
         $manager->persist($electricity);
@@ -101,9 +101,9 @@ class LoadFuelData implements FixtureInterface
             ->setType('wood')
             ->setName('Drewno')
             ->setPrice(0.35)
-            ->setUnit("kg")
+            ->setUnit('kg')
             ->setTradeAmount(450)
-            ->setTradeUnit("mp")
+            ->setTradeUnit('mp')
             ->setEnergy(16)
         ;
         $manager->persist($wood);
@@ -113,9 +113,9 @@ class LoadFuelData implements FixtureInterface
             ->setType('coke')
             ->setName('Koks')
             ->setPrice(1)
-            ->setUnit("kg")
+            ->setUnit('kg')
             ->setTradeAmount(1000)
-            ->setTradeUnit("t")
+            ->setTradeUnit('t')
             ->setEnergy(30)
         ;
         $manager->persist($coke);
@@ -125,9 +125,9 @@ class LoadFuelData implements FixtureInterface
             ->setType('propane')
             ->setName('Propan (LPG)')
             ->setPrice(2.5)
-            ->setUnit("l")
+            ->setUnit('l')
             ->setTradeAmount(1)
-            ->setTradeUnit("l")
+            ->setTradeUnit('l')
             ->setEnergy(24)
         ;
         $manager->persist($propane);
@@ -259,8 +259,8 @@ class LoadFuelData implements FixtureInterface
 
         $hv1 = new HeatingVariant();
         $hv1->setFuel($bituminousCoal);
-        $hv1->setName("Węgiel kamienny");
-        $hv1->setDetail("Spalany ekonomicznie w kotle zasypowym");
+        $hv1->setName('Węgiel kamienny');
+        $hv1->setDetail('Spalany ekonomicznie w kotle zasypowym');
         $hv1->setHeatingDevice($manualStove);
         $hv1->setEfficiency(0.55);
         $hv1->setSetupCost(4000);
@@ -269,8 +269,8 @@ class LoadFuelData implements FixtureInterface
 
         $hv2 = new HeatingVariant();
         $hv2->setFuel($brownCoal);
-        $hv2->setName("Węgiel czeski");
-        $hv2->setDetail("Spalany ekonomicznie w kotle zasypowym");
+        $hv2->setName('Węgiel czeski');
+        $hv2->setDetail('Spalany ekonomicznie w kotle zasypowym');
         $hv2->setHeatingDevice($manualStove);
         $hv2->setEfficiency(0.55);
         $hv2->setSetupCost(4000);
@@ -279,8 +279,8 @@ class LoadFuelData implements FixtureInterface
 
         $hv3 = new HeatingVariant();
         $hv3->setFuel($wood);
-        $hv3->setName("Drewno bukowe");
-        $hv3->setDetail("Spalane ekonomicznie w kotle zasypowym");
+        $hv3->setName('Drewno bukowe');
+        $hv3->setDetail('Spalane ekonomicznie w kotle zasypowym');
         $hv3->setHeatingDevice($manualStove);
         $hv3->setSetupCost(4000);
         $hv3->setMaintenanceTime(150);
@@ -289,8 +289,8 @@ class LoadFuelData implements FixtureInterface
 
         $hv11 = new HeatingVariant();
         $hv11->setFuel($bituminousCoal);
-        $hv11->setName("Węgiel (+ bufor ciepła)");
-        $hv11->setDetail("Spalany w kotle zasypowym z buforem ciepła");
+        $hv11->setName('Węgiel (+ bufor ciepła)');
+        $hv11->setDetail('Spalany w kotle zasypowym z buforem ciepła');
         $hv11->setHeatingDevice($manualStoveWithBuffer);
         $hv11->setEfficiency(0.7);
         $hv11->setSetupCost(8000);
@@ -299,8 +299,8 @@ class LoadFuelData implements FixtureInterface
 
         $hv33 = new HeatingVariant();
         $hv33->setFuel($wood);
-        $hv33->setName("Drewno (+ bufor ciepła)");
-        $hv33->setDetail("Spalane w kotle zasypowym z buforem ciepła");
+        $hv33->setName('Drewno (+ bufor ciepła)');
+        $hv33->setDetail('Spalane w kotle zasypowym z buforem ciepła');
         $hv33->setHeatingDevice($manualStoveWithBuffer);
         $hv33->setEfficiency(0.7);
         $hv33->setSetupCost(8000);
@@ -309,8 +309,8 @@ class LoadFuelData implements FixtureInterface
 
         $hv4 = new HeatingVariant();
         $hv4->setFuel($sandCoal);
-        $hv4->setName("Miał");
-        $hv4->setDetail("Spalany ekonomicznie w kotle zasypowym");
+        $hv4->setName('Miał');
+        $hv4->setDetail('Spalany ekonomicznie w kotle zasypowym');
         $hv4->setHeatingDevice($manualStove);
         $hv4->setEfficiency(0.6);
         $hv4->setSetupCost(5000);
@@ -319,8 +319,8 @@ class LoadFuelData implements FixtureInterface
 
         $hv5 = new HeatingVariant();
         $hv5->setFuel($coke);
-        $hv5->setName("Koks");
-        $hv5->setDetail("Spalany w kotle zasypowym");
+        $hv5->setName('Koks');
+        $hv5->setDetail('Spalany w kotle zasypowym');
         $hv5->setHeatingDevice($manualStove);
         $hv5->setEfficiency(0.7);
         $hv5->setSetupCost(4000);
@@ -329,8 +329,8 @@ class LoadFuelData implements FixtureInterface
 
         $hv6 = new HeatingVariant();
         $hv6->setFuel($ecoCoal);
-        $hv6->setName("Kocioł podajnikowy na ekogroszek");
-        $hv6->setDetail("Ekogroszek spalany w kotle podajnikowym");
+        $hv6->setName('Kocioł podajnikowy na ekogroszek');
+        $hv6->setDetail('Ekogroszek spalany w kotle podajnikowym');
         $hv6->setHeatingDevice($automaticStove);
         $hv6->setEfficiency(0.7);
         $hv6->setSetupCost(10000);
@@ -339,8 +339,8 @@ class LoadFuelData implements FixtureInterface
 
         $hv7 = new HeatingVariant();
         $hv7->setFuel($pellet);
-        $hv7->setName("Pellet");
-        $hv7->setDetail("Spalany w kotle na pellet z palnikiem wrzutkowym");
+        $hv7->setName('Pellet');
+        $hv7->setDetail('Spalany w kotle na pellet z palnikiem wrzutkowym');
         $hv7->setHeatingDevice($pelletStove);
         $hv7->setEfficiency(0.8);
         $hv7->setSetupCost(12000);
@@ -349,8 +349,8 @@ class LoadFuelData implements FixtureInterface
 
         $hv8 = new HeatingVariant();
         $hv8->setFuel($naturalGas);
-        $hv8->setName("Gaz ziemny + zwykły kocioł");
-        $hv8->setDetail("Spalany w niekondensacyjnym nowym kotle gazowym");
+        $hv8->setName('Gaz ziemny + zwykły kocioł');
+        $hv8->setDetail('Spalany w niekondensacyjnym nowym kotle gazowym');
         $hv8->setHeatingDevice($gasStove);
         $hv8->setEfficiency(0.85);
         $hv8->setSetupCost(6000);
@@ -359,8 +359,8 @@ class LoadFuelData implements FixtureInterface
 
         $hv9 = new HeatingVariant();
         $hv9->setFuel($naturalGas);
-        $hv9->setName("Gaz ziemny + stary kocioł");
-        $hv9->setDetail("Spalany w niekondensacyjnym starym kotle gazowym");
+        $hv9->setName('Gaz ziemny + stary kocioł');
+        $hv9->setDetail('Spalany w niekondensacyjnym starym kotle gazowym');
         $hv9->setHeatingDevice($oldGasStove);
         $hv9->setEfficiency(0.7);
         $hv9->setSetupCost(6000);
@@ -370,7 +370,7 @@ class LoadFuelData implements FixtureInterface
 
         $hv91 = new HeatingVariant();
         $hv91->setFuel($naturalGas);
-        $hv91->setName("Piec kaflowy");
+        $hv91->setName('Piec kaflowy');
         $hv91->setHeatingDevice($tileStove);
         $hv91->setEfficiency(0.6);
         $hv91->setMaintenanceTime(150);
@@ -379,7 +379,7 @@ class LoadFuelData implements FixtureInterface
 
         $hv92 = new HeatingVariant();
         $hv92->setFuel($naturalGas);
-        $hv92->setName("Kominek");
+        $hv92->setName('Kominek');
         $hv92->setHeatingDevice($fireplace);
         $hv92->setEfficiency(0.5);
         $hv92->setMaintenanceTime(150);
@@ -388,8 +388,8 @@ class LoadFuelData implements FixtureInterface
 
         $hv10 = new HeatingVariant();
         $hv10->setFuel($naturalGas);
-        $hv10->setName("Gaz ziemny + kondensat");
-        $hv10->setDetail("Gaz ziemny typ E (GZ-50) spalany w kotle kondensacyjnym");
+        $hv10->setName('Gaz ziemny + kondensat');
+        $hv10->setDetail('Gaz ziemny typ E (GZ-50) spalany w kotle kondensacyjnym');
         $hv10->setHeatingDevice($condensing);
         $hv10->setEfficiency(1.04);
         $hv10->setSetupCost(8000);
@@ -398,8 +398,8 @@ class LoadFuelData implements FixtureInterface
 
         $hv11 = new HeatingVariant();
         $hv11->setFuel($propane);
-        $hv11->setName("Propan + kondensat");
-        $hv11->setDetail("Gaz płynny (propan/LPG) spalany w kotle kondensacyjnym");
+        $hv11->setName('Propan + kondensat');
+        $hv11->setDetail('Gaz płynny (propan/LPG) spalany w kotle kondensacyjnym');
         $hv11->setHeatingDevice($condensing);
         $hv11->setEfficiency(1.04);
         $hv11->setSetupCost(8000);
@@ -408,7 +408,7 @@ class LoadFuelData implements FixtureInterface
 
         $hv13 = new HeatingVariant();
         $hv13->setFuel($electricity);
-        $hv13->setName("Bufor ciepła grzany prądem");
+        $hv13->setName('Bufor ciepła grzany prądem');
         $hv13->setHeatingDevice($heatBuffer);
         $hv13->setEfficiency(1);
         $hv13->setSetupCost(8000);
@@ -417,7 +417,7 @@ class LoadFuelData implements FixtureInterface
 
         $hv14 = new HeatingVariant();
         $hv14->setFuel($electricity);
-        $hv14->setName("Pompa ciepła (powietrzna)");
+        $hv14->setName('Pompa ciepła (powietrzna)');
         $hv14->setHeatingDevice($heatPumpAir);
         $hv14->setEfficiency(2.5);
         $hv14->setSetupCost(15000);
@@ -426,7 +426,7 @@ class LoadFuelData implements FixtureInterface
 
         $hv15 = new HeatingVariant();
         $hv15->setFuel($electricity);
-        $hv15->setName("Pompa ciepła (gruntowa)");
+        $hv15->setName('Pompa ciepła (gruntowa)');
         $hv15->setHeatingDevice($heatPumpGround);
         $hv15->setEfficiency(4);
         $hv15->setSetupCost(30000);
@@ -435,8 +435,8 @@ class LoadFuelData implements FixtureInterface
 
         $hv16 = new HeatingVariant();
         $hv16->setFuel($wood);
-        $hv16->setName("Kocioł zgazowujący");
-        $hv16->setDetail("Drewno bukowe spalane w kotle zgazowującym z buforem ciepła");
+        $hv16->setName('Kocioł zgazowujący');
+        $hv16->setDetail('Drewno bukowe spalane w kotle zgazowującym z buforem ciepła');
         $hv16->setHeatingDevice($holzgasStove);
         $hv16->setEfficiency(0.85);
         $hv16->setSetupCost(15000);

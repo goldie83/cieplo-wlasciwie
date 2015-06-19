@@ -1,4 +1,5 @@
 <?php
+
 namespace Kraken\WarmBundle\Command;
 
 use Goutte\Client;
@@ -23,12 +24,12 @@ class FetchLatestWeatherDataCommand extends ContainerAwareCommand
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
 
         $cities = array();
-        $citiesFile = dirname(__DIR__) . '/DataFixtures/cities.json';
+        $citiesFile = dirname(__DIR__).'/DataFixtures/cities.json';
         if (file_exists($citiesFile)) {
             $cities = json_decode(file_get_contents($citiesFile), true);
         }
 
-        $rawFreemeteoCities = file_get_contents(dirname(__DIR__) . '/DataFixtures/freemeteo_cities.txt');
+        $rawFreemeteoCities = file_get_contents(dirname(__DIR__).'/DataFixtures/freemeteo_cities.txt');
         $freemeteoCities = explode(PHP_EOL, $rawFreemeteoCities);
 
         $client = new Client();
@@ -66,7 +67,7 @@ class FetchLatestWeatherDataCommand extends ContainerAwareCommand
             array(1, 2014),
             array(2, 2014),
             array(3, 2014),
-            array(4, 2014)
+            array(4, 2014),
         );
 
         foreach ($matchedCities as $cityName => $cityId) {
@@ -85,13 +86,13 @@ class FetchLatestWeatherDataCommand extends ContainerAwareCommand
                 ->getSingleScalarResult();
 
             if ($temperatureEntities >= 28 * count($months)) {
-                echo $cityName. ' ma już wszystko'.PHP_EOL;
+                echo $cityName.' ma już wszystko'.PHP_EOL;
                 continue;
             } else {
-                echo $cityName. ' ma tylko '.$temperatureEntities.PHP_EOL;
+                echo $cityName.' ma tylko '.$temperatureEntities.PHP_EOL;
             }
 
-            sleep(rand(5,15));
+            sleep(rand(5, 15));
             $landPointInfoResponse = $client->getClient()->get(sprintf('http://freemeteo.pl/Services/GeoLocation/LandPointInfo?ID=%s', $cityId));
             $landPointInfo = $landPointInfoResponse->json();
 
@@ -100,7 +101,7 @@ class FetchLatestWeatherDataCommand extends ContainerAwareCommand
                 foreach ($months as $m => $month) {
                     $rowsThisMonth = 0;
                     $temperatureEntity = $em->getRepository('KrakenWarmBundle:Temperature')->findOneBy(array('city' => $cityEntity, 'month' => $month[0]));
-                    
+
                     if ($temperatureEntity) {
                         echo $cityEntity->getName().' już ma miesiąc '.$month[0].PHP_EOL;
                         continue;
@@ -108,7 +109,7 @@ class FetchLatestWeatherDataCommand extends ContainerAwareCommand
 
                     sleep(rand(5, 15));
                     $dataUrl = sprintf(
-                        'http://freemeteo.pl/pogoda/%s/historia/miesieczna-historia/?gid=%s&station=%s&month=%s&year=%s&language=polish&country=poland', 
+                        'http://freemeteo.pl/pogoda/%s/historia/miesieczna-historia/?gid=%s&station=%s&month=%s&year=%s&language=polish&country=poland',
                         $landPointInfo[0]['FriendlyUrl'],
                         $cityId,
                         $station['StationID'],
@@ -124,12 +125,12 @@ class FetchLatestWeatherDataCommand extends ContainerAwareCommand
                         //echo $i.': '.$node->text().PHP_EOL;
 
                         if ($i % 10 >= 0 && $i % 10 < 2) {
-                            $row[] = $node->text(); 
+                            $row[] = $node->text();
                         }
 
                         if ($i % 10 == 2) {
-                            $data[$row[0]] = ((double)$row[1] + (double)$node->text()) / 2;
-                            $rowsThisMonth++;
+                            $data[$row[0]] = ((double) $row[1] + (double) $node->text()) / 2;
+                            ++$rowsThisMonth;
                             $row = array();
                         }
                     });

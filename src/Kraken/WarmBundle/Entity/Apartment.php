@@ -48,16 +48,16 @@ class Apartment
     protected $houses;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
         return $this->id;
     }
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -65,9 +65,10 @@ class Apartment
     }
 
     /**
-     * Set number_external_walls
+     * Set number_external_walls.
      *
-     * @param  integer   $numberExternalWalls
+     * @param int $numberExternalWalls
+     *
      * @return Apartment
      */
     public function setNumberExternalWalls($numberExternalWalls)
@@ -78,9 +79,9 @@ class Apartment
     }
 
     /**
-     * Get number_external_walls
+     * Get number_external_walls.
      *
-     * @return integer
+     * @return int
      */
     public function getNumberExternalWalls()
     {
@@ -88,9 +89,10 @@ class Apartment
     }
 
     /**
-     * Add houses
+     * Add houses.
      *
-     * @param  \Kraken\WarmBundle\Entity\House $houses
+     * @param \Kraken\WarmBundle\Entity\House $houses
+     *
      * @return Apartment
      */
     public function addHouse(\Kraken\WarmBundle\Entity\House $houses)
@@ -101,7 +103,7 @@ class Apartment
     }
 
     /**
-     * Remove houses
+     * Remove houses.
      *
      * @param \Kraken\WarmBundle\Entity\House $houses
      */
@@ -111,7 +113,7 @@ class Apartment
     }
 
     /**
-     * Get houses
+     * Get houses.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -121,9 +123,10 @@ class Apartment
     }
 
     /**
-     * Set number_unheated_walls
+     * Set number_unheated_walls.
      *
-     * @param  integer   $numberUnheatedWalls
+     * @param int $numberUnheatedWalls
+     *
      * @return Apartment
      */
     public function setNumberUnheatedWalls($numberUnheatedWalls)
@@ -134,9 +137,9 @@ class Apartment
     }
 
     /**
-     * Get number_unheated_walls
+     * Get number_unheated_walls.
      *
-     * @return integer
+     * @return int
      */
     public function getNumberUnheatedWalls()
     {
@@ -144,9 +147,10 @@ class Apartment
     }
 
     /**
-     * Set whats_over
+     * Set whats_over.
      *
-     * @param  string    $whatsOver
+     * @param string $whatsOver
+     *
      * @return Apartment
      */
     public function setWhatsOver($whatsOver)
@@ -157,7 +161,7 @@ class Apartment
     }
 
     /**
-     * Get whats_over
+     * Get whats_over.
      *
      * @return string
      */
@@ -167,9 +171,10 @@ class Apartment
     }
 
     /**
-     * Set whats_under
+     * Set whats_under.
      *
-     * @param  string    $whatsUnder
+     * @param string $whatsUnder
+     *
      * @return Apartment
      */
     public function setWhatsUnder($whatsUnder)
@@ -180,7 +185,7 @@ class Apartment
     }
 
     /**
-     * Get whats_under
+     * Get whats_under.
      *
      * @return string
      */

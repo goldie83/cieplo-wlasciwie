@@ -8,5 +8,4 @@ class DoubleBuilding extends Building
     {
         return 3;
     }
-
 }

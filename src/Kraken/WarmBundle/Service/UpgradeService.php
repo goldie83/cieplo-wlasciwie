@@ -5,7 +5,6 @@ namespace Kraken\WarmBundle\Service;
 use Kraken\WarmBundle\Entity\Layer;
 use Kraken\WarmBundle\Entity\Material;
 use Kraken\WarmBundle\Calculator\BuildingInterface;
-use Kraken\WarmBundle\Service\InstanceService;
 
 class UpgradeService
 {
@@ -43,8 +42,7 @@ class UpgradeService
         }
 
         $gain = array();
-        foreach ($variants as $key => $row)
-        {
+        foreach ($variants as $key => $row) {
             if ($row['gain'] < 0.05) {
                 unset($variants[$key]);
                 continue;
@@ -63,13 +61,13 @@ class UpgradeService
         $customCalculation = clone unserialize(serialize($originalCalculation));
         $this->instance->setCustomCalculation($customCalculation);
         $house = $customCalculation->getHouse();
-  
+
         if ($apartment->getNumberUnheatedWalls() > 0) {
             $newEnergyLoss = $this->building->getEnergyLossToOutside() + $this->building->getEnergyLossToUnheated(true);
 
             $variants[] = array(
                 'gain' => round(($actualEnergyLoss - $newEnergyLoss) / $actualEnergyLoss, 2),
-                'title' => 'ocieplenie ścian od pomieszczeń nieogrzewanych 5cm styropianu'
+                'title' => 'ocieplenie ścian od pomieszczeń nieogrzewanych 5cm styropianu',
             );
         }
     }
@@ -92,12 +90,12 @@ class UpgradeService
                 $l->setSize(10);
 
                 $house->setHighestCeilingIsolationLayer($l);
-                
+
                 $newEnergyLoss = $this->building->getEnergyLossToOutside() + $this->building->getEnergyLossToUnheated();
 
                 $variants[] = array(
                     'gain' => round(($actualEnergyLoss - $newEnergyLoss) / $actualEnergyLoss, 2),
-                    'title' => 'ocieplenie sufitu 10cm styropianu'
+                    'title' => 'ocieplenie sufitu 10cm styropianu',
                 );
             }
         }
@@ -121,12 +119,12 @@ class UpgradeService
                 $l->setSize(10);
 
                 $house->setLowestCeilingIsolationLayer($l);
-                
+
                 $newEnergyLoss = $this->building->getEnergyLossToOutside() + $this->building->getEnergyLossToUnheated();
 
                 $variants[] = array(
                     'gain' => round(($actualEnergyLoss - $newEnergyLoss) / $actualEnergyLoss, 2),
-                    'title' => 'ocieplenie podłogi 10cm styropianu'
+                    'title' => 'ocieplenie podłogi 10cm styropianu',
                 );
             }
         }
@@ -151,12 +149,12 @@ class UpgradeService
                 $l->setSize(20);
 
                 $house->setGroundFloorIsolationLayer($l);
-                
+
                 $newEnergyLoss = $this->building->getEnergyLossToOutside() + $this->building->getEnergyLossToUnheated();
 
                 $variants[] = array(
                     'gain' => round(($actualEnergyLoss - $newEnergyLoss) / $actualEnergyLoss, 2),
-                    'title' => 'ocieplenie podłogi parteru 20cm styropianu'
+                    'title' => 'ocieplenie podłogi parteru 20cm styropianu',
                 );
             }
         }
@@ -180,12 +178,12 @@ class UpgradeService
                 $l->setSize(10);
 
                 $house->setLowestCeilingIsolationLayer($l);
-                
+
                 $newEnergyLoss = $this->building->getEnergyLossToOutside() + $this->building->getEnergyLossToUnheated();
 
                 $variants[] = array(
                     'gain' => round(($actualEnergyLoss - $newEnergyLoss) / $actualEnergyLoss, 2),
-                    'title' => 'ocieplenie stropu nad parterem 10cm styropianu'
+                    'title' => 'ocieplenie stropu nad parterem 10cm styropianu',
                 );
             }
         }
@@ -200,12 +198,12 @@ class UpgradeService
 
         if (stristr($doorsType, 'old')) {
             $house->setDoorsType('new_wood');
-            
+
             $newEnergyLoss = $this->building->getEnergyLossToOutside() + $this->building->getEnergyLossToUnheated();
 
             $variants[] = array(
                 'gain' => round(($actualEnergyLoss - $newEnergyLoss) / $actualEnergyLoss, 2),
-                'title' => 'wymiana drzwi'
+                'title' => 'wymiana drzwi',
             );
         }
     }
@@ -219,12 +217,12 @@ class UpgradeService
 
         if (stristr($windowsType, 'old')) {
             $house->setWindowsType('new_double_glass');
-            
+
             $newEnergyLoss = $this->building->getEnergyLossToOutside() + $this->building->getEnergyLossToUnheated();
 
             $variants[] = array(
                 'gain' => round(($actualEnergyLoss - $newEnergyLoss) / $actualEnergyLoss, 2),
-                'title' => 'wymiana wszystkich okien'
+                'title' => 'wymiana wszystkich okien',
             );
         }
     }
@@ -249,12 +247,12 @@ class UpgradeService
             $l->setSize($isolationSize);
 
             $wall->setExtraIsolationLayer($l);
-            
+
             $newEnergyLoss = $this->building->getEnergyLossToOutside() + $this->building->getEnergyLossToUnheated();
 
             $variants[] = array(
                 'gain' => round(($actualEnergyLoss - $newEnergyLoss) / $actualEnergyLoss, 2),
-                'title' => sprintf('ocieplenie ścian zewn. %scm styropianu, lambda %s', $isolationSize, $this->presentStyrofoamLambda)
+                'title' => sprintf('ocieplenie ścian zewn. %scm styropianu, lambda %s', $isolationSize, $this->presentStyrofoamLambda),
             );
         }
     }
@@ -273,7 +271,7 @@ class UpgradeService
 
         if (!$roofIsolation || $roofIsolation->getSize() < 20 || (!stristr($materialName, 'styropian') && !stristr($materialName, 'wełna'))) {
             $isolationSize = $flatRoof ? 35 : 20;
-            
+
             $m = new Material();
             $m->setLambda($this->presentStyrofoamLambda);
 
@@ -286,12 +284,12 @@ class UpgradeService
             } else {
                 $house->setRoofIsolationLayer($l);
             }
-            
+
             $newEnergyLoss = $this->building->getEnergyLossToOutside() + $this->building->getEnergyLossToUnheated();
 
             $variants[] = array(
                 'gain' => round(($actualEnergyLoss - $newEnergyLoss) / $actualEnergyLoss, 2),
-                'title' => sprintf('ocieplenie dachu %scm styropianu', $isolationSize)
+                'title' => sprintf('ocieplenie dachu %scm styropianu', $isolationSize),
             );
         }
     }
@@ -300,13 +298,13 @@ class UpgradeService
     {
         $customCalculation = clone unserialize(serialize($originalCalculation));
         $this->instance->setCustomCalculation($customCalculation);
-        
+
         $customCalculation->getHouse()->setVentilationType('mechanical_recovery');
         $newEnergyLoss = $this->building->getEnergyLossToOutside() + $this->building->getEnergyLossToUnheated();
 
         $variants[] = array(
             'gain' => round(($actualEnergyLoss - $newEnergyLoss) / $actualEnergyLoss, 2),
-            'title' => 'wentylacja mechaniczna z odzyskiem ciepła'
+            'title' => 'wentylacja mechaniczna z odzyskiem ciepła',
         );
     }
 }

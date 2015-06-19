@@ -49,12 +49,14 @@ class Calculation
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     *
      * @deprecated
      */
     protected $fuel_type;
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     *
      * @deprecated
      */
     protected $stove_type;
@@ -122,7 +124,7 @@ class Calculation
 
     public static function create()
     {
-        $calc = new Calculation();
+        $calc = new self();
         $calc->setLatitude(51.917168);
         $calc->setLongitude(19.138184);
 
@@ -140,7 +142,7 @@ class Calculation
 
         foreach ($this->getFuelConsumptions() as $fc) {
             $amount = round($fc->getConsumption(), 1);
-            $labels[] = $fc->getFuel()->getName() . ' ' . $amount . $fc->getFuel()->getTradeUnit();
+            $labels[] = $fc->getFuel()->getName().' '.$amount.$fc->getFuel()->getTradeUnit();
         }
 
         return implode(', ', $labels);
@@ -171,7 +173,7 @@ class Calculation
         $w = $house->getBuildingWidth();
         $floors = $house->getNumberFloors();
 
-        return $types[$this->building_type] . ', ' . round($w * $l * $floors) . 'm2';
+        return $types[$this->building_type].', '.round($w * $l * $floors).'m2';
     }
 
     public function getSlug()
@@ -180,9 +182,9 @@ class Calculation
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -190,9 +192,10 @@ class Calculation
     }
 
     /**
-     * Set construction_year
+     * Set construction_year.
      *
-     * @param  integer     $constructionYear
+     * @param int $constructionYear
+     *
      * @return Calculation
      */
     public function setConstructionYear($constructionYear)
@@ -203,9 +206,9 @@ class Calculation
     }
 
     /**
-     * Get construction_year
+     * Get construction_year.
      *
-     * @return integer
+     * @return int
      */
     public function getConstructionYear()
     {
@@ -213,9 +216,10 @@ class Calculation
     }
 
     /**
-     * Set latitude
+     * Set latitude.
      *
-     * @param  float       $latitude
+     * @param float $latitude
+     *
      * @return Calculation
      */
     public function setLatitude($latitude)
@@ -226,7 +230,7 @@ class Calculation
     }
 
     /**
-     * Get latitude
+     * Get latitude.
      *
      * @return float
      */
@@ -236,9 +240,10 @@ class Calculation
     }
 
     /**
-     * Set longitude
+     * Set longitude.
      *
-     * @param  float       $longitude
+     * @param float $longitude
+     *
      * @return Calculation
      */
     public function setLongitude($longitude)
@@ -249,7 +254,7 @@ class Calculation
     }
 
     /**
-     * Get longitude
+     * Get longitude.
      *
      * @return float
      */
@@ -259,9 +264,10 @@ class Calculation
     }
 
     /**
-     * Set created
+     * Set created.
      *
-     * @param  \DateTime   $created
+     * @param \DateTime $created
+     *
      * @return Calculation
      */
     public function setCreated($created)
@@ -272,7 +278,7 @@ class Calculation
     }
 
     /**
-     * Get created
+     * Get created.
      *
      * @return \DateTime
      */
@@ -282,9 +288,10 @@ class Calculation
     }
 
     /**
-     * Set updated
+     * Set updated.
      *
-     * @param  \DateTime   $updated
+     * @param \DateTime $updated
+     *
      * @return Calculation
      */
     public function setUpdated($updated)
@@ -295,7 +302,7 @@ class Calculation
     }
 
     /**
-     * Get updated
+     * Get updated.
      *
      * @return \DateTime
      */
@@ -305,9 +312,10 @@ class Calculation
     }
 
     /**
-     * Set building_type
+     * Set building_type.
      *
-     * @param  string      $buildingType
+     * @param string $buildingType
+     *
      * @return Calculation
      */
     public function setBuildingType($buildingType)
@@ -318,7 +326,7 @@ class Calculation
     }
 
     /**
-     * Get building_type
+     * Get building_type.
      *
      * @return string
      */
@@ -328,9 +336,10 @@ class Calculation
     }
 
     /**
-     * Set indoor_temperature
+     * Set indoor_temperature.
      *
-     * @param  float       $indoorTemperature
+     * @param float $indoorTemperature
+     *
      * @return Calculation
      */
     public function setIndoorTemperature($indoorTemperature)
@@ -341,7 +350,7 @@ class Calculation
     }
 
     /**
-     * Get indoor_temperature
+     * Get indoor_temperature.
      *
      * @return float
      */
@@ -351,9 +360,10 @@ class Calculation
     }
 
     /**
-     * Set fuel_type
+     * Set fuel_type.
      *
-     * @param  string      $fuelType
+     * @param string $fuelType
+     *
      * @return Calculation
      */
     public function setFuelType($fuelType)
@@ -364,7 +374,7 @@ class Calculation
     }
 
     /**
-     * Get fuel_type
+     * Get fuel_type.
      *
      * @return string
      */
@@ -381,7 +391,7 @@ class Calculation
     }
 
     /**
-     * Get stove_type
+     * Get stove_type.
      *
      * @return string
      */
@@ -391,9 +401,10 @@ class Calculation
     }
 
     /**
-     * Set house
+     * Set house.
      *
-     * @param  \Kraken\WarmBundle\Entity\House $house
+     * @param \Kraken\WarmBundle\Entity\House $house
+     *
      * @return Calculation
      */
     public function setHouse(\Kraken\WarmBundle\Entity\House $house = null)
@@ -404,7 +415,7 @@ class Calculation
     }
 
     /**
-     * Get house
+     * Get house.
      *
      * @return \Kraken\WarmBundle\Entity\House
      */
@@ -414,9 +425,10 @@ class Calculation
     }
 
     /**
-     * Set stove_power
+     * Set stove_power.
      *
-     * @param  float       $stovePower
+     * @param float $stovePower
+     *
      * @return Calculation
      */
     public function setStovePower($stovePower)
@@ -427,7 +439,7 @@ class Calculation
     }
 
     /**
-     * Get stove_power
+     * Get stove_power.
      *
      * @return float
      */
@@ -452,9 +464,10 @@ class Calculation
     }
 
     /**
-     * Set heated_area
+     * Set heated_area.
      *
      * @param string $heatedArea
+     *
      * @return Calculation
      */
     public function setHeatedArea($heatedArea)
@@ -465,9 +478,9 @@ class Calculation
     }
 
     /**
-     * Get heated_area
+     * Get heated_area.
      *
-     * @return string 
+     * @return string
      */
     public function getHeatedArea()
     {
@@ -475,9 +488,10 @@ class Calculation
     }
 
     /**
-     * Set heating_power
+     * Set heating_power.
      *
      * @param string $heatingPower
+     *
      * @return Calculation
      */
     public function setHeatingPower($heatingPower)
@@ -488,9 +502,9 @@ class Calculation
     }
 
     /**
-     * Get heating_power
+     * Get heating_power.
      *
-     * @return string 
+     * @return string
      */
     public function getHeatingPower()
     {
@@ -498,9 +512,10 @@ class Calculation
     }
 
     /**
-     * Set city
+     * Set city.
      *
      * @param \Kraken\WarmBundle\Entity\City $city
+     *
      * @return Calculation
      */
     public function setCity(\Kraken\WarmBundle\Entity\City $city = null)
@@ -511,9 +526,9 @@ class Calculation
     }
 
     /**
-     * Get city
+     * Get city.
      *
-     * @return \Kraken\WarmBundle\Entity\City 
+     * @return \Kraken\WarmBundle\Entity\City
      */
     public function getCity()
     {
@@ -521,9 +536,10 @@ class Calculation
     }
 
     /**
-     * Set fuel
+     * Set fuel.
      *
      * @param \Kraken\WarmBundle\Entity\Fuel $fuel
+     *
      * @return Calculation
      */
     public function setFuel(\Kraken\WarmBundle\Entity\Fuel $fuel = null)
@@ -534,9 +550,9 @@ class Calculation
     }
 
     /**
-     * Get fuel
+     * Get fuel.
      *
-     * @return \Kraken\WarmBundle\Entity\Fuel 
+     * @return \Kraken\WarmBundle\Entity\Fuel
      */
     public function getFuel()
     {
@@ -544,9 +560,10 @@ class Calculation
     }
 
     /**
-     * Set heating_device
+     * Set heating_device.
      *
      * @param \Kraken\WarmBundle\Entity\HeatingDevice $heatingDevice
+     *
      * @return Calculation
      */
     public function setHeatingDevice(\Kraken\WarmBundle\Entity\HeatingDevice $heatingDevice = null)
@@ -557,16 +574,16 @@ class Calculation
     }
 
     /**
-     * Get heating_device
+     * Get heating_device.
      *
-     * @return \Kraken\WarmBundle\Entity\HeatingDevice 
+     * @return \Kraken\WarmBundle\Entity\HeatingDevice
      */
     public function getHeatingDevice()
     {
         return $this->heating_device;
     }
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -574,9 +591,10 @@ class Calculation
     }
 
     /**
-     * Add fuel_consumptions
+     * Add fuel_consumptions.
      *
      * @param \Kraken\WarmBundle\Entity\fuelConsumption $fuelConsumptions
+     *
      * @return Calculation
      */
     public function addFuelConsumption(\Kraken\WarmBundle\Entity\fuelConsumption $fuelConsumptions)
@@ -587,7 +605,7 @@ class Calculation
     }
 
     /**
-     * Remove fuel_consumptions
+     * Remove fuel_consumptions.
      *
      * @param \Kraken\WarmBundle\Entity\fuelConsumption $fuelConsumptions
      */
@@ -597,9 +615,9 @@ class Calculation
     }
 
     /**
-     * Get fuel_consumptions
+     * Get fuel_consumptions.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getFuelConsumptions()
     {
@@ -607,9 +625,10 @@ class Calculation
     }
 
     /**
-     * Set custom_data
+     * Set custom_data.
      *
      * @param string $customData
+     *
      * @return Calculation
      */
     public function setCustomData($customData)
@@ -620,9 +639,9 @@ class Calculation
     }
 
     /**
-     * Get custom_data
+     * Get custom_data.
      *
-     * @return string 
+     * @return string
      */
     public function getCustomData()
     {

@@ -2,10 +2,6 @@
 
 namespace Kraken\WarmBundle\Service;
 
-use Kraken\WarmBundle\Entity\Layer;
-use Kraken\WarmBundle\Entity\Material;
-use Kraken\WarmBundle\Calculator\BuildingInterface;
-use Kraken\WarmBundle\Service\InstanceService;
 use Doctrine\ORM\EntityManager;
 
 class ComparisonService
@@ -36,10 +32,10 @@ class ComparisonService
             ->andWhere('c.id <> ?6')
             ->setParameters(array(
                 0 => $calc->getCity(),
-                1 => $calc->getHeatedArea()*0.8,
-                2 => $calc->getHeatedArea()*1.2,
-                3 => $calc->getHeatingPower()*0.8,
-                4 => $calc->getHeatingPower()*1.2,
+                1 => $calc->getHeatedArea() * 0.8,
+                2 => $calc->getHeatedArea() * 1.2,
+                3 => $calc->getHeatingPower() * 0.8,
+                4 => $calc->getHeatingPower() * 1.2,
                 5 => $calc->getStoveType(),
                 6 => $calc->getId(),
             ))
@@ -50,7 +46,7 @@ class ComparisonService
 
         foreach ($comparables as $c) {
             $cost = $c->getFuelCost();
-            
+
             if ($cost > 0) {
                 $resume[] = $cost;
             }
@@ -59,7 +55,7 @@ class ComparisonService
         $comment = '';
 
         if (count($resume) > 2) {
-            $comment = sprintf('Średni koszt ogrzewania %d domów z twojej okolicy to %dzł', count($resume), array_sum($resume)/count($resume));
+            $comment = sprintf('Średni koszt ogrzewania %d domów z twojej okolicy to %dzł', count($resume), array_sum($resume) / count($resume));
         }
 
         return $comment;

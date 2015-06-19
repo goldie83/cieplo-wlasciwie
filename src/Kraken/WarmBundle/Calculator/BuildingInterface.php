@@ -5,12 +5,12 @@ namespace Kraken\WarmBundle\Calculator;
 interface BuildingInterface
 {
     /**
-     * @return double
+     * @return float
      */
     public function getEnergyLossToOutside();
 
     /**
-     * @return double
+     * @return float
      */
     public function getEnergyLossToUnheated();
     public function getHeatedArea();

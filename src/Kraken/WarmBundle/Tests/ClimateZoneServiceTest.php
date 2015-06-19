@@ -6,8 +6,6 @@ use Kraken\WarmBundle\Calculator\ClimateZoneService;
 use Kraken\WarmBundle\Entity\Calculation;
 use Kraken\WarmBundle\Entity\House;
 use Kraken\WarmBundle\Service\InstanceService;
-use Kraken\WarmBundle\Service\FuelService;
-use Kraken\WarmBundle\Calculator\HeatingSeason;
 use Mockery;
 
 class ClimateZoneServiceTest extends \PHPUnit_Framework_TestCase

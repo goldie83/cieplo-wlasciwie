@@ -68,9 +68,9 @@ class Material
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -78,9 +78,10 @@ class Material
     }
 
     /**
-     * Set name
+     * Set name.
      *
-     * @param  \varchar $name
+     * @param \varchar $name
+     *
      * @return Material
      */
     public function setName($name)
@@ -91,7 +92,7 @@ class Material
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return \varchar
      */
@@ -101,9 +102,10 @@ class Material
     }
 
     /**
-     * Set for_wall_construction_layer
+     * Set for_wall_construction_layer.
      *
-     * @param  boolean  $forWallConstructionLayer
+     * @param bool $forWallConstructionLayer
+     *
      * @return Material
      */
     public function setForWallConstructionLayer($forWallConstructionLayer)
@@ -114,9 +116,9 @@ class Material
     }
 
     /**
-     * Get for_wall_construction_layer
+     * Get for_wall_construction_layer.
      *
-     * @return boolean
+     * @return bool
      */
     public function getForWallConstructionLayer()
     {
@@ -124,9 +126,10 @@ class Material
     }
 
     /**
-     * Set for_wall_internal_layer
+     * Set for_wall_internal_layer.
      *
-     * @param  boolean  $forWallInternalLayer
+     * @param bool $forWallInternalLayer
+     *
      * @return Material
      */
     public function setForWallInternalLayer($forWallInternalLayer)
@@ -137,9 +140,9 @@ class Material
     }
 
     /**
-     * Get for_wall_internal_layer
+     * Get for_wall_internal_layer.
      *
-     * @return boolean
+     * @return bool
      */
     public function getForWallInternalLayer()
     {
@@ -147,9 +150,10 @@ class Material
     }
 
     /**
-     * Set for_wall_facade_layer
+     * Set for_wall_facade_layer.
      *
-     * @param  boolean  $forWallFacadeLayer
+     * @param bool $forWallFacadeLayer
+     *
      * @return Material
      */
     public function setForWallFacadeLayer($forWallFacadeLayer)
@@ -160,9 +164,9 @@ class Material
     }
 
     /**
-     * Get for_wall_facade_layer
+     * Get for_wall_facade_layer.
      *
-     * @return boolean
+     * @return bool
      */
     public function getForWallFacadeLayer()
     {
@@ -170,9 +174,10 @@ class Material
     }
 
     /**
-     * Set for_wall_isolation_layer
+     * Set for_wall_isolation_layer.
      *
-     * @param  boolean  $forWallIsolationLayer
+     * @param bool $forWallIsolationLayer
+     *
      * @return Material
      */
     public function setForWallIsolationLayer($forWallIsolationLayer)
@@ -183,9 +188,9 @@ class Material
     }
 
     /**
-     * Get for_wall_isolation_layer
+     * Get for_wall_isolation_layer.
      *
-     * @return boolean
+     * @return bool
      */
     public function getForWallIsolationLayer()
     {
@@ -193,7 +198,7 @@ class Material
     }
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -201,9 +206,10 @@ class Material
     }
 
     /**
-     * Add layers
+     * Add layers.
      *
-     * @param  \Kraken\WarmBundle\Entity\Layer $layers
+     * @param \Kraken\WarmBundle\Entity\Layer $layers
+     *
      * @return Material
      */
     public function addLayer(\Kraken\WarmBundle\Entity\Layer $layers)
@@ -214,7 +220,7 @@ class Material
     }
 
     /**
-     * Remove layers
+     * Remove layers.
      *
      * @param \Kraken\WarmBundle\Entity\Layer $layers
      */
@@ -224,7 +230,7 @@ class Material
     }
 
     /**
-     * Get layers
+     * Get layers.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -234,9 +240,10 @@ class Material
     }
 
     /**
-     * Set lambda
+     * Set lambda.
      *
-     * @param  float    $lambda
+     * @param float $lambda
+     *
      * @return Material
      */
     public function setLambda($lambda)
@@ -247,7 +254,7 @@ class Material
     }
 
     /**
-     * Get lambda
+     * Get lambda.
      *
      * @return float
      */
@@ -257,9 +264,10 @@ class Material
     }
 
     /**
-     * Set for_ceiling
+     * Set for_ceiling.
      *
-     * @param  boolean  $forCeiling
+     * @param bool $forCeiling
+     *
      * @return Material
      */
     public function setForCeiling($forCeiling)
@@ -270,9 +278,9 @@ class Material
     }
 
     /**
-     * Get for_ceiling
+     * Get for_ceiling.
      *
-     * @return boolean
+     * @return bool
      */
     public function getForCeiling()
     {
@@ -280,9 +288,10 @@ class Material
     }
 
     /**
-     * Set for_floor
+     * Set for_floor.
      *
-     * @param  boolean  $forFloor
+     * @param bool $forFloor
+     *
      * @return Material
      */
     public function setForFloor($forFloor)
@@ -293,9 +302,9 @@ class Material
     }
 
     /**
-     * Get for_floor
+     * Get for_floor.
      *
-     * @return boolean
+     * @return bool
      */
     public function getForFloor()
     {

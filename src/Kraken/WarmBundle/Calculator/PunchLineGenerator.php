@@ -19,23 +19,23 @@ class PunchLineGenerator
     {
         $factor = $this->calculator->getYearlyEnergyConsumptionFactor();
 
-        $house = "Twój dom to dziura bez dna";
+        $house = 'Twój dom to dziura bez dna';
 
         if ($factor <= 20) {
-            $house = "Twój dom jest pasywny";
+            $house = 'Twój dom jest pasywny';
         } elseif ($factor <= 45) {
-            $house = "Twój dom jest niskoenergetyczny";
+            $house = 'Twój dom jest niskoenergetyczny';
         } elseif ($factor < 80) {
-            $house = "Twój dom jest energooszczędny";
+            $house = 'Twój dom jest energooszczędny';
         } elseif ($factor < 100) {
-            $house = "Twój dom jest średnio energooszczędny";
+            $house = 'Twój dom jest średnio energooszczędny';
         } elseif ($factor < 150) {
-            $house = "Twój dom jest średnio energochłonny";
+            $house = 'Twój dom jest średnio energochłonny';
         }
 
         try {
             $efficiency = $this->calculator->getYearlyStoveEfficiency();
-            $heating = "Ogrzewanie działa bardzo ekonomicznie";
+            $heating = 'Ogrzewanie działa bardzo ekonomicznie';
 
             if ($this->instance->get()->isUsingSolidFuel()) {
                 $bad = 0.4;
@@ -48,19 +48,19 @@ class PunchLineGenerator
             }
 
             if ($efficiency < $bad) {
-                $heating = "Ogrzewanie jest kompletnie nieefektywne";
+                $heating = 'Ogrzewanie jest kompletnie nieefektywne';
             } elseif ($efficiency < $quite) {
-                $heating = "Ogrzewanie pracuje na skraju opłacalności";
+                $heating = 'Ogrzewanie pracuje na skraju opłacalności';
             } elseif ($efficiency < $good) {
-                $heating = "Ogrzewanie działa dość ekonomicznie";
+                $heating = 'Ogrzewanie działa dość ekonomicznie';
             }
         } catch (\Exception $e) {
-            $heating = "Nie wiemy nic o tym jak aktualnie ogrzewasz";
+            $heating = 'Nie wiemy nic o tym jak aktualnie ogrzewasz';
         }
 
         return array(
             'house' => $house,
-            'heating' => $heating
+            'heating' => $heating,
         );
     }
 }

@@ -15,18 +15,18 @@ class HouseType extends AbstractType
         $builder
             ->add('building_length', null, array(
                 'label' => 'Długość budynku',
-                'attr'  => array(
+                'attr' => array(
                     'input_group' => array(
-                        'append'  => 'm'
-                    )
+                        'append' => 'm',
+                    ),
                 ),
             ))
             ->add('building_width', null, array(
                 'label' => 'Szerokość budynku',
-                'attr'  => array(
+                'attr' => array(
                     'input_group' => array(
-                        'append'  => 'm'
-                    )
+                        'append' => 'm',
+                    ),
                 ),
             ))
             ->add('floor_height', 'choice', array(
@@ -42,7 +42,7 @@ class HouseType extends AbstractType
                 'label' => 'Liczba wszystkich kondygnacji budynku',
                 'attr' => array(
                     'help_text' => 'Wlicz tutaj piwnicę, parter, każde z pięter, poddasze/strych - obojętnie czy ogrzewane, czy nie.',
-                )
+                ),
             ))
             ->add('number_heated_floors', null, array(
                 'label' => 'Liczba pięter ogrzewanych',
@@ -55,11 +55,11 @@ class HouseType extends AbstractType
                     'attic' => 'Poddasze',
                 ),
                 'label' => 'Które z pięter jest nieogrzewane?',
-                'required' => false
+                'required' => false,
             ))
             ->add('has_balcony', null, array(
                 'required' => false,
-                'label' => 'Dom posiada balkon(y)'
+                'label' => 'Dom posiada balkon(y)',
             ))
             ->add('construction_type', 'choice', array(
                 'choices' => array(
@@ -73,15 +73,15 @@ class HouseType extends AbstractType
                 'required' => true,
                 'label' => 'Grubość ścian zewnętrznych',
                 'mapped' => false,
-                'attr'  => array(
+                'attr' => array(
                     'help_text' => 'Zmierz całkowitą grubość ściany: od tynku wewnątrz do tynku na zewnątrz',
                     'input_group' => array(
-                        'append' => 'cm'
-                    )
+                        'append' => 'cm',
+                    ),
                 ),
             ))
-            ->add('walls','collection', array(
-                'type' =>  new WallType(),
+            ->add('walls', 'collection', array(
+                'type' => new WallType(),
                 'allow_add' => false,
                 'prototype' => false,
             ))
@@ -89,7 +89,7 @@ class HouseType extends AbstractType
                 'label' => 'Liczba drzwi zewnętrznych',
                 'attr' => array(
                     'help_text' => 'W części ogrzewanej',
-                )
+                ),
             ))
             ->add('doors_type', 'choice', array(
                 'required' => false,
@@ -103,13 +103,13 @@ class HouseType extends AbstractType
                 'label' => 'Rodzaj drzwi zewnętrznych',
                 'attr' => array(
                     'help_text' => 'Jeśli masz starsze i nowsze, wybierz te, których jest najwięcej',
-                )
+                ),
             ))
             ->add('number_windows', null, array(
                 'label' => 'Liczba okien',
                 'attr' => array(
                     'help_text' => 'W części ogrzewanej',
-                )
+                ),
             ))
             ->add('windows_type', 'choice', array(
                 'choices' => array(
@@ -120,7 +120,7 @@ class HouseType extends AbstractType
                     'new_double_glass' => 'Nowe z szybami zespolonymi',
                     'new_triple_glass' => 'Nowe z trzema szybami',
                 ),
-                'label' => 'Rodzaj okien'
+                'label' => 'Rodzaj okien',
             ))
             ->add('roof_type', 'choice', array(
                 'choices' => array(
@@ -128,7 +128,7 @@ class HouseType extends AbstractType
                     'oblique' => 'dwuspadowy o niewielkim nachyleniu',
                     'steep' => 'dwuspadowy stromy (rejony górskie)',
                 ),
-                'label' => 'Rodzaj dachu'
+                'label' => 'Rodzaj dachu',
             ))
             ->add('highest_ceiling_isolation_layer', new LayerType(), array(
                 'label' => 'Izolacja najwyższego stropu',
@@ -152,7 +152,7 @@ class HouseType extends AbstractType
             ->add('basement_floor_isolation_layer', new LayerType(), array(
                 'label' => 'Izolacja podłogi w piwnicy',
                 'material_type' => 'for_floor',
-                'required' => false
+                'required' => false,
             ))
             ->add('lowest_ceiling_isolation_layer', new LayerType(), array(
                 'label' => 'Izolacja stropu nad parterem',
@@ -165,7 +165,7 @@ class HouseType extends AbstractType
                     'mechanical' => 'Mechaniczna',
                     'mechanical_recovery' => 'Mechaniczna z odzyskiem ciepła',
                 ),
-                'label' => 'Rodzaj wentylacji'
+                'label' => 'Rodzaj wentylacji',
             ))
             ->add('has_garage', null, array(
                 'label' => 'Dom posiada garaż',

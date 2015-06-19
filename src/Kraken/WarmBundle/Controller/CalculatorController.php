@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
-
 use Kraken\WarmBundle\Form\CalculationFormType;
 use Kraken\WarmBundle\Form\HouseApartmentType;
 use Kraken\WarmBundle\Form\HouseType;
@@ -69,7 +68,7 @@ class CalculatorController extends Controller
 
                 $calcSlug = base_convert($obj->getId(), 10, 36);
                 $redirect = $this->generateUrl('details', array(
-                    'slug' => $calcSlug
+                    'slug' => $calcSlug,
                 ));
 
                 if (!$isEditing) {
@@ -94,7 +93,7 @@ class CalculatorController extends Controller
 
         return $this->render('KrakenWarmBundle:Default:index.html.twig', array(
             'calc' => $calc,
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ));
     }
 
@@ -183,7 +182,6 @@ class CalculatorController extends Controller
                 $calc->setHouse($house);
 
                 foreach ($house->getWalls() as $i => $wall) {
-
                     if ($wall->getIsolationLayer()) {
                         if (!$wall->getIsolationLayer()->getMaterial() || !$wall->getIsolationLayer()->getSize()) {
                             $em->remove($wall->getIsolationLayer());
@@ -236,7 +234,7 @@ class CalculatorController extends Controller
             ->setSubject('Podsumowanie grzewcze twojego domu')
             ->setFrom(array('juzefwt@gmail.com' => 'CieploWlasciwie.pl'))
             ->setTo($calc->getEmail())
-            ->setContentType("text/html")
+            ->setContentType('text/html')
             ->setBody(
                 $this->renderView(
                     'KrakenWarmBundle:Calculator:email.html.twig',
@@ -306,9 +304,9 @@ class CalculatorController extends Controller
                 'label' => $variants[$variantType]['label'],
                 'version' => $variants[$variantType]['detail'],
                 'amount' => $variants[$variantType]['amount'],
-                'consumption' => round($variants[$variantType]['amount']/$fuels[$fuelType]['trade_amount'], 1),
+                'consumption' => round($variants[$variantType]['amount'] / $fuels[$fuelType]['trade_amount'], 1),
                 'fuel_type' => $fuelType,
-                'efficiency' => $variants[$variantType]['efficiency']*100,
+                'efficiency' => $variants[$variantType]['efficiency'] * 100,
                 'setup_costs' => $variants[$variantType]['setup_costs'],
                 'maintenance_time' => $variants[$variantType]['maintenance_time'],
             ];
@@ -442,7 +440,7 @@ class CalculatorController extends Controller
             ->innerJoin('c.house', 'h')
             ->where('c.id IN (?1)')
             ->setParameters(array(
-                1 => $ids
+                1 => $ids,
             ))
             ->getQuery()
             ->getResult();

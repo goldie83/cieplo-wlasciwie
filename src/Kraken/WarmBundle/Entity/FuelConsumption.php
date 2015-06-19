@@ -3,7 +3,6 @@
 namespace Kraken\WarmBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -41,9 +40,9 @@ class FuelConsumption
     protected $cost;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -51,9 +50,10 @@ class FuelConsumption
     }
 
     /**
-     * Set consumption
+     * Set consumption.
      *
      * @param string $consumption
+     *
      * @return FuelConsumption
      */
     public function setConsumption($consumption)
@@ -64,9 +64,9 @@ class FuelConsumption
     }
 
     /**
-     * Get consumption
+     * Get consumption.
      *
-     * @return string 
+     * @return string
      */
     public function getConsumption()
     {
@@ -74,9 +74,10 @@ class FuelConsumption
     }
 
     /**
-     * Set cost
+     * Set cost.
      *
      * @param string $cost
+     *
      * @return FuelConsumption
      */
     public function setCost($cost)
@@ -87,9 +88,9 @@ class FuelConsumption
     }
 
     /**
-     * Get cost
+     * Get cost.
      *
-     * @return string 
+     * @return string
      */
     public function getCost()
     {
@@ -97,9 +98,10 @@ class FuelConsumption
     }
 
     /**
-     * Set calculation
+     * Set calculation.
      *
      * @param \Kraken\WarmBundle\Entity\Calculation $calculation
+     *
      * @return FuelConsumption
      */
     public function setCalculation(\Kraken\WarmBundle\Entity\Calculation $calculation = null)
@@ -110,9 +112,9 @@ class FuelConsumption
     }
 
     /**
-     * Get calculation
+     * Get calculation.
      *
-     * @return \Kraken\WarmBundle\Entity\Calculation 
+     * @return \Kraken\WarmBundle\Entity\Calculation
      */
     public function getCalculation()
     {
@@ -120,9 +122,10 @@ class FuelConsumption
     }
 
     /**
-     * Set fuel
+     * Set fuel.
      *
      * @param \Kraken\WarmBundle\Entity\Fuel $fuel
+     *
      * @return FuelConsumption
      */
     public function setFuel(\Kraken\WarmBundle\Entity\Fuel $fuel = null)
@@ -133,9 +136,9 @@ class FuelConsumption
     }
 
     /**
-     * Get fuel
+     * Get fuel.
      *
-     * @return \Kraken\WarmBundle\Entity\Fuel 
+     * @return \Kraken\WarmBundle\Entity\Fuel
      */
     public function getFuel()
     {

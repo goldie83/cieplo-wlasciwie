@@ -154,14 +154,14 @@
         <h3>Czym i za ile ogrzewać</h3>
         <p>Poniżej zebrane zostały roczne koszty ogrzewania różnymi paliwami (zakładając utrzymanie w domu temperatury {{ calc.indoorTemperature|number_format(1, ',', ' ') }}&deg;C przez cały sezon grzewczy) oraz koszty inwestycji w przypadku zmiany aktualnego sposobu ogrzewania na inny.</p>
         <div class="alert alert-warning">
-            W wyliczeniach przyjęto orientacyjne ceny paliw. Aby wyniki lepiej pasowały do&nbsp;twojej sytuacji, w każdej chwili <a href="#custom_fuel_prices" data-toggle="modal"><strong>możesz zmienić ceny paliw wedle uznania</strong></a>.</p>  
+            W wyliczeniach przyjęto orientacyjne ceny paliw. Aby wyniki lepiej pasowały do&nbsp;twojej sytuacji, w każdej chwili <a href="#custom_fuel_prices" data-toggle="modal"><strong>możesz zmienić ceny paliw wedle uznania</strong></a>.</p>
         </div>
 
         <ul id="cost_charts_navbar" class="nav nav-tabs">
           <li role="presentation" class="active"><a href="#" onclick="openHeatingCostsTab();return false;">Koszty ogrzewania</a></li>
           <li role="presentation"><a href="#" onclick="openSetupCostsTab();return false;">Koszty inwestycji</a></li>
         </ul>
-  
+
         <div id="fuel_chart" style="height:600px"></div>
         <div id="setup_chart" style="height:600px;display:none"></div>
         <p><small><strong>Ekonomiczne palenie</strong> w kotle zasypowym to <a href="http://czysteogrzewanie.pl/jak-palic" target="_blank">palenie "od góry" w kotle górnego spalania</a> lub zgodnie z&nbsp;instrukcją w kotle dolnego spalania.
@@ -221,7 +221,7 @@
           <p>Nie istnieją kotły węglowe pracujące efektywnie z tak małą mocą.</p>
       {% endif %}
         <dt>min. {{ label_success((1.2*powerNeeded)|number_format(0, ',', ' ') ~ 'kW') }} dla kotła gazowego</dt>
-        <dd>Kotły gazowe pracują z dobrą sprawnością nawet na niskich mocach, dlatego przy wyborze kieruj się zaleceniami producenta (również w doborze mocy na potrzeby CWU).<br /> 
+        <dd>Kotły gazowe pracują z dobrą sprawnością nawet na niskich mocach, dlatego przy wyborze kieruj się zaleceniami producenta (również w doborze mocy na potrzeby CWU).<br />
             Instalując kocioł kondensacyjny pamiętaj o takim zaprojektowaniu instalacji, <a href="http://czysteogrzewanie.pl/zakupy/mocy-przybywaj-dobor-mocy-kotla-weglowego/#Koty_gazowe" target="_blank">aby temperatura wody nie musiała przekraczać 60&deg;C</a> - inaczej nici z kondensacji i rachunki wzrosną.</dd>
       </dl>
       {% if powerNeeded > 3 and powerNeeded <= 10 %}

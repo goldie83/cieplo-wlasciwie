@@ -10,9 +10,7 @@ use Kraken\WarmBundle\Entity\Material;
 use Kraken\WarmBundle\Service\InstanceService;
 use Kraken\WarmBundle\Service\Building;
 use Kraken\WarmBundle\Service\DoubleBuilding;
-use Kraken\WarmBundle\Service\VentilationService;
 use Kraken\WarmBundle\Service\WallService;
-use Kraken\WarmBundle\Service\WallFactory;
 use Mockery;
 
 class BuildingTest extends \PHPUnit_Framework_TestCase
@@ -50,7 +48,7 @@ class BuildingTest extends \PHPUnit_Framework_TestCase
     public function testEnergyLossThroughGroundFloor()
     {
         $instance = $this->makeInstance();
-        $building = new Building($instance , $this->mockVentilation(), $this->mockWall(), $this->mockWallFactory());
+        $building = new Building($instance, $this->mockVentilation(), $this->mockWall(), $this->mockWallFactory());
 
         $this->assertEquals(29.21, $building->getEnergyLossThroughGroundFloor());
 
@@ -137,14 +135,14 @@ class BuildingTest extends \PHPUnit_Framework_TestCase
 
         $building = new Building($instance, $this->mockVentilation(), $this->mockWall(), $this->mockWallFactory());
 
-        $this->assertEquals(round(9.2*9.2*3*2.6, 2), $building->getHouseCubature());
+        $this->assertEquals(round(9.2 * 9.2 * 3 * 2.6, 2), $building->getHouseCubature());
 
         $instance->get()->getHouse()->setNumberFloors(2);
         $instance->get()->getHouse()->setHasBasement(false);
         $instance->get()->getHouse()->setNumberHeatedFloors(2);
         $instance->get()->getHouse()->setRoofType('oblique');
 
-        $this->assertEquals(round(9.2*9.2*2.6*1.5, 2), $building->getHouseCubature());
+        $this->assertEquals(round(9.2 * 9.2 * 2.6 * 1.5, 2), $building->getHouseCubature());
     }
 
     public function testWallArea()
@@ -286,19 +284,19 @@ class BuildingTest extends \PHPUnit_Framework_TestCase
         $instance->get()->getHouse()->setDoorsType('old_wooden');
         $instance->get()->getHouse()->setWindowsType('new_double_glass');
 
-        $m1 = new Material;
+        $m1 = new Material();
         $m1->setLambda(0.65);
         $m1->setName('pustak żużlobetonowy');
 
-        $m2 = new Material;
+        $m2 = new Material();
         $m2->setName('styropian');
         $m2->setLambda(0.038);
 
-        $l1 = new Layer;
+        $l1 = new Layer();
         $l1->setMaterial($m1);
         $l1->setSize(40);
 
-        $l2 = new Layer;
+        $l2 = new Layer();
         $l2->setMaterial($m2);
         $l2->setSize(12);
 

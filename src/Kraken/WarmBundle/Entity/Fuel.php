@@ -63,7 +63,7 @@ class Fuel
     protected $calculations;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -76,9 +76,9 @@ class Fuel
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -86,9 +86,10 @@ class Fuel
     }
 
     /**
-     * Set type
+     * Set type.
      *
      * @param string $type
+     *
      * @return Fuel
      */
     public function setType($type)
@@ -99,9 +100,9 @@ class Fuel
     }
 
     /**
-     * Get type
+     * Get type.
      *
-     * @return string 
+     * @return string
      */
     public function getType()
     {
@@ -109,9 +110,10 @@ class Fuel
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
+     *
      * @return Fuel
      */
     public function setName($name)
@@ -122,9 +124,9 @@ class Fuel
     }
 
     /**
-     * Get name
+     * Get name.
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -132,9 +134,10 @@ class Fuel
     }
 
     /**
-     * Set unit
+     * Set unit.
      *
      * @param string $unit
+     *
      * @return Fuel
      */
     public function setUnit($unit)
@@ -145,9 +148,9 @@ class Fuel
     }
 
     /**
-     * Get unit
+     * Get unit.
      *
-     * @return string 
+     * @return string
      */
     public function getUnit()
     {
@@ -155,9 +158,10 @@ class Fuel
     }
 
     /**
-     * Set price
+     * Set price.
      *
      * @param string $price
+     *
      * @return Fuel
      */
     public function setPrice($price)
@@ -168,9 +172,9 @@ class Fuel
     }
 
     /**
-     * Get price
+     * Get price.
      *
-     * @return string 
+     * @return string
      */
     public function getPrice()
     {
@@ -178,9 +182,10 @@ class Fuel
     }
 
     /**
-     * Set trade_amount
+     * Set trade_amount.
      *
-     * @param integer $tradeAmount
+     * @param int $tradeAmount
+     *
      * @return Fuel
      */
     public function setTradeAmount($tradeAmount)
@@ -191,9 +196,9 @@ class Fuel
     }
 
     /**
-     * Get trade_amount
+     * Get trade_amount.
      *
-     * @return integer 
+     * @return int
      */
     public function getTradeAmount()
     {
@@ -201,9 +206,10 @@ class Fuel
     }
 
     /**
-     * Set trade_unit
+     * Set trade_unit.
      *
      * @param string $tradeUnit
+     *
      * @return Fuel
      */
     public function setTradeUnit($tradeUnit)
@@ -214,9 +220,9 @@ class Fuel
     }
 
     /**
-     * Get trade_unit
+     * Get trade_unit.
      *
-     * @return string 
+     * @return string
      */
     public function getTradeUnit()
     {
@@ -224,9 +230,10 @@ class Fuel
     }
 
     /**
-     * Set energy
+     * Set energy.
      *
      * @param string $energy
+     *
      * @return Fuel
      */
     public function setEnergy($energy)
@@ -237,9 +244,9 @@ class Fuel
     }
 
     /**
-     * Get energy
+     * Get energy.
      *
-     * @return string 
+     * @return string
      */
     public function getEnergy()
     {
@@ -247,9 +254,10 @@ class Fuel
     }
 
     /**
-     * Add heatingVariants
+     * Add heatingVariants.
      *
      * @param \Kraken\WarmBundle\Entity\HeatingVariant $heatingVariants
+     *
      * @return Fuel
      */
     public function addHeatingVariant(\Kraken\WarmBundle\Entity\HeatingVariant $heatingVariants)
@@ -260,7 +268,7 @@ class Fuel
     }
 
     /**
-     * Remove heatingVariants
+     * Remove heatingVariants.
      *
      * @param \Kraken\WarmBundle\Entity\HeatingVariant $heatingVariants
      */
@@ -270,9 +278,9 @@ class Fuel
     }
 
     /**
-     * Get heatingVariants
+     * Get heatingVariants.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getHeatingVariants()
     {
@@ -280,9 +288,10 @@ class Fuel
     }
 
     /**
-     * Add calculations
+     * Add calculations.
      *
      * @param \Kraken\WarmBundle\Entity\Calculation $calculations
+     *
      * @return Fuel
      */
     public function addCalculation(\Kraken\WarmBundle\Entity\Calculation $calculations)
@@ -293,7 +302,7 @@ class Fuel
     }
 
     /**
-     * Remove calculations
+     * Remove calculations.
      *
      * @param \Kraken\WarmBundle\Entity\Calculation $calculations
      */
@@ -303,9 +312,9 @@ class Fuel
     }
 
     /**
-     * Get calculations
+     * Get calculations.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCalculations()
     {

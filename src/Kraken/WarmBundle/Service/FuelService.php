@@ -59,7 +59,7 @@ class FuelService
         $number = str_replace('.', ',', $number);
         $number = str_replace(',0', '', $number);
         $text = $text[$calc->getFuelType()];
-        
+
         return sprintf($text, $number);
     }
 }

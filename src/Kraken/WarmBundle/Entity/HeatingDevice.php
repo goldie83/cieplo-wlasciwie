@@ -53,9 +53,9 @@ class HeatingDevice
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -63,9 +63,10 @@ class HeatingDevice
     }
 
     /**
-     * Set type
+     * Set type.
      *
      * @param string $type
+     *
      * @return HeatingDevice
      */
     public function setType($type)
@@ -76,9 +77,9 @@ class HeatingDevice
     }
 
     /**
-     * Get type
+     * Get type.
      *
-     * @return string 
+     * @return string
      */
     public function getType()
     {
@@ -86,9 +87,10 @@ class HeatingDevice
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
+     *
      * @return HeatingDevice
      */
     public function setName($name)
@@ -99,9 +101,9 @@ class HeatingDevice
     }
 
     /**
-     * Get name
+     * Get name.
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -109,9 +111,10 @@ class HeatingDevice
     }
 
     /**
-     * Set detail
+     * Set detail.
      *
      * @param string $detail
+     *
      * @return HeatingDevice
      */
     public function setDetail($detail)
@@ -122,16 +125,16 @@ class HeatingDevice
     }
 
     /**
-     * Get detail
+     * Get detail.
      *
-     * @return string 
+     * @return string
      */
     public function getDetail()
     {
         return $this->detail;
     }
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -139,9 +142,10 @@ class HeatingDevice
     }
 
     /**
-     * Add heatingVariants
+     * Add heatingVariants.
      *
      * @param \Kraken\WarmBundle\Entity\HeatingVariant $heatingVariants
+     *
      * @return HeatingDevice
      */
     public function addHeatingVariant(\Kraken\WarmBundle\Entity\HeatingVariant $heatingVariants)
@@ -152,7 +156,7 @@ class HeatingDevice
     }
 
     /**
-     * Remove heatingVariants
+     * Remove heatingVariants.
      *
      * @param \Kraken\WarmBundle\Entity\HeatingVariant $heatingVariants
      */
@@ -162,9 +166,9 @@ class HeatingDevice
     }
 
     /**
-     * Get heatingVariants
+     * Get heatingVariants.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getHeatingVariants()
     {
@@ -172,9 +176,10 @@ class HeatingDevice
     }
 
     /**
-     * Set for_legacy_setup
+     * Set for_legacy_setup.
      *
-     * @param boolean $forLegacySetup
+     * @param bool $forLegacySetup
+     *
      * @return HeatingDevice
      */
     public function setForLegacySetup($forLegacySetup)
@@ -185,9 +190,9 @@ class HeatingDevice
     }
 
     /**
-     * Get for_legacy_setup
+     * Get for_legacy_setup.
      *
-     * @return boolean 
+     * @return bool
      */
     public function getForLegacySetup()
     {
@@ -195,9 +200,10 @@ class HeatingDevice
     }
 
     /**
-     * Set for_advice
+     * Set for_advice.
      *
-     * @param boolean $forAdvice
+     * @param bool $forAdvice
+     *
      * @return HeatingDevice
      */
     public function setForAdvice($forAdvice)
@@ -208,9 +214,9 @@ class HeatingDevice
     }
 
     /**
-     * Get for_advice
+     * Get for_advice.
      *
-     * @return boolean 
+     * @return bool
      */
     public function getForAdvice()
     {

@@ -24,27 +24,27 @@ class CalculationFormType extends AbstractType
                 'label' => 'Rodzaj budynku',
             ))
             ->add('construction_year', 'choice', array(
-                'choices' => array_combine(range(date("Y"), 1900), range(date("Y"), 1900)),
+                'choices' => array_combine(range(date('Y'), 1900), range(date('Y'), 1900)),
                 'required' => true,
                 'label' => 'Rok budowy domu',
-                'attr'  => array(
+                'attr' => array(
                     'help_text' => 'Dokładność +/- 10 lat jest wystarczająca',
                 ),
             ))
             ->add('heating_device', null, [
                 'label' => 'Podstawowe urządzenie grzewcze',
-                'query_builder' => function(EntityRepository $er ) use ($options) {
+                'query_builder' => function (EntityRepository $er) use ($options) {
                     return $er->createQueryBuilder('hd')
                         ->andWhere('hd.for_legacy_setup = 1')
                         ->orderBy('hd.name', 'ASC');
-                }
+                },
             ])
             ->add('stove_power', 'number', array(
                 'label' => 'Moc urządzenia grzewczego',
                 'required' => false,
                 'widget_addon_append' => [
-                    'text'  => 'kW'
-                ]
+                    'text' => 'kW',
+                ],
             ))
             ->add('fuel_consumptions', 'collection', [
                 'label' => 'Zużycie paliw',
@@ -63,8 +63,8 @@ class CalculationFormType extends AbstractType
                     'widget_addon_prepend' => [
                         'text' => '@',
                     ],
-                    'horizontal_input_wrapper_class' => "col-sm-9",
-                ]
+                    'horizontal_input_wrapper_class' => 'col-sm-9',
+                ],
             ])
             ->add('email', null, array(
                 'label' => 'Twój adres e-mail',
@@ -74,7 +74,7 @@ class CalculationFormType extends AbstractType
                 'label' => 'Temperatura w mieszkaniu zimą',
                 'required' => true,
                 'widget_addon_append' => [
-                    'text'  => '&deg;C',
+                    'text' => '&deg;C',
                 ],
                 'help_block' => 'Podaj temperaturę jaką uznajesz za komfortową bez noszenia dwóch swetrów i kalesonów. Za standardową temperaturę pokojową przyjmuje się 20 st.C',
             ))

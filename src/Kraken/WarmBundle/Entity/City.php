@@ -43,7 +43,7 @@ class City
     protected $calculations;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -51,9 +51,9 @@ class City
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -61,9 +61,10 @@ class City
     }
 
     /**
-     * Set latitude
+     * Set latitude.
      *
-     * @param  float $latitude
+     * @param float $latitude
+     *
      * @return City
      */
     public function setLatitude($latitude)
@@ -74,7 +75,7 @@ class City
     }
 
     /**
-     * Get latitude
+     * Get latitude.
      *
      * @return float
      */
@@ -84,9 +85,10 @@ class City
     }
 
     /**
-     * Set longitude
+     * Set longitude.
      *
-     * @param  float $longitude
+     * @param float $longitude
+     *
      * @return City
      */
     public function setLongitude($longitude)
@@ -97,7 +99,7 @@ class City
     }
 
     /**
-     * Get longitude
+     * Get longitude.
      *
      * @return float
      */
@@ -107,9 +109,10 @@ class City
     }
 
     /**
-     * Set name
+     * Set name.
      *
-     * @param  string $name
+     * @param string $name
+     *
      * @return City
      */
     public function setName($name)
@@ -120,7 +123,7 @@ class City
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -130,9 +133,10 @@ class City
     }
 
     /**
-     * Add temperatures
+     * Add temperatures.
      *
-     * @param  \Kraken\WarmBundle\Entity\Temperature $temperatures
+     * @param \Kraken\WarmBundle\Entity\Temperature $temperatures
+     *
      * @return City
      */
     public function addTemperature(\Kraken\WarmBundle\Entity\Temperature $temperatures)
@@ -143,7 +147,7 @@ class City
     }
 
     /**
-     * Remove temperatures
+     * Remove temperatures.
      *
      * @param \Kraken\WarmBundle\Entity\Temperature $temperatures
      */
@@ -153,7 +157,7 @@ class City
     }
 
     /**
-     * Get temperatures
+     * Get temperatures.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -163,9 +167,10 @@ class City
     }
 
     /**
-     * Add calculations
+     * Add calculations.
      *
      * @param \Kraken\WarmBundle\Entity\Calculation $calculations
+     *
      * @return City
      */
     public function addCalculation(\Kraken\WarmBundle\Entity\Calculation $calculations)
@@ -176,7 +181,7 @@ class City
     }
 
     /**
-     * Remove calculations
+     * Remove calculations.
      *
      * @param \Kraken\WarmBundle\Entity\Calculation $calculations
      */
@@ -186,9 +191,9 @@ class City
     }
 
     /**
-     * Get calculations
+     * Get calculations.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCalculations()
     {

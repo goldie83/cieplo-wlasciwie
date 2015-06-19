@@ -17,19 +17,19 @@ class LayerType extends AbstractType
             ->add('material', null, array(
                 'required' => $options['force_required'],
                 'label' => 'Materiał',
-                'query_builder' => function(EntityRepository $er ) use ($options) {
+                'query_builder' => function (EntityRepository $er) use ($options) {
                     return $er->createQueryBuilder('m')
                         ->andWhere(sprintf('m.%s = 1', $options['material_type']))
                         ->orderBy('m.name', 'ASC');
-                }
+                },
             ))
             ->add('size', 'integer', array(
                 'required' => $options['force_required'],
                 'label' => 'Grubość',
-                'attr'  => array(
+                'attr' => array(
                     'input_group' => array(
-                        'append' => 'cm'
-                    )
+                        'append' => 'cm',
+                    ),
                 ),
             ))
         ;

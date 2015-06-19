@@ -12,7 +12,7 @@ use Kraken\WarmBundle\Service\HouseService;
 
 class HouseServiceTest extends \PHPUnit_Framework_TestCase
 {
-//     public function testNumberOfHeatedFloors()
+    //     public function testNumberOfHeatedFloors()
 //     {
 //         $house = new House();
 //         $house->setVentilationType('natural');
@@ -34,7 +34,7 @@ class HouseServiceTest extends \PHPUnit_Framework_TestCase
 //
     public function testWallThickness()
     {
-//         $calc = new Calculation();
+        //         $calc = new Calculation();
 //
 //         $instance = new InstanceService();
 //         $instance->setCalculation($calc);
@@ -57,6 +57,6 @@ class HouseServiceTest extends \PHPUnit_Framework_TestCase
 //         $w->setIsolationLayer($l2);
 //         $w->setOutsideLayer($l3);
 
-        $this->assertEquals(1,1);
+        $this->assertEquals(1, 1);
     }
 }

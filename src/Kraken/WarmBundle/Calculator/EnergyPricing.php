@@ -6,7 +6,6 @@ use Doctrine\ORM\EntityManager;
 use Kraken\WarmBundle\Entity\Calculation;
 use Kraken\WarmBundle\Entity\HeatingVariant;
 use Kraken\WarmBundle\Service\InstanceService;
-use Kraken\WarmBundle\Calculator\HeatingSeason;
 
 class EnergyPricing
 {
@@ -27,7 +26,7 @@ class EnergyPricing
     {
         $comparison = array();
         $energyAmount = $this->calculator->getYearlyEnergyConsumption();
-        
+
         $heatingVariants = $this->em
             ->createQueryBuilder()
             ->select('hv')
@@ -38,7 +37,7 @@ class EnergyPricing
             ->getResult();
 
         foreach ($heatingVariants as $variant) {
-            $amount = ($energyAmount/$variant->getEfficiency())/($variant->getFuel()->getEnergy()*0.277); // MJ to kWh
+            $amount = ($energyAmount / $variant->getEfficiency()) / ($variant->getFuel()->getEnergy() * 0.277); // MJ to kWh
             $variantKey = $variant->getType();
             $device = $this->instance->get()->getHeatingDevice();
             $actualHeatingDeviceType = $device ? $device->getType() : '';
@@ -100,7 +99,7 @@ class EnergyPricing
             'electricity_heat_pump_ground' => ['ground_heat_pump', 'place'],
         ];
 
-        $selectedMapping = isset($mapping[$variant->getType()]) 
+        $selectedMapping = isset($mapping[$variant->getType()])
             ? $mapping[$variant->getType()]
             : [];
 
@@ -168,7 +167,7 @@ class EnergyPricing
             ->from('KrakenWarmBundle:HeatingVariant', 'hv')
             ->where('hv.heatingDevice = (?1)')
             ->setParameters([
-                1 => $device
+                1 => $device,
             ])
             ->setMaxResults(1)
             ->getQuery()

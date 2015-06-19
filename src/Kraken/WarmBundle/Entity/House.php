@@ -216,7 +216,7 @@ class House
 
     public static function create()
     {
-        $house = new House();
+        $house = new self();
         $wall = new Wall();
         $house->addWall($wall);
 
@@ -224,7 +224,7 @@ class House
     }
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -233,9 +233,9 @@ class House
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -243,9 +243,10 @@ class House
     }
 
     /**
-     * Set building_length
+     * Set building_length.
      *
-     * @param  integer $buildingLength
+     * @param int $buildingLength
+     *
      * @return House
      */
     public function setBuildingLength($buildingLength)
@@ -256,9 +257,9 @@ class House
     }
 
     /**
-     * Get building_length
+     * Get building_length.
      *
-     * @return integer
+     * @return int
      */
     public function getBuildingLength()
     {
@@ -266,9 +267,10 @@ class House
     }
 
     /**
-     * Set building_width
+     * Set building_width.
      *
-     * @param  integer $buildingWidth
+     * @param int $buildingWidth
+     *
      * @return House
      */
     public function setBuildingWidth($buildingWidth)
@@ -279,9 +281,9 @@ class House
     }
 
     /**
-     * Get building_width
+     * Get building_width.
      *
-     * @return integer
+     * @return int
      */
     public function getBuildingWidth()
     {
@@ -289,9 +291,10 @@ class House
     }
 
     /**
-     * Set number_floors
+     * Set number_floors.
      *
-     * @param  integer $numberFloors
+     * @param int $numberFloors
+     *
      * @return House
      */
     public function setNumberFloors($numberFloors)
@@ -302,9 +305,9 @@ class House
     }
 
     /**
-     * Get number_floors
+     * Get number_floors.
      *
-     * @return integer
+     * @return int
      */
     public function getNumberFloors()
     {
@@ -324,9 +327,10 @@ class House
     }
 
     /**
-     * Set number_doors
+     * Set number_doors.
      *
-     * @param  integer $numberDoors
+     * @param int $numberDoors
+     *
      * @return House
      */
     public function setNumberDoors($numberDoors)
@@ -337,9 +341,9 @@ class House
     }
 
     /**
-     * Get number_doors
+     * Get number_doors.
      *
-     * @return integer
+     * @return int
      */
     public function getNumberDoors()
     {
@@ -347,9 +351,10 @@ class House
     }
 
     /**
-     * Set doors_type
+     * Set doors_type.
      *
-     * @param  string $doorsType
+     * @param string $doorsType
+     *
      * @return House
      */
     public function setDoorsType($doorsType)
@@ -360,7 +365,7 @@ class House
     }
 
     /**
-     * Get doors_type
+     * Get doors_type.
      *
      * @return string
      */
@@ -370,9 +375,10 @@ class House
     }
 
     /**
-     * Set number_windows
+     * Set number_windows.
      *
-     * @param  integer $numberWindows
+     * @param int $numberWindows
+     *
      * @return House
      */
     public function setNumberWindows($numberWindows)
@@ -383,9 +389,9 @@ class House
     }
 
     /**
-     * Get number_windows
+     * Get number_windows.
      *
-     * @return integer
+     * @return int
      */
     public function getNumberWindows()
     {
@@ -393,9 +399,10 @@ class House
     }
 
     /**
-     * Set windows_type
+     * Set windows_type.
      *
-     * @param  string $windowsType
+     * @param string $windowsType
+     *
      * @return House
      */
     public function setWindowsType($windowsType)
@@ -406,7 +413,7 @@ class House
     }
 
     /**
-     * Get windows_type
+     * Get windows_type.
      *
      * @return string
      */
@@ -416,9 +423,10 @@ class House
     }
 
     /**
-     * Set roof_type
+     * Set roof_type.
      *
-     * @param  string $roofType
+     * @param string $roofType
+     *
      * @return House
      */
     public function setRoofType($roofType)
@@ -429,7 +437,7 @@ class House
     }
 
     /**
-     * Get roof_type
+     * Get roof_type.
      *
      * @return string
      */
@@ -439,9 +447,10 @@ class House
     }
 
     /**
-     * Set has_basement
+     * Set has_basement.
      *
-     * @param  boolean $hasBasement
+     * @param bool $hasBasement
+     *
      * @return House
      */
     public function setHasBasement($hasBasement)
@@ -452,9 +461,9 @@ class House
     }
 
     /**
-     * Get has_basement
+     * Get has_basement.
      *
-     * @return boolean
+     * @return bool
      */
     public function getHasBasement()
     {
@@ -462,9 +471,10 @@ class House
     }
 
     /**
-     * Set ventilation_type
+     * Set ventilation_type.
      *
-     * @param  string $ventilationType
+     * @param string $ventilationType
+     *
      * @return House
      */
     public function setVentilationType($ventilationType)
@@ -475,7 +485,7 @@ class House
     }
 
     /**
-     * Get ventilation_type
+     * Get ventilation_type.
      *
      * @return string
      */
@@ -485,9 +495,10 @@ class House
     }
 
     /**
-     * Set has_garage
+     * Set has_garage.
      *
-     * @param  boolean $hasGarage
+     * @param bool $hasGarage
+     *
      * @return House
      */
     public function setHasGarage($hasGarage)
@@ -498,9 +509,9 @@ class House
     }
 
     /**
-     * Get has_garage
+     * Get has_garage.
      *
-     * @return boolean
+     * @return bool
      */
     public function getHasGarage()
     {
@@ -508,9 +519,10 @@ class House
     }
 
     /**
-     * Add walls
+     * Add walls.
      *
-     * @param  \Kraken\WarmBundle\Entity\Wall $walls
+     * @param \Kraken\WarmBundle\Entity\Wall $walls
+     *
      * @return House
      */
     public function addWall(\Kraken\WarmBundle\Entity\Wall $walls)
@@ -521,7 +533,7 @@ class House
     }
 
     /**
-     * Remove walls
+     * Remove walls.
      *
      * @param \Kraken\WarmBundle\Entity\Wall $walls
      */
@@ -531,7 +543,7 @@ class House
     }
 
     /**
-     * Get walls
+     * Get walls.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -541,9 +553,10 @@ class House
     }
 
     /**
-     * Set highest_ceiling_isolation_layer
+     * Set highest_ceiling_isolation_layer.
      *
-     * @param  \Kraken\WarmBundle\Entity\Layer $highestCeilingIsolationLayer
+     * @param \Kraken\WarmBundle\Entity\Layer $highestCeilingIsolationLayer
+     *
      * @return House
      */
     public function setHighestCeilingIsolationLayer(\Kraken\WarmBundle\Entity\Layer $highestCeilingIsolationLayer = null)
@@ -554,7 +567,7 @@ class House
     }
 
     /**
-     * Get highest_ceiling_isolation_layer
+     * Get highest_ceiling_isolation_layer.
      *
      * @return \Kraken\WarmBundle\Entity\Layer
      */
@@ -564,9 +577,10 @@ class House
     }
 
     /**
-     * Set roof_isolation_layer
+     * Set roof_isolation_layer.
      *
-     * @param  \Kraken\WarmBundle\Entity\Layer $roofIsolationLayer
+     * @param \Kraken\WarmBundle\Entity\Layer $roofIsolationLayer
+     *
      * @return House
      */
     public function setRoofIsolationLayer(\Kraken\WarmBundle\Entity\Layer $roofIsolationLayer = null)
@@ -577,7 +591,7 @@ class House
     }
 
     /**
-     * Get roof_isolation_layer
+     * Get roof_isolation_layer.
      *
      * @return \Kraken\WarmBundle\Entity\Layer
      */
@@ -587,9 +601,10 @@ class House
     }
 
     /**
-     * Set ground_floor_isolation_layer
+     * Set ground_floor_isolation_layer.
      *
-     * @param  \Kraken\WarmBundle\Entity\Layer $groundFloorIsolationLayer
+     * @param \Kraken\WarmBundle\Entity\Layer $groundFloorIsolationLayer
+     *
      * @return House
      */
     public function setGroundFloorIsolationLayer(\Kraken\WarmBundle\Entity\Layer $groundFloorIsolationLayer = null)
@@ -600,7 +615,7 @@ class House
     }
 
     /**
-     * Get ground_floor_isolation_layer
+     * Get ground_floor_isolation_layer.
      *
      * @return \Kraken\WarmBundle\Entity\Layer
      */
@@ -610,9 +625,10 @@ class House
     }
 
     /**
-     * Set basement_floor_isolation_layer
+     * Set basement_floor_isolation_layer.
      *
-     * @param  \Kraken\WarmBundle\Entity\Layer $basementFloorIsolationLayer
+     * @param \Kraken\WarmBundle\Entity\Layer $basementFloorIsolationLayer
+     *
      * @return House
      */
     public function setBasementFloorIsolationLayer(\Kraken\WarmBundle\Entity\Layer $basementFloorIsolationLayer = null)
@@ -623,7 +639,7 @@ class House
     }
 
     /**
-     * Get basement_floor_isolation_layer
+     * Get basement_floor_isolation_layer.
      *
      * @return \Kraken\WarmBundle\Entity\Layer
      */
@@ -633,9 +649,10 @@ class House
     }
 
     /**
-     * Set lowest_ceiling_isolation_layer
+     * Set lowest_ceiling_isolation_layer.
      *
-     * @param  \Kraken\WarmBundle\Entity\Layer $lowestCeilingIsolationLayer
+     * @param \Kraken\WarmBundle\Entity\Layer $lowestCeilingIsolationLayer
+     *
      * @return House
      */
     public function setLowestCeilingIsolationLayer(\Kraken\WarmBundle\Entity\Layer $lowestCeilingIsolationLayer = null)
@@ -646,7 +663,7 @@ class House
     }
 
     /**
-     * Get lowest_ceiling_isolation_layer
+     * Get lowest_ceiling_isolation_layer.
      *
      * @return \Kraken\WarmBundle\Entity\Layer
      */
@@ -656,9 +673,10 @@ class House
     }
 
     /**
-     * Add calculations
+     * Add calculations.
      *
-     * @param  \Kraken\WarmBundle\Entity\Calculation $calculations
+     * @param \Kraken\WarmBundle\Entity\Calculation $calculations
+     *
      * @return House
      */
     public function addCalculation(\Kraken\WarmBundle\Entity\Calculation $calculations)
@@ -669,7 +687,7 @@ class House
     }
 
     /**
-     * Remove calculations
+     * Remove calculations.
      *
      * @param \Kraken\WarmBundle\Entity\Calculation $calculations
      */
@@ -679,7 +697,7 @@ class House
     }
 
     /**
-     * Get calculations
+     * Get calculations.
      *
      * @return Calculation[]
      */
@@ -694,9 +712,10 @@ class House
     }
 
     /**
-     * Set has_balcony
+     * Set has_balcony.
      *
-     * @param  boolean $hasBalcony
+     * @param bool $hasBalcony
+     *
      * @return House
      */
     public function setHasBalcony($hasBalcony)
@@ -707,9 +726,9 @@ class House
     }
 
     /**
-     * Get has_balcony
+     * Get has_balcony.
      *
-     * @return boolean
+     * @return bool
      */
     public function getHasBalcony()
     {
@@ -717,9 +736,10 @@ class House
     }
 
     /**
-     * Set apartment
+     * Set apartment.
      *
-     * @param  \Kraken\WarmBundle\Entity\Apartment $apartment
+     * @param \Kraken\WarmBundle\Entity\Apartment $apartment
+     *
      * @return House
      */
     public function setApartment(\Kraken\WarmBundle\Entity\Apartment $apartment = null)
@@ -730,7 +750,7 @@ class House
     }
 
     /**
-     * Get apartment
+     * Get apartment.
      *
      * @return \Kraken\WarmBundle\Entity\Apartment
      */
@@ -740,9 +760,10 @@ class House
     }
 
     /**
-     * Set number_heated_floors
+     * Set number_heated_floors.
      *
-     * @param  integer $numberHeatedFloors
+     * @param int $numberHeatedFloors
+     *
      * @return House
      */
     public function setNumberHeatedFloors($numberHeatedFloors)
@@ -753,9 +774,9 @@ class House
     }
 
     /**
-     * Get number_heated_floors
+     * Get number_heated_floors.
      *
-     * @return integer
+     * @return int
      */
     public function getNumberHeatedFloors()
     {
@@ -763,9 +784,10 @@ class House
     }
 
     /**
-     * Set whats_unheated
+     * Set whats_unheated.
      *
-     * @param  string $whatsUnheated
+     * @param string $whatsUnheated
+     *
      * @return House
      */
     public function setWhatsUnheated($whatsUnheated)
@@ -776,7 +798,7 @@ class House
     }
 
     /**
-     * Get whats_unheated
+     * Get whats_unheated.
      *
      * @return string
      */

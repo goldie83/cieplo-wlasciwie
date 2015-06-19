@@ -58,9 +58,9 @@ class HeatingVariant
     protected $legacy = false;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -68,9 +68,10 @@ class HeatingVariant
     }
 
     /**
-     * Set efficiency
+     * Set efficiency.
      *
      * @param string $efficiency
+     *
      * @return HeatingVariant
      */
     public function setEfficiency($efficiency)
@@ -81,9 +82,9 @@ class HeatingVariant
     }
 
     /**
-     * Get efficiency
+     * Get efficiency.
      *
-     * @return string 
+     * @return string
      */
     public function getEfficiency()
     {
@@ -91,9 +92,10 @@ class HeatingVariant
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
+     *
      * @return HeatingVariant
      */
     public function setName($name)
@@ -104,9 +106,9 @@ class HeatingVariant
     }
 
     /**
-     * Get name
+     * Get name.
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -114,9 +116,10 @@ class HeatingVariant
     }
 
     /**
-     * Set fuel
+     * Set fuel.
      *
      * @param \Kraken\WarmBundle\Entity\Fuel $fuel
+     *
      * @return HeatingVariant
      */
     public function setFuel(\Kraken\WarmBundle\Entity\Fuel $fuel = null)
@@ -127,9 +130,9 @@ class HeatingVariant
     }
 
     /**
-     * Get fuel
+     * Get fuel.
      *
-     * @return \Kraken\WarmBundle\Entity\Fuel 
+     * @return \Kraken\WarmBundle\Entity\Fuel
      */
     public function getFuel()
     {
@@ -137,9 +140,10 @@ class HeatingVariant
     }
 
     /**
-     * Set heatingDevice
+     * Set heatingDevice.
      *
      * @param \Kraken\WarmBundle\Entity\HeatingDevice $heatingDevice
+     *
      * @return HeatingVariant
      */
     public function setHeatingDevice(\Kraken\WarmBundle\Entity\HeatingDevice $heatingDevice = null)
@@ -150,9 +154,9 @@ class HeatingVariant
     }
 
     /**
-     * Get heatingDevice
+     * Get heatingDevice.
      *
-     * @return \Kraken\WarmBundle\Entity\HeatingDevice 
+     * @return \Kraken\WarmBundle\Entity\HeatingDevice
      */
     public function getHeatingDevice()
     {
@@ -161,13 +165,14 @@ class HeatingVariant
 
     public function getType()
     {
-        return $this->fuel->getType() . '_' . $this->heatingDevice->getType();
+        return $this->fuel->getType().'_'.$this->heatingDevice->getType();
     }
 
     /**
-     * Set detail
+     * Set detail.
      *
      * @param string $detail
+     *
      * @return HeatingVariant
      */
     public function setDetail($detail)
@@ -178,9 +183,9 @@ class HeatingVariant
     }
 
     /**
-     * Get detail
+     * Get detail.
      *
-     * @return string 
+     * @return string
      */
     public function getDetail()
     {
@@ -188,9 +193,10 @@ class HeatingVariant
     }
 
     /**
-     * Set setup_cost
+     * Set setup_cost.
      *
-     * @param integer $setupCost
+     * @param int $setupCost
+     *
      * @return HeatingVariant
      */
     public function setSetupCost($setupCost)
@@ -201,9 +207,9 @@ class HeatingVariant
     }
 
     /**
-     * Get setup_cost
+     * Get setup_cost.
      *
-     * @return integer 
+     * @return int
      */
     public function getSetupCost()
     {
@@ -211,9 +217,10 @@ class HeatingVariant
     }
 
     /**
-     * Set maintenance_time
+     * Set maintenance_time.
      *
-     * @param integer $maintenanceTime
+     * @param int $maintenanceTime
+     *
      * @return HeatingVariant
      */
     public function setMaintenanceTime($maintenanceTime)
@@ -224,9 +231,9 @@ class HeatingVariant
     }
 
     /**
-     * Get maintenance_time
+     * Get maintenance_time.
      *
-     * @return integer 
+     * @return int
      */
     public function getMaintenanceTime()
     {
@@ -234,9 +241,10 @@ class HeatingVariant
     }
 
     /**
-     * Set legacy
+     * Set legacy.
      *
-     * @param boolean $legacy
+     * @param bool $legacy
+     *
      * @return HeatingVariant
      */
     public function setLegacy($legacy)
@@ -247,9 +255,9 @@ class HeatingVariant
     }
 
     /**
-     * Get legacy
+     * Get legacy.
      *
-     * @return boolean 
+     * @return bool
      */
     public function isLegacy()
     {
@@ -257,9 +265,9 @@ class HeatingVariant
     }
 
     /**
-     * Get legacy
+     * Get legacy.
      *
-     * @return boolean 
+     * @return bool
      */
     public function getLegacy()
     {

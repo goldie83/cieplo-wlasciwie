@@ -2,7 +2,6 @@
 
 namespace Kraken\WarmBundle\Calculator;
 
-use Kraken\WarmBundle\Entity\Calculation;
 use Kraken\WarmBundle\Service\InstanceService;
 
 class AdviceGenerator
@@ -55,7 +54,6 @@ class AdviceGenerator
                 $advice['Kup kocioł o mniejszej mocy'] = 'Obecny ma o wiele za dużą moc, przez co pożera bezproduktywnie nawet 2/3 opału.'.
                     ' Możesz też <a href="http://czysteogrzewanie.pl/zakupy/mocy-przybywaj-dobor-mocy-kotla-weglowego/#Co_zrobi_z_przewymiarowanym_kotem" target="_blank">rozwiązać problem tanio.</a>';
             }
-
         } catch (\Exception $e) {
             // skip if any case is not applicable
         }
@@ -65,6 +63,5 @@ class AdviceGenerator
         }
 
         return $advice;
-
     }
 }
