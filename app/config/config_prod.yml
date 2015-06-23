@@ -33,7 +33,3 @@ monolog:
             to_email:   juzefwt@gmail.com
             subject:    Shit happend!
             level:      critical
-
-kunstmaan_sentry:
-    enabled: true
-    dsn: "http://9214d05221464985b018b8d44be62a13:812329282e254b56bf4b581cf9c74add@sentry.chwedziak.pl/3"
