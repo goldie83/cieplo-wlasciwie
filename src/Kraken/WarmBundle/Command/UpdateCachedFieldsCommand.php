@@ -1,7 +1,7 @@
 <?php
+
 namespace Kraken\WarmBundle\Command;
 
-use Goutte\Client;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\HttpFoundation\Session\Session;

@@ -112,7 +112,7 @@ function analyzeWallSize()
         + makeInteger($('#calculation_walls_0_outside_layer_size').val())
         + makeInteger($('#calculation_walls_0_extra_isolation_layer_size').val());
 
-    $('#wall_may_be_too_thin').toggle(wallSize < 20 && $('#calculation_construction_type').val() == 'traditional');
+    $('#wall_may_be_too_thin').toggle(wallSize > 0 && wallSize < 20 && $('#calculation_construction_type').val() == 'traditional');
     $('#wall_may_be_too_thin span').text(wallSize);
     $('#wall_may_have_isolation').toggle(wallSize > 30 && $('#calculation_walls_0_isolation_layer_size').val() == 0);
 }

@@ -1,0 +1,9 @@
+{% extends 'MopaBootstrapBundle:Form:fields.html.twig' %}
+
+{% block label_asterisk %}
+{% if required %}
+    {%- if render_required_asterisk %}&nbsp;<span class="required">*</span>{% endif %}
+{% else %}
+    {%- if render_optional_text %}&nbsp;<span>{{ "(optional)"|trans({}, translation_domain) }}</span>{% endif %}
+{% endif %}
+{% endblock label_asterisk %}

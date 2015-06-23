@@ -73,16 +73,16 @@ class Wall
     }
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -90,9 +90,10 @@ class Wall
     }
 
     /**
-     * Set house
+     * Set house.
      *
-     * @param  \Kraken\WarmBundle\Entity\House $house
+     * @param \Kraken\WarmBundle\Entity\House $house
+     *
      * @return Wall
      */
     public function setHouse(\Kraken\WarmBundle\Entity\House $house = null)
@@ -103,7 +104,7 @@ class Wall
     }
 
     /**
-     * Get house
+     * Get house.
      *
      * @return \Kraken\WarmBundle\Entity\House
      */
@@ -113,9 +114,10 @@ class Wall
     }
 
     /**
-     * Set construction_layer
+     * Set construction_layer.
      *
-     * @param  \Kraken\WarmBundle\Entity\Layer $constructionLayer
+     * @param \Kraken\WarmBundle\Entity\Layer $constructionLayer
+     *
      * @return Wall
      */
     public function setConstructionLayer(\Kraken\WarmBundle\Entity\Layer $constructionLayer = null)
@@ -126,7 +128,7 @@ class Wall
     }
 
     /**
-     * Get construction_layer
+     * Get construction_layer.
      *
      * @return \Kraken\WarmBundle\Entity\Layer
      */
@@ -136,9 +138,10 @@ class Wall
     }
 
     /**
-     * Set isolation_layer
+     * Set isolation_layer.
      *
-     * @param  \Kraken\WarmBundle\Entity\Layer $isolationLayer
+     * @param \Kraken\WarmBundle\Entity\Layer $isolationLayer
+     *
      * @return Wall
      */
     public function setIsolationLayer(\Kraken\WarmBundle\Entity\Layer $isolationLayer = null)
@@ -149,7 +152,7 @@ class Wall
     }
 
     /**
-     * Get isolation_layer
+     * Get isolation_layer.
      *
      * @return \Kraken\WarmBundle\Entity\Layer
      */
@@ -159,9 +162,10 @@ class Wall
     }
 
     /**
-     * Set outside_layer
+     * Set outside_layer.
      *
-     * @param  \Kraken\WarmBundle\Entity\Layer $outsideLayer
+     * @param \Kraken\WarmBundle\Entity\Layer $outsideLayer
+     *
      * @return Wall
      */
     public function setOutsideLayer(\Kraken\WarmBundle\Entity\Layer $outsideLayer = null)
@@ -172,7 +176,7 @@ class Wall
     }
 
     /**
-     * Get outside_layer
+     * Get outside_layer.
      *
      * @return \Kraken\WarmBundle\Entity\Layer
      */
@@ -182,9 +186,10 @@ class Wall
     }
 
     /**
-     * Set extra_isolation_layer
+     * Set extra_isolation_layer.
      *
-     * @param  \Kraken\WarmBundle\Entity\Layer $extraIsolationLayer
+     * @param \Kraken\WarmBundle\Entity\Layer $extraIsolationLayer
+     *
      * @return Wall
      */
     public function setExtraIsolationLayer(\Kraken\WarmBundle\Entity\Layer $extraIsolationLayer = null)
@@ -195,7 +200,7 @@ class Wall
     }
 
     /**
-     * Get extra_isolation_layer
+     * Get extra_isolation_layer.
      *
      * @return \Kraken\WarmBundle\Entity\Layer
      */

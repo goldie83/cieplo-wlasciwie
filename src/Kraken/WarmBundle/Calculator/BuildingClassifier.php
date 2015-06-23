@@ -4,13 +4,13 @@ namespace Kraken\WarmBundle\Calculator;
 
 class BuildingClassifier
 {
-    const CLASS_A_PLUS = "A+";
-    const CLASS_A = "A";
-    const CLASS_B = "B";
-    const CLASS_C = "C";
-    const CLASS_D = "D";
-    const CLASS_E = "E";
-    const CLASS_F = "F";
+    const CLASS_A_PLUS = 'A+';
+    const CLASS_A = 'A';
+    const CLASS_B = 'B';
+    const CLASS_C = 'C';
+    const CLASS_D = 'D';
+    const CLASS_E = 'E';
+    const CLASS_F = 'F';
 
     protected $strings = array(
         self::CLASS_A_PLUS => 'a-plus',

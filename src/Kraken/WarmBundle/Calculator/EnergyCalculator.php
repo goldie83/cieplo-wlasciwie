@@ -4,7 +4,6 @@ namespace Kraken\WarmBundle\Calculator;
 
 use Kraken\WarmBundle\Service\FuelService;
 use Kraken\WarmBundle\Service\InstanceService;
-use Kraken\WarmBundle\Calculator\BuildingInterface;
 
 class EnergyCalculator
 {
@@ -35,7 +34,7 @@ class EnergyCalculator
             $energy += $this->getHeatingPower($t->getValue()) * 24; // 24h
         }
 
-        return $energy/1000;
+        return $energy / 1000;
     }
 
     /*
@@ -50,7 +49,7 @@ class EnergyCalculator
             $energy += $this->getHeatingPower($t->getValue()) * 24; // 24h
         }
 
-        return $energy/1000;
+        return $energy / 1000;
     }
 
     public function getNecessaryStovePower($fuel = 'coal')
@@ -88,7 +87,7 @@ class EnergyCalculator
 
     public function getYearlyEnergyConsumptionFactor()
     {
-        return $this->getYearlyEnergyConsumption()/$this->building->getHeatedArea();
+        return $this->getYearlyEnergyConsumption() / $this->building->getHeatedArea();
     }
 
     public function getYearlyStoveEfficiency()
@@ -96,10 +95,10 @@ class EnergyCalculator
         $paidEnergy = $this->getEnergyOfSpentFuel();
 
         if ($paidEnergy == 0) {
-            throw new \RuntimeException("Fuel consumption info not provided");
+            throw new \RuntimeException('Fuel consumption info not provided');
         }
 
-        $efficiency = $this->getLastYearEnergyConsumption()/$paidEnergy;
+        $efficiency = $this->getLastYearEnergyConsumption() / $paidEnergy;
 
         return round($efficiency, 1);
     }
@@ -109,8 +108,14 @@ class EnergyCalculator
      */
     public function getEnergyOfSpentFuel()
     {
+        $totalEnergy = 0;
+
+        foreach ($this->instance->get()->getFuelConsumptions() as $fc) {
+            $totalEnergy += $this->fuel_service->getFuelEnergy($fc->getFuel(), $fc->getConsumption());
+        }
+
         // 10% as equivalent of kindling wood etc.
-        return 1.1 * $this->fuel_service->getFuelEnergy($this->instance->get()->getFuelType(), $this->instance->get()->getFuelConsumption());
+        return 1.1 * $totalEnergy;
     }
 
     /*
@@ -118,7 +123,7 @@ class EnergyCalculator
      */
     public function getHeatDemandFactor()
     {
-        return $this->getMaxHeatingPower()/$this->building->getHeatedArea();
+        return $this->getMaxHeatingPower() / $this->building->getHeatedArea();
     }
 
     /*
@@ -179,5 +184,4 @@ class EnergyCalculator
 
         return $actualStovePower > $factor * $this->getNecessaryStovePower();
     }
-
 }

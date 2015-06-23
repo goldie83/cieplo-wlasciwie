@@ -70,14 +70,26 @@
   </div>
   <div class="row">
     <div class="col-md-6">
-        <h3>Aktualna sytuacja</h3>
+        <h3>Jak obecnie ogrzewasz</h3>
+          {% set stoveEfficiency = calc.fuelConsumptionProvided ? calculator.yearlyStoveEfficiency*100 : 0 %}
           <dl>
-          {% set fuelInfoProvided = calc.fuelType and calc.fuelConsumption %}
-          {% set stoveEfficiency = fuelInfoProvided ? calculator.yearlyStoveEfficiency*100 : 0 %}
+            {% if calc.heatingDevice %}
+              <h4>{{ calc.heatingDevice.name }} {% if calc.stovePower %}o mocy {{ label_info(calc.stovePower|number_format(0, ',', ' ') ~ 'kW') }}{% endif %}</h4>
+            {% endif %}
+            {% if calc.fuelConsumptionProvided %}
+              <dt>{{ calc.fuelLabel }}</dt>
+              <dd>zużycie paliwa w sezonie grzewczym</dd>
+            {% endif %}
+            {% if calc.fuelCost %}
+              <dt>{{ calc.fuelCost|number_format(0, ',', ' ') }}zł</dt>
+              <dd>roczny koszt ogrzewania</dd>
+            {% endif %}
+            <dt>{{ calc.indoorTemperature|number_format(1, ',', ' ') }}&deg;C</dt>
+            <dd>średnia temperatura w domu w ciągu zimy</dd>
+          </dl>
+
           {% if calc.stovePower %}
-            <dt>{{ label_success(calc.stovePower|number_format(0, ',', ' ') ~ 'kW') }}</dt>
-            <dd>moc nominalna twojego kotła</dd>
-            {% if calculator.isStoveOversized and (not fuelInfoProvided or stoveEfficiency < 40) %}
+            {% if calculator.isStoveOversized and (not calc.fuelConsumptionProvided or stoveEfficiency < 40) %}
                 <div class="alert alert-danger">
                   <h4>Zbyt duża moc kotła drenuje ci portfel</h4>
                   Przez ten zbędny zapas mocy płacisz za opał, który bez pożytku ucieka kominem.
@@ -85,78 +97,20 @@
                 </div>
             {% endif %}
           {% endif %}
-            <dt>{{ calc.indoorTemperature|number_format(1, ',', ' ') }}&deg;C</dt>
-            <dd>średnia temperatura w domu w ciągu zimy</dd>
-          {% if fuelInfoProvided %}
-            <dt>{{ calc.fuelLabel }}</dt>
-            <dd>zużycie paliwa w sezonie grzewczym</dd>
-          {% endif %}
-          </dl>
-          {% if fuelInfoProvided %}
-            {% if calc.usingSolidFuel %}
-                {% if stoveEfficiency < 35 %}
-                  <div class="alert alert-danger">
-                      <h4>Ogrzewanie rujnuje twój budżet</h4>
-                      Sprawność twojej instalacji grzewczej to <strong>marne ~{{ stoveEfficiency|number_format(0, ',', ' ') }}%</strong>.
-                      To znaczy, że większość pieniędzy wydanych na ogrzewanie wyrzucasz w błoto!
-                      <br />Na szczęście możesz szybko i prawie za darmo zacząć oszczędzać.
-                      <br /><a href="http://czysteogrzewanie.pl/jak-palic-w-piecu/jak-palic-czysto-weglem/" target="_blank">Przeczytaj, jak palić ekonomicznie i wygodnie</a>.
-                  </div>
-                {% elseif stoveEfficiency < 50 %}
-                  <div class="alert alert-warning">
-                      <h4>Sporo przepłacasz za ogrzewanie</h4>
-                      Sprawność twojej instalacji grzewczej to <strong>tylko ~{{ stoveEfficiency|number_format(0, ',', ' ') }}%</strong>.
-                      <br /><a href="http://czysteogrzewanie.pl/jak-palic-w-piecu/jak-palic-czysto-weglem/" target="_blank">Zobacz, jak palić ekonomicznie oraz wygodnie i zacznij oszczędzać od zaraz!</a>
-                  </div>
-                {% elseif stoveEfficiency < 75 %}
-                  <div class="alert alert-info">
-                      <h4>Ogrzewanie jest dość efektywne</h4>
-                      Sprawność twojej instalacji grzewczej to <strong>~{{ stoveEfficiency|number_format(0, ',', ' ') }}%</strong>.
-                  </div>
-                {% elseif stoveEfficiency < 90 %}
-                  <div class="alert alert-success">
-                      <h4>Ogrzewanie jest bardzo efektywne</h4>
-                      Sprawność twojej instalacji grzewczej to <strong>aż ~{{ stoveEfficiency|number_format(0, ',', ' ') }}%</strong>.
-                  </div>
-                {% endif %}
-            {% else %}
-                {% if stoveEfficiency < 75 %}
-                  <div class="alert alert-warning">
-                      <h4>Ogrzewanie jest nieefektywne</h4>
-                      Sprawność twojej instalacji grzewczej to <strong>tylko ~{{ stoveEfficiency|number_format(0, ',', ' ') }}%</strong>. To mało jak na {{ calc.fuelType == 'electricity' ? 'prąd' : 'gaz' }}.
-                      Być może podałeś zbyt duże aktualne zużycie energii. Jeśli grzejesz także wodę użytkową, odejmij od rachunku 10-20%.
-                  </div>
-                {% elseif stoveEfficiency < 110 %}
-                  <div class="alert alert-success">
-                      <h4>Ogrzewanie jest bardzo efektywne</h4>
-                      Sprawność twojej instalacji grzewczej to <strong>aż ~{{ stoveEfficiency|number_format(0, ',', ' ') }}%</strong>. Znakomicie.
-                  </div>
-                {% endif %}
-            {% endif %}
-            {% set fuelComparison = comparison.compareFuelConsumption %}
-            {% if fuelComparison %}
-                <div class="alert alert-info">
-                    <h4>Jak to wygląda u innych?</h4>
-                    {{ fuelComparison|raw }}
-                </div>
-            {% endif %}
-          {% else %}
-            <div class="alert alert-danger">
-                <strong>Niestety</strong> nie podałeś kosztów ogrzewania, więc nie powiemy ci nic na ten temat.
-            </div>
-          {% endif %}
+
+          {{ include('KrakenWarmBundle:Default:legacySetupEfficiency.html.twig', { 'calc': calc }) }}
     </div>
     <div class="col-md-6">
-        <h3>Ile energii potrzeba do ogrzewania</h3>
+        <h3>Ile ciepła potrzebuje twój dom</h3>
         <dl>
           <dt>{{ label_success((calculator.maxHeatingPower/1000)|number_format(1, ',', ' ') ~ 'kW') }}</dt>
-          <dd>takiej mocy grzewczej potrzebuje twój dom w największy mróz</dd>
+          <dd>maksymalna moc grzewcza jakiej potrzebuje twój dom w największy mróz</dd>
           <dt>{{ calculator.maxHeatingPowerPerArea|number_format(0, ',', ' ') }}W/m<sup>2</sup></dt>
           <dd>wskaźnik mocy kotła względem ogrzewanego metrażu</dd>
           <dt>{{ calculator.yearlyEnergyConsumption|number_format(0, ',', ' ') }}kWh</dt>
           <dd>tyle ciepła zużyje dom w ciągu całego sezonu grzewczego</dd>
           <dt>{{ calculator.yearlyEnergyConsumptionFactor|number_format(0, ',', ' ') }}kWh/m<sup>2</sup>*rok</dt>
-          <dd>zużycie roczne energii w przeliczeniu na 1m<sup>2</sup> - zalicza twój dom do klasy energetycznej&nbsp;{{ classifier.class }}</dd>
+          <dd>zużycie roczne energii w przeliczeniu na 1m<sup>2</sup> - zalicza twój dom do klasy energetycznej&nbsp;<strong>{{ classifier.class }}</strong></dd>
         </dl>
         <h4>W najmroźniejszy dzień zimy <small>średnia dobowa {{ heatingSeason.getLowestTemperature()|number_format(0, ',', ' ') }}&deg;C na zewnątrz</small></h4>
         <dl>
@@ -173,95 +127,8 @@
 
   <div class="row">
     <div class="col-md-6">
-      <h3>Czym i za ile ogrzewać</h3>
-      <p>Tyle zapłaciłbyś, gdybyś chciał całą zimę utrzym ać w mieszkaniu średnią temperaturę {{ calc.indoorTemperature|number_format(1, ',', ' ') }}&deg;C.
-        Możesz założyć kufajkę i marznąć przy {{ min(16, calc.indoorTemperature-5)|number_format(1, ',', ' ') }}&deg;C, ale <a href="http://czysteogrzewanie.pl/jak-palic-w-piecu/jak-ogrzewac-by-sie-ogrzac/" target="_blank">wcale nie będzie taniej</a>.</p>
-        <div id="fuel_chart"></div>
-        <a class="btn btn-info btn-big pull-right" href="#custom_fuel_prices" data-toggle="modal">Zmień ceny paliw i koszt pracy</a>
-        <div id="custom_fuel_prices" class="modal fade">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <a class="close" data-dismiss="modal">&times;</a>
-                <h3>Ceny paliw i koszt pracy</h3>
-              </div>
-              <div class="modal-body">
-                <p>Poniżej możesz podać ceny paliw dostępnych w twojej okolicy oraz cenę godziny twojej pracy w kotłowni, aby otrzymać bardziej realne podsumowanie kosztów ogrzewania.</p>
-                <div id="custom_fuel_prices2">
-                  <form role="form">
-                  <div class="form-group">
-                      <label for="work_hour_cost" class="required control-label">Cena twojej pracy:</label>
-                      <div class="input-group">
-                          <input type="text" id="work_hour_cost" name="work_hour_cost" value="{{ pricing.defaultWorkHourPrice }}" class="form-control" />
-                          <span class="input-group-addon">zł/h</span>
-                      </div>
-                  </div>
-                      {% for fuel in fuels %}
-                      <div class="form-group">
-                          <label for="fuel_{{ fuel.type }}" class="required control-label">{{ fuel.name }}:</label>
-                          <div class="input-group">
-                                <input type="text" id="fuel_{{ fuel.type }}" name="fuel_{{ fuel.type }}" value="{{ fuel.price * fuel.tradeAmount }}" class="form-control" />
-                                <span class="input-group-addon">zł/{{ fuel.tradeUnit }}</span>
-                          </div>
-                      </div>
-                      {% endfor %}
-                  </form>
-                </div>
-              </div>
-              <div class="modal-footer">
-                <a href="#" class="btn" data-dismiss="modal">Zamknij</a>
-                <a href="#" class="btn btn-primary" id="update_fuels">Przelicz koszty</a>
-              </div>
-            </div>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <h3>Źródła strat ciepła</h3>
+      <h3>Podział strat ciepła</h3>
       <div id="heat_loss_breakdown"></div>
-    </div>
-  </div>
-
-  <div class="page-header" id="rady">
-    <h2>Jak żyć</h2>
-  </div>
-  <div class="row">
-    <div class="col-md-6">
-      <h3>Jakiej mocy kotła szukać?</h3>
-      <div class="alert alert-danger">Podane moce dotyczą wyłącznie ogrzewania budynku. Dla podgrzewania wody (CWU) <a href="http://czysteogrzewanie.pl/zakupy/co-za-duzo-to-niezdrowo-dobor-mocy-kotla-weglowego/#Ile_mocy_na_potrzeby_CWU" target="_blank">trzeba doliczyć odpowiednią moc</a>.</div>
-      <dl>
-      {% if powerNeeded > 3 %}
-        <dt>{{ label_success((1.1*powerNeeded)|number_format(0, ',', ' ') ~ '-' ~ (1.25*powerNeeded)|number_format(0, ',', ' ') ~ 'kW') }} dla kotła zasypowego</dt>
-        <dd>Nie kupuj kotła o dużo większej mocy,
-              <a href="#" onclick="$('#big-stove-alert').toggle();return false">nawet jeśli sprzedawca, sąsiad i szwagier twierdzą inaczej</a>. Mocno za duży kocioł <a href="http://czysteogrzewanie.pl/zakupy/mocy-przybywaj-dobor-mocy-kotla-weglowego/#Czym_grozi_zbyt_dua_moc_kota" target="_blank">to katastrofa finansowa</a>.
-              <div class="alert alert-success" id="big-stove-alert" style="display:none">
-                  <strong>~{{ powerNeeded|number_format(0, ',', ' ') }}kW</strong> to maksymalna moc grzewcza, jakiej twój dom będzie potrzebował co najwyżej w kilka(naście) najmroźniejszych dni w roku (zgodnie z normami budowlanymi, z uwzględnieniem rozsądnego zapasu mocy).
-                  <br /><br />Jeśli grzejesz kotłem ciepłą wodę, dodaj jeszcze 2-3kW. Jak ognia unikaj przewymiarowania kotła o ponad 50% - jego sprawność będzie pełzać <strong>w okolicach 30%</strong>, z efektami specjalnymi w postaci smoły i gnijącego komina.
-              </div>
-        </dd>
-        {% set automaticStovePower = calculator.suggestedAutomaticStovePower %}
-        <dt>{{ label_success(automaticStovePower ~ 'kW') }} dla kotła podajnikowego</dt>
-        <dd>Kotły podajnikowe posiadają nawet 30% zapasu ponad moc nominalną (potwierdzenie znajdziesz w DTR kotła), więc często nie ma potrzeby kupowania wyższego wariantu mocy, gdy potrzeby domu tylko nieznacznie przekraczają moc nominalną wariantu niższego.</dd>
-        <dt>{{ label_success(sandCoalPowerNeeded|number_format(0, ',', ' ') ~ '-' ~  (1.2*sandCoalPowerNeeded)|number_format(0, ',', ' ') ~ 'kW') }} dla kotła miałowego</dt>
-        <dd><a href="http://czysteogrzewanie.pl/zakupy/mocy-przybywaj-dobor-mocy-kotla-weglowego/#Wyjtek_dla_kotw_miaowych" target="_blank">Kocioł miałowy dobiera się nieco inaczej</a>. Taka moc ma pojemność zasypu wystarczającą do bezobsługowej pracy przez jedną dobę, jeśli będzie rozpalany od góry (a to jedyny wygodny sposób palenia miałem).</dd>
-      {% else %}
-          <dt>Zapomnij o kotle węglowym</dt>
-          <p>Nie istnieją kotły węglowe pracujące efektywnie z tak małą mocą.</p>
-      {% endif %}
-        <dt>min. {{ label_success((1.2*powerNeeded)|number_format(0, ',', ' ') ~ 'kW') }} dla kotła gazowego</dt>
-        <dd>Kotły gazowe pracują z dobrą sprawnością nawet na niskich mocach, dlatego przy wyborze kieruj się zaleceniami producenta (również w doborze mocy na potrzeby CWU).<br /> 
-            Instalując kocioł kondensacyjny pamiętaj o takim zaprojektowaniu instalacji, <a href="http://czysteogrzewanie.pl/zakupy/mocy-przybywaj-dobor-mocy-kotla-weglowego/#Koty_gazowe" target="_blank">aby temperatura wody nie musiała przekraczać 60&deg;C</a> - inaczej nici z kondensacji i rachunki wzrosną.</dd>
-      </dl>
-      {% if powerNeeded > 3 and powerNeeded <= 10 %}
-          <div class="alert alert-warning">
-            <h4>Co jeśli nie znajdę kotła zasypowego o tak małej mocy?</h4>
-            <ul>
-                <li><a href="http://czysteogrzewanie.pl/2014/05/nie-pakuj-smieciucha-do-nowego-domu" target="_blank">rozważ inne rodzaje ogrzewania</a>, np. kocioł na ekogroszek, kocioł na pellet albo gaz ziemny (będzie max. kilkaset złotych rocznie drożej, ale o wiele wygodniej)</li>
-                <li><a href="http://czysteogrzewanie.pl/warsztat/instalacja-grzewcza-jak-to-sie-robi/#Bufor_ciepa" target="_blank">zainstaluj bufor ciepła</a> - wtedy odrobinę większa moc kotła nie jest problemem, wygoda i efektywność dorównują kotłom na ekogroszek, a koszty są niższe dzięki tańszemu paliwu</li>
-                <li>w ostateczności bierz kocioł zasypowy o najmniejszej dostępnej mocy, lecz nie więcej jak 10-12kW</li>
-            </ul>
-          </div>
-      {% endif %}
     </div>
     <div class="col-md-6">
       <h3>W co zainwestować, by taniej ogrzewać?</h3>
@@ -276,21 +143,167 @@
       {% else %}
       <p>Dom jest dobrze ocieplony. Za rozsądne pieniądze nic tu nie poprawisz.</p>
       {% endif %}
-      {% if advice %}
-        <h3>Co zrobić, by było lepiej</h3>
-        <dl>
-        {% for title,content in advice %}
-          <dt>{{ title|raw }}</dt>
-          <dd>{{ content|raw }}</dd>
-        {% endfor %}
-        </dl>
+    </div>
+  </div>
+
+  <div class="page-header" id="rady">
+    <h2>Jak żyć</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+        <h3>Czym i za ile ogrzewać</h3>
+        <p>Poniżej zebrane zostały roczne koszty ogrzewania różnymi paliwami (zakładając utrzymanie w domu temperatury {{ calc.indoorTemperature|number_format(1, ',', ' ') }}&deg;C przez cały sezon grzewczy) oraz koszty inwestycji w przypadku zmiany aktualnego sposobu ogrzewania na inny.</p>
+        <div class="alert alert-warning">
+            W wyliczeniach przyjęto orientacyjne ceny paliw. Aby wyniki lepiej pasowały do&nbsp;twojej sytuacji, w każdej chwili <a href="#custom_fuel_prices" data-toggle="modal"><strong>możesz zmienić ceny paliw wedle uznania</strong></a>.</p>
+        </div>
+
+        <ul id="cost_charts_navbar" class="nav nav-tabs">
+          <li role="presentation" class="active"><a href="#" onclick="openHeatingCostsTab();return false;">Koszty ogrzewania</a></li>
+          <li role="presentation"><a href="#" onclick="openSetupCostsTab();return false;">Koszty inwestycji</a></li>
+        </ul>
+
+        <div id="fuel_chart" style="height:600px"></div>
+        <div id="setup_chart" style="height:600px;display:none"></div>
+        <p><small><strong>Ekonomiczne palenie</strong> w kotle zasypowym to <a href="http://czysteogrzewanie.pl/jak-palic" target="_blank">palenie "od góry" w kotle górnego spalania</a> lub zgodnie z&nbsp;instrukcją w kotle dolnego spalania.
+            Efektywność tak obsługiwanego kotła można szacować na 50-60%. Jeśli twój kocioł produkuje smołę, wiadra sadzy i kłęby dymu, to jego efektywność nie przekracza 30-40% - a więc koszty ogrzewania będą sporo wyższe niż tutaj przedstawione.<br />
+            <strong>Cena prądu</strong> dotyczy strefy II ("nocnej") w taryfie dwustrefowej.</small>
+        </p>
+        <div id="custom_fuel_prices" class="modal fade" role="dialog" aria-labelledby="zmianaCenPaliw" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <a class="close" data-dismiss="modal">&times;</a>
+                <h3>Ceny paliw i koszt pracy</h3>
+              </div>
+              <div class="modal-body">
+                <p>Poniżej możesz podać ceny paliw dostępnych w twojej okolicy oraz cenę godziny twojej pracy w kotłowni, aby otrzymać bardziej realne podsumowanie kosztów ogrzewania.</p>
+                <div id="custom_fuel_prices2">
+                  <form role="form">
+                  <div class="form-group">
+                      <label for="work_hour_cost" class="required control-label">Cena twojej pracy:</label>
+                      <div class="input-group">
+                          <input type="text" id="work_hour_cost" name="work_hour_cost" ng-model="workHourPrice" class="form-control" />
+                          <span class="input-group-addon">zł/h</span>
+                      </div>
+                  </div>
+                  <div class="form-group" ng-repeat="(fuel_type, fuel) in fuels">
+                      <label for="fuel_{[{ fuel_type }]}" class="required control-label">{[{ fuel.name }]}:</label>
+                      <div class="input-group">
+                            <input type="text" id="fuel_{[{ fuel_type }[}" name="fuel_{[{ fuel_type }]}" ng-model="fuel.human_price" class="form-control" />
+                            <span class="input-group-addon">zł/{[{ fuel.trade_unit }]}</span>
+                      </div>
+                  </div>
+                  </form>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <a href="#" class="btn" data-dismiss="modal">Zamknij</a>
+                <a href="#" class="btn btn-primary" id="update_fuels" ng-click="updateFuelCosts()">Przelicz koszty</a>
+              </div>
+            </div>
+        </div>
+      </div>
+
+      <h3>Jakiej mocy kotła szukać?</h3>
+      <div class="alert alert-danger">Podane niżej moce dotyczą wyłącznie ogrzewania budynku. Dla podgrzewania wody (CWU) <a href="http://czysteogrzewanie.pl/zakupy/co-za-duzo-to-niezdrowo-dobor-mocy-kotla-weglowego/#Ile_mocy_na_potrzeby_CWU" target="_blank">trzeba dodać co nieco kilowatów</a>.</div>
+      <dl>
+      {% if powerNeeded > 3 %}
+        <dt>{{ label_success((1.1*powerNeeded)|number_format(0, ',', ' ') ~ '-' ~ (1.25*powerNeeded)|number_format(0, ',', ' ') ~ 'kW') }} dla kotła zasypowego</dt>
+        <dd>Nie kupuj dwa-trzy raz większego kotła nawet jeśli sprzedawca, instalator, szwagier i sąsiedzi twierdzą inaczej. <a href="http://czysteogrzewanie.pl/zakupy/mocy-przybywaj-dobor-mocy-kotla-weglowego/#Czym_grozi_zbyt_dua_moc_kota" target="_blank">To ty będziesz miał z nim kosztowne problemy</a>, a oni umyją ręce tak czy inaczej.
+        </dd>
+        {% set automaticStovePower = calculator.suggestedAutomaticStovePower %}
+        <dt>{{ label_success(automaticStovePower ~ 'kW') }} dla kotła podajnikowego</dt>
+        <dd>Kotły podajnikowe (zwłaszcza te najmniejsze) posiadają nawet 30% zapasu ponad moc nominalną (potwierdzenie znajdziesz w DTR kotła), więc często nie ma potrzeby kupowania wyższego wariantu mocy, gdy potrzeby domu są na styk z wariantem niższym.</dd>
+        <dt>{{ label_success(sandCoalPowerNeeded|number_format(0, ',', ' ') ~ '-' ~  (1.2*sandCoalPowerNeeded)|number_format(0, ',', ' ') ~ 'kW') }} dla kotła miałowego</dt>
+        <dd><a href="http://czysteogrzewanie.pl/zakupy/mocy-przybywaj-dobor-mocy-kotla-weglowego/#Wyjtek_dla_kotw_miaowych" target="_blank">Kocioł miałowy dobiera się nieco inaczej</a>. Taka moc ma pojemność zasypu wystarczającą do bezobsługowej pracy przez jedną dobę, jeśli będzie rozpalany od góry (a to jedyny wygodny sposób palenia miałem).</dd>
+      {% else %}
+          <dt>Zapomnij o kotle węglowym</dt>
+          <p>Nie istnieją kotły węglowe pracujące efektywnie z tak małą mocą.</p>
       {% endif %}
+        <dt>min. {{ label_success((1.2*powerNeeded)|number_format(0, ',', ' ') ~ 'kW') }} dla kotła gazowego</dt>
+        <dd>Kotły gazowe pracują z dobrą sprawnością nawet na niskich mocach, dlatego przy wyborze kieruj się zaleceniami producenta (również w doborze mocy na potrzeby CWU).<br />
+            Instalując kocioł kondensacyjny pamiętaj o takim zaprojektowaniu instalacji, <a href="http://czysteogrzewanie.pl/zakupy/mocy-przybywaj-dobor-mocy-kotla-weglowego/#Koty_gazowe" target="_blank">aby temperatura wody nie musiała przekraczać 60&deg;C</a> - inaczej nici z kondensacji i rachunki wzrosną.</dd>
+      </dl>
+      {% if powerNeeded > 3 and powerNeeded <= 10 %}
+          <div class="alert alert-warning">
+            <h4>Co jeśli nie znajdę kotła zasypowego o tak małej mocy?</h4>
+            <ul>
+                <li><a href="http://czysteogrzewanie.pl/warsztat/bufor-ciepla/" target="_blank"><strong>zainstaluj bufor ciepła</strong></a> - dzięki niemu kocioł zasypowy zbliża się wygodą obsługi i efektywnością do kotłów na ekogroszek, a koszty ogrzewania są niższe dzięki tańszemu paliwu i lepszej efektywności pracy. Wtedy moc kotła może być większa, bo dobiera się ją do pojemności bufora, a nie do budynku.</li>
+                <li><a href="http://czysteogrzewanie.pl/2014/05/nie-pakuj-smieciucha-do-nowego-domu" target="_blank">rozważ inne rodzaje ogrzewania</a>, np. kocioł na ekogroszek, pellet, gaz ziemny czy pompę ciepła. W nowych malutkich domach różnice w rachunkach między tymi źródłami ciepła to 200-300zł.</li>
+                <li>w ostateczności bierz kocioł zasypowy o mocy ok. 10-12kW, ale jeśli zaprzęgniesz go do instalacji z przewagą podłogówki, to szybko doświadczysz problemów (ot choćby hurtowej produkcji smoły), których uniknąłbyś montując od razu <a href="http://czysteogrzewanie.pl/warsztat/bufor-ciepla/" target="_blank">bufor ciepła</a>.</li>
+            </ul>
+          </div>
+      {% endif %}
+
+    </div>
+    <div class="col-md-6">
+    {% if calc.fuelConsumptionProvided %}
+      <h3>Jakie ogrzewanie jest najbardziej opłacalne?</h3>
+
+      <p>{% if calc.fuelCost %}Obecnie płacisz za ogrzewanie <strong>{{ calc.fuelCost|number_format(0, ',', ' ') }}zł</strong> rocznie.{% endif %}
+      Poniżej wybrane zostały sposoby ogrzewania, na które przejście byłoby opłacalne w twoim przypadku. Kosztują mniej pieniędzy i czasu niż to, czego obecnie używasz, a koszty inwestycji zwracają się w niższych rachunkach.</p>
+
+      <div class="panel panel-success" ng-repeat="variant in filtered = (heatingVariants | filter: greaterThan('savedMoney', 0))">
+        <div class="panel-heading"><strong>{[{ variant.label }]}</strong>&nbsp;<small>{[{ variant.version }]}</small></div>
+        <div class="panel-body">
+          <p ng-show="variant.setup_cost > 0">Koszt instalacji: <strong>~{[{ variant.setup_cost|currency }]}</strong> <small>
+          (w tym: <span ng-repeat="item in variant.setup_costs">{[{ item[0] }]}: {[{ item[1]|currency }]}<span ng-show="!$last">, </span></span>)</small></p>
+          <p ng-show="variant.setup_cost == 0">Koszt instalacji: żaden (nic nie musisz zmieniać)</p>
+          <p>Roczna oszczędność: <strong>{[{ variant.totalSavings|currency }]}</strong> <span ng-show="variant.savedTime > 0"><small>tj. {[{ variant.savedMoney|currency }]} + {[{ variant.savedTime|number }]} godzin pracy ({[{ variant.savedTimeCost|currency }]})</small></span></p>
+          <p ng-show="variant.setup_cost > 0">Czas zwrotu inwestycji: <strong>{[{ formatRoiPeriod(variant.roi) }]}</strong></p>
+        </div>
+      </div>
+
+      <div class="alert alert-success" ng-show="(heatingVariants | filter: greaterThan('savedMoney', 0)).length == 0">
+          <h4>Jest dobrze</h4>
+          Wygląda na to, że przy obecnych kosztach ogrzewania twojego domu żadna zmiana nie będzie opłacalna.
+      </div>
+
+    {% else %}
+
+      <h3>Jakie ogrzewanie jest najbardziej opłacalne?</h3>
+
+      <p>Oto zestawienie kosztów ogrzewania najtańszym zdawałoby się kotłem zasypowym do innych wariantów, które są bardziej opłacalne. Aby porównanie było miarodajne, uwzględnione zostały "ukryte" koszty jak np. koszt budowy komina, wydzielenia kotłowni, niezbędne przyłącza itp.</p>
+
+      <div class="panel panel-warning" ng-show="referenceVariant">
+        <div class="panel-heading"><strong>{[{ referenceVariant.label }]}</strong>&nbsp;<small>{[{ referenceVariant.version }]}</small></div>
+        <div class="panel-body">
+          <p>Koszt instalacji: {[{ referenceVariant.setup_cost|currency }]} <small>
+          (w tym: <span ng-repeat="item in referenceVariant.setup_costs">{[{ item[0] }]}: {[{ item[1]|currency }]}<span ng-show="!$last">, </span></span>)</small></p>
+          <p>Koszt ogrzewania: <strong>{[{ referenceVariant.cost|currency }]}</strong> + {[{ referenceVariant.maintenance_time|number }]} godzin pracy</p>
+        </div>
+      </div>
+
+      <p>Te sposoby ogrzewania będą korzystniejsze niż zwykły "śmieciuch" a wyższy koszt instalacji zwróci się w niższych rachunkach.</p>
+
+      <div class="panel panel-success" ng-repeat="variant in heatingVariants" ng-show="variant.cost < referenceVariant.cost && filterOutManualStoveVariants(variant)">
+        <div class="panel-heading"><strong>{[{ variant.label }]}</strong>&nbsp;<small>{[{ variant.version }]}</small></div>
+        <div class="panel-body">
+          <p>Różnica w kosztach instalacji: <strong>{[{ variant.setup_cost_diff|currency }]}</strong> <small>
+          (razem ~{[{ variant.setup_cost|currency }]}, w tym: <span ng-repeat="item in variant.setup_costs">{[{ item[0] }]}: {[{ item[1]|currency }]}<span ng-show="!$last">, </span></span>)</small></p>
+          <p>
+              Koszt ogrzewania: <strong>{[{ variant.cost|currency }]}</strong>
+              <span ng-show="variant.maintenance_time > 0"> oraz {[{ variant.maintenance_time|number }]} godzin pracy</span>
+              <span ng-show="variant.maintenance_time == 0"> (nie wymaga obsługi)</span>
+          </p>
+          <p>Roczna oszczędność: <strong>{[{ variant.totalSavings|currency }]}</strong> <small>tj. {[{ variant.savedMoney|currency }]} + {[{ variant.savedTime|number }]} godzin pracy ({[{ variant.savedTimeCost|currency }]})</small></p>
+          <p ng-show="variant.setup_cost > 0">Czas zwrotu inwestycji: <strong>{[{ formatRoiPeriod(variant.roi) }]}</strong></p>
+        </div>
+      </div>
+
+    {% endif %}
+
     </div>
   </div>
 
   {{ block('edit_button') }}
 </div>
 
+{% endblock %}
+
+{% block javascripts %}
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.10/angular.min.js"></script>
+  <script src="https://code.angularjs.org/1.3.0-beta.10/i18n/angular-locale_pl.js"></script>
 {% endblock %}
 
 {% block bottom_javascripts %}

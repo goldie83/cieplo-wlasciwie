@@ -49,25 +49,42 @@ class Calculation
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     *
+     * @deprecated
      */
     protected $fuel_type;
 
     /**
+     * @ORM\Column(type="string", nullable=true)
+     *
+     * @deprecated
+     */
+    protected $stove_type;
+
+    /**
      * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
-     * @Assert\Range(min="1", minMessage = "Nie za mało?")
+     *
+     * @deprecated
      */
     protected $fuel_consumption;
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
-     * @Assert\Range(min="0.01", minMessage = "Nie za mało?")
+     *
+     * @deprecated
      */
     protected $fuel_cost;
 
     /**
-     * @ORM\Column(type="string", columnDefinition="ENUM('manual_upward', 'manual_downward', 'automatic', 'fireplace', 'kitchen', 'ceramic', 'goat')", nullable=true)
+     * @ORM\ManyToOne(targetEntity="HeatingDevice", inversedBy="calculations", cascade={"persist"})
+     * @ORM\JoinColumn(name="heating_device_id", referencedColumnName="id", nullable=true)
      */
-    protected $stove_type;
+    protected $heating_device;
+
+    /**
+     * @ORM\OneToMany(targetEntity="FuelConsumption", mappedBy="calculation", cascade={"all"})
+     */
+    protected $fuel_consumptions;
 
     /**
      * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
@@ -80,6 +97,11 @@ class Calculation
      * @Assert\Email
      */
     protected $email;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $custom_data;
 
     /**
      * @ORM\ManyToOne(targetEntity="House", inversedBy="calculations",cascade={"all"})
@@ -116,41 +138,39 @@ class Calculation
 
     public static function create()
     {
-        $calc = new Calculation();
+        $calc = new self();
         $calc->setLatitude(51.917168);
         $calc->setLongitude(19.138184);
 
         return $calc;
     }
 
+    public function isFuelConsumptionProvided()
+    {
+        return count($this->getFuelConsumptions()) > 0;
+    }
+
     public function getFuelLabel()
     {
-        $labels = array(
-          'coal' => 'Węgiel kamienny',
-          'coke' => 'Koks',
-          'sand_coal' => 'Miał węglowy',
-          'brown_coal' => 'Węgiel brunatny',
-          'wood' => 'Drewno',
-          'pellet' => 'Pellet/brykiety',
-          'gas_e' => 'Gaz ziemny typ E (GZ-50)',
-          'gas_ls' => 'Gaz ziemny typ Ls (GZ-35)',
-          'gas_lw' => 'Gaz ziemny typ Lw (GZ-41,5)',
-          'electricity' => 'Prąd elektryczny',
-        );
+        $labels = [];
 
-        $amount = round($this->getFuelConsumption(), 1);
-
-        if (stristr($this->getFuelType(), 'coal') || $this->getFuelType() == 'pellet' || $this->getFuelType() == 'coke') {
-            $amount .= 't';
-        } elseif (stristr($this->getFuelType(), 'gas')) {
-            $amount .= 'm3';
-        } elseif ($this->getFuelType() == 'wood') {
-            $amount .= 'mp';
-        } else {
-            $amount .= 'kWh';
+        foreach ($this->getFuelConsumptions() as $fc) {
+            $amount = round($fc->getConsumption(), 1);
+            $labels[] = $fc->getFuel()->getName().' '.$amount.$fc->getFuel()->getTradeUnit();
         }
 
-        return $labels[$this->getFuelType()].', '.$amount;
+        return implode(', ', $labels);
+    }
+
+    public function getFuelCost()
+    {
+        $cost = 0;
+
+        foreach ($this->getFuelConsumptions() as $fc) {
+            $cost += $fc->getCost();
+        }
+
+        return $cost;
     }
 
     public function getLabel()
@@ -167,7 +187,7 @@ class Calculation
         $w = $house->getBuildingWidth();
         $floors = $house->getNumberFloors();
 
-        return $types[$this->building_type] . ', ' . round($w * $l * $floors) . 'm2';
+        return $types[$this->building_type].', '.round($w * $l * $floors).'m2';
     }
 
     public function getSlug()
@@ -176,9 +196,9 @@ class Calculation
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -186,9 +206,10 @@ class Calculation
     }
 
     /**
-     * Set construction_year
+     * Set construction_year.
      *
-     * @param  integer     $constructionYear
+     * @param int $constructionYear
+     *
      * @return Calculation
      */
     public function setConstructionYear($constructionYear)
@@ -199,9 +220,9 @@ class Calculation
     }
 
     /**
-     * Get construction_year
+     * Get construction_year.
      *
-     * @return integer
+     * @return int
      */
     public function getConstructionYear()
     {
@@ -209,9 +230,10 @@ class Calculation
     }
 
     /**
-     * Set latitude
+     * Set latitude.
      *
-     * @param  float       $latitude
+     * @param float $latitude
+     *
      * @return Calculation
      */
     public function setLatitude($latitude)
@@ -222,7 +244,7 @@ class Calculation
     }
 
     /**
-     * Get latitude
+     * Get latitude.
      *
      * @return float
      */
@@ -232,9 +254,10 @@ class Calculation
     }
 
     /**
-     * Set longitude
+     * Set longitude.
      *
-     * @param  float       $longitude
+     * @param float $longitude
+     *
      * @return Calculation
      */
     public function setLongitude($longitude)
@@ -245,7 +268,7 @@ class Calculation
     }
 
     /**
-     * Get longitude
+     * Get longitude.
      *
      * @return float
      */
@@ -255,9 +278,10 @@ class Calculation
     }
 
     /**
-     * Set created
+     * Set created.
      *
-     * @param  \DateTime   $created
+     * @param \DateTime $created
+     *
      * @return Calculation
      */
     public function setCreated($created)
@@ -268,7 +292,7 @@ class Calculation
     }
 
     /**
-     * Get created
+     * Get created.
      *
      * @return \DateTime
      */
@@ -278,9 +302,10 @@ class Calculation
     }
 
     /**
-     * Set updated
+     * Set updated.
      *
-     * @param  \DateTime   $updated
+     * @param \DateTime $updated
+     *
      * @return Calculation
      */
     public function setUpdated($updated)
@@ -291,7 +316,7 @@ class Calculation
     }
 
     /**
-     * Get updated
+     * Get updated.
      *
      * @return \DateTime
      */
@@ -301,9 +326,10 @@ class Calculation
     }
 
     /**
-     * Set building_type
+     * Set building_type.
      *
-     * @param  string      $buildingType
+     * @param string $buildingType
+     *
      * @return Calculation
      */
     public function setBuildingType($buildingType)
@@ -314,7 +340,7 @@ class Calculation
     }
 
     /**
-     * Get building_type
+     * Get building_type.
      *
      * @return string
      */
@@ -324,9 +350,10 @@ class Calculation
     }
 
     /**
-     * Set indoor_temperature
+     * Set indoor_temperature.
      *
-     * @param  float       $indoorTemperature
+     * @param float $indoorTemperature
+     *
      * @return Calculation
      */
     public function setIndoorTemperature($indoorTemperature)
@@ -337,7 +364,7 @@ class Calculation
     }
 
     /**
-     * Get indoor_temperature
+     * Get indoor_temperature.
      *
      * @return float
      */
@@ -347,9 +374,10 @@ class Calculation
     }
 
     /**
-     * Set fuel_type
+     * Set fuel_type.
      *
-     * @param  string      $fuelType
+     * @param string $fuelType
+     *
      * @return Calculation
      */
     public function setFuelType($fuelType)
@@ -360,7 +388,7 @@ class Calculation
     }
 
     /**
-     * Get fuel_type
+     * Get fuel_type.
      *
      * @return string
      */
@@ -377,7 +405,7 @@ class Calculation
     }
 
     /**
-     * Get stove_type
+     * Get stove_type.
      *
      * @return string
      */
@@ -387,60 +415,10 @@ class Calculation
     }
 
     /**
-     * Set fuel_consumption
+     * Set house.
      *
-     * @param  float       $fuelConsumption
-     * @return Calculation
-     */
-    public function setFuelConsumption($fuelConsumption)
-    {
-        $this->fuel_consumption = $fuelConsumption;
-
-        return $this;
-    }
-
-    /**
-     * Get fuel_consumption
+     * @param \Kraken\WarmBundle\Entity\House $house
      *
-     * @return float
-     */
-    public function getFuelConsumption()
-    {
-        // in case someone put amount in kgs, not in tons
-        if ((stristr($this->getFuelType(), 'coal') || $this->getFuelType() == 'pellet' || $this->getFuelType() == 'coke') && $this->fuel_consumption >= 1000) {
-            return $this->fuel_consumption/1000;
-        }
-
-        return $this->fuel_consumption;
-    }
-
-    /**
-     * Set fuel_cost
-     *
-     * @param  float       $fuelCost
-     * @return Calculation
-     */
-    public function setFuelCost($fuelCost)
-    {
-        $this->fuel_cost = $fuelCost;
-
-        return $this;
-    }
-
-    /**
-     * Get fuel_cost
-     *
-     * @return float
-     */
-    public function getFuelCost()
-    {
-        return $this->fuel_cost;
-    }
-
-    /**
-     * Set house
-     *
-     * @param  \Kraken\WarmBundle\Entity\House $house
      * @return Calculation
      */
     public function setHouse(\Kraken\WarmBundle\Entity\House $house = null)
@@ -451,7 +429,7 @@ class Calculation
     }
 
     /**
-     * Get house
+     * Get house.
      *
      * @return \Kraken\WarmBundle\Entity\House
      */
@@ -461,9 +439,10 @@ class Calculation
     }
 
     /**
-     * Set stove_power
+     * Set stove_power.
      *
-     * @param  float       $stovePower
+     * @param float $stovePower
+     *
      * @return Calculation
      */
     public function setStovePower($stovePower)
@@ -474,7 +453,7 @@ class Calculation
     }
 
     /**
-     * Get stove_power
+     * Get stove_power.
      *
      * @return float
      */
@@ -499,9 +478,10 @@ class Calculation
     }
 
     /**
-     * Set heated_area
+     * Set heated_area.
      *
      * @param string $heatedArea
+     *
      * @return Calculation
      */
     public function setHeatedArea($heatedArea)
@@ -512,9 +492,9 @@ class Calculation
     }
 
     /**
-     * Get heated_area
+     * Get heated_area.
      *
-     * @return string 
+     * @return string
      */
     public function getHeatedArea()
     {
@@ -522,9 +502,10 @@ class Calculation
     }
 
     /**
-     * Set heating_power
+     * Set heating_power.
      *
      * @param string $heatingPower
+     *
      * @return Calculation
      */
     public function setHeatingPower($heatingPower)
@@ -535,9 +516,9 @@ class Calculation
     }
 
     /**
-     * Get heating_power
+     * Get heating_power.
      *
-     * @return string 
+     * @return string
      */
     public function getHeatingPower()
     {
@@ -545,9 +526,10 @@ class Calculation
     }
 
     /**
-     * Set city
+     * Set city.
      *
      * @param \Kraken\WarmBundle\Entity\City $city
+     *
      * @return Calculation
      */
     public function setCity(\Kraken\WarmBundle\Entity\City $city = null)
@@ -558,12 +540,166 @@ class Calculation
     }
 
     /**
-     * Get city
+     * Get city.
      *
-     * @return \Kraken\WarmBundle\Entity\City 
+     * @return \Kraken\WarmBundle\Entity\City
      */
     public function getCity()
     {
         return $this->city;
+    }
+
+    /**
+     * Set fuel.
+     *
+     * @param \Kraken\WarmBundle\Entity\Fuel $fuel
+     *
+     * @return Calculation
+     */
+    public function setFuel(\Kraken\WarmBundle\Entity\Fuel $fuel = null)
+    {
+        $this->fuel = $fuel;
+
+        return $this;
+    }
+
+    /**
+     * Get fuel.
+     *
+     * @return \Kraken\WarmBundle\Entity\Fuel
+     */
+    public function getFuel()
+    {
+        return $this->fuel;
+    }
+
+    /**
+     * Set heating_device.
+     *
+     * @param \Kraken\WarmBundle\Entity\HeatingDevice $heatingDevice
+     *
+     * @return Calculation
+     */
+    public function setHeatingDevice(\Kraken\WarmBundle\Entity\HeatingDevice $heatingDevice = null)
+    {
+        $this->heating_device = $heatingDevice;
+
+        return $this;
+    }
+
+    /**
+     * Get heating_device.
+     *
+     * @return \Kraken\WarmBundle\Entity\HeatingDevice
+     */
+    public function getHeatingDevice()
+    {
+        return $this->heating_device;
+    }
+    /**
+     * Constructor.
+     */
+    public function __construct()
+    {
+        $this->fuel_consumptions = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add fuel_consumptions.
+     *
+     * @param \Kraken\WarmBundle\Entity\fuelConsumption $fuelConsumptions
+     *
+     * @return Calculation
+     */
+    public function addFuelConsumption(\Kraken\WarmBundle\Entity\fuelConsumption $fuelConsumptions)
+    {
+        $this->fuel_consumptions[] = $fuelConsumptions;
+
+        return $this;
+    }
+
+    /**
+     * Remove fuel_consumptions.
+     *
+     * @param \Kraken\WarmBundle\Entity\fuelConsumption $fuelConsumptions
+     */
+    public function removeFuelConsumption(\Kraken\WarmBundle\Entity\fuelConsumption $fuelConsumptions)
+    {
+        $this->fuel_consumptions->removeElement($fuelConsumptions);
+    }
+
+    /**
+     * Get fuel_consumptions.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFuelConsumptions()
+    {
+        return $this->fuel_consumptions;
+    }
+
+    /**
+     * Set custom_data.
+     *
+     * @param string $customData
+     *
+     * @return Calculation
+     */
+    public function setCustomData($customData)
+    {
+        $this->custom_data = $customData;
+
+        return $this;
+    }
+
+    /**
+     * Get custom_data.
+     *
+     * @return string
+     */
+    public function getCustomData()
+    {
+        return $this->custom_data;
+    }
+
+    /**
+     * Set fuel_consumption
+     *
+     * @param string $fuelConsumption
+     * @return Calculation
+     */
+    public function setFuelConsumption($fuelConsumption)
+    {
+        $this->fuel_consumption = $fuelConsumption;
+
+        return $this;
+    }
+
+    /**
+     * Get fuel_consumption
+     *
+     * @return string 
+     */
+    public function getFuelConsumption()
+    {
+        return $this->fuel_consumption;
+    }
+
+    /**
+     * Set fuel_cost
+     *
+     * @param string $fuelCost
+     * @return Calculation
+     */
+    public function setFuelCost($fuelCost)
+    {
+        $this->fuel_cost = $fuelCost;
+
+        return $this;
+    }
+
+    public function getOldFuelCost()
+    {
+        return $this->fuel_cost;
     }
 }

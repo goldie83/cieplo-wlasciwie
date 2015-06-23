@@ -21,17 +21,17 @@ class Apartment extends Building implements BuildingInterface
 
         $sum = $w + $v + $g + $r + $win + $d + $u;
         $round = function ($number) {
-            return $number*100;
+            return $number * 100;
         };
 
         $breakdown = array(
-          'Wentylacja' => $round($v/$sum),
-          'Ściany zewnętrzne' => $round($w/$sum),
-          'Nieogrzewane <br/><b>pomieszczenia</b>' => $round($u/$sum),
-          'Sufit' => $round($r/$sum),
-          'Podłoga' => $round($g/$sum),
-          'Okna' => $round($win/$sum),
-          'Drzwi' => $round($d/$sum),
+          'Wentylacja' => $round($v / $sum),
+          'Ściany zewnętrzne' => $round($w / $sum),
+          'Nieogrzewane <br/><b>pomieszczenia</b>' => $round($u / $sum),
+          'Sufit' => $round($r / $sum),
+          'Podłoga' => $round($g / $sum),
+          'Okna' => $round($win / $sum),
+          'Drzwi' => $round($d / $sum),
         );
 
         foreach ($breakdown as $label => $value) {
@@ -71,10 +71,10 @@ class Apartment extends Building implements BuildingInterface
         $lowestCeilingIsolation = $house->getLowestCeilingIsolationLayer();
 
         $ceilingIsolationResistance = $lowestCeilingIsolation
-            ? ($lowestCeilingIsolation->getSize()/100)/$lowestCeilingIsolation->getMaterial()->getLambda()
+            ? ($lowestCeilingIsolation->getSize() / 100) / $lowestCeilingIsolation->getMaterial()->getLambda()
             : 0;
 
-        return $house->getBuildingLength() * $house->getBuildingWidth() * 1/($this->getInternalCeilingResistance() + $ceilingIsolationResistance);
+        return $house->getBuildingLength() * $house->getBuildingWidth() * 1 / ($this->getInternalCeilingResistance() + $ceilingIsolationResistance);
     }
 
     public function getCeilingEnergyLossToUnheated()
@@ -89,10 +89,10 @@ class Apartment extends Building implements BuildingInterface
         $highestCeilingIsolation = $house->getHighestCeilingIsolationLayer();
 
         $ceilingIsolationResistance = $highestCeilingIsolation
-            ? ($highestCeilingIsolation->getSize()/100)/$highestCeilingIsolation->getMaterial()->getLambda()
+            ? ($highestCeilingIsolation->getSize() / 100) / $highestCeilingIsolation->getMaterial()->getLambda()
             : 0;
 
-        return $house->getBuildingLength() * $house->getBuildingWidth() * 1/($this->getInternalCeilingResistance() + $ceilingIsolationResistance);
+        return $house->getBuildingLength() * $house->getBuildingWidth() * 1 / ($this->getInternalCeilingResistance() + $ceilingIsolationResistance);
     }
 
     public function getNumberOfWalls()
@@ -128,22 +128,22 @@ class Apartment extends Building implements BuildingInterface
 
         if ($walls > 0) {
             $sum += $l;
-            $walls--;
+            --$walls;
         }
 
         if ($walls > 0) {
             $sum += $w;
-            $walls--;
+            --$walls;
         }
 
         if ($walls > 0) {
             $sum += $l;
-            $walls--;
+            --$walls;
         }
 
         if ($walls > 0) {
             $sum += $w;
-            $walls--;
+            --$walls;
         }
 
         return $sum * $houseHeight;
@@ -166,10 +166,10 @@ class Apartment extends Building implements BuildingInterface
             $highestCeilingIsolation = $house->getHighestCeilingIsolationLayer();
 
             $ceilingIsolationResistance = $highestCeilingIsolation
-                ? ($highestCeilingIsolation->getSize()/100)/$highestCeilingIsolation->getMaterial()->getLambda()
+                ? ($highestCeilingIsolation->getSize() / 100) / $highestCeilingIsolation->getMaterial()->getLambda()
                 : 0;
 
-            return $house->getBuildingLength() * $house->getBuildingWidth() * 1/($this->getInternalCeilingResistance() + $ceilingIsolationResistance);
+            return $house->getBuildingLength() * $house->getBuildingWidth() * 1 / ($this->getInternalCeilingResistance() + $ceilingIsolationResistance);
         }
 
         return 0;
@@ -188,27 +188,27 @@ class Apartment extends Building implements BuildingInterface
             $lowestCeilingIsolation = $house->getLowestCeilingIsolationLayer();
 
             $ceilingIsolationResistance = $lowestCeilingIsolation
-                ? ($lowestCeilingIsolation->getSize()/100)/$lowestCeilingIsolation->getMaterial()->getLambda()
+                ? ($lowestCeilingIsolation->getSize() / 100) / $lowestCeilingIsolation->getMaterial()->getLambda()
                 : 0;
 
-            return $floorArea * 1/($this->getInternalCeilingResistance() + $ceilingIsolationResistance);
+            return $floorArea * 1 / ($this->getInternalCeilingResistance() + $ceilingIsolationResistance);
         } elseif ($what == 'ground') {
             $isolation = $house->getLowestCeilingIsolationLayer();
-            $isolationResistance = $isolation ? ($isolation->getSize()/100)/$isolation->getMaterial()->getLambda() : 0;
+            $isolationResistance = $isolation ? ($isolation->getSize() / 100) / $isolation->getMaterial()->getLambda() : 0;
 
             $groundLambda = $this->getGroundLambda();
             $floorLambda = $isolationResistance > 0
-                ? 1/$isolationResistance
+                ? 1 / $isolationResistance
                 : 1;
             $wallSize = $this->wall->getSize($house->getWalls()->first());
 
-            $proportion = ($l*$w)/(0.5*($l+$w));
-            $equivalentSize = $wallSize + $groundLambda/$floorLambda;
+            $proportion = ($l * $w) / (0.5 * ($l + $w));
+            $equivalentSize = $wallSize + $groundLambda / $floorLambda;
 
             if ($equivalentSize < $proportion) {
-                $equivalentLambda = (2*$groundLambda/(3.14*$proportion+$equivalentSize)) * log(3.14*$proportion/$equivalentSize+1);
+                $equivalentLambda = (2 * $groundLambda / (3.14 * $proportion + $equivalentSize)) * log(3.14 * $proportion / $equivalentSize + 1);
             } else {
-                $equivalentLambda = $groundLambda/(0.457*$proportion + $equivalentSize);
+                $equivalentLambda = $groundLambda / (0.457 * $proportion + $equivalentSize);
             }
 
             return round($l * $w * $equivalentLambda, 2);
@@ -222,7 +222,7 @@ class Apartment extends Building implements BuildingInterface
         $cubature = 0;
         // we're interested in heated room only
         $numberFloors = $this->getNumberOfHeatedFloors();
-        for ($i = 0; $i < $numberFloors; $i++) {
+        for ($i = 0; $i < $numberFloors; ++$i) {
             $cubature += $this->getInternalBuildingLength() * $this->getInternalBuildingWidth() * $this->getFloorHeight();
         }
 
@@ -261,8 +261,7 @@ class Apartment extends Building implements BuildingInterface
             );
         }
 
-
-        for ($j = 1; $i < $nbFloors; $i++) {
+        for ($j = 1; $i < $nbFloors; ++$i) {
             $floors[] = array(
                 'name' => 'regular_floor_'.$j,
                 'label' => ($j++).'. piętro',

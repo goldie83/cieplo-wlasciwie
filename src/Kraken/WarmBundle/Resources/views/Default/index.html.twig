@@ -1,5 +1,7 @@
 {% extends '::base.html.twig' %}
 
+{% form_theme form 'KrakenWarmBundle:Form:fields.html.twig' %}
+
 {% block body %}
 
 <header class="jumbotron subhead" id="overview">
@@ -30,8 +32,8 @@
           {{ form_row(form.construction_year) }}
 
           <div class="form-group">
-            <label class="required control-label col-lg-4">Lokalizacja budynku</label>
-            <div class="col-lg-8">
+            <label class="required control-label col-sm-3">Lokalizacja budynku&nbsp;<span class="required">*</span></label>
+            <div class="col-sm-9">
                 <div class="alert alert-info">
                   <strong>Spokojnie, nie zamierzamy cię nachodzić.</strong> Wystarczy przybliżenie ~50km.
                 </div>
@@ -75,16 +77,11 @@
 
           <legend>Wymagania cieplne</legend>
           {{ form_row(form.indoor_temperature) }}
-          <legend>Źródło ciepła</legend>
-          <div class="alert alert-warning" ng-show="heater_not_required && room_type != 'bathroom'">
-              <h4>Ta część nie jest niezbędna do bilansu grzewczego budynku</h4>
-              Ale jeśli powiesz, czym i za ile ogrzewasz, to będziemy mogli ocenić, na ile efektywny jest twój sposób ogrzewania i co zrobić, by było taniej.
-          </div>
-          {{ form_row(form.fuel_type) }}
-          {{ form_row(form.stove_type) }}
+          <legend>Aktualny sposób ogrzewania</legend>
+          <p>Te informacje nie są wymagane. Ale jeśli je znasz, to warto je podać. Ocenimy wtedy, na ile opłacalny jest twój obecny sposób ogrzewania i czy warto go zmieniać.</p>
+          {{ form_row(form.heating_device) }}
           {{ form_row(form.stove_power) }}
-          {{ form_row(form.fuel_consumption) }}
-          {{ form_row(form.fuel_cost) }}
+          {{ form_row(form.fuel_consumptions) }}
 
           <legend>Pozostałe</legend>
           <div class="form-group">
@@ -97,10 +94,10 @@
           <div id="give_email" style="display:none">
               {{ form_row(form.email) }}
               <div class="form-group">
-                  <div class="col-lg-4"></div>
-                  <div class="col-lg-8">
+                  <div class="col-sm-3"></div>
+                  <div class="col-sm-9">
                     <div class="alert alert-info">
-                        <strong>Adres e-mail nie jest wymagany.</strong> Jeśli go podasz, wyślemy ci link do wyniku, abyś go nie zgubił.<br />Wynik znajdziesz też w zakładce "Moje wyniki", ale tylko na tym komputerze.
+                        Jeśli podasz adres e-mail, wyślemy ci link do wyniku, abyś go nie zgubił.<br />Wynik znajdziesz też w zakładce "Moje wyniki", ale tylko na tym komputerze.
                     </div>
 
                   </div>

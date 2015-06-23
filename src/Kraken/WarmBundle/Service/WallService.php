@@ -14,8 +14,8 @@ class WallService
     }
 
     /**
-      * Get thermal conductance factor, including all layers and stuffs
-      */
+     * Get thermal conductance factor, including all layers and stuffs.
+     */
     public function getThermalConductance(Wall $wall)
     {
         $thermalResistance = 0;
@@ -27,7 +27,7 @@ class WallService
             if (stristr($layer->getMaterial()->getName(), 'pustka')) {
                 $thermalResistance += 0.18;
             } elseif ($size != 0 && $lambda != 0) {
-                $thermalResistance += $size/$lambda;
+                $thermalResistance += $size / $lambda;
             }
         }
 
@@ -39,19 +39,19 @@ class WallService
         }*/
 
         return $thermalResistance > 0
-            ? round(1/$thermalResistance, 2)
+            ? round(1 / $thermalResistance, 2)
             : 0;
     }
 
     /**
-      * Get wall size, including all layers and stuffs
-      */
+     * Get wall size, including all layers and stuffs.
+     */
     public function getSize(Wall $wall)
     {
         $thickness = 0.05; // plasters and stuffs
 
         foreach ($wall->getLayers() as $layer) {
-            $thickness += $layer->getSize()/100;
+            $thickness += $layer->getSize() / 100;
         }
 
         return $thickness;

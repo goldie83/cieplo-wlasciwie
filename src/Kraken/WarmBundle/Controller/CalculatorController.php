@@ -2,16 +2,18 @@
 
 namespace Kraken\WarmBundle\Controller;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Kraken\WarmBundle\Form\CalculationFormType;
 use Kraken\WarmBundle\Form\HouseApartmentType;
 use Kraken\WarmBundle\Form\HouseType;
 use Kraken\WarmBundle\Entity\Calculation;
 use Kraken\WarmBundle\Entity\House;
 use Kraken\WarmBundle\Entity\Layer;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Cookie;
-use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class CalculatorController extends Controller
 {
@@ -38,10 +40,26 @@ class CalculatorController extends Controller
         $form = $this->createForm(new CalculationFormType(), $calc);
 
         if ($this->getRequest()->getMethod() == 'POST') {
+            $originalFuelConsumptions = new ArrayCollection();
+
+            foreach ($calc->getFuelConsumptions() as $fc) {
+                $originalFuelConsumptions->add($fc);
+            }
+
             $form->bind($this->getRequest());
 
             if ($form->isValid()) {
                 $obj = $form->getData();
+
+                foreach ($originalFuelConsumptions as $fc) {
+                    if (false === $obj->getFuelConsumptions()->contains($fc)) {
+                        $em->remove($fc);
+                    }
+                }
+
+                foreach ($obj->getFuelConsumptions() as $fc) {
+                    $fc->setCalculation($obj);
+                }
 
                 $isEditing = $obj->getId() != null;
 
@@ -50,7 +68,7 @@ class CalculatorController extends Controller
 
                 $calcSlug = base_convert($obj->getId(), 10, 36);
                 $redirect = $this->generateUrl('details', array(
-                    'slug' => $calcSlug
+                    'slug' => $calcSlug,
                 ));
 
                 if (!$isEditing) {
@@ -75,7 +93,7 @@ class CalculatorController extends Controller
 
         return $this->render('KrakenWarmBundle:Default:index.html.twig', array(
             'calc' => $calc,
-            'form' => $form->createView()
+            'form' => $form->createView(),
         ));
     }
 
@@ -164,7 +182,6 @@ class CalculatorController extends Controller
                 $calc->setHouse($house);
 
                 foreach ($house->getWalls() as $i => $wall) {
-
                     if ($wall->getIsolationLayer()) {
                         if (!$wall->getIsolationLayer()->getMaterial() || !$wall->getIsolationLayer()->getSize()) {
                             $em->remove($wall->getIsolationLayer());
@@ -217,7 +234,7 @@ class CalculatorController extends Controller
             ->setSubject('Podsumowanie grzewcze twojego domu')
             ->setFrom(array('juzefwt@gmail.com' => 'CieploWlasciwie.pl'))
             ->setTo($calc->getEmail())
-            ->setContentType("text/html")
+            ->setContentType('text/html')
             ->setBody(
                 $this->renderView(
                     'KrakenWarmBundle:Calculator:email.html.twig',
@@ -264,58 +281,76 @@ class CalculatorController extends Controller
             throw $this->createNotFoundException('Jakiś zły masz ten link. Nic tu nie ma.');
         }
 
-        $data = array();
+        $data = [];
+        $fuels = [];
+        $variants = $this->get('kraken_warm.energy_pricing')->getHeatingVariantsComparison();
+        $fuelEntities = $this->get('kraken_warm.energy_pricing')->getFuels();
+        $variantTypes = array_keys($variants);
 
-        $raw = $this->get('kraken_warm.energy_pricing')->getEnergySourcesComparison();
+        foreach ($fuelEntities as $fuelEntity) {
+            $fuels[$fuelEntity->getType()] = [
+                'name' => $fuelEntity->getName(),
+                'price' => (double) $fuelEntity->getPrice(),
+                'trade_amount' => (int) $fuelEntity->getTradeAmount(),
+                'trade_unit' => $fuelEntity->getTradeUnit(),
+            ];
+        }
 
-        $fuelTypes = array_keys($raw);
+        foreach ($variantTypes as $variantType) {
+            $fuelType = $variants[$variantType]['fuel_type'];
 
-        $data['categories'] = array();
-        $costs = array();
-
-        foreach ($fuelTypes as $fuelType) {
-            $data['categories'][] = $raw[$fuelType]['label'];
-            $costs[] = array(
+            $data[] = [
+                'type' => $variantType,
+                'label' => $variants[$variantType]['label'],
+                'version' => $variants[$variantType]['detail'],
+                'amount' => $variants[$variantType]['amount'],
+                'consumption' => round($variants[$variantType]['amount'] / $fuels[$fuelType]['trade_amount'], 1),
                 'fuel_type' => $fuelType,
-                'price' => $raw[$fuelType]['price'],
-                'amount' => $raw[$fuelType]['amount'],
-                'consumption' => round($raw[$fuelType]['amount']/$raw[$fuelType]['trade_amount'], 1),
-                'trade_amount' => $raw[$fuelType]['trade_amount'],
-                'trade_unit' => $raw[$fuelType]['trade_unit'],
-                'version' => $raw[$fuelType]['detail'],
-                'efficiency' => $raw[$fuelType]['efficiency']*100,
-            );
+                'efficiency' => $variants[$variantType]['efficiency'] * 100,
+                'setup_costs' => $variants[$variantType]['setup_costs'],
+                'maintenance_time' => $variants[$variantType]['maintenance_time'],
+            ];
         }
 
-        $serviceCosts = array();
+        $response = [
+            'variants' => $data,
+            'fuels' => $fuels,
+            'currentVariant' => [
+                'cost' => $calc->getFuelCost(),
+                'time' => $this->get('kraken_warm.energy_pricing')->getMaintenanceTime($calc),
+            ],
+        ];
 
-        foreach ($fuelTypes as $fuelType) {
-            $time = $this->get('kraken_warm.energy_pricing')->getYearlyServiceTime($fuelType);
-            $workHourPrice = $this->get('kraken_warm.energy_pricing')->getDefaultWorkHourPrice();
+        return new JsonResponse($response);
+    }
 
-            $serviceCosts[] = array(
-                'hours' => round($time, 0),
-                'y' => $time * $workHourPrice,
-            );
+    public function customDataAction($id)
+    {
+        $calc = $this->getDoctrine()
+            ->getRepository('KrakenWarmBundle:Calculation')
+            ->find($id);
+
+        if (!$calc) {
+            throw $this->createNotFoundException('Jakiś zły masz ten link. Nic tu nie ma.');
         }
 
-        $data['series'] = array(
-            array(
-                'name' => 'Koszt paliwa',
-                'data' => $costs,
-                'index' => 1,
-                'showInLegend' => true
-            ),
-            array(
-                'name' => 'Koszty obsługi',
-                'data' => $serviceCosts,
-                'visible' => false,
-                'index' => 0,
-                'showInLegend' => true
-            )
-        );
+        $payload = json_decode(file_get_contents('php://input'), true);
+        $customFuels = [];
+        foreach ($payload['fuels'] as $type => $stuff) {
+            $customFuels[$type] = round($stuff['price'], 2);
+        }
 
-        return new JsonResponse($data);
+        if (is_array($customFuels) && !empty($customFuels)) {
+            $customData = json_decode($calc->getCustomData(), true);
+            $customData['fuels'] = $customFuels;
+            $calc->setCustomData(json_encode($customData));
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($calc);
+            $em->flush();
+        }
+
+        return new Response('', 204);
     }
 
     public function resultAction($slug)
@@ -334,10 +369,9 @@ class CalculatorController extends Controller
         $building = $this->get('kraken_warm.building');
         $heatingSeason = $this->get('kraken_warm.heating_season');
         $pricing = $this->get('kraken_warm.energy_pricing');
-        $adviceGenerator = $this->get('kraken_warm.advice');
-        $nearestCity = $this->get('kraken_warm.city_locator')->findNearestCity();
 
         if ($calc->getHeatedArea() == false) {
+            $nearestCity = $this->get('kraken_warm.city_locator')->findNearestCity();
             $calc->setHeatedArea($building->getHeatedHouseArea());
             $calc->setHeatingPower($calculator->getMaxHeatingPower());
             $calc->setCity($nearestCity);
@@ -349,65 +383,18 @@ class CalculatorController extends Controller
 
         return $this->render('KrakenWarmBundle:Default:result.html.twig', array(
             'calculator' => $calculator,
-            'fuels' => $this->get('kraken_warm.energy_pricing')->getFuels(),
             'building' => $building,
             'pricing' => $pricing,
             'heatingSeason' => $heatingSeason,
-            'advice' => $adviceGenerator->getAdvice(),
             'punch' => $this->get('kraken_warm.punchline'),
             'classifier' => $this->get('kraken_warm.building_classifier'),
             'upgrade' => $this->get('kraken_warm.upgrade'),
             'comparison' => $this->get('kraken_warm.comparison'),
             'houseDescription' => $building->getHouseDescription(),
             'calc' => $calc,
-            'city' => $nearestCity,
+            'city' => $calc->getCity(),
             'isAuthor' => $this->userIsAuthor($slug),
         ));
-    }
-
-    public function climateAction()
-    {
-        $calc = $this->getDoctrine()
-            ->getRepository('KrakenWarmBundle:Calculation')
-            ->findOneBy(array('id' => $this->get('session')->get('calculation_id')));
-
-        if (!$calc) {
-            throw $this->createNotFoundException('Jakiś zły masz ten link. Nic tu nie ma.');
-        }
-
-        $nearestCity = $this->get('kraken_warm.city_locator')->findNearestCity();
-
-        $lastWinter = $this->getDoctrine()
-            ->getRepository('KrakenWarmBundle:Temperature')
-            ->getLastWinterTemperatures($nearestCity);
-
-        $averageWinter = $this->getDoctrine()
-            ->getRepository('KrakenWarmBundle:Temperature')
-            ->getAverageWinterTemperatures($nearestCity);
-
-        $temperatures = array(
-            'series' => array(
-                array('showInLegend' => true, 'name' => 'Ostatnia zima', 'data' => array()),
-                array('showInLegend' => true, 'name' => 'Średnia wieloletnia', 'color' => '#888888', 'data' => array()),
-            )
-        );
-
-        $seriesSorter = function ($a, $b) { if ($a[0] == $b[0]) return 0; return ($a[0] < $b[0]) ? -1 : 1; };
-
-        foreach ($lastWinter as $d) {
-            $year = $d->getMonth() >= 9 ? 1970 : 1971;
-            $temperatures['series'][0]['data'][] = array(mktime(0,0,0, $d->getMonth(), $d->getDay(), $year)*1000, (double) $d->getValue());
-        }
-
-        foreach ($averageWinter as $d) {
-            $year = $d->getMonth() >= 9 ? 1970 : 1971;
-            $temperatures['series'][1]['data'][] = array(mktime(0,0,0, $d->getMonth(), $d->getDay(), $year)*1000, (double) $d->getValue());
-        }
-
-        usort($temperatures['series'][0]['data'], $seriesSorter);
-        usort($temperatures['series'][1]['data'], $seriesSorter);
-
-        return new JsonResponse($temperatures);
     }
 
     public function heatersAction($slug)
@@ -453,7 +440,7 @@ class CalculatorController extends Controller
             ->innerJoin('c.house', 'h')
             ->where('c.id IN (?1)')
             ->setParameters(array(
-                1 => $ids
+                1 => $ids,
             ))
             ->getQuery()
             ->getResult();

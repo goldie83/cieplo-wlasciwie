@@ -33,7 +33,7 @@ class ApartmentType extends AbstractType
                     'unheated_room' => 'Nieogrzewany lokal',
                     'outdoor' => 'Świat zewnętrzny',
                 ),
-                'label' => 'Co znajduje się nad twoim mieszkaniem?'
+                'label' => 'Co znajduje się nad twoim mieszkaniem?',
             ))
             ->add('whats_under', 'choice', array(
                 'choices' => array(
@@ -42,7 +42,7 @@ class ApartmentType extends AbstractType
                     'outdoor' => 'Świat zewnętrzny',
                     'ground' => 'Grunt',
                 ),
-                'label' => 'Co znajduje się pod twoim mieszkaniem?'
+                'label' => 'Co znajduje się pod twoim mieszkaniem?',
             ))
         ;
     }

@@ -1,4 +1,5 @@
 <?php
+
 namespace Kraken\WarmBundle\Command;
 
 use Goutte\Client;
@@ -19,7 +20,7 @@ class FetchWeatherDataCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $cities = array();
-        $citiesFile = dirname(__DIR__) . '/DataFixtures/cities.json';
+        $citiesFile = dirname(__DIR__).'/DataFixtures/cities.json';
         if (file_exists($citiesFile)) {
             $cities = json_decode(file_get_contents($citiesFile), true);
         }
@@ -28,7 +29,7 @@ class FetchWeatherDataCommand extends ContainerAwareCommand
         $client->setHeader('User-Agent', 'Opera/9.80 (X11; Linux x86_64) Presto/2.12.388 Version/12.15');
         $data = array();
 
-        $url ='http://weather.sg.msn.com/sitemap.aspx?wealocations=Poland';
+        $url = 'http://weather.sg.msn.com/sitemap.aspx?wealocations=Poland';
         $crawler = $client->request('GET', $url);
 
         $that = $this;
@@ -39,7 +40,7 @@ class FetchWeatherDataCommand extends ContainerAwareCommand
             $crawler = $client->request('GET', $regionUrl);
 
             $nodeValues = $crawler->filter('.t3 .td2 a')->each(function ($node, $i) use (&$that, &$output, &$cities) {
-                echo "miasto: ".$node->nodeValue.PHP_EOL;
+                echo 'miasto: '.$node->nodeValue.PHP_EOL;
 
                 $parts = explode(',', $node->nodeValue);
                 $cityName = trim($parts[0]);
@@ -63,7 +64,7 @@ class FetchWeatherDataCommand extends ContainerAwareCommand
                         ));
 
                         $temperatures = $that->fetchAverageTemperatures($cityId);
-                        file_put_contents(dirname(__DIR__) . '/DataFixtures/weather/'.$cityId.'.json', json_encode($temperatures));
+                        file_put_contents(dirname(__DIR__).'/DataFixtures/weather/'.$cityId.'.json', json_encode($temperatures));
                     } catch (\Exception $e) {
                         $cityData['error'] = 'incomplete weather data';
                         $output->writeln(sprintf(
@@ -71,7 +72,6 @@ class FetchWeatherDataCommand extends ContainerAwareCommand
                             $e->getMessage()
                         ));
                     }
-
                 } catch (\Exception $e) {
                     $output->writeln(sprintf(
                         '<error>weather:fetch</error> %s Oh crap! <comment>%s</comment>',
@@ -85,7 +85,7 @@ class FetchWeatherDataCommand extends ContainerAwareCommand
 
         });
 
-        file_put_contents(dirname(__DIR__) . '/DataFixtures/cities.json', json_encode($cities));
+        file_put_contents(dirname(__DIR__).'/DataFixtures/cities.json', json_encode($cities));
     }
 
     /**
@@ -97,23 +97,22 @@ class FetchWeatherDataCommand extends ContainerAwareCommand
         curl_setopt_array($curl, array(
             CURLOPT_RETURNTRANSFER => 1,
             CURLOPT_URL => 'http://maps.googleapis.com/maps/api/geocode/json?address='.urlencode($cityName).',+Poland&sensor=false',
-            CURLOPT_USERAGENT => 'Kraken Invader'
+            CURLOPT_USERAGENT => 'Kraken Invader',
         ));
 
         $response = json_decode(curl_exec($curl), true);
         curl_close($curl);
 
         if (!isset($response['results'][0])) {
-              throw new \Exception('Skipped, as this does not look like a city to Google: '.$cityName);
+            throw new \Exception('Skipped, as this does not look like a city to Google: '.$cityName);
         }
 
         if ($response['results'][0]['address_components'][0]['types'][0] != 'locality') {
-              throw new \Exception('Skipped, as this is not a city: '.$cityName);
+            throw new \Exception('Skipped, as this is not a city: '.$cityName);
         }
 
         $location = $response['results'][0]['geometry']['location'];
         if ($location) {
-
             $name = isset($response['results'][0]['address_components'][1]['long_name'])
                 ? $response['results'][0]['address_components'][1]['long_name']
                 : $response['results'][0]['address_components'][0]['long_name'];
@@ -148,7 +147,7 @@ class FetchWeatherDataCommand extends ContainerAwareCommand
         //TODO check if there's any data, not only N/A's
         // cities without data: Rybnik, Sanok, Kwidzyn, Elbląg
 
-        for ($month = 1; $month <= 12; $month++) {
+        for ($month = 1; $month <= 12; ++$month) {
             $crawler = $client->request('GET', $cityUrl.'&weai='.$month);
 
             $nodeValues = $crawler->filter('.t3 tr td')->each(function ($node, $i) use (&$data, $month, &$min) {
@@ -165,13 +164,13 @@ class FetchWeatherDataCommand extends ContainerAwareCommand
                     if (isset($stuff[1]) && !stristr($stuff[1], 'NA')) {
                         $avgHi = (int) $stuff[1];
                         if ($min !== 'NA' && $avgHi !== 'NA') {
-                            $data[$month][((int) ($i/5)+1)] = ($min + $avgHi)/2;
+                            $data[$month][((int) ($i / 5) + 1)] = ($min + $avgHi) / 2;
                         } else {
-                            $data[$month][((int) ($i/5)+1)] = (int) ($avgHi*0.75);
+                            $data[$month][((int) ($i / 5) + 1)] = (int) ($avgHi * 0.75);
                         }
                         $min = 0;
                     } else {
-                        $data[$month][((int) ($i/5)+1)] = $min + abs((int) ($min/2));
+                        $data[$month][((int) ($i / 5) + 1)] = $min + abs((int) ($min / 2));
                     }
                 }
             });

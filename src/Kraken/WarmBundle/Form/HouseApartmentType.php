@@ -33,31 +33,31 @@ class HouseApartmentType extends HouseType
             ))
             ->add('has_balcony', null, array(
                 'required' => false,
-                'label' => 'Mieszkanie posiada balkon(y)'
+                'label' => 'Mieszkanie posiada balkon(y)',
             ))
             ->add('area', null, array(
                 'label' => 'Powierzchnia mieszkania',
-                'attr'  => array(
+                'attr' => array(
                     'input_group' => array(
-                        'append'  => 'm2'
-                    )
+                        'append' => 'm2',
+                    ),
                 ),
-                'mapped' => false
+                'mapped' => false,
             ))
             ->add('building_length', null, array(
                 'label' => 'Długość mieszkania',
-                'attr'  => array(
+                'attr' => array(
                     'input_group' => array(
-                        'append'  => 'm'
-                    )
+                        'append' => 'm',
+                    ),
                 ),
             ))
             ->add('building_width', null, array(
                 'label' => 'Szerokość mieszkania',
-                'attr'  => array(
+                'attr' => array(
                     'input_group' => array(
-                        'append'  => 'm'
-                    )
+                        'append' => 'm',
+                    ),
                 ),
             ))
             ->add('number_floors', null, array(

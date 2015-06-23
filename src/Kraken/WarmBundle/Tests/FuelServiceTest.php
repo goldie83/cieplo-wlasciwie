@@ -4,6 +4,7 @@ namespace Kraken\WarmBundle\Tests\Service;
 
 use Kraken\WarmBundle\Service\FuelService;
 use Kraken\WarmBundle\Entity\Calculation;
+use Kraken\WarmBundle\Entity\Fuel;
 
 class FuelServiceTest extends \PHPUnit_Framework_TestCase
 {
@@ -11,18 +12,40 @@ class FuelServiceTest extends \PHPUnit_Framework_TestCase
     {
         $fs = new FuelService();
 
-        $this->assertEquals(15540, $fs->getFuelEnergy('coal', 2));
-        $this->assertEquals(33300, $fs->getFuelEnergy('sand_coal', 5));
-        $this->assertEquals(10000, $fs->getFuelEnergy('brown_coal', 2));
-        $this->assertEquals(60000, $fs->getFuelEnergy('pellet', 12));
-        $this->assertEquals(21.1, $fs->getFuelEnergy('gas_e', 2));
-        $this->assertEquals(77.7, $fs->getFuelEnergy('gas_ls', 10));
-        $this->assertEquals(86.1, $fs->getFuelEnergy('gas_lw', 10));
-        $this->assertEquals(23400, $fs->getFuelEnergy('wood', 10));
-        $this->assertEquals(3, $fs->getFuelEnergy('electricity', 3));
+        $f1 = new Fuel;
+        $f1->setType(Fuel::TYPE_COAL);
+        $f1->setEnergy(28);
+        $this->assertEquals(15512, $fs->getFuelEnergy($f1, 2));
 
-        $this->setExpectedException('InvalidArgumentException');
-        $this->assertEquals(10, $fs->getFuelEnergy('shmoal', 10));
+        $f2 = new Fuel;
+        $f2->setType(Fuel::TYPE_SAND_COAL);
+        $f2->setEnergy(22);
+        $this->assertEquals(30470, $fs->getFuelEnergy($f2, 5));
+
+        $f3 = new Fuel;
+        $f3->setType(Fuel::TYPE_BROWN_COAL);
+        $f3->setEnergy(18);
+        $this->assertEquals(9973, $fs->getFuelEnergy($f3, 2));
+
+        $f4 = new Fuel;
+        $f4->setType(Fuel::TYPE_PELLET);
+        $f4->setEnergy(19);
+        $this->assertEquals(63157, $fs->getFuelEnergy($f4, 12));
+
+        $f5 = new Fuel;
+        $f5->setType(Fuel::TYPE_NATURAL_GAS);
+        $f5->setEnergy(3.6);
+        $this->assertEquals(2, $fs->getFuelEnergy($f5, 2));
+
+        $f8 = new Fuel;
+        $f8->setType(Fuel::TYPE_WOOD);
+        $f8->setEnergy(19);
+        $this->assertEquals(24631, $fs->getFuelEnergy($f8, 10));
+
+        $f9 = new Fuel;
+        $f9->setType(Fuel::TYPE_ELECTRICITY);
+        $f9->setEnergy(3.6);
+        $this->assertEquals(3, $fs->getFuelEnergy($f9, 3));
     }
 
     public function testFormatFuelAmount()

@@ -8,5 +8,4 @@ class RowBuilding extends Building
     {
         return 2;
     }
-
 }

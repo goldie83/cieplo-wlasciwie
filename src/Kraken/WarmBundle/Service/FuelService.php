@@ -3,43 +3,26 @@
 namespace Kraken\WarmBundle\Service;
 
 use Kraken\WarmBundle\Entity\Calculation;
+use Kraken\WarmBundle\Entity\Fuel;
 
 class FuelService
 {
-    protected $fuelsEnergy = array(
-        'coal' => 7.77,
-        'coke' => 8,
-        'sand_coal' => 6.66,
-        'brown_coal' => 5,
-        'pellet' => 5,
-        'gas_e' => 10.55,
-        'gas_ls' => 7.77,
-        'gas_lw' => 8.61,
-        'wood' => 5,
-        'electricity' => 1,
-    );
-
-    /**
-     * @param string $fuelType
-     */
-    public function getFuelEnergy($fuelType, $amount)
+    public function getFuelEnergy(Fuel $fuel, $amount)
     {
-        if (!isset($this->fuelsEnergy[$fuelType])) {
-            throw new \InvalidArgumentException('Invalid fuel type');
-        }
+        // amount comes in megajoules, result goes in kWh
 
-        return $this->fuelsEnergy[$fuelType] * $this->consumedAmountToBaseUnits($fuelType, $amount);
+        return ceil(($fuel->getEnergy() * 0.277) * $this->consumedAmountToBaseUnits($fuel, $amount));
     }
 
-    public function consumedAmountToBaseUnits($fuelType, $amount)
+    public function consumedAmountToBaseUnits(Fuel $fuel, $amount)
     {
         // tons to kgs
-        if (in_array($fuelType, array('coal', 'coke', 'sand_coal', 'brown_coal', 'pellet'))) {
+        if (stristr($fuel->getType(), 'coal') || stristr($fuel->getType(), 'coke') || stristr($fuel->getType(), 'pellet')) {
             return $amount * 1000;
         }
 
         // stere ~ 0,65 cubic meter
-        if ($fuelType == 'wood') {
+        if ($fuel->getType() == 'wood') {
             return 0.65 * $amount * 720; // 720kg/
         }
 
@@ -78,7 +61,7 @@ class FuelService
         $number = str_replace('.', ',', $number);
         $number = str_replace(',0', '', $number);
         $text = $text[$calc->getFuelType()];
-        
+
         return sprintf($text, $number);
     }
 }

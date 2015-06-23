@@ -11,11 +11,12 @@ class LoadWeatherData implements FixtureInterface
 {
     public function load(ObjectManager $manager)
     {
-        $data = file_get_contents(dirname(__DIR__) . '/cities.json');
+        return;
+        $data = file_get_contents(dirname(__DIR__).'/cities.json');
 
         $data = json_decode($data, true);
         if (empty($data)) {
-            throw new \RuntimeException("List of cities seems to be broken.");
+            throw new \RuntimeException('List of cities seems to be broken.');
         }
 
         foreach ($data as $code => $cityData) {
@@ -29,7 +30,7 @@ class LoadWeatherData implements FixtureInterface
                 continue;
             }
 
-            $cache = dirname(__DIR__) . '/weather/'.$code.'.json';
+            $cache = dirname(__DIR__).'/weather/'.$code.'.json';
             if (file_exists($cache)) {
                 $temperatures = json_decode(file_get_contents($cache), true);
             } else {

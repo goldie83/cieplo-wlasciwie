@@ -36,9 +36,9 @@ class Layer
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -46,9 +46,10 @@ class Layer
     }
 
     /**
-     * Set size
+     * Set size.
      *
-     * @param  float $size
+     * @param float $size
+     *
      * @return Layer
      */
     public function setSize($size)
@@ -59,7 +60,7 @@ class Layer
     }
 
     /**
-     * Get layer size in meters
+     * Get layer size in meters.
      *
      * @return float
      */
@@ -69,9 +70,10 @@ class Layer
     }
 
     /**
-     * Set material
+     * Set material.
      *
-     * @param  \Kraken\WarmBundle\Entity\Material $material
+     * @param \Kraken\WarmBundle\Entity\Material $material
+     *
      * @return Layer
      */
     public function setMaterial(\Kraken\WarmBundle\Entity\Material $material = null)
@@ -82,7 +84,7 @@ class Layer
     }
 
     /**
-     * Get material
+     * Get material.
      *
      * @return \Kraken\WarmBundle\Entity\Material
      */

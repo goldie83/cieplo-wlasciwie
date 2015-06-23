@@ -3,10 +3,7 @@
 namespace Kraken\WarmBundle\Service;
 
 use Kraken\WarmBundle\Calculator\BuildingInterface;
-use Kraken\WarmBundle\Entity\Calculation;
 use Kraken\WarmBundle\Entity\Wall;
-use Kraken\WarmBundle\Service\InstanceService;
-use Kraken\WarmBundle\Service\VentilationService;
 
 class Building implements BuildingInterface
 {
@@ -104,11 +101,11 @@ class Building implements BuildingInterface
 
         if ($this->getInstance()->getHouse()->getConstructionType() == 'canadian') {
             $wallDetails = array(
-                'szkielet drewniany (dom kanadyjski)'
+                'szkielet drewniany (dom kanadyjski)',
             );
         } else {
             $wallDetails = array(
-                $wall->getConstructionLayer()->getMaterial()->getName().' '.$wall->getConstructionLayer()->getSize().'cm'
+                $wall->getConstructionLayer()->getMaterial()->getName().' '.$wall->getConstructionLayer()->getSize().'cm',
             );
             $wallSize += $wall->getConstructionLayer()->getSize();
         }
@@ -126,7 +123,7 @@ class Building implements BuildingInterface
             $wallSize += $wall->getExtraIsolationLayer()->getSize();
         }
 
-        $heatingDetails = sprintf("Ogrzewane piętra: %s, średnia temperatura: %sst.C", $this->getHouse()->getNumberHeatedFloors(), number_format($this->getInstance()->getIndoorTemperature(), 1));
+        $heatingDetails = sprintf('Ogrzewane piętra: %s, średnia temperatura: %sst.C', $this->getHouse()->getNumberHeatedFloors(), number_format($this->getInstance()->getIndoorTemperature(), 1));
 
         $windowsTypes = array(
             'old_single_glass' => 'Stare z pojedynczą szybą',
@@ -222,7 +219,7 @@ class Building implements BuildingInterface
 
         $sum = $w + $v + $g + $r + $win + $d;
         $round = function ($number) {
-            return max(1, $number*100);
+            return max(1, $number * 100);
         };
 
         if ($house->getHasBasement() && !$this->isBasementHeated() && $this->isGroundFloorHeated()) {
@@ -239,12 +236,12 @@ class Building implements BuildingInterface
         }
 
         $breakdown = array(
-          'Wentylacja' => $round($v/$sum),
-          'Ściany zewnętrzne' => $round($w/$sum),
-          $roofLabel => $round($r/$sum),
-          $groundLabel => $round($g/$sum),
-          'Okna' => $round($win/$sum),
-          'Drzwi' => $round($d/$sum),
+          'Wentylacja' => $round($v / $sum),
+          'Ściany zewnętrzne' => $round($w / $sum),
+          $roofLabel => $round($r / $sum),
+          $groundLabel => $round($g / $sum),
+          'Okna' => $round($win / $sum),
+          'Drzwi' => $round($d / $sum),
         );
 
         asort($breakdown);
@@ -271,7 +268,7 @@ class Building implements BuildingInterface
         $floors = $this->getHouse()->getNumberFloors();
         $heatedFloors = $this->getHouse()->getNumberHeatedFloors();
 
-        return ($floors > 1 && $floors == $heatedFloors) || ($floors-$heatedFloors == 1 && $this->getHouse()->getWhatsUnheated() != 'basement');
+        return ($floors > 1 && $floors == $heatedFloors) || ($floors - $heatedFloors == 1 && $this->getHouse()->getWhatsUnheated() != 'basement');
     }
 
     public function isGroundFloorHeated()
@@ -289,7 +286,7 @@ class Building implements BuildingInterface
         $heatedFloors = $this->getHouse()->getNumberHeatedFloors();
 
         return $floors > 1 && $floors == $heatedFloors ||
-            ($floors-$heatedFloors == 1
+            ($floors - $heatedFloors == 1
                 && $this->getHouse()->getWhatsUnheated() != 'attic'
                 && $this->getHouse()->getWhatsUnheated() != ''
                 && !$this->isBasementHeated());
@@ -381,25 +378,25 @@ class Building implements BuildingInterface
             $isolation = $house
                 ->getHighestCeilingIsolationLayer();
             $roofIsolationResistance = $isolation
-                ? ($isolation->getSize()/100)/$isolation->getMaterial()->getLambda()
+                ? ($isolation->getSize() / 100) / $isolation->getMaterial()->getLambda()
                 : 0;
 
-            return 1/($this->getInternalCeilingResistance() + $roofIsolationResistance);
+            return 1 / ($this->getInternalCeilingResistance() + $roofIsolationResistance);
         }
 
         if ($this->isAtticHeated()) {
             // assume construction material for non-flat roof
             $woodenCoverLambda = 0.18;
             $woodenCoverSize = 0.1;
-            $constructionResistance = $woodenCoverSize/$woodenCoverLambda;
+            $constructionResistance = $woodenCoverSize / $woodenCoverLambda;
 
             $isolation = $house->getRoofIsolationLayer();
 
             $roofIsolationResistance = $isolation
-                ? ($isolation->getSize()/100)/$isolation->getMaterial()->getLambda()
+                ? ($isolation->getSize() / 100) / $isolation->getMaterial()->getLambda()
                 : 0;
 
-            return 1/($constructionResistance + $roofIsolationResistance);
+            return 1 / ($constructionResistance + $roofIsolationResistance);
         } else {
             return 0;
         }
@@ -417,10 +414,10 @@ class Building implements BuildingInterface
         $isolation = $house
             ->getHighestCeilingIsolationLayer();
         $isolationResistance = $isolation
-            ? ($isolation->getSize()/100)/$isolation->getMaterial()->getLambda()
+            ? ($isolation->getSize() / 100) / $isolation->getMaterial()->getLambda()
             : 0;
 
-        return 1/($this->getInternalCeilingResistance() + $isolationResistance);
+        return 1 / ($this->getInternalCeilingResistance() + $isolationResistance);
     }
 
     public function getRoofEnergyLossToUnheated()
@@ -458,21 +455,21 @@ class Building implements BuildingInterface
         $w = $house->getBuildingWidth();
 
         $isolation = $house->getGroundFloorIsolationLayer();
-        $isolationResistance = $isolation ? ($isolation->getSize()/100)/$isolation->getMaterial()->getLambda() : 0;
+        $isolationResistance = $isolation ? ($isolation->getSize() / 100) / $isolation->getMaterial()->getLambda() : 0;
 
         $groundLambda = $this->getGroundLambda();
         $floorLambda = $isolationResistance > 0
-            ? 1/$isolationResistance
+            ? 1 / $isolationResistance
             : 1;
         $wallSize = $this->wall->getSize($house->getWalls()->first());
 
-        $proportion = ($l*$w)/(0.5*($l+$w));
-        $equivalentSize = $wallSize + $groundLambda/$floorLambda;
+        $proportion = ($l * $w) / (0.5 * ($l + $w));
+        $equivalentSize = $wallSize + $groundLambda / $floorLambda;
 
         if ($equivalentSize < $proportion) {
-            $equivalentLambda = (2*$groundLambda/(3.14*$proportion+$equivalentSize)) * log(3.14*$proportion/$equivalentSize+1);
+            $equivalentLambda = (2 * $groundLambda / (3.14 * $proportion + $equivalentSize)) * log(3.14 * $proportion / $equivalentSize + 1);
         } else {
-            $equivalentLambda = $groundLambda/(0.457*$proportion + $equivalentSize);
+            $equivalentLambda = $groundLambda / (0.457 * $proportion + $equivalentSize);
         }
 
         return $equivalentLambda;
@@ -500,30 +497,30 @@ class Building implements BuildingInterface
 
         $isolation = $house->getBasementFloorIsolationLayer();
         $isolationResistance = $isolation
-            ? ($isolation->getSize()/100)/$isolation->getMaterial()->getLambda()
+            ? ($isolation->getSize() / 100) / $isolation->getMaterial()->getLambda()
             : 0;
 
         $basementHeight = $this->getBasementHeight();
 
         $groundLambda = $this->getGroundLambda();
         $floorLambda = $isolationResistance > 0
-            ? 1/$isolationResistance
+            ? 1 / $isolationResistance
             : 1;
         $wallSize = $this->wall->getSize($house->getWalls()->first());
-        $floorArea = $l*$w;
-        $floorPerimeter = 2*($l+$w);
+        $floorArea = $l * $w;
+        $floorPerimeter = 2 * ($l + $w);
 
-        $proportion = $floorArea/(0.5*$floorPerimeter);
-        $equivalentSize = $wallSize + $groundLambda/$floorLambda;
+        $proportion = $floorArea / (0.5 * $floorPerimeter);
+        $equivalentSize = $wallSize + $groundLambda / $floorLambda;
 
-        if ($equivalentSize + 0.5*$basementHeight < $proportion) {
-            $equivalentFloorLambda = (2*$groundLambda/(3.14*$proportion+$equivalentSize+0.5*$basementHeight))*log(3.14*$proportion/($equivalentSize+0.5*$basementHeight)+1);
+        if ($equivalentSize + 0.5 * $basementHeight < $proportion) {
+            $equivalentFloorLambda = (2 * $groundLambda / (3.14 * $proportion + $equivalentSize + 0.5 * $basementHeight)) * log(3.14 * $proportion / ($equivalentSize + 0.5 * $basementHeight) + 1);
         } else {
-            $equivalentFloorLambda = $groundLambda/(0.457*$proportion + $equivalentSize);
+            $equivalentFloorLambda = $groundLambda / (0.457 * $proportion + $equivalentSize);
         }
 
-        $equivalentWallSize = $groundLambda/$this->wall->getThermalConductance($house->getWalls()->first());
-        $basementWallsLambda = ((2*$groundLambda)/(3.14*$basementHeight)) * (1+(0.5*$equivalentSize)/($equivalentSize+$basementHeight)) * log($basementHeight/$equivalentWallSize + 1);
+        $equivalentWallSize = $groundLambda / $this->wall->getThermalConductance($house->getWalls()->first());
+        $basementWallsLambda = ((2 * $groundLambda) / (3.14 * $basementHeight)) * (1 + (0.5 * $equivalentSize) / ($equivalentSize + $basementHeight)) * log($basementHeight / $equivalentWallSize + 1);
 
         $totalLambda = ($floorArea * $equivalentFloorLambda + $basementHeight * $floorPerimeter * $basementWallsLambda) / ($floorArea + $basementHeight * $floorPerimeter);
 
@@ -572,29 +569,29 @@ class Building implements BuildingInterface
         if ($house->getHasBasement() && !$this->isBasementHeated()) {
             $wallSize = $this->wall->getSize($house->getWalls()->first());
 
-            $l = $house->getBuildingLength() - 2*$wallSize;
-            $w = $house->getBuildingWidth() - 2*$wallSize;
+            $l = $house->getBuildingLength() - 2 * $wallSize;
+            $w = $house->getBuildingWidth() - 2 * $wallSize;
 
             $groundFloorIsolation = $house->getGroundFloorIsolationLayer();
 
             $ceilingIsolationResistance = $groundFloorIsolation
-                ? ($groundFloorIsolation->getSize()/100)/$groundFloorIsolation->getMaterial()->getLambda()
+                ? ($groundFloorIsolation->getSize() / 100) / $groundFloorIsolation->getMaterial()->getLambda()
                 : 0;
 
-            return round($l * $w * (1/($this->getInternalCeilingResistance() + $ceilingIsolationResistance)), 2);
+            return round($l * $w * (1 / ($this->getInternalCeilingResistance() + $ceilingIsolationResistance)), 2);
         } elseif (!$house->getHasBasement() && !$this->isGroundFloorHeated()) {
             $wallSize = $this->wall->getSize($house->getWalls()->first());
 
-            $l = $house->getBuildingLength() - 2*$wallSize;
-            $w = $house->getBuildingWidth() - 2*$wallSize;
+            $l = $house->getBuildingLength() - 2 * $wallSize;
+            $w = $house->getBuildingWidth() - 2 * $wallSize;
 
             $ceilingIsolation = $house->getLowestCeilingIsolationLayer();
 
             $ceilingIsolationResistance = $ceilingIsolation
-                ? ($ceilingIsolation->getSize()/100)/$ceilingIsolation->getMaterial()->getLambda()
+                ? ($ceilingIsolation->getSize() / 100) / $ceilingIsolation->getMaterial()->getLambda()
                 : 0;
 
-            return round($l * $w * (1/($this->getInternalCeilingResistance() + $ceilingIsolationResistance)), 2);
+            return round($l * $w * (1 / ($this->getInternalCeilingResistance() + $ceilingIsolationResistance)), 2);
         }
 
         return 0;
@@ -612,7 +609,7 @@ class Building implements BuildingInterface
 
         $heatRecoveryEfficiency = 0.6;
 
-        return 0.34 * (1-$heatRecoveryEfficiency) * $airStream;
+        return 0.34 * (1 - $heatRecoveryEfficiency) * $airStream;
     }
 
     public function getHouseCubature()
@@ -621,7 +618,7 @@ class Building implements BuildingInterface
         // we're interested in heated room only
         $numberFloors = $this->getNumberOfHeatedFloors();
 
-        for ($i = 0; $i < $numberFloors; $i++) {
+        for ($i = 0; $i < $numberFloors; ++$i) {
             $floorCubature = $this->getInternalBuildingLength() * $this->getInternalBuildingWidth() * $this->getFloorHeight();
 
             $cubature += $i == 0 && $this->getInstance()->getHouse()->getRoofType() != 'flat'
@@ -640,12 +637,12 @@ class Building implements BuildingInterface
 
         if ($roofType == 'oblique') {
             // 30 degrees
-            return 2*($w/sqrt(3))*$l;
+            return 2 * ($w / sqrt(3)) * $l;
         }
 
         if ($roofType == 'steep') {
             // 60 degrees
-            return 2*$w*$l;
+            return 2 * $w * $l;
         }
 
         return $this->getInstance()->getHouse()->getBuildingLength() * $this->getInstance()->getHouse()->getBuildingWidth();
@@ -658,11 +655,12 @@ class Building implements BuildingInterface
 
         // basement walls are added to ground floor, so we skip basement here
         if ($house->getHasBasement() && $house->getWhatsUnheated() != 'basement') {
-            $nbHeatedFloors--;
+            --$nbHeatedFloors;
         }
 
-        if ($nbHeatedFloors < 1)
+        if ($nbHeatedFloors < 1) {
             $nbHeatedFloors = 1;
+        }
 
         return $nbHeatedFloors;
     }
@@ -689,7 +687,7 @@ class Building implements BuildingInterface
 
         // this should include any heated area, so we add up basement again, if present
         if ($this->getHouse()->getHasBasement() && $this->getHouse()->getWhatsUnheated() != 'basement' && $this->getInstance()->getHouse()->getNumberHeatedFloors() > 1) {
-            $nbFloors++;
+            ++$nbFloors;
         }
 
         return $this->getInternalBuildingLength() * $this->getInternalBuildingWidth() * $nbFloors;
@@ -709,22 +707,22 @@ class Building implements BuildingInterface
 
         if ($walls > 0) {
             $sum += $l;
-            $walls--;
+            --$walls;
         }
 
         if ($walls > 0) {
             $sum += $w;
-            $walls--;
+            --$walls;
         }
 
         if ($walls > 0) {
             $sum += $l;
-            $walls--;
+            --$walls;
         }
 
         if ($walls > 0) {
             $sum += $w;
-            $walls--;
+            --$walls;
         }
 
         return $sum * $houseHeight;
@@ -751,7 +749,7 @@ class Building implements BuildingInterface
         $sum = $this->getStandardDoorArea() * $numberDoors;
 
         if (!$this->isGroundFloorHeated() && $numberDoors > 1) {
-            $numberDoors--;
+            --$numberDoors;
         }
 
         return $sum;
@@ -759,7 +757,7 @@ class Building implements BuildingInterface
 
     public function getStandardDoorArea()
     {
-        $doorHeight = $this->getFloorHeight()*0.8;
+        $doorHeight = $this->getFloorHeight() * 0.8;
         $doorWidth = 1;
 
         return $doorHeight * $doorWidth;
@@ -816,7 +814,7 @@ class Building implements BuildingInterface
                 'label' => 'Piwnica',
                 'heated' => $this->isBasementHeated(),
             );
-            $i++;
+            ++$i;
         }
 
         $floors[] = array(
@@ -824,13 +822,13 @@ class Building implements BuildingInterface
             'label' => 'Parter',
             'heated' => $this->isGroundFloorHeated(),
         );
-        $i++;
+        ++$i;
 
-        for ($j = 1; $i < $nbFloors-1; $i++) {
+        for ($j = 1; $i < $nbFloors - 1; ++$i) {
             $floors[] = array(
                 'name' => 'regular_floor_'.$j,
                 'label' => ($j++).'. piętro',
-                'heated' => $unheated == 'floor' ? $i == $nbFloors-1 : true,
+                'heated' => $unheated == 'floor' ? $i == $nbFloors - 1 : true,
             );
         }
 

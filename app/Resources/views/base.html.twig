@@ -86,10 +86,17 @@
 </footer>
 
 <script src="{{ asset('js/jquery.js') }}"></script>
-<script src="{{ asset('js/bootstrap.js') }}"></script>
+<!-- <script src="{{ asset('js/bootstrap.js') }}"></script> -->
+
+{% javascripts
+'@MopaBootstrapBundle/Resources/public/bootstrap/js/*.js'
+'@MopaBootstrapBundle/Resources/public/js/mopabootstrap-collection.js'
+'@MopaBootstrapBundle/Resources/public/js/mopabootstrap-subnav.js'
+%}
+<script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
 
 {% block bottom_javascripts %}{% endblock %}
-<script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
 
 </body>
 
