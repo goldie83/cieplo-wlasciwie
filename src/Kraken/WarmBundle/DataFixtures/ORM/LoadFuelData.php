@@ -14,7 +14,7 @@ class LoadFuelData implements FixtureInterface
     {
         $brownCoal = new Fuel();
         $brownCoal
-            ->setType('brown_coal')
+            ->setType(Fuel::TYPE_BROWN_COAL)
             ->setName('Węgiel brunatny (lub czeski)')
             ->setPrice(0.5)
             ->setUnit('kg')
@@ -26,7 +26,7 @@ class LoadFuelData implements FixtureInterface
 
         $bituminousCoal = new Fuel();
         $bituminousCoal
-            ->setType('bituminous_coal')
+            ->setType(Fuel::TYPE_COAL)
             ->setName('Węgiel kamienny')
             ->setPrice(0.75)
             ->setUnit('kg')
@@ -38,7 +38,7 @@ class LoadFuelData implements FixtureInterface
 
         $sandCoal = new Fuel();
         $sandCoal
-            ->setType('sand_coal')
+            ->setType(Fuel::TYPE_SAND_COAL)
             ->setName('Miał węglowy')
             ->setPrice(0.6)
             ->setUnit('kg')
@@ -50,7 +50,7 @@ class LoadFuelData implements FixtureInterface
 
         $ecoCoal = new Fuel();
         $ecoCoal
-            ->setType('eco_coal')
+            ->setType(Fuel::TYPE_ECO_COAL)
             ->setName('Ekogroszek')
             ->setPrice(0.9)
             ->setUnit('kg')
@@ -62,7 +62,7 @@ class LoadFuelData implements FixtureInterface
 
         $naturalGas = new Fuel();
         $naturalGas
-            ->setType('natural_gas')
+            ->setType(Fuel::TYPE_NATURAL_GAS)
             ->setName('Gaz ziemny')
             ->setPrice(0.22)
             ->setUnit('kWh')
@@ -74,7 +74,7 @@ class LoadFuelData implements FixtureInterface
 
         $pellet = new Fuel();
         $pellet
-            ->setType('pellet')
+            ->setType(Fuel::TYPE_PELLET)
             ->setName('Pellet')
             ->setPrice(0.9)
             ->setUnit('kg')
@@ -86,7 +86,7 @@ class LoadFuelData implements FixtureInterface
 
         $electricity = new Fuel();
         $electricity
-            ->setType('electricity')
+            ->setType(Fuel::TYPE_ELECTRICITY)
             ->setName('Prąd')
             ->setPrice(0.3)
             ->setUnit('kWh')
@@ -98,7 +98,7 @@ class LoadFuelData implements FixtureInterface
 
         $wood = new Fuel();
         $wood
-            ->setType('wood')
+            ->setType(Fuel::TYPE_WOOD)
             ->setName('Drewno')
             ->setPrice(0.35)
             ->setUnit('kg')
@@ -110,7 +110,7 @@ class LoadFuelData implements FixtureInterface
 
         $coke = new Fuel();
         $coke
-            ->setType('coke')
+            ->setType(Fuel::TYPE_COKE)
             ->setName('Koks')
             ->setPrice(1)
             ->setUnit('kg')
@@ -122,7 +122,7 @@ class LoadFuelData implements FixtureInterface
 
         $propane = new Fuel();
         $propane
-            ->setType('propane')
+            ->setType(Fuel::TYPE_PROPANE)
             ->setName('Propan (LPG)')
             ->setPrice(2.5)
             ->setUnit('l')
@@ -134,7 +134,7 @@ class LoadFuelData implements FixtureInterface
 
         $heatBuffer = new HeatingDevice();
         $heatBuffer
-            ->setType('heat_buffer')
+            ->setType(HeatingDevice::TYPE_HEAT_BUFFER)
             ->setName('Bufor ciepła')
             ->setForLegacySetup(false)
             ->setForAdvice(true)
@@ -143,7 +143,7 @@ class LoadFuelData implements FixtureInterface
 
         $manualStove = new HeatingDevice();
         $manualStove
-            ->setType('manual_stove')
+            ->setType(HeatingDevice::TYPE_MANUAL_STOVE)
             ->setName('Kocioł zasypowy')
             ->setForLegacySetup(true)
             ->setForAdvice(true)
@@ -152,7 +152,7 @@ class LoadFuelData implements FixtureInterface
 
         $manualStoveWithBuffer = new HeatingDevice();
         $manualStoveWithBuffer
-            ->setType('manual_stove_buffer')
+            ->setType(HeatingDevice::TYPE_MANUAL_STOVE_BUFFER)
             ->setName('Kocioł zasypowy z buforem ciepła')
             ->setForLegacySetup(true)
             ->setForAdvice(true)
@@ -161,7 +161,7 @@ class LoadFuelData implements FixtureInterface
 
         $heatPumpAir = new HeatingDevice();
         $heatPumpAir
-            ->setType('heat_pump_air')
+            ->setType(HeatingDevice::TYPE_HEAT_PUMP_AIR)
             ->setName('Pompa ciepła powietrzna')
             ->setForLegacySetup(true)
             ->setForAdvice(true)
@@ -169,7 +169,7 @@ class LoadFuelData implements FixtureInterface
         $manager->persist($heatPumpAir);
 
         $heatPumpGround = new HeatingDevice();
-        $heatPumpGround->setType('heat_pump_ground')
+        $heatPumpGround->setType(HeatingDevice::TYPE_HEAT_PUMP_GROUND)
             ->setName('Pompa ciepła gruntowa')
             ->setForLegacySetup(true)
             ->setForAdvice(true)
@@ -178,7 +178,7 @@ class LoadFuelData implements FixtureInterface
 
         $pelletStove = new HeatingDevice();
         $pelletStove
-            ->setType('pellet_stove')
+            ->setType(HeatingDevice::TYPE_PELLET_STOVE)
             ->setName('Kocioł na pellet')
             ->setForLegacySetup(true)
             ->setForAdvice(true)
@@ -187,7 +187,7 @@ class LoadFuelData implements FixtureInterface
 
         $holzgasStove = new HeatingDevice();
         $holzgasStove
-            ->setType('holzgas_stove')
+            ->setType(HeatingDevice::TYPE_HOLZGAS_STOVE)
             ->setName('Kocioł zgazowujący drewno')
             ->setForLegacySetup(true)
             ->setForAdvice(true)
@@ -196,7 +196,7 @@ class LoadFuelData implements FixtureInterface
 
         $automaticStove = new HeatingDevice();
         $automaticStove
-            ->setType('automatic_stove')
+            ->setType(HeatingDevice::TYPE_AUTOMATIC_STOVE)
             ->setName('Kocioł podajnikowy')
             ->setForLegacySetup(true)
             ->setForAdvice(true)
@@ -205,7 +205,7 @@ class LoadFuelData implements FixtureInterface
 
         $tileStove = new HeatingDevice();
         $tileStove
-            ->setType('tile_stove')
+            ->setType(HeatingDevice::TYPE_MASONRY_STOVE)
             ->setName('Piec ceramiczny (kaflowy, kuchenny)')
             ->setForLegacySetup(true)
             ->setForAdvice(false)
@@ -214,7 +214,7 @@ class LoadFuelData implements FixtureInterface
 
         $fireplace = new HeatingDevice();
         $fireplace
-            ->setType('fireplace')
+            ->setType(HeatingDevice::TYPE_FIREPLACE)
             ->setName('Kominek')
             ->setForLegacySetup(true)
             ->setForAdvice(false)
@@ -223,7 +223,7 @@ class LoadFuelData implements FixtureInterface
 
         $electricStove = new HeatingDevice();
         $electricStove
-            ->setType('electric_stove')
+            ->setType(HeatingDevice::TYPE_ELECTRIC_STOVE)
             ->setName('Elektryczny piecyk / bufor wodny grzany prądem')
             ->setForLegacySetup(true)
             ->setForAdvice(false)
@@ -232,7 +232,7 @@ class LoadFuelData implements FixtureInterface
 
         $condensing = new HeatingDevice();
         $condensing
-            ->setType('gas_stove_condensing')
+            ->setType(HeatingDevice::TYPE_GAS_STOVE_CONDENSING)
             ->setName('Kocioł gazowy kondensacyjny')
             ->setForLegacySetup(true)
             ->setForAdvice(true)
@@ -241,7 +241,7 @@ class LoadFuelData implements FixtureInterface
 
         $gasStove = new HeatingDevice();
         $gasStove
-            ->setType('gas_stove')
+            ->setType(HeatingDevice::TYPE_GAS_STOVE)
             ->setName('Kocioł gazowy niekondensacyjny')
             ->setForLegacySetup(true)
             ->setForAdvice(true)
@@ -250,7 +250,7 @@ class LoadFuelData implements FixtureInterface
 
         $oldGasStove = new HeatingDevice();
         $oldGasStove
-            ->setType('gas_stove_old')
+            ->setType(HeatingDevice::TYPE_GAS_STOVE_OLD)
             ->setName('Kocioł gazowy niekondensacyjny starego typu')
             ->setForLegacySetup(true)
             ->setForAdvice(false)

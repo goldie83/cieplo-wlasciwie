@@ -62,6 +62,20 @@ class Calculation
     protected $stove_type;
 
     /**
+     * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
+     *
+     * @deprecated
+     */
+    protected $fuel_consumption;
+
+    /**
+     * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
+     *
+     * @deprecated
+     */
+    protected $fuel_cost;
+
+    /**
      * @ORM\ManyToOne(targetEntity="HeatingDevice", inversedBy="calculations", cascade={"persist"})
      * @ORM\JoinColumn(name="heating_device_id", referencedColumnName="id", nullable=true)
      */
@@ -646,5 +660,46 @@ class Calculation
     public function getCustomData()
     {
         return $this->custom_data;
+    }
+
+    /**
+     * Set fuel_consumption
+     *
+     * @param string $fuelConsumption
+     * @return Calculation
+     */
+    public function setFuelConsumption($fuelConsumption)
+    {
+        $this->fuel_consumption = $fuelConsumption;
+
+        return $this;
+    }
+
+    /**
+     * Get fuel_consumption
+     *
+     * @return string 
+     */
+    public function getFuelConsumption()
+    {
+        return $this->fuel_consumption;
+    }
+
+    /**
+     * Set fuel_cost
+     *
+     * @param string $fuelCost
+     * @return Calculation
+     */
+    public function setFuelCost($fuelCost)
+    {
+        $this->fuel_cost = $fuelCost;
+
+        return $this;
+    }
+
+    public function getOldFuelCost()
+    {
+        return $this->fuel_cost;
     }
 }

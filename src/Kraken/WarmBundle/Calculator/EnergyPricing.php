@@ -141,7 +141,7 @@ class EnergyPricing
                 $incurredCosts = ['gas_stove', 'gas_network_link'];
             }
 
-            if ($actualDevice->getType() == 'tile_stove') {
+            if ($actualDevice->getType() == HeatingDevice::TYPE_MASONRY_STOVE) {
                 $incurredCosts = ['chimney'];
             }
 

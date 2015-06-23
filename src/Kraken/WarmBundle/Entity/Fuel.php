@@ -10,6 +10,17 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Fuel
 {
+    const TYPE_WOOD = 'wood';
+    const TYPE_NATURAL_GAS = 'natural_gas';
+    const TYPE_PROPANE = 'propane';
+    const TYPE_COKE = 'coke',
+    const TYPE_SAND_COAL = 'sand_coal',
+    const TYPE_PELLET = 'pellet',
+    const TYPE_ELECTRICITY = 'electricity',
+    const TYPE_BROWN_COAL = 'brown_coal',
+    const TYPE_COAL = 'bituminous_coal';
+    const TYPE_ECO_COAL = 'eco_coal';
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")

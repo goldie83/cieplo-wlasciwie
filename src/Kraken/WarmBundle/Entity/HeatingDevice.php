@@ -10,6 +10,21 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class HeatingDevice
 {
+    const TYPE_MANUAL_STOVE = 'manual_stove';
+    const TYPE_AUTOMATIC_STOVE = 'automatic_stove';
+    const TYPE_FIREPLACE = 'fireplace';
+    const TYPE_MASONRY_STOVE = 'masonry_stove';
+    const TYPE_HEAT_BUFFER = 'heat_buffer';
+    const TYPE_MANUAL_STOVE_BUFFER = 'manual_stove_buffer';
+    const TYPE_HEAT_PUMP_AIR = 'heat_pump_air';
+    const TYPE_HEAT_PUMP_GROUND = 'heat_pump_ground';
+    const TYPE_PELLET_STOVE = 'pellet_stove';
+    const TYPE_HOLZGAS_STOVE = 'holzgas_stove';
+    const TYPE_ELECTRIC_STOVE = 'electric_stove';
+    const TYPE_GAS_STOVE_OLD = 'gas_stove_old';
+    const TYPE_GAS_STOVE_CONDENSING = 'gas_stove_condensing';
+    const TYPE_GAS_STOVE = 'gas_stove';
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")

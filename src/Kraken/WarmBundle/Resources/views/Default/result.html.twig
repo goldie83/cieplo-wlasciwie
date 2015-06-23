@@ -230,7 +230,7 @@
             <ul>
                 <li><a href="http://czysteogrzewanie.pl/warsztat/bufor-ciepla/" target="_blank"><strong>zainstaluj bufor ciepła</strong></a> - dzięki niemu kocioł zasypowy zbliża się wygodą obsługi i efektywnością do kotłów na ekogroszek, a koszty ogrzewania są niższe dzięki tańszemu paliwu i lepszej efektywności pracy. Wtedy moc kotła może być większa, bo dobiera się ją do pojemności bufora, a nie do budynku.</li>
                 <li><a href="http://czysteogrzewanie.pl/2014/05/nie-pakuj-smieciucha-do-nowego-domu" target="_blank">rozważ inne rodzaje ogrzewania</a>, np. kocioł na ekogroszek, pellet, gaz ziemny czy pompę ciepła. W nowych malutkich domach różnice w rachunkach między tymi źródłami ciepła to 200-300zł.</li>
-                <li>w ostateczności bierz kocioł zasypowy o mocy ok. 10-12kW, ale jeśli zaprzęgniesz go do instalacji z przewagą podłogówki, to szybko doświadczysz wszystkich problemów, których unikniesz montując od razu <a href="http://czysteogrzewanie.pl/warsztat/bufor-ciepla/" target="_blank">bufor ciepła</a>.</li>
+                <li>w ostateczności bierz kocioł zasypowy o mocy ok. 10-12kW, ale jeśli zaprzęgniesz go do instalacji z przewagą podłogówki, to szybko doświadczysz problemów (ot choćby hurtowej produkcji smoły), których uniknąłbyś montując od razu <a href="http://czysteogrzewanie.pl/warsztat/bufor-ciepla/" target="_blank">bufor ciepła</a>.</li>
             </ul>
           </div>
       {% endif %}
@@ -249,14 +249,14 @@
           <p ng-show="variant.setup_cost > 0">Koszt instalacji: <strong>~{[{ variant.setup_cost|currency }]}</strong> <small>
           (w tym: <span ng-repeat="item in variant.setup_costs">{[{ item[0] }]}: {[{ item[1]|currency }]}<span ng-show="!$last">, </span></span>)</small></p>
           <p ng-show="variant.setup_cost == 0">Koszt instalacji: żaden (nic nie musisz zmieniać)</p>
-          <p>Roczna oszczędność: <strong>{[{ variant.totalSavings|currency }]}</strong> <small>tj. {[{ variant.savedMoney|currency }]} + {[{ variant.savedTime|number }]} godzin pracy ({[{ variant.savedTimeCost|currency }]})</small></p>
+          <p>Roczna oszczędność: <strong>{[{ variant.totalSavings|currency }]}</strong> <span ng-show="variant.savedTime > 0"><small>tj. {[{ variant.savedMoney|currency }]} + {[{ variant.savedTime|number }]} godzin pracy ({[{ variant.savedTimeCost|currency }]})</small></span></p>
           <p ng-show="variant.setup_cost > 0">Czas zwrotu inwestycji: <strong>{[{ formatRoiPeriod(variant.roi) }]}</strong></p>
         </div>
       </div>
 
       <div class="alert alert-success" ng-show="(heatingVariants | filter: greaterThan('savedMoney', 0)).length == 0">
           <h4>Jest dobrze</h4>
-          Wygląda na to, że przy obecnych kosztach ogrzewania domu nie ma opłacalnego alternatywnego sposobu grzania.
+          Wygląda na to, że przy obecnych kosztach ogrzewania twojego domu żadna zmiana nie będzie opłacalna.
       </div>
 
     {% else %}
