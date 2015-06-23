@@ -5,6 +5,7 @@ namespace Kraken\WarmBundle\Command;
 use Kraken\WarmBundle\Entity\Calculation;
 use Kraken\WarmBundle\Entity\Fuel;
 use Kraken\WarmBundle\Entity\FuelConsumption;
+use Kraken\WarmBundle\Entity\HeatingDevice;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
