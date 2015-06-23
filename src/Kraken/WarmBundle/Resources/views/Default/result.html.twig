@@ -268,7 +268,7 @@
       <div class="panel panel-warning" ng-show="referenceVariant">
         <div class="panel-heading"><strong>{[{ referenceVariant.label }]}</strong>&nbsp;<small>{[{ referenceVariant.version }]}</small></div>
         <div class="panel-body">
-          <p>Koszt instalacji: {[{ referenceVariant.setup_cost|currency }]} <small>
+          <p ng-show="referenceVariant.setup_cost > 0">Koszt instalacji: {[{ referenceVariant.setup_cost|currency }]} <small>
           (w tym: <span ng-repeat="item in referenceVariant.setup_costs">{[{ item[0] }]}: {[{ item[1]|currency }]}<span ng-show="!$last">, </span></span>)</small></p>
           <p>Koszt ogrzewania: <strong>{[{ referenceVariant.cost|currency }]}</strong> + {[{ referenceVariant.maintenance_time|number }]} godzin pracy</p>
         </div>
