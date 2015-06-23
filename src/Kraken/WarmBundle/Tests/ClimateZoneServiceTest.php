@@ -20,8 +20,8 @@ class ClimateZoneServiceTest extends \PHPUnit_Framework_TestCase
         $calc->setIndoorTemperature(20);
         $calc->setLatitude(51.11);
         $calc->setLongitude(17.01);
-        $instance = new InstanceService();
-        $instance->setCalculation($calc);
+        $instance = new InstanceService($this->mockSession(), $this->mockEM());
+        $instance->setCustomCalculation($calc);
 
         $c = new ClimateZoneService($instance);
 
@@ -96,6 +96,20 @@ class ClimateZoneServiceTest extends \PHPUnit_Framework_TestCase
     protected function mockBuilding()
     {
         $mock = Mockery::mock('Kraken\WarmBundle\Calculator\BuildingInterface');
+
+        return $mock;
+    }
+
+    protected function mockSession()
+    {
+        $mock = Mockery::mock('Symfony\Component\HttpFoundation\Session\SessionInterface');
+
+        return $mock;
+    }
+
+    protected function mockEM()
+    {
+        $mock = Mockery::mock('Doctrine\ORM\EntityManager');
 
         return $mock;
     }

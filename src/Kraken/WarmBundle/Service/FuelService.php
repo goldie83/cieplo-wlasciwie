@@ -9,7 +9,9 @@ class FuelService
 {
     public function getFuelEnergy(Fuel $fuel, $amount)
     {
-        return ($fuel->getEnergy() * 0.277) * $this->consumedAmountToBaseUnits($fuel, $amount);
+        // amount comes in megajoules, result goes in kWh
+
+        return ceil(($fuel->getEnergy() * 0.277) * $this->consumedAmountToBaseUnits($fuel, $amount));
     }
 
     public function consumedAmountToBaseUnits(Fuel $fuel, $amount)

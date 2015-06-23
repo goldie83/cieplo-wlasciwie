@@ -109,31 +109,31 @@ class EnergyPricing
             $incurredCosts = [];
 
             // subtract costs already incurred
-            if ($actualDevice->getType() == 'manual_stove') {
+            if ($actualDevice->getType() == HeatingDevice::TYPE_MANUAL_STOVE) {
                 $incurredCosts = ['chimney', 'boiler_room', 'manual_stove'];
             }
 
-            if ($actualDevice->getType() == 'manual_stove_buffer') {
+            if ($actualDevice->getType() == HeatingDevice::TYPE_MANUAL_STOVE_BUFFER) {
                 $incurredCosts = ['chimney', 'boiler_room', 'manual_stove', 'heat_buffer'];
             }
 
-            if ($actualDevice->getType() == 'heat_pump_air') {
+            if ($actualDevice->getType() == HeatingDevice::TYPE_HEAT_PUMP_AIR) {
                 $incurredCosts = ['air_heat_pump'];
             }
 
-            if ($actualDevice->getType() == 'heat_pump_ground') {
+            if ($actualDevice->getType() == HeatingDevice::TYPE_HEAT_PUMP_GROUND) {
                 $incurredCosts = ['ground_heat_pump'];
             }
 
-            if ($actualDevice->getType() == 'pellet_stove') {
+            if ($actualDevice->getType() == HeatingDevice::TYPE_PELLET_STOVE) {
                 $incurredCosts = ['chimney', 'boiler_room', 'pellet_stove'];
             }
 
-            if ($actualDevice->getType() == 'holzgas_stove') {
+            if ($actualDevice->getType() == HeatingDevice::TYPE_HOLZGAS_STOVE) {
                 $incurredCosts = ['chimney', 'boiler_room', 'holzgas_stove', 'heat_buffer'];
             }
 
-            if ($actualDevice->getType() == 'automatic_stove') {
+            if ($actualDevice->getType() == HeatingDevice::TYPE_AUTOMATIC_STOVE) {
                 $incurredCosts = ['chimney', 'boiler_room', 'automatic_stove'];
             }
 

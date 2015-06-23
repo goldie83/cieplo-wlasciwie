@@ -39,8 +39,8 @@ class BuildingTest extends \PHPUnit_Framework_TestCase
         $calc->setHouse($house);
         $calc->setIndoorTemperature(20);
 
-        $instance = new InstanceService();
-        $instance->setCalculation($calc);
+        $instance = new InstanceService($this->mockSession(), $this->mockEM());
+        $instance->setCustomCalculation($calc);
 
         return $instance;
     }
@@ -334,6 +334,20 @@ class BuildingTest extends \PHPUnit_Framework_TestCase
     protected function mockWallFactory()
     {
         $mock = Mockery::mock('Kraken\WarmBundle\Service\WallFactory');
+
+        return $mock;
+    }
+
+    protected function mockSession()
+    {
+        $mock = Mockery::mock('Symfony\Component\HttpFoundation\Session\SessionInterface');
+
+        return $mock;
+    }
+
+    protected function mockEM()
+    {
+        $mock = Mockery::mock('Doctrine\ORM\EntityManager');
 
         return $mock;
     }
