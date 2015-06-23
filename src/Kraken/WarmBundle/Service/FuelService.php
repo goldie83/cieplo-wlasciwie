@@ -28,40 +28,4 @@ class FuelService
 
         return $amount;
     }
-
-    public function formatFuelAmount($amount, Calculation $calc)
-    {
-        $numbers = [
-            'wood' => '%.1f',
-            'gas_e' => '%d',
-            'gas_ls' => '%d',
-            'gas_lw' => '%d',
-            'coke' => '%.1f',
-            'sand_coal' => '%.1f',
-            'pellet' => '%.1f',
-            'electricity' => '%d',
-            'brown_coal' => '%.1f',
-            'coal' => '%.1f',
-        ];
-
-        $text = [
-            'wood' => '%smp drewna',
-            'gas_e' => '%sm<sup>3</sup> gazu ziemnego',
-            'gas_ls' => '%sm<sup>3</sup> gazu ziemnego',
-            'gas_lw' => '%sm<sup>3</sup> gazu ziemnego',
-            'coke' => '%st koksu',
-            'sand_coal' => '%st miału',
-            'pellet' => '%st pelletu',
-            'electricity' => '%skWh prądu',
-            'brown_coal' => '%st węgla brunatnego',
-            'coal' => '%st węgla kamiennego',
-        ];
-
-        $number = sprintf($numbers[$calc->getFuelType()], $amount);
-        $number = str_replace('.', ',', $number);
-        $number = str_replace(',0', '', $number);
-        $text = $text[$calc->getFuelType()];
-
-        return sprintf($text, $number);
-    }
 }

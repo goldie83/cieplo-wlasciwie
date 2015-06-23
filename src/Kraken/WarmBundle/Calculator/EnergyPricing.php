@@ -4,6 +4,7 @@ namespace Kraken\WarmBundle\Calculator;
 
 use Doctrine\ORM\EntityManager;
 use Kraken\WarmBundle\Entity\Calculation;
+use Kraken\WarmBundle\Entity\HeatingDevice;
 use Kraken\WarmBundle\Entity\HeatingVariant;
 use Kraken\WarmBundle\Service\InstanceService;
 
@@ -60,7 +61,7 @@ class EnergyPricing
         return $comparison;
     }
 
-    protected function collectSetupCosts(HeatingVariant $variant)
+    public function collectSetupCosts(HeatingVariant $variant)
     {
         $costs = [
             'chimney' => ['Komin', 10000],
