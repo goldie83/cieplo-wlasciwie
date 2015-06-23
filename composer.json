@@ -44,7 +44,8 @@
         "friendsofsymfony/jsrouting-bundle": "dev-master",
         "doctrine/migrations": "dev-master",
         "doctrine/doctrine-migrations-bundle": "dev-master",
-        "mopa/bootstrap-bundle": "dev-master"
+        "mopa/bootstrap-bundle": "dev-master",
+        "raven/raven": "0.12.*"
     },
     "require-dev": {
         "behat/behat": "3.0.*@dev",

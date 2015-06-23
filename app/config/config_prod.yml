@@ -27,6 +27,10 @@ monolog:
             type:  stream
             path:  %kernel.logs_dir%/%kernel.environment%.log
             level: debug
+        sentry:
+            type:  raven
+            dsn:   'http://2ed638979ff84a58a28e7585649eeaac:1b4875d9c82e48fb920d189ff0d2f17a@sentry.treter.pl/3'
+            level: notice
         swift:
             type:       swift_mailer
             from_email: juzefwt@gmail.com
