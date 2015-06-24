@@ -369,6 +369,7 @@ class CalculatorController extends Controller
         $building = $this->get('kraken_warm.building');
         $heatingSeason = $this->get('kraken_warm.heating_season');
         $pricing = $this->get('kraken_warm.energy_pricing');
+        $fuelService = $this->get('kraken_warm.fuel');
 
         if ($calc->getHeatedArea() == false) {
             $nearestCity = $this->get('kraken_warm.city_locator')->findNearestCity();
@@ -386,6 +387,7 @@ class CalculatorController extends Controller
             'building' => $building,
             'pricing' => $pricing,
             'heatingSeason' => $heatingSeason,
+            'fuelService' => $fuelService,
             'punch' => $this->get('kraken_warm.punchline'),
             'classifier' => $this->get('kraken_warm.building_classifier'),
             'upgrade' => $this->get('kraken_warm.upgrade'),

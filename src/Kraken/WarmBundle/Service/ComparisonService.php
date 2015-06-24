@@ -28,7 +28,7 @@ class ComparisonService
             ->where('c.city = ?0')
             ->andWhere('c.heated_area BETWEEN ?1 AND ?2')
             ->andWhere('c.heating_power BETWEEN ?3 AND ?4')
-            ->andWhere('c.stove_type = ?5')
+            ->andWhere('c.heating_device = ?5')
             ->andWhere('c.id <> ?6')
             ->setParameters(array(
                 0 => $calc->getCity(),
@@ -36,7 +36,7 @@ class ComparisonService
                 2 => $calc->getHeatedArea() * 1.2,
                 3 => $calc->getHeatingPower() * 0.8,
                 4 => $calc->getHeatingPower() * 1.2,
-                5 => $calc->getStoveType(),
+                5 => $calc->getHeatingDevice(),
                 6 => $calc->getId(),
             ))
             ->getQuery()

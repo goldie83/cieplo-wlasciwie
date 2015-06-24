@@ -5,6 +5,7 @@ namespace Kraken\WarmBundle\Tests\Service;
 use Kraken\WarmBundle\Service\FuelService;
 use Kraken\WarmBundle\Entity\Calculation;
 use Kraken\WarmBundle\Entity\Fuel;
+use Kraken\WarmBundle\Entity\FuelConsumption;
 
 class FuelServiceTest extends \PHPUnit_Framework_TestCase
 {
@@ -48,33 +49,94 @@ class FuelServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(3, $fs->getFuelEnergy($f9, 3));
     }
 
-    public function testFormatFuelAmount()
+    public function testFormatFuelConsumption()
     {
         $fs = new FuelService();
         $c = new Calculation();
+        $f1 = new Fuel;
+        $f1->setType('sand_coal');
+        $fc = new FuelConsumption;
+        $fc->setFuel($f1);
+        $fc->setConsumption(2);
+        $c->addFuelConsumption($fc);
+        $this->assertEquals('2t miału', $fs->formatFuelConsumption($c));
 
-        $c->setFuelType('sand_coal');
-        $this->assertEquals('2t miału', $fs->formatFuelAmount(2, $c));
+        $fs = new FuelService();
+        $c = new Calculation();
+        $f1 = new Fuel;
+        $f1->setType(Fuel::TYPE_COAL);
+        $fc = new FuelConsumption;
+        $fc->setFuel($f1);
+        $fc->setConsumption(2.2);
+        $c->addFuelConsumption($fc);
+        $this->assertEquals('2,2t węgla kamiennego', $fs->formatFuelConsumption($c));
 
-        $c->setFuelType('coal');
-        $this->assertEquals('2,2t węgla kamiennego', $fs->formatFuelAmount(2.2, $c));
+        $fs = new FuelService();
+        $c = new Calculation();
+        $f1 = new Fuel;
+        $f1->setType('wood');
+        $fc = new FuelConsumption;
+        $fc->setFuel($f1);
+        $fc->setConsumption(1.5);
+        $c->addFuelConsumption($fc);
+        $this->assertEquals('1,5mp drewna', $fs->formatFuelConsumption($c));
 
-        $c->setFuelType('wood');
-        $this->assertEquals('1,5mp drewna', $fs->formatFuelAmount(1.5, $c));
+        $fs = new FuelService();
+        $c = new Calculation();
+        $f1 = new Fuel;
+        $f1->setType('natural_gas');
+        $fc = new FuelConsumption;
+        $fc->setFuel($f1);
+        $fc->setConsumption(20);
+        $c->addFuelConsumption($fc);
+        $this->assertEquals('20kWh gazu ziemnego', $fs->formatFuelConsumption($c));
 
-        $c->setFuelType('gas_e');
-        $this->assertEquals('20m<sup>3</sup> gazu ziemnego', $fs->formatFuelAmount(20, $c));
+        $fs = new FuelService();
+        $c = new Calculation();
+        $f1 = new Fuel;
+        $f1->setType('coke');
+        $fc = new FuelConsumption;
+        $fc->setFuel($f1);
+        $fc->setConsumption(3.3);
+        $c->addFuelConsumption($fc);
+        $this->assertEquals('3,3t koksu', $fs->formatFuelConsumption($c));
 
-        $c->setFuelType('coke');
-        $this->assertEquals('3,3t koksu', $fs->formatFuelAmount(3.3, $c));
+        $fs = new FuelService();
+        $c = new Calculation();
+        $f1 = new Fuel;
+        $f1->setType('pellet');
+        $fc = new FuelConsumption;
+        $fc->setFuel($f1);
+        $fc->setConsumption(4);
+        $c->addFuelConsumption($fc);
+        $this->assertEquals('4t pelletu', $fs->formatFuelConsumption($c));
 
-        $c->setFuelType('pellet');
-        $this->assertEquals('4t pelletu', $fs->formatFuelAmount(4, $c));
+        $fs = new FuelService();
+        $c = new Calculation();
+        $f1 = new Fuel;
+        $f1->setType('electricity');
+        $fc = new FuelConsumption;
+        $fc->setFuel($f1);
+        $fc->setConsumption(1567);
+        $c->addFuelConsumption($fc);
+        $this->assertEquals('1567kWh prądu', $fs->formatFuelConsumption($c));
 
-        $c->setFuelType('electricity');
-        $this->assertEquals('1567kWh prądu', $fs->formatFuelAmount(1567, $c));
+        $fs = new FuelService();
+        $c = new Calculation();
+        $f1 = new Fuel;
+        $f1->setType('brown_coal');
+        $fc = new FuelConsumption;
+        $fc->setFuel($f1);
+        $fc->setConsumption(7.5);
+        $c->addFuelConsumption($fc);
 
-        $c->setFuelType('brown_coal');
-        $this->assertEquals('7,5t węgla brunatnego', $fs->formatFuelAmount(7.5, $c));
+        $f2 = new Fuel;
+        $f2->setType('coke');
+        $fc2 = new FuelConsumption;
+        $fc2->setFuel($f2);
+        $fc2->setConsumption(1);
+        $c->addFuelConsumption($fc2);
+
+        $this->assertEquals('7,5t węgla brunatnego, 1t koksu', $fs->formatFuelConsumption($c));
     }
 }

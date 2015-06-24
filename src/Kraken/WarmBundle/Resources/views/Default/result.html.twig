@@ -61,7 +61,6 @@
       {% set lastYearAverageTemperature = heatingSeason.getLastYearAverageTemperature(calc) %}
       <p>Przeciętny sezon grzewczy trwa u ciebie ok. <strong>{{ heatingSeason.getSeasonLength(calc) }} dni</strong>, ze średnią temperaturą <strong>{{ averageTemperature|number_format(2, ',', ' ') }}&deg;C</strong>.</p>
       <p>Poprzedni sezon grzewczy trwał ok. <strong>{{ heatingSeason.getLastSeasonLength(calc) }} dni</strong>, ze średnią temperaturą <strong>{{ lastYearAverageTemperature|number_format(2, ',', ' ') }}&deg;C</strong>.</p>
-      <div id="climate_chart"></div>
     </div>
   </div>
 
@@ -77,7 +76,7 @@
               <h4>{{ calc.heatingDevice.name }} {% if calc.stovePower %}o mocy {{ label_info(calc.stovePower|number_format(0, ',', ' ') ~ 'kW') }}{% endif %}</h4>
             {% endif %}
             {% if calc.fuelConsumptionProvided %}
-              <dt>{{ calc.fuelLabel }}</dt>
+              <dt>{{ fuelService.formatFuelConsumption(calc) }}</dt>
               <dd>zużycie paliwa w sezonie grzewczym</dd>
             {% endif %}
             {% if calc.fuelCost %}

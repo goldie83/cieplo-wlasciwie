@@ -48,34 +48,6 @@ class Calculation
     protected $indoor_temperature;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
-     *
-     * @deprecated
-     */
-    protected $fuel_type;
-
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     *
-     * @deprecated
-     */
-    protected $stove_type;
-
-    /**
-     * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
-     *
-     * @deprecated
-     */
-    protected $fuel_consumption;
-
-    /**
-     * @ORM\Column(type="decimal", precision=10, scale=2, nullable=true)
-     *
-     * @deprecated
-     */
-    protected $fuel_cost;
-
-    /**
      * @ORM\ManyToOne(targetEntity="HeatingDevice", inversedBy="calculations", cascade={"persist"})
      * @ORM\JoinColumn(name="heating_device_id", referencedColumnName="id", nullable=true)
      */
@@ -150,18 +122,6 @@ class Calculation
         return count($this->getFuelConsumptions()) > 0;
     }
 
-    public function getFuelLabel()
-    {
-        $labels = [];
-
-        foreach ($this->getFuelConsumptions() as $fc) {
-            $amount = round($fc->getConsumption(), 1);
-            $labels[] = $fc->getFuel()->getName().' '.$amount.$fc->getFuel()->getTradeUnit();
-        }
-
-        return implode(', ', $labels);
-    }
-
     public function getFuelCost()
     {
         $cost = 0;
@@ -171,6 +131,18 @@ class Calculation
         }
 
         return $cost;
+    }
+
+    public function getStoveType()
+    {
+        return $this->getHeatingDevice() ? $this->getHeatingDevice()->getType() : '';
+    }
+
+    public function getFuelType()
+    {
+        $consumption = $this->getFuelConsumptions();
+
+        return count($consumption) > 0 ? $consumption->get(0)->getFuel()->getType() : '';
     }
 
     public function getLabel()
@@ -374,47 +346,6 @@ class Calculation
     }
 
     /**
-     * Set fuel_type.
-     *
-     * @param string $fuelType
-     *
-     * @return Calculation
-     */
-    public function setFuelType($fuelType)
-    {
-        $this->fuel_type = $fuelType;
-
-        return $this;
-    }
-
-    /**
-     * Get fuel_type.
-     *
-     * @return string
-     */
-    public function getFuelType()
-    {
-        return $this->fuel_type;
-    }
-
-    public function setStoveType($stoveType)
-    {
-        $this->stove_type = $stoveType;
-
-        return $this;
-    }
-
-    /**
-     * Get stove_type.
-     *
-     * @return string
-     */
-    public function getStoveType()
-    {
-        return $this->stove_type;
-    }
-
-    /**
      * Set house.
      *
      * @param \Kraken\WarmBundle\Entity\House $house
@@ -474,7 +405,14 @@ class Calculation
 
     public function isUsingSolidFuel()
     {
-        return !stristr($this->getFuelType(), 'electricity') && !stristr($this->getFuelType(), 'gas');
+        foreach ($this->fuel_consumptions as $fc) {
+            $type = $fc->getFuel()->getType();
+            if (stristr($type, 'coke') || stristr($type, 'coal') || stristr($type, 'wood') || stristr($type, 'pellet')) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -550,30 +488,6 @@ class Calculation
     }
 
     /**
-     * Set fuel.
-     *
-     * @param \Kraken\WarmBundle\Entity\Fuel $fuel
-     *
-     * @return Calculation
-     */
-    public function setFuel(\Kraken\WarmBundle\Entity\Fuel $fuel = null)
-    {
-        $this->fuel = $fuel;
-
-        return $this;
-    }
-
-    /**
-     * Get fuel.
-     *
-     * @return \Kraken\WarmBundle\Entity\Fuel
-     */
-    public function getFuel()
-    {
-        return $this->fuel;
-    }
-
-    /**
      * Set heating_device.
      *
      * @param \Kraken\WarmBundle\Entity\HeatingDevice $heatingDevice
@@ -596,9 +510,7 @@ class Calculation
     {
         return $this->heating_device;
     }
-    /**
-     * Constructor.
-     */
+
     public function __construct()
     {
         $this->fuel_consumptions = new \Doctrine\Common\Collections\ArrayCollection();
@@ -660,46 +572,5 @@ class Calculation
     public function getCustomData()
     {
         return $this->custom_data;
-    }
-
-    /**
-     * Set fuel_consumption
-     *
-     * @param string $fuelConsumption
-     * @return Calculation
-     */
-    public function setFuelConsumption($fuelConsumption)
-    {
-        $this->fuel_consumption = $fuelConsumption;
-
-        return $this;
-    }
-
-    /**
-     * Get fuel_consumption
-     *
-     * @return string 
-     */
-    public function getFuelConsumption()
-    {
-        return $this->fuel_consumption;
-    }
-
-    /**
-     * Set fuel_cost
-     *
-     * @param string $fuelCost
-     * @return Calculation
-     */
-    public function setFuelCost($fuelCost)
-    {
-        $this->fuel_cost = $fuelCost;
-
-        return $this;
-    }
-
-    public function getOldFuelCost()
-    {
-        return $this->fuel_cost;
     }
 }

@@ -20,12 +20,6 @@ details_breakdown:
     options:
         expose: true
 
-details_climate:
-    path:  /details/climate
-    defaults: { _controller: KrakenWarmBundle:Calculator:climate }
-    options:
-        expose: true
-
 details_fuels:
     path:  /details/fuels/{id}
     defaults: { _controller: KrakenWarmBundle:Calculator:fuels }
