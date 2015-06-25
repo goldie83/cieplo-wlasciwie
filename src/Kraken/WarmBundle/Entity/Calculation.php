@@ -119,13 +119,13 @@ class Calculation
 
     public function isFuelConsumptionProvided()
     {
-        $totalEnergy = 0;
-
-        foreach ($this->instance->get()->getFuelConsumptions() as $fc) {
-            $totalEnergy += $this->fuel_service->getFuelEnergy($fc->getFuel(), $fc->getConsumption());
+        foreach ($this->getFuelConsumptions() as $fc) {
+            if ($fc->getConsumption() > 0) {
+                return true;
+            }
         }
 
-        return $totalEnergy > 0;
+        return false;
     }
 
     public function getFuelCost()
