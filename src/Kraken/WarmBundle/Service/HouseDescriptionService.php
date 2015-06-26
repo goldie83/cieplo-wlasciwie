@@ -34,7 +34,7 @@ class HouseDescriptionService
         'other' => 'Inne',
     ];
 
-    protected $roofs = [
+    protected $roofTypes = [
         'flat' => 'dach płaski',
         'oblique' => 'dach dwuspadowy',
         'steep' => 'dach dwuspadowy stromy',
