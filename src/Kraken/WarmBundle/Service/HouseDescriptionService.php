@@ -34,6 +34,12 @@ class HouseDescriptionService
         'other' => 'Inne',
     ];
 
+    protected $roofs = [
+        'flat' => 'dach płaski',
+        'oblique' => 'dach dwuspadowy',
+        'steep' => 'dach dwuspadowy stromy',
+    ];
+
     protected $ventilationTypes = [
         'natural' => 'Naturalna lub grawitacyjna',
         'mechanical' => 'Mechaniczna',
@@ -106,68 +112,40 @@ class HouseDescriptionService
     {
         $house = $this->instance->get()->getHouse();
         $wall = $house->getWalls()->first();
+        $wallDetails = [];
         $wallSize = 0;
 
+        $includeLayer = function ($layer) use (&$wallDetails, &$wallSize) {
+            if ($layer != null) {
+                $wallDetails[] = sprintf('%s %scm', $layer->getMaterial()->getName(), $layer->getSize());
+                $wallSize += $layer->getSize();
+            }
+        };
+
         if ($house->getConstructionType() == 'canadian') {
-            $wallDetails = array(
-                'szkielet drewniany (dom kanadyjski)',
-            );
+            $wallDetails[] = 'szkielet drewniany (dom kanadyjski)';
         } else {
-            $wallDetails = array(
-                $wall->getConstructionLayer()->getMaterial()->getName().' '.$wall->getConstructionLayer()->getSize().'cm',
-            );
-            $wallSize += $wall->getConstructionLayer()->getSize();
+            $includeLayer($wall->getConstructionLayer());
         }
 
-        if (($isolation = $wall->getIsolationLayer()) != null) {
-            $wallDetails[] = $isolation->getMaterial()->getName().' '.$isolation->getSize().'cm';
-            $wallSize += $isolation->getSize();
-        }
+        $includeLayer($wall->getIsolationLayer());
+        $includeLayer($wall->getOutsideLayer());
+        $includeLayer($wall->getExtraIsolationLayer());
 
-        if ($wall->getOutsideLayer()) {
-            $wallDetails[] = $wall->getOutsideLayer()->getMaterial()->getName().' '.$wall->getOutsideLayer()->getSize().'cm';
-            $wallSize += $wall->getOutsideLayer()->getSize();
-        }
-
-        if ($wall->getExtraIsolationLayer()) {
-            $wallDetails[] = $wall->getExtraIsolationLayer()->getMaterial()->getName().' '.$wall->getExtraIsolationLayer()->getSize().'cm';
-            $wallSize += $wall->getExtraIsolationLayer()->getSize();
-        }
-
-        return $wallSize.'cm, w tym '.implode(' + ', $wallDetails);
+        return sprintf('%scm, w tym %s', $wallSize, implode(' + ', $wallDetails));
     }
 
     public function getRoofDetails()
     {
         $house = $this->instance->get()->getHouse();
-        $roof = $house->getRoofType();
-        $roofs = array(
-            'flat' => 'dach płaski',
-            'oblique' => 'dach dwuspadowy',
-            'steep' => 'dach dwuspadowy stromy',
-        );
-
-        if ($house->getRoofType() != 'flat') {
-            $atticInUse = $this->building->isAtticHeated()
-                ? 'poddasze ogrzewane'
-                : 'poddasze nieogrzewane';
-        }
-
         $roofType = $house->getRoofType();
-        $roof = $roofType == 'flat' ? $roofs[$roofType] : $roofs[$roofType];
-        $roofInformation = [];
-        $roofInformation[] = $roof;
 
-        if ($house->getRoofIsolationLayer()) {
-            $roofIsolation = sprintf('izolacja: %s %scm', $house->getRoofIsolationLayer()->getMaterial()->getName(), $house->getRoofIsolationLayer()->getSize());
-            $roofInformation[] = $roofIsolation;
-        } elseif ($house->getHighestCeilingIsolationLayer()) {
-            $roofIsolation = sprintf('izolacja: %s %scm', $house->getHighestCeilingIsolationLayer()->getMaterial()->getName(), $house->getHighestCeilingIsolationLayer()->getSize());
-            $roofInformation[] = $roofIsolation;
-        }
+        $roofInformation = [$this->roofTypes[$roofType]];
 
-        if (isset($atticInUse)) {
-            $roofInformation[] = $atticInUse;
+        if (($isolation = $house->getRoofIsolationLayer()) != null) {
+            $roofInformation[] = sprintf('izolacja: %s %scm', $isolation->getMaterial()->getName(), $isolation->getSize());
+        } elseif (($isolation = $house->getHighestCeilingIsolationLayer()) != null) {
+            $roofInformation[] = sprintf('izolacja: %s %scm', $isolation->getMaterial()->getName(), $isolation->getSize());
         }
 
         return implode(', ', $roofInformation);
@@ -196,8 +174,6 @@ class HouseDescriptionService
                 return 'strop nad nieogrzewanym parterem bez izolacji';
             }
         }
-
-        return 'brak izolacji';
     }
 
     public function getDoorsWindowsDetails()
