@@ -23,6 +23,10 @@ services:
         class: Kraken\WarmBundle\Calculator\ClimateZoneService
         arguments: [@kraken_warm.instance]
 
+    kraken_warm.house_description:
+        class: Kraken\WarmBundle\Service\HouseDescriptionService
+        arguments: [@kraken_warm.instance, @kraken_warm.building]
+
     kraken_warm.energy_calculator:
         class: Kraken\WarmBundle\Calculator\EnergyCalculator
         arguments: [@kraken_warm.instance, @kraken_warm.heating_season, @kraken_warm.fuel, @kraken_warm.building, @kraken_warm.climate]

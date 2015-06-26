@@ -21,5 +21,4 @@ interface BuildingInterface
      */
     public function getHouse();
     public function getEnergyLossBreakdown();
-    public function getHouseDescription();
 }

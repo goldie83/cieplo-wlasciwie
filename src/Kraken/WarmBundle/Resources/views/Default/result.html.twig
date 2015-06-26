@@ -41,19 +41,34 @@
       <p style="text-align:right;font-size:11px"><a href="{{ url('how_it_works') }}#klasyfikacja" target="_blank">Co to znaczy?</a></p>
 
       <h3>W skrócie o budynku</h3>
-      <ul>
-      {% for item in houseDescription %}
-          <li>{{ item }}</li>
-      {% endfor %}
-      </ul>
-      <p><strong>Lokalizacja:</strong> {{ city.name }} i okolice</p>
-      <p><strong>Powierzchnia ogrzewana:</strong> {{ building.heatedHouseArea|number_format(0) }}m<sup>2</sup></p>
+      <table class="table table-condensed">
+          <thead>
+              <tr><th colspan="2">{{ describer.headline|raw }}</th></tr>
+          </thead>
+          <tbody>
+              <tr><td class="col-md-4">Lokalizacja</td><td>{{ city.name }} i okolice</td></tr>
+          {% if calc.buildingType == 'apartment' %}
+              <tr><td class="col-md-4">Powierzchnia ogrzewana</td><td class="col-md-8">{{ describer.areaDetails|raw }}</td></tr>
+              <tr><td class="col-md-4">Ściany</td><td class="col-md-8">{{ describer.wallDetails}}</td></tr>
+              <tr><td class="col-md-4">Ogrzewane piętra</td><td class="col-md-8">{{ describer.heatedFloorsDetails }}</td></tr>
+              <tr><td class="col-md-4">Usytuowanie</td><td class="col-md-8">{{ describer.apartmentSituationDetails|raw }}</td></tr>
+          {% else %}
+              <tr><td class="col-md-4">Powierzchnia budynku</td><td class="col-md-8">{{ describer.areaDetails|raw }}</td></tr>
+              <tr><td class="col-md-4">Ściany</td><td class="col-md-8">{{ describer.wallDetails}}</td></tr>
+              <tr><td class="col-md-4">Ogrzewane piętra</td><td class="col-md-8">{{ describer.heatedFloorsDetails }}</td></tr>
+              <tr><td class="col-md-4">Izolacja od góry</td><td class="col-md-8">{{ describer.roofDetails}}</td></tr>
+              <tr><td class="col-md-4">Izolacja od dołu</td><td class="col-md-8">{{ describer.groundDetails}}</td></tr>
+          {% endif %}
+              <tr><td class="col-md-4">Drzwi i okna</td><td class="col-md-8">{{ describer.doorsWindowsDetails|raw }}</td></tr>
+              <tr><td class="col-md-4">Wentylacja</td><td class="col-md-8">{{ describer.ventilationDetails}}</td></tr>
+          </tbody>
+      </table>
     </div>
     <div class="col-md-6">
       <div class="alert alert-success">
-          <h4>Pokaż swój wynik innym</h4>
+          <h4>Udostępnij wynik</h4>
           {% set resultUrl = url('result', {'slug': app.request.get('slug') }) %}
-          Możesz później wrócić do tej strony, przesłać komuś te wyniki<br /> lub umieścić na forum. <br />Po prostu skopiuj ten adres: <strong><a href="{{ resultUrl }}">{{ resultUrl }}</a></strong>
+          Link do niniejszego wyniku to: <strong><a href="{{ resultUrl }}">{{ resultUrl }}</a></strong>. <br />Używając go możesz później wrócić do tej strony, przesłać ten wynik innej osobie lub umieścić np. na forum. 
       </div>
 
       <h3>Warunki klimatyczne ({{ city.name }})</h3>
@@ -61,6 +76,8 @@
       {% set lastYearAverageTemperature = heatingSeason.getLastYearAverageTemperature(calc) %}
       <p>Przeciętny sezon grzewczy trwa u ciebie ok. <strong>{{ heatingSeason.getSeasonLength(calc) }} dni</strong>, ze średnią temperaturą <strong>{{ averageTemperature|number_format(2, ',', ' ') }}&deg;C</strong>.</p>
       <p>Poprzedni sezon grzewczy trwał ok. <strong>{{ heatingSeason.getLastSeasonLength(calc) }} dni</strong>, ze średnią temperaturą <strong>{{ lastYearAverageTemperature|number_format(2, ',', ' ') }}&deg;C</strong>.</p>
+      <p>{{ city.name }} leży w <strong>{{ climate.climateZone }}.</strong> <a href="http://www.hvacr.pl/public/styles/img_640/public/vademecum/mainPhoto/12/strefy_klimatyczne_polska.jpg" target="_blank">strefie klimatycznej</a>.
+      w której maksymalne zapotrzebowanie na ciepło oblicza się dla średniej dobowej temperatury <strong>{{ climate.designOutdoorTemperature }}&deg;C</strong>.</p>
     </div>
   </div>
 

@@ -122,7 +122,7 @@ function updateAreaStuff() {
     
     if (area == 0) {
         var length = parseFloat($('#calculation_building_length').val());
-        length -= 2*(wallSize/100);
+//         length -= 2*(wallSize/100);
         
         $('#calculation_area').val(Math.ceil(length*length*1.1));
         
@@ -137,7 +137,7 @@ function updateAreaStuff() {
     
     size += 2*(wallSize/100);
     size = size.toFixed(2);
-    
+
     $('#calculation_building_length').val(size);
     $('#calculation_building_width').val(size);
 }
