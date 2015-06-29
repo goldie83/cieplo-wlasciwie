@@ -164,11 +164,11 @@ class EnergyPricing
             ->from('KrakenWarmBundle:HeatingVariant', 'hv')
             ->where('hv.heatingDevice = (?1)')
             ->setParameters([
-                1 => $device,
+                1 => $device->getId(),
             ])
             ->setMaxResults(1)
             ->getQuery()
-            ->getSingleResult();
+            ->getOneOrNullResult();
 
         return $hv ? $hv->getMaintenanceTime() : 0;
     }
@@ -184,8 +184,6 @@ class EnergyPricing
             ->createQueryBuilder()
             ->select('f')
             ->from('KrakenWarmBundle:Fuel', 'f')
-            ->groupBy('f.name')
-            ->orderBy('f.id')
             ->getQuery()
             ->getResult();
 

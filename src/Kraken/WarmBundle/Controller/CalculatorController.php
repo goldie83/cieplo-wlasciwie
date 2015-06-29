@@ -335,19 +335,22 @@ class CalculatorController extends Controller
         }
 
         $payload = json_decode(file_get_contents('php://input'), true);
-        $customFuels = [];
-        foreach ($payload['fuels'] as $type => $stuff) {
-            $customFuels[$type] = round($stuff['price'], 2);
-        }
+        
+        if (isset($payload['fuels'])) {
+            $customFuels = [];
+            foreach ($payload['fuels'] as $type => $stuff) {
+                $customFuels[$type] = round($stuff['price'], 2);
+            }
 
-        if (is_array($customFuels) && !empty($customFuels)) {
-            $customData = json_decode($calc->getCustomData(), true);
-            $customData['fuels'] = $customFuels;
-            $calc->setCustomData(json_encode($customData));
+            if (is_array($customFuels) && !empty($customFuels)) {
+                $customData = json_decode($calc->getCustomData(), true);
+                $customData['fuels'] = $customFuels;
+                $calc->setCustomData(json_encode($customData));
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($calc);
-            $em->flush();
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($calc);
+                $em->flush();
+            }
         }
 
         return new Response('', 204);
