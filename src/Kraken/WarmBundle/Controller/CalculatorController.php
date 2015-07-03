@@ -63,6 +63,10 @@ class CalculatorController extends Controller
 
                 $isEditing = $obj->getId() != null;
 
+                if ($isEditing) {
+                    $obj->setHeatedArea(null); // to reassign city
+                }
+
                 $em->persist($obj);
                 $em->flush();
 
