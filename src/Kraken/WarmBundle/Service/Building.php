@@ -21,6 +21,7 @@ class Building implements BuildingInterface
     const HEATING_SEASON_DAYS = 200;
 
     protected $windows_u_factor = array(
+        '' => 3.0,
         'old_single_glass' => 3.0,
         'old_double_glass' => 2.5,
         'old_improved' => 2.6,
@@ -29,9 +30,11 @@ class Building implements BuildingInterface
         'new_triple_glass' => 0.9,
     );
     protected $doors_u_factor = array(
+        '' => 3.0,
         'old_wooden' => 3.0,
         'old_metal' => 2.5,
         'new_wooden' => 1.8,
+        'new_wood' => 1.8,
         'new_metal' => 1.9,
         'other' => 2.0,
     );

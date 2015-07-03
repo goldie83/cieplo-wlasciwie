@@ -18,6 +18,7 @@ class HouseDescriptionService
     ];
 
     protected $windowsTypes = [
+        '' => '(nie podano)',
         'old_single_glass' => 'Stare z pojedynczą szybą',
         'old_double_glass' => 'Stare z min. dwiema szybami',
         'old_improved' => 'Stare, ale doszczelnione',
@@ -27,6 +28,7 @@ class HouseDescriptionService
     ];
 
     protected $doorsTypes = [
+        '' => '(nie podano)',
         'old_wooden' => 'Stare drewniane',
         'old_metal' => 'Stare metalowe',
         'new_wooden' => 'Nowe drewniane',
