@@ -529,9 +529,11 @@ class Calculation
      *
      * @return Calculation
      */
-    public function addFuelConsumption(\Kraken\WarmBundle\Entity\fuelConsumption $fuelConsumptions)
+    public function addFuelConsumption($fuelConsumptions)
     {
-        $this->fuel_consumptions[] = $fuelConsumptions;
+        if ($fuelConsumptions instanceof \Kraken\WarmBundle\Entity\fuelConsumption) {
+            $this->fuel_consumptions[] = $fuelConsumptions;
+        }
 
         return $this;
     }
