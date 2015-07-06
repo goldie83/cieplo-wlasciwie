@@ -36,7 +36,9 @@ class InstanceService
             return $this->cachedInstance;
         }
 
-        $instance = $this->em->getRepository('KrakenWarmBundle:Calculation')->find($instanceId);
+        if (is_int($instanceId)) {
+            $instance = $this->em->getRepository('KrakenWarmBundle:Calculation')->find($instanceId);
+        }
 
         if (!$instance instanceof Calculation) {
             throw new \RuntimeException('There is no Calculation instance here');

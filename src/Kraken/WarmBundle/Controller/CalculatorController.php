@@ -256,6 +256,8 @@ class CalculatorController extends Controller
             throw $this->createNotFoundException('Jakiś zły masz ten link. Nic tu nie ma.');
         }
 
+        $this->get('kraken_warm.instance')->setCustomCalculation($calc);
+
         $data = array();
         $breakdownData = $this->get('kraken_warm.building')->getEnergyLossBreakdown();
 
@@ -281,6 +283,8 @@ class CalculatorController extends Controller
         if (!$calc) {
             throw $this->createNotFoundException('Jakiś zły masz ten link. Nic tu nie ma.');
         }
+
+        $this->get('kraken_warm.instance')->setCustomCalculation($calc);
 
         $data = [];
         $fuels = [];
@@ -414,7 +418,7 @@ class CalculatorController extends Controller
             throw $this->createNotFoundException('Jakiś zły masz ten link. Nic tu nie ma.');
         }
 
-        $this->get('session')->set('calculation_id', $calculation->getId());
+        $this->get('kraken_warm.instance')->setCustomCalculation($calculation);
 
         $calculationulator = $this->get('kraken_warm.energy_calculator');
         $building = $this->get('kraken_warm.building');
