@@ -132,6 +132,18 @@ class LoadFuelData implements FixtureInterface
         ;
         $manager->persist($propane);
 
+        $networkHeat = new Fuel();
+        $networkHeat
+            ->setType(Fuel::TYPE_NETWORK_HEAT)
+            ->setName('Ciepło sieciowe')
+            ->setPrice(0)
+            ->setUnit('kWh')
+            ->setTradeAmount(1)
+            ->setTradeUnit('kWh')
+            ->setEnergy(3.6)
+        ;
+        $manager->persist($networkHeat);
+
         $heatBuffer = new HeatingDevice();
         $heatBuffer
             ->setType(HeatingDevice::TYPE_HEAT_BUFFER)
@@ -256,6 +268,15 @@ class LoadFuelData implements FixtureInterface
             ->setForAdvice(false)
         ;
         $manager->persist($oldGasStove);
+
+        $heatingNetwork = new HeatingDevice();
+        $heatingNetwork
+            ->setType(HeatingDevice::TYPE_HEATING_NETWORK)
+            ->setName('Sieć ciepłownicza / lokalna kotłownia')
+            ->setForLegacySetup(true)
+            ->setForAdvice(false)
+        ;
+        $manager->persist($heatingNetwork);
 
         $hv1 = new HeatingVariant();
         $hv1->setFuel($bituminousCoal);

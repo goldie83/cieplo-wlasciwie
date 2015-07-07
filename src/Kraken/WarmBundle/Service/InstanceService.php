@@ -40,7 +40,7 @@ class InstanceService
             $instance = $this->em->getRepository('KrakenWarmBundle:Calculation')->find($instanceId);
         }
 
-        if (!$instance instanceof Calculation) {
+        if (!isset($instance) || !$instance instanceof Calculation) {
             throw new \RuntimeException('There is no Calculation instance here');
         }
 

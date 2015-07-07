@@ -410,7 +410,7 @@ app.controller('WarmCtrl', function($scope, $http) {
             return '> 30 lat';
         }
         
-        return period > 0 && period < 1 ? 'poniżej roku' : Math.round(period) + " " + suffix;
+        return period < 1 ? 'poniżej roku' : Math.round(period) + " " + suffix;
     };
     
     $scope.greaterThan = function(prop, val){

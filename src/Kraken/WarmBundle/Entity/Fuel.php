@@ -20,6 +20,7 @@ class Fuel
     const TYPE_BROWN_COAL = 'brown_coal';
     const TYPE_COAL = 'bituminous_coal';
     const TYPE_ECO_COAL = 'eco_coal';
+    const TYPE_NETWORK_HEAT = 'network_heat';
 
     /**
      * @ORM\Id

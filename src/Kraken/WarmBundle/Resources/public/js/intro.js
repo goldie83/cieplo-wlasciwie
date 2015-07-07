@@ -31,7 +31,7 @@ function bindEvents() {
 function heatingDeviceChanged() {
     var newVal = $('#calculation_heating_device option:selected').text();
 
-    $('#calculation_stove_power').parents('.form-group').toggle(newVal != '');
+    $('#calculation_stove_power').parents('.form-group').toggle(newVal != '' && newVal.indexOf("ciepłownicza") == -1);
 }
 
 function updateFuelType(fuelSelect) {
@@ -52,7 +52,7 @@ function updateFuelType(fuelSelect) {
         unitSpan.text('mp');
     }
 
-    if (newVal.indexOf("Prąd") !== -1) {
+    if (newVal.indexOf("Prąd") !== -1 || newVal.indexOf("sieciowe") !== -1) {
         unitSpan.text('kWh');
         $('label[for="calculation_fuel_consumption"]').text('Zużycie energii ostatniej zimy');
         $('label[for="calculation_fuel_cost"]').text('Koszt zużytej energii');

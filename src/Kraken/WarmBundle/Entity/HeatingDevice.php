@@ -24,6 +24,7 @@ class HeatingDevice
     const TYPE_GAS_STOVE_OLD = 'gas_stove_old';
     const TYPE_GAS_STOVE_CONDENSING = 'gas_stove_condensing';
     const TYPE_GAS_STOVE = 'gas_stove';
+    const TYPE_HEATING_NETWORK = 'heating_network';
 
     /**
      * @ORM\Id
