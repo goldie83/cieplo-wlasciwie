@@ -111,7 +111,9 @@ class EnergyCalculator
         $totalEnergy = 0;
 
         foreach ($this->instance->get()->getFuelConsumptions() as $fc) {
-            $totalEnergy += $this->fuel_service->getFuelEnergy($fc->getFuel(), $fc->getConsumption());
+            if ($fc->getFuel()) {
+                $totalEnergy += $this->fuel_service->getFuelEnergy($fc->getFuel(), $fc->getConsumption());
+            }
         }
 
         // 10% as equivalent of kindling wood etc.
