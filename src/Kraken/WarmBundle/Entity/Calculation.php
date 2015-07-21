@@ -120,7 +120,7 @@ class Calculation
     public function isFuelConsumptionProvided()
     {
         foreach ($this->getFuelConsumptions() as $fc) {
-            if ($fc->getConsumption() > 0) {
+            if ($fc->getFuel() != null && $fc->getConsumption() > 0) {
                 return true;
             }
         }
