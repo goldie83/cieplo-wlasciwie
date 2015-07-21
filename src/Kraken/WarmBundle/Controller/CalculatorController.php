@@ -58,7 +58,9 @@ class CalculatorController extends Controller
                 }
 
                 foreach ($obj->getFuelConsumptions() as $fc) {
-                    $fc->setCalculation($obj);
+                    if ($fc->getFuel() && $fc->getConsumption() > 0) {
+                        $fc->setCalculation($obj);
+                    }
                 }
 
                 $isEditing = $obj->getId() != null;
