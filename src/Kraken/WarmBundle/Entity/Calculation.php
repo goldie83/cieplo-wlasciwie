@@ -414,7 +414,7 @@ class Calculation
     public function isUsingSolidFuel()
     {
         foreach ($this->fuel_consumptions as $fc) {
-            $type = $fc->getFuel()->getType();
+            $type = $fc->getFuel() ? $fc->getFuel()->getType() : '';
             if (stristr($type, 'coke') || stristr($type, 'coal') || stristr($type, 'wood') || stristr($type, 'pellet')) {
                 return true;
             }
