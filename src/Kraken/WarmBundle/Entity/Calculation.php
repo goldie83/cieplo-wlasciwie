@@ -133,7 +133,9 @@ class Calculation
         $cost = 0;
 
         foreach ($this->getFuelConsumptions() as $fc) {
-            $cost += $fc->getCost();
+            if ($fc->getFuel()) {
+                $cost += $fc->getCost();
+            }
         }
 
         return $cost;
@@ -148,7 +150,7 @@ class Calculation
     {
         $consumption = $this->getFuelConsumptions();
 
-        return count($consumption) > 0 ? $consumption->get(0)->getFuel()->getType() : '';
+        return count($consumption) > 0 && $consumption->get(0)->getFuel() != null ? $consumption->get(0)->getFuel()->getType() : '';
     }
 
     public function getLabel()
