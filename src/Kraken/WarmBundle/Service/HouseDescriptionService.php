@@ -110,6 +110,20 @@ class HouseDescriptionService
         return strtolower(implode(', ', $heatedFloors));
     }
 
+    public function getUnheatedFloorsDetails()
+    {
+        $floors = $this->building->getFloors();
+
+        $heatedFloors = [];
+        foreach ($floors as $floor) {
+            if ($floor['heated'] == false && $floor['label'] != 'other') {
+                $heatedFloors[] = $floor['label'];
+            }
+        }
+
+        return strtolower(implode(', ', $heatedFloors));
+    }
+
     public function getWallDetails()
     {
         $house = $this->instance->get()->getHouse();

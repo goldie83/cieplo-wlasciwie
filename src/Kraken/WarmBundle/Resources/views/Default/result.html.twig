@@ -56,6 +56,9 @@
               <tr><td class="col-md-4">Powierzchnia budynku</td><td class="col-md-8">{{ describer.areaDetails|raw }}</td></tr>
               <tr><td class="col-md-4">Ściany</td><td class="col-md-8">{{ describer.wallDetails}}</td></tr>
               <tr><td class="col-md-4">Ogrzewane piętra</td><td class="col-md-8">{{ describer.heatedFloorsDetails }}</td></tr>
+              {% if building.house.numberFloors != building.house.numberHeatedFloors %}
+                  <tr><td class="col-md-4">Nieogrzewane piętra</td><td class="col-md-8">{{ describer.unheatedFloorsDetails }}</td></tr>
+              {% endif %}
               <tr><td class="col-md-4">Izolacja od góry</td><td class="col-md-8">{{ describer.roofDetails}}</td></tr>
               <tr><td class="col-md-4">Izolacja od dołu</td><td class="col-md-8">{{ describer.groundDetails}}</td></tr>
           {% endif %}
