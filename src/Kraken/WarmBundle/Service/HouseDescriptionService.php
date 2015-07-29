@@ -79,6 +79,10 @@ class HouseDescriptionService
             );
 
             $floor = isset($floors[$nbFloors]) ? $floors[$nbFloors] : $nbFloors.'-piętrowy';
+
+            if ($house->getHasBasement()) {
+                $floor .= ' podpiwniczony';
+            }
         }
 
         return $this->houseTypes[$type].' '.$floor.' A.D. '.$this->instance->get()->getConstructionYear().' ('.$sizes.')';
