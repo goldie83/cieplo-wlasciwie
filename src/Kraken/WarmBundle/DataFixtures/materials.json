@@ -206,5 +206,14 @@
         "for_wall_construction_layer": true,
         "for_wall_internal_layer": true,
         "for_wall_facade_layer": true
+    },
+    {
+        "name": "Poliuretan (PUR, PIR)",
+        "lambda": 0.026,
+        "for_wall_construction_layer": true,
+        "for_wall_internal_layer": true,
+        "for_wall_isolation_layer": true,
+        "for_ceiling": true,
+        "for_floor": true
     }
 ]
