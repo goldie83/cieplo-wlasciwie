@@ -24,6 +24,7 @@
         "doctrine/dbal": "<2.5",
         "doctrine/doctrine-bundle": "~1.4",
         "doctrine/doctrine-fixtures-bundle": "2.2.*",
+        "gedmo/doctrine-extensions": "dev-master",
         "twig/extensions": "~1.0",
         "symfony/swiftmailer-bundle": "~2.3",
         "symfony/monolog-bundle": "~2.4",

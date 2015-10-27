@@ -28,6 +28,7 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
             new Mopa\Bundle\BootstrapBundle\MopaBootstrapBundle(),
             new Kraken\WarmBundle\KrakenWarmBundle(),
+            new Kraken\RankingBundle\KrakenRankingBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

@@ -1,0 +1,15 @@
+{% extends 'MopaBootstrapBundle::base_less.html.twig' %}
+
+{% block title %}Ranking kotłów węglowych{% endblock %}
+
+{% block navbar %}
+    {% embed '@MopaBootstrap/Navbar/navbar.html.twig' with { fixedTop: false, inverse: true, id: 'navbar-example' } %}
+        {% block brand %}
+            <a class="navbar-brand" href="{{ path('homepage') }}">Ranking kotłów węglowych</a>
+        {% endblock %}
+
+        {% block menu %}
+            {{ mopa_bootstrap_menu('KrakenRankingBundle:Builder:createMainMenu') }}
+        {% endblock %}
+    {% endembed %}
+{% endblock navbar %}
