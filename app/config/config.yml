@@ -1,6 +1,7 @@
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
+    - { resource: doctrine_extensions.yml }
 
 framework:
     #esi:             ~
@@ -54,8 +55,8 @@ doctrine:
         user:     %database_user%
         password: %database_password%
         charset:  UTF8
-        mapping_types: 
-            enum:       string 
+        mapping_types:
+            enum:       string
         # if using pdo_sqlite as your database driver, add the path in parameters.yml
         # e.g. database_path: %kernel.root_dir%/data/data.db3
         # path:     %database_path%
@@ -112,4 +113,9 @@ mopa_bootstrap:
                 label: Usuń tę pozycję z listy
                 icon: null
                 icon_inverted: false
-    menu: ~ 
+    menu: ~
+
+fos_user:
+    db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
+    firewall_name: main
+    user_class: Kraken\RankingBundle\Entity\User

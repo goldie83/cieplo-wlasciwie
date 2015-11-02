@@ -7,9 +7,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="properties")
+ * @ORM\Table(name="proposals")
  */
-class Property
+class Proposal
 {
     /**
      * @ORM\Id

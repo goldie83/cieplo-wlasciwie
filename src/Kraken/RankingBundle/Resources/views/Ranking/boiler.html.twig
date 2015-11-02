@@ -1,0 +1,35 @@
+{% extends 'KrakenRankingBundle::base.html.twig' %}
+
+{% block headline %}{{ boiler.name }}{% endblock headline %}
+
+{% block content_row %}
+<div class="row">
+    <div class="col-sm-8">
+        <div class="col-sm-4">
+            <p><strong>A</strong></p>
+            <p>Ocena w rankingu</p>
+        </div>
+        <div class="col-sm-4">
+            <p><strong>A</strong></p>
+            <p>Ocena w rankingu</p>
+        </div>
+        <div class="col-sm-4">
+            <p><strong>A</strong></p>
+            <p>Ocena w rankingu</p>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="thumbnail">
+            <img src="{{ asset('uploads/ranking/' ~ boiler.image) }}" />
+        </div>
+        <div class="col-sm-6">
+            <p><strong>A</strong></p>
+            <p>Ocena w rankingu</p>
+        </div>
+        <div class="col-sm-6">
+            <p><strong>7,8/10</strong></p>
+            <p>Opinia użytkowników</p>
+        </div>
+    </div>
+</div>
+{% endblock content_row %}

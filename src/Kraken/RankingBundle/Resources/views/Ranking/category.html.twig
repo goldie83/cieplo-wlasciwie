@@ -1,0 +1,31 @@
+{% extends 'KrakenRankingBundle::base.html.twig' %}
+
+{% block headline %}{{ category.name }}{% endblock headline %}
+
+{% block content_row %}
+<div class="row">
+    <div class="col-sm-4">
+        <h2>Parametry</h2>
+    </div>
+    <div class="col-sm-8">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Ocena</th>
+                    <th>Model</th>
+                    <th>Producent</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for boiler in category.boilers %}
+                <tr>
+                    <td>{{ boiler.rating }}</td>
+                    <td><a href="{{ url('boiler_overview', {'category': category.slug, 'boiler': boiler.slug}) }}">{{ boiler.name }}</a></td>
+                    <td>{{ boiler.manufacturer.name }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content_row %}

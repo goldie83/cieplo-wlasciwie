@@ -27,6 +27,7 @@ class AppKernel extends Kernel
             new FOS\JsRoutingBundle\FOSJsRoutingBundle(),
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
             new Mopa\Bundle\BootstrapBundle\MopaBootstrapBundle(),
+            new FOS\UserBundle\FOSUserBundle(),
             new Kraken\WarmBundle\KrakenWarmBundle(),
             new Kraken\RankingBundle\KrakenRankingBundle(),
         );

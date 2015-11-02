@@ -1,7 +1,7 @@
 services:
     # KernelRequest listener
     extension.listener:
-        class: Acme\DemoBundle\Listener\DoctrineExtensionListener
+        class: Kraken\RankingBundle\Listener\DoctrineExtensionListener
         calls:
             - [ setContainer, [ @service_container ] ]
         tags:
