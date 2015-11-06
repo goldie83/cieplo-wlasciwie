@@ -5,6 +5,7 @@ namespace Kraken\RankingBundle\Entity;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity
@@ -31,11 +32,28 @@ class Boiler
     protected $slug;
 
     /**
+     * @Assert\File(
+     *     maxSize="5M",
+     *     mimeTypes={"image/png", "image/jpeg", "image/pjpeg"}
+     * )
+     * @Vich\UploadableField(mapping="cover_image", fileNameProperty="image")
+     */
+    protected $imageFile;
+
+    /**
      * @ORM\Column(type="string", nullable=true)
-     * @Assert\NotBlank()
      * @Assert\Image()
      */
     protected $image;
+
+    /**
+     * @Assert\File(
+     *     maxSize="5M",
+     *     mimeTypes={"image/png", "image/jpeg", "image/pjpeg"}
+     * )
+     * @Vich\UploadableField(mapping="cross_section", fileNameProperty="crossSection")
+     */
+    protected $crossSectionFile;
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -203,6 +221,44 @@ class Boiler
     public function getSlug()
     {
         return $this->slug;
+    }
+
+    public function setImageFile(File $image = null)
+    {
+        $this->imageFile = $image;
+
+        if ($image) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updated = new \DateTime('now');
+        }
+    }
+
+    /**
+     * @return File
+     */
+    public function getImageFile()
+    {
+        return $this->imageFile;
+    }
+
+    public function setCrossSectionFile(File $crossSection = null)
+    {
+        $this->crossSectionFile = $crossSection;
+
+        if ($crossSection) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updated = new \DateTime('now');
+        }
+    }
+
+    /**
+     * @return File
+     */
+    public function getCrossSectionFile()
+    {
+        return $this->crossSectionFile;
     }
 
     /**

@@ -1,0 +1,49 @@
+easy_admin:
+    site_name: 'CiepłoWłaściwie.pl'
+    entities:
+        Boiler:
+            label: Kotły
+            class: Kraken\RankingBundle\Entity\Boiler
+            list:
+                fields:
+                    - 'id'
+                    - 'name'
+                    - 'category'
+                    - 'rating'
+            form:
+                fields:
+                    - { label: 'Nazwa', property: 'name'}
+                    - { label: 'Kategoria', property: 'category'}
+                    - { label: 'Producent', property: 'manufacturer'}
+                    - { label: 'Główny obrazek', property: 'imageFile', type: 'file'}
+                    - { label: 'Przekrój', property: 'crossSectionFile', type: 'file'}
+                    - { label: 'Opis', property: 'content'}
+                    - { label: 'Ocena', property: 'rating'}
+                    - { label: 'Klasa wg PN-EN 303-5:2012', property: 'normClass'}
+                    - { label: 'Typowa moc', property: 'typicalModelPower'}
+                    - { label: 'Powierzchnia wymiennika', property: 'typicalModelExchanger'}
+                    - { label: 'Pojemność zasypowa', property: 'typicalModelCapacity'}
+                    - { label: 'Cena', property: 'typicalModelPrice'}
+                    - { label: 'Gwarancja', property: 'warrantyYears'}
+                    - { label: 'Pułapki w gwarancji', property: 'hasWarrantyCatches'}
+                    - { label: 'Układ zamknięty', property: 'forClosedSystem'}
+                    - { label: 'Cechy', property: 'boilerProperties' }
+                    - { label: 'Moce', property: 'boilerPowers',  type: 'collection' }
+                    - { label: 'Rodzaje paliw', property: 'acceptedFuelTypes',  type: 'collection' }
+                    - { label: 'Dziennik zmian', property: 'changes',  type: 'collection' }
+        Category:
+            label: Kategorie kotłów
+            class: Kraken\RankingBundle\Entity\Category
+        FuelType:
+            label: Typy paliw
+            class: Kraken\RankingBundle\Entity\FuelType
+        User:
+            label: Użytkownicy
+            class: Kraken\RankingBundle\Entity\User
+            list:
+                fields:
+                    - 'id'
+                    - 'email'
+                    - 'roles'
+                    - 'enabled'
+                    - 'lastLogin'

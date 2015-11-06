@@ -1,6 +1,7 @@
 imports:
     - { resource: parameters.yml }
     - { resource: security.yml }
+    - { resource: admin.yml }
     - { resource: doctrine_extensions.yml }
 
 framework:
@@ -119,3 +120,14 @@ fos_user:
     db_driver: orm # other valid values are 'mongodb', 'couchdb' and 'propel'
     firewall_name: main
     user_class: Kraken\RankingBundle\Entity\User
+
+vich_uploader:
+    db_driver: orm # or mongodb or propel or phpcr
+
+    mappings:
+        cover_image:
+            uri_prefix:         /grafika/kotly
+            upload_destination: %kernel.root_dir%/../web/images/covers
+        cross_section:
+            uri_prefix:         /grafika/przekroje
+            upload_destination: %kernel.root_dir%/../web/images/cross_sections

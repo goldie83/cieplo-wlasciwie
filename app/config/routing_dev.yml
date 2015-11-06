@@ -3,11 +3,6 @@ _warm:
     prefix:   /
     host: "cieplo.dev"
 
-_ranking:
-    resource: "@KrakenRankingBundle/Resources/config/routing.yml"
-    prefix:   /
-    host: "ranking.dev"
-
 _wdt:
     resource: "@WebProfilerBundle/Resources/config/routing/wdt.xml"
     prefix:   /_wdt
@@ -22,3 +17,8 @@ _configurator:
 
 _main:
     resource: routing.yml
+
+_ranking:
+    resource: "@KrakenRankingBundle/Resources/config/routing.yml"
+    prefix:   /
+    host: "ranking.dev"

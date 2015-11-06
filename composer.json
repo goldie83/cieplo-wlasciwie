@@ -47,7 +47,9 @@
         "doctrine/doctrine-migrations-bundle": "dev-master",
         "mopa/bootstrap-bundle": "dev-master",
         "raven/raven": "0.12.*",
-        "friendsofsymfony/user-bundle": "~2.0@dev"
+        "friendsofsymfony/user-bundle": "~2.0@dev",
+        "javiereguiluz/easyadmin-bundle": "dev-master",
+        "vich/uploader-bundle": "~0.14"
     },
     "require-dev": {
         "behat/behat": "3.0.*@dev",
