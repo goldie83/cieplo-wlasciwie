@@ -1,49 +1,49 @@
-easy_admin:
-    site_name: 'CiepłoWłaściwie.pl'
-    entities:
-        Boiler:
-            label: Kotły
-            class: Kraken\RankingBundle\Entity\Boiler
-            list:
-                fields:
-                    - 'id'
-                    - 'name'
-                    - 'category'
-                    - 'rating'
-            form:
-                fields:
-                    - { label: 'Nazwa', property: 'name'}
-                    - { label: 'Kategoria', property: 'category'}
-                    - { label: 'Producent', property: 'manufacturer'}
-                    - { label: 'Główny obrazek', property: 'imageFile', type: 'file'}
-                    - { label: 'Przekrój', property: 'crossSectionFile', type: 'file'}
-                    - { label: 'Opis', property: 'content'}
-                    - { label: 'Ocena', property: 'rating'}
-                    - { label: 'Klasa wg PN-EN 303-5:2012', property: 'normClass'}
-                    - { label: 'Typowa moc', property: 'typicalModelPower'}
-                    - { label: 'Powierzchnia wymiennika', property: 'typicalModelExchanger'}
-                    - { label: 'Pojemność zasypowa', property: 'typicalModelCapacity'}
-                    - { label: 'Cena', property: 'typicalModelPrice'}
-                    - { label: 'Gwarancja', property: 'warrantyYears'}
-                    - { label: 'Pułapki w gwarancji', property: 'hasWarrantyCatches'}
-                    - { label: 'Układ zamknięty', property: 'forClosedSystem'}
-                    - { label: 'Cechy', property: 'boilerProperties' }
-                    - { label: 'Moce', property: 'boilerPowers',  type: 'collection' }
-                    - { label: 'Rodzaje paliw', property: 'acceptedFuelTypes',  type: 'collection' }
-                    - { label: 'Dziennik zmian', property: 'changes',  type: 'collection' }
-        Category:
-            label: Kategorie kotłów
-            class: Kraken\RankingBundle\Entity\Category
-        FuelType:
-            label: Typy paliw
-            class: Kraken\RankingBundle\Entity\FuelType
-        User:
-            label: Użytkownicy
-            class: Kraken\RankingBundle\Entity\User
-            list:
-                fields:
-                    - 'id'
-                    - 'email'
-                    - 'roles'
-                    - 'enabled'
-                    - 'lastLogin'
+sonata_admin:
+    templates:
+        # default global templates
+        layout:  SonataAdminBundle::layout.html.twig
+
+sonata_block:
+    default_contexts: [cms]
+    blocks:
+        # enable the SonataAdminBundle block
+        sonata.admin.block.admin_list:
+            contexts: [admin]
+
+sonata_formatter:
+    formatters:
+        markdown:
+            service: sonata.formatter.text.markdown
+            extensions:
+                - sonata.formatter.twig.control_flow
+                - sonata.formatter.twig.gist
+        #        - sonata.media.formatter.twig #keep this commented unless you are using media bundle.
+
+
+        text:
+            service: sonata.formatter.text.text
+            extensions:
+                - sonata.formatter.twig.control_flow
+                - sonata.formatter.twig.gist
+        #        - sonata.media.formatter.twig
+
+
+        rawhtml:
+            service: sonata.formatter.text.raw
+            extensions:
+                - sonata.formatter.twig.control_flow
+                - sonata.formatter.twig.gist
+        #        - sonata.media.formatter.twig
+
+
+        richhtml:
+            service: sonata.formatter.text.raw
+            extensions:
+                - sonata.formatter.twig.control_flow
+                - sonata.formatter.twig.gist
+        #        - sonata.media.formatter.twig
+
+
+        twig:
+            service: sonata.formatter.text.twigengine
+            extensions: [] # Twig formatter cannot have extensions

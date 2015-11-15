@@ -26,8 +26,10 @@ framework:
 twig:
     debug:            %kernel.debug%
     strict_variables: %kernel.debug%
-    form:
-        resources: ['KrakenWarmBundle:Form:form_div_layout.html.twig']
+    form_themes:
+        - 'KrakenWarmBundle:Form:form_div_layout.html.twig'
+        - 'VichUploaderBundle:Form:fields.html.twig'
+        - 'SonataCoreBundle:Form:datepicker.html.twig'
 
 # Assetic Configuration
 assetic:
@@ -123,11 +125,10 @@ fos_user:
 
 vich_uploader:
     db_driver: orm # or mongodb or propel or phpcr
-
     mappings:
         cover_image:
-            uri_prefix:         /grafika/kotly
-            upload_destination: %kernel.root_dir%/../web/images/covers
+            uri_prefix:         /uploads/covers
+            upload_destination: %kernel.root_dir%/../web/uploads/covers
         cross_section:
-            uri_prefix:         /grafika/przekroje
-            upload_destination: %kernel.root_dir%/../web/images/cross_sections
+            uri_prefix:         /uploads/cross_sections
+            upload_destination: %kernel.root_dir%/../web/uploads/cross_sections

@@ -34,19 +34,17 @@ class FuelType
      * @ORM\OneToMany(targetEntity="BoilerPower", mappedBy="fuelType")
      */
     protected $boilerPowers;
-    /**
-     * Constructor
-     */
+
     public function __construct()
     {
         $this->boilerPowers = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
+    public function __toString()
+    {
+        return $this->name;
+    }
+
     public function getId()
     {
         return $this->id;
@@ -68,7 +66,7 @@ class FuelType
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -91,7 +89,7 @@ class FuelType
     /**
      * Get slug
      *
-     * @return string 
+     * @return string
      */
     public function getSlug()
     {
@@ -124,7 +122,7 @@ class FuelType
     /**
      * Get boilerPowers
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getBoilerPowers()
     {

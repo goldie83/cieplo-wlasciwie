@@ -20,6 +20,7 @@ class BoilerProperty
 
     /**
      * @ORM\ManyToOne(targetEntity="Boiler", inversedBy="boilerProperties")
+     * @ORM\JoinColumn(name="boiler_id", referencedColumnName="id", nullable=false)
      */
     protected $boiler;
 
@@ -38,14 +39,14 @@ class BoilerProperty
      */
     protected $content;
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
     public function getId()
     {
         return $this->id;
+    }
+
+    public function __toString()
+    {
+        return $this->label == '' ? $this->property->getLabel() : $this->label;
     }
 
     /**

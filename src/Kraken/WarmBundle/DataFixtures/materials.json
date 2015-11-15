@@ -215,5 +215,13 @@
         "for_wall_isolation_layer": true,
         "for_ceiling": true,
         "for_floor": true
+    },
+    {
+        "name": "Ekofiber",
+        "lambda": 0.042,
+        "for_wall_internal_layer": true,
+        "for_wall_isolation_layer": true,
+        "for_ceiling": true,
+        "for_floor": true
     }
 ]

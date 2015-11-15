@@ -39,6 +39,12 @@ class LoadRankingData implements FixtureInterface
         $p2->setContent('Jest w stanie spalać gorsze, spiekające węgle oraz miał');
         $manager->persist($p2);
 
+        $p3 = new Property;
+        $p3->setPositive(true);
+        $p3->setLabel('Dopuszczenie do układu zamkniętego');
+        $p3->setContent('Kocioł posiada potwierdzone pisemnie zezwolenie na montaż w układzie zamkniętym');
+        $manager->persist($p3);
+
 
         $m = new Manufacturer();
         $m->setName('Ogniwo');

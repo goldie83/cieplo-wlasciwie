@@ -24,9 +24,9 @@ class Property
     protected $boilerProperties;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="integer")
      */
-    protected $positive = true;
+    protected $meaning;
 
     /**
      * @ORM\Column(type="string")
@@ -37,45 +37,20 @@ class Property
      * @ORM\Column(type="text", nullable=true)
      */
     protected $content;
-    /**
-     * Constructor
-     */
+
     public function __construct()
     {
         $this->boilerProperties = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
+    public function __toString()
+    {
+        return $this->label;
+    }
+
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set positive
-     *
-     * @param boolean $positive
-     * @return Property
-     */
-    public function setPositive($positive)
-    {
-        $this->positive = $positive;
-
-        return $this;
-    }
-
-    /**
-     * Get positive
-     *
-     * @return boolean
-     */
-    public function getPositive()
-    {
-        return $this->positive;
     }
 
     /**
@@ -155,5 +130,28 @@ class Property
     public function getBoilerProperties()
     {
         return $this->boilerProperties;
+    }
+
+    /**
+     * Set meaning
+     *
+     * @param integer $meaning
+     * @return Property
+     */
+    public function setMeaning($meaning)
+    {
+        $this->meaning = $meaning;
+
+        return $this;
+    }
+
+    /**
+     * Get meaning
+     *
+     * @return integer
+     */
+    public function getMeaning()
+    {
+        return $this->meaning;
     }
 }

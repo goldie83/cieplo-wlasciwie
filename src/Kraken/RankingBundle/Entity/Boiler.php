@@ -4,12 +4,14 @@ namespace Kraken\RankingBundle\Entity;
 
 use Gedmo\Mapping\Annotation as Gedmo;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="boilers")
+ * @Vich\Uploadable
  */
 class Boiler
 {
@@ -42,7 +44,6 @@ class Boiler
 
     /**
      * @ORM\Column(type="string", nullable=true)
-     * @Assert\Image()
      */
     protected $image;
 
@@ -57,7 +58,6 @@ class Boiler
 
     /**
      * @ORM\Column(type="string", nullable=true)
-     * @Assert\Image()
      */
     protected $crossSection;
 
@@ -72,22 +72,22 @@ class Boiler
     protected $manufacturer;
 
     /**
-     * @ORM\OneToMany(targetEntity="Change", mappedBy="boiler")
+     * @ORM\OneToMany(targetEntity="Change", mappedBy="boiler", cascade={"all"}, orphanRemoval=true)
      */
     protected $changes;
 
     /**
-     * @ORM\OneToMany(targetEntity="BoilerProperty", mappedBy="boiler")
+     * @ORM\OneToMany(targetEntity="BoilerProperty", mappedBy="boiler", cascade={"all"}, orphanRemoval=true)
      */
     protected $boilerProperties;
 
     /**
-     * @ORM\OneToMany(targetEntity="BoilerPower", mappedBy="boiler")
+     * @ORM\OneToMany(targetEntity="BoilerPower", mappedBy="boiler", cascade={"all"}, orphanRemoval=true)
      */
     protected $boilerPowers;
 
     /**
-     * @ORM\ManyToMany(targetEntity="FuelType")
+     * @ORM\ManyToMany(targetEntity="FuelType", cascade={"all"}, orphanRemoval=true)
      * @ORM\JoinTable(name="boiler_fuel_types",
      *      joinColumns={@ORM\JoinColumn(name="boiler_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="fuel_type_id", referencedColumnName="id", unique=true)}
@@ -133,17 +133,7 @@ class Boiler
     /**
      * @ORM\Column(type="decimal", nullable=true)
      */
-    protected $warrantyYears;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    protected $hasWarrantyCatches = false;
-
-    /**
-     * @ORM\Column(type="boolean")
-     */
-    protected $forClosedSystem = false;
+    protected $warranty;
 
     /**
      * @Gedmo\Timestampable(on="create")
@@ -167,11 +157,11 @@ class Boiler
         $this->acceptedFuelTypes = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-    /**
-     * Get id
-     *
-     * @return integer
-     */
+    public function __toString()
+    {
+        return $this->name;
+    }
+
     public function getId()
     {
         return $this->id;
@@ -469,26 +459,26 @@ class Boiler
     }
 
     /**
-     * Set warrantyYears
+     * Set warranty
      *
-     * @param string $warrantyYears
+     * @param string $warranty
      * @return Boiler
      */
-    public function setWarrantyYears($warrantyYears)
+    public function setWarranty($warranty)
     {
-        $this->warrantyYears = $warrantyYears;
+        $this->warranty = $warranty;
 
         return $this;
     }
 
     /**
-     * Get warrantyYears
+     * Get warranty
      *
      * @return string
      */
-    public function getWarrantyYears()
+    public function getWarranty()
     {
-        return $this->warrantyYears;
+        return $this->warranty;
     }
 
     /**

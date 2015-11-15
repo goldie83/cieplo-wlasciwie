@@ -4,6 +4,28 @@ parameters:
 #    parameter_name: value
 
 services:
-#    service_name:
-#        class: AppBundle\Directory\ClassName
-#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+    admin.boiler:
+        class: Kraken\RankingBundle\Admin\BoilerAdmin
+        arguments: [~, Kraken\RankingBundle\Entity\Boiler, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Kocioł }
+    admin.change:
+        class: Kraken\RankingBundle\Admin\ChangeAdmin
+        arguments: [~, Kraken\RankingBundle\Entity\Change, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Log zmian }
+    admin.boiler_property:
+        class: Kraken\RankingBundle\Admin\BoilerPropertyAdmin
+        arguments: [~, Kraken\RankingBundle\Entity\BoilerProperty, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Cecha kotła }
+    admin.boiler_power:
+        class: Kraken\RankingBundle\Admin\BoilerPowerAdmin
+        arguments: [~, Kraken\RankingBundle\Entity\BoilerPower, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Moc kotła }
+    admin.fuel_type:
+        class: Kraken\RankingBundle\Admin\FuelTypeAdmin
+        arguments: [~, Kraken\RankingBundle\Entity\FuelType, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Paliwo }

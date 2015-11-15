@@ -20,6 +20,7 @@ class Change
 
     /**
      * @ORM\ManyToOne(targetEntity="Boiler", inversedBy="changes")
+     * @ORM\JoinColumn(name="boiler_id", referencedColumnName="id", nullable=false)
      */
     protected $boiler;
 
@@ -30,25 +31,30 @@ class Change
     protected $date;
 
     /**
-     * @ORM\Column(type="string", length=2)
+     * @ORM\Column(type="string", length=2, nullable=true)
      */
     protected $oldRating;
 
     /**
-     * @ORM\Column(type="string", length=2)
+     * @ORM\Column(type="string", length=2, nullable=true)
      */
     protected $newRating;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     protected $content;
 
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
+    public function __construct()
+    {
+        $this->date = new \DateTime('today');
+    }
+
+    public function __toString()
+    {
+        return $this->content;
+    }
+
     public function getId()
     {
         return $this->id;
@@ -70,7 +76,7 @@ class Change
     /**
      * Get date
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDate()
     {
@@ -93,7 +99,7 @@ class Change
     /**
      * Get oldRating
      *
-     * @return string 
+     * @return string
      */
     public function getOldRating()
     {
@@ -116,7 +122,7 @@ class Change
     /**
      * Get newRating
      *
-     * @return string 
+     * @return string
      */
     public function getNewRating()
     {
@@ -139,7 +145,7 @@ class Change
     /**
      * Get content
      *
-     * @return string 
+     * @return string
      */
     public function getContent()
     {
@@ -162,7 +168,7 @@ class Change
     /**
      * Get boiler
      *
-     * @return \Kraken\RankingBundle\Entity\Boiler 
+     * @return \Kraken\RankingBundle\Entity\Boiler
      */
     public function getBoiler()
     {

@@ -4,23 +4,9 @@
 
 {% block content_row %}
 <div class="row">
-    <div class="col-sm-8">
-        <div class="col-sm-4">
-            <p><strong>A</strong></p>
-            <p>Ocena w rankingu</p>
-        </div>
-        <div class="col-sm-4">
-            <p><strong>A</strong></p>
-            <p>Ocena w rankingu</p>
-        </div>
-        <div class="col-sm-4">
-            <p><strong>A</strong></p>
-            <p>Ocena w rankingu</p>
-        </div>
-    </div>
     <div class="col-sm-4">
         <div class="thumbnail">
-            <img src="{{ asset('uploads/ranking/' ~ boiler.image) }}" />
+            <img src="{{ vich_uploader_asset(boiler, 'imageFile') }}" />
         </div>
         <div class="col-sm-6">
             <p><strong>A</strong></p>
@@ -29,6 +15,24 @@
         <div class="col-sm-6">
             <p><strong>7,8/10</strong></p>
             <p>Opinia użytkowników</p>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <ul class="nav nav-tabs">
+          <li role="presentation" class="active"><a href="#">Podsumowanie</a></li>
+          <li role="presentation"><a href="#">Opis</a></li>
+          <li role="presentation"><a href="#">Opinie</a></li>
+        </ul>
+        <div class="col-sm-12">
+            <p>Ogniwo Eko Plus (OEP) to eks­tra­klasa kotłów podaj­ni­ko­wych. Można by wyli­czać jego zalety jak rów­nież zna­leźć kilka wad, ale klu­czowe w tym kotle jest co innego: ktoś w końcu zauwa­żył, że osoba obsłu­gu­jąca kocioł węglowy może nie być i nie chcieć być eks­per­tem od spa­la­nia węgla.</p>
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <h3 class="panel-title">Zalety kotła</h3>
+              </div>
+              <div class="panel-body">
+                Palnik II generacji
+              </div>
+            </div>
         </div>
     </div>
 </div>
