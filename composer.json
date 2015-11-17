@@ -51,7 +51,8 @@
         "vich/uploader-bundle": "~0.14",
         "sonata-project/admin-bundle": "2.3.*",
         "sonata-project/doctrine-orm-admin-bundle": "2.3.*",
-        "sonata-project/formatter-bundle": "^2.4@dev"
+        "sonata-project/formatter-bundle": "^2.4@dev",
+        "sonata-project/media-bundle": "^2.4@dev"
     },
     "require-dev": {
         "behat/behat": "3.0.*@dev",

@@ -98,7 +98,17 @@ class Boiler
     /**
      * @ORM\Column(type="text", nullable=true)
      */
+    protected $lead;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
     protected $content;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $ratingExplanation;
 
     /**
      * @ORM\Column(type="string", length=2, nullable=true)
@@ -111,12 +121,12 @@ class Boiler
     protected $normClass;
 
     /**
-     * @ORM\Column(type="decimal", nullable=true)
+     * @ORM\Column(type="decimal", precision=4, scale=2, nullable=true)
      */
     protected $typicalModelPower;
 
     /**
-     * @ORM\Column(type="decimal", nullable=true)
+     * @ORM\Column(type="decimal", precision=4, scale=2, nullable=true)
      */
     protected $typicalModelExchanger;
 
@@ -131,9 +141,19 @@ class Boiler
     protected $typicalModelPrice;
 
     /**
-     * @ORM\Column(type="decimal", nullable=true)
+     * @ORM\Column(type="integer", nullable=true)
      */
     protected $warranty;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $userManual;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $forClosedSystem;
 
     /**
      * @Gedmo\Timestampable(on="create")
@@ -505,29 +525,6 @@ class Boiler
     }
 
     /**
-     * Set forClosedSystem
-     *
-     * @param boolean $forClosedSystem
-     * @return Boiler
-     */
-    public function setForClosedSystem($forClosedSystem)
-    {
-        $this->forClosedSystem = $forClosedSystem;
-
-        return $this;
-    }
-
-    /**
-     * Get forClosedSystem
-     *
-     * @return boolean
-     */
-    public function getForClosedSystem()
-    {
-        return $this->forClosedSystem;
-    }
-
-    /**
      * Set created
      *
      * @param \DateTime $created
@@ -749,5 +746,133 @@ class Boiler
     public function getAcceptedFuelTypes()
     {
         return $this->acceptedFuelTypes;
+    }
+
+    /**
+     * Set lead
+     *
+     * @param string $lead
+     * @return Boiler
+     */
+    public function setLead($lead)
+    {
+        $this->lead = $lead;
+
+        return $this;
+    }
+
+    /**
+     * Get lead
+     *
+     * @return string
+     */
+    public function getLead()
+    {
+        return $this->lead;
+    }
+
+    /**
+     * Set ratingExplanation
+     *
+     * @param string $ratingExplanation
+     * @return Boiler
+     */
+    public function setRatingExplanation($ratingExplanation)
+    {
+        $this->ratingExplanation = $ratingExplanation;
+
+        return $this;
+    }
+
+    /**
+     * Get ratingExplanation
+     *
+     * @return string
+     */
+    public function getRatingExplanation()
+    {
+        return $this->ratingExplanation;
+    }
+
+    public function hasCrossSectionImage()
+    {
+        return $this->crossSection != '';
+    }
+
+    public function getWarrantyYears()
+    {
+        if ($this->warranty == 12) {
+            return 'rok';
+        }
+
+        if ($this->warranty % 12 == 0) {
+            $years = $this->warranty / 12;
+
+            if ($years < 5) {
+                return sprintf('%d lata', $years);
+            }
+
+            return sprintf('%d lat', $years);
+        } else {
+            $years = $this->warranty / 12;
+            $fraction = ($this->warranty % 12) / 12 * 10;
+
+            return sprintf('%d,%d roku', $years, $fraction);
+        }
+    }
+
+    public function getExchangerNormPercent()
+    {
+        if (!$this->typicalModelPower || !$this->typicalModelExchanger) {
+            return 0;
+        }
+
+        return ($this->typicalModelExchanger/$this->typicalModelPower)/0.125*100;
+    }
+
+    /**
+     * Set userManual
+     *
+     * @param string $userManual
+     * @return Boiler
+     */
+    public function setUserManual($userManual)
+    {
+        $this->userManual = $userManual;
+
+        return $this;
+    }
+
+    /**
+     * Get userManual
+     *
+     * @return string 
+     */
+    public function getUserManual()
+    {
+        return $this->userManual;
+    }
+
+    /**
+     * Set forClosedSystem
+     *
+     * @param boolean $forClosedSystem
+     * @return Boiler
+     */
+    public function setForClosedSystem($forClosedSystem)
+    {
+        $this->forClosedSystem = $forClosedSystem;
+
+        return $this;
+    }
+
+    /**
+     * Get forClosedSystem
+     *
+     * @return boolean 
+     */
+    public function getForClosedSystem()
+    {
+        return $this->forClosedSystem;
     }
 }

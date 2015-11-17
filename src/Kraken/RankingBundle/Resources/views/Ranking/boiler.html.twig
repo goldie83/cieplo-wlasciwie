@@ -8,32 +8,115 @@
         <div class="thumbnail">
             <img src="{{ vich_uploader_asset(boiler, 'imageFile') }}" />
         </div>
-        <div class="col-sm-6">
-            <p><strong>A</strong></p>
-            <p>Ocena w rankingu</p>
-        </div>
-        <div class="col-sm-6">
-            <p><strong>7,8/10</strong></p>
-            <p>Opinia użytkowników</p>
-        </div>
+        <table class="table table-striped">
+          <tbody>
+            <tr>
+              <th scope="row">Ocena w rankingu</th>
+              <td><span class="label label-primary boiler-class {{ boiler.rating|lower }}-class">{{ boiler.rating }}</span></td>
+            </tr>
+            <tr>
+              <th scope="row">Producent</th>
+              <td>{{ boiler.manufacturer }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Rodzaj kotła</th>
+              <td>{{ boiler.category.singularName }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Powierzchnia wymiennika</th>
+              <td><strong>{{ boiler.exchangerNormPercent }}%</strong> współczesnego standardu</td>
+            </tr>
+            <tr>
+              <th scope="row">Do układu zamkniętego</th>
+              <td><strong>{{ boiler.forClosedSystem ? 'tak' : 'nie' }}</strong></td>
+            </tr>
+            <tr>
+              <th scope="row">Paliwa</th>
+              <td>
+                  <ul>
+                  {% for fuel in boiler.acceptedFuelTypes %}
+                      <li>{{ fuel }}</li>
+                  {% endfor %}
+                  </ul>
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Dostępne moce</th>
+              <td>
+                  {% for power in boiler.boilerPowers %}
+                      <span class="label label-primary boiler-power">{{ power.power }}kW</span>
+                  {% endfor %}
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">
+                  Klasa<br/><small><a href="http://czysteogrzewanie.pl/kociol/ranking-kotlow-weglowych/norma-pn-en-303-5-2012/" target="_blank">wg normy <span style="white-space:nowrap">PN-EN 303-5:2012</span></a></small></th>
+              <td>
+                  {% if boiler.normClass %}
+                      {{ boiler.normClass }}
+                  {% else %}
+                      <i>nie przebadano</i>
+                  {% endif %}
+              </td>
+            </tr>
+            <tr>
+              <th scope="row">Gwarancja</th>
+              <td>{{ boiler.warrantyYears }}</td>
+            </tr>
+            <tr>
+              <th scope="row">Instrukcja obsługi</th>
+              <td>{% if boiler.userManual %}<a href="{{ boiler.userManual }}" target="_blank">dostępna</a>{% else %}<i>niedostępna</i>{% endif %}</td>
+            </tr>
+            <tr>
+              <th scope="row">Orientacyjna cena</th>
+              <td>od {{ boiler.typicalModelPrice|number_format(0, ',', ' ') }}zł ({{ boiler.typicalModelPower|number_format }}kW)</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>Ostatnia aktualizacja: {{ boiler.updated|date('d.m.Y') }}</p>
     </div>
     <div class="col-sm-8">
-        <ul class="nav nav-tabs">
-          <li role="presentation" class="active"><a href="#">Podsumowanie</a></li>
-          <li role="presentation"><a href="#">Opis</a></li>
-          <li role="presentation"><a href="#">Opinie</a></li>
+        <ul id="boilerTabs" class="nav nav-tabs" role="tablist">
+              <li role="presentation" class="active"><a href="#overview" id="overview-tab" role="tab" data-toggle="tab" aria-controls="overview" aria-expanded="true">Podsumowanie</a></li>
+              <li role="presentation" class=""><a href="#details" role="tab" id="details-tab" data-toggle="tab" aria-controls="details" aria-expanded="false">Szczegóły</a></li>
+              <li role="presentation" class=""><a href="#rating" role="tab" id="rating-tab" data-toggle="tab" aria-controls="rating" aria-expanded="false">Ocena</a></li>
         </ul>
-        <div class="col-sm-12">
-            <p>Ogniwo Eko Plus (OEP) to eks­tra­klasa kotłów podaj­ni­ko­wych. Można by wyli­czać jego zalety jak rów­nież zna­leźć kilka wad, ale klu­czowe w tym kotle jest co innego: ktoś w końcu zauwa­żył, że osoba obsłu­gu­jąca kocioł węglowy może nie być i nie chcieć być eks­per­tem od spa­la­nia węgla.</p>
-            <div class="panel panel-default">
-              <div class="panel-heading">
-                <h3 class="panel-title">Zalety kotła</h3>
+        <div id="boilerTabsContent" class="tab-content">
+          <div role="tabpanel" class="tab-pane fade active in" id="overview" aria-labelledby="overview-tab">
+              <h2>W dużym skrócie</h2>
+              {{ boiler.lead|raw }}
+          </div>
+          <div role="tabpanel" class="tab-pane fade" id="details" aria-labelledby="details-tab">
+              <h2>Detale techniczne</h2>
+              {% if boiler.hasCrossSectionImage %}
+              <div class="thumbnail">
+                  <img src="{{ vich_uploader_asset(boiler, 'crossSectionFile') }}" />
+                  <div class="caption text-center">
+                      <p>Przekrój kotła {{ boiler.name }}</p>
+                  </div>
               </div>
-              <div class="panel-body">
-                Palnik II generacji
-              </div>
-            </div>
+              {% endif %}
+              {{ boiler.content|raw }}
+          </div>
+          <div role="tabpanel" class="tab-pane fade" id="rating" aria-labelledby="rating-tab">
+              <h2>Uzasadnienie oceny</h2>
+              {{ boiler.ratingExplanation|raw }}
+              {% if boiler.changes %}
+                  <h3>Historia zmian</h3>
+                  <dl>
+                  {% for change in boiler.changes %}
+                      <dt>{{ change.date|date('d.m.Y') }}: {{ change.content }}</dt>
+                      <dd>{% if change.oldRating %}Zmiana oceny: <strong>{{ change.oldRating }} &rarr; {{ change.newRating }}{% else %}Ocena bez zmian.{% endif %}</dd>
+                  {% endfor %}
+                  </dl>
+               {% endif %}
+          </div>
         </div>
     </div>
 </div>
 {% endblock content_row %}
+
+{% block bottom_javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/krakenranking/js/boiler.js') }}"></script>
+{% endblock %}

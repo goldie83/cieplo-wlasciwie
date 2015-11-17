@@ -1,0 +1,40 @@
+.boiler-power {
+    font-size: 90%;
+}
+
+.boiler-class {
+    font-size: 120%;
+}
+
+.a-plus-class {
+    background-color: #7FEB2C;
+}
+
+.a-class {
+    background-color: #37c837;
+}
+
+.b-class {
+    background-color: #aad400;
+}
+
+.c-class {
+    background-color: #ffcc00;
+}
+
+.d-class {
+    background-color: #ff6600;
+}
+
+.e-class {
+    background-color: #ff2a2a;
+}
+
+.f-class {
+    background-color: #BE0E11;
+}
+
+
+#boilerTabsContent > div {
+    margin-top: 20px;
+}

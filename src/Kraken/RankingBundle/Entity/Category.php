@@ -25,6 +25,11 @@ class Category
     protected $name;
 
     /**
+     * @ORM\Column(type="string", name="singular_name")
+     */
+    protected $singularName;
+
+    /**
      * @Gedmo\Slug(fields={"name"})
      * @ORM\Column(length=128, unique=true)
      */
@@ -190,5 +195,28 @@ class Category
     public function getBoilers()
     {
         return $this->boilers;
+    }
+
+    /**
+     * Set singularName
+     *
+     * @param string $singularName
+     * @return Category
+     */
+    public function setSingularName($singularName)
+    {
+        $this->singularName = $singularName;
+
+        return $this;
+    }
+
+    /**
+     * Get singularName
+     *
+     * @return string
+     */
+    public function getSingularName()
+    {
+        return $this->singularName;
     }
 }
