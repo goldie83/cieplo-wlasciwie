@@ -30,9 +30,9 @@ class BoilerAdmin extends Admin
                 'edit' => 'inline',
                 'inline' => 'table',
             ])
-            ->add('lead', 'sonata_simple_formatter_type', ['label' => 'Wstęp', 'format' => 'richhtml'])
-            ->add('content', 'sonata_simple_formatter_type', ['label' => 'Artykuł', 'format' => 'richhtml'])
-            ->add('ratingExplanation', 'sonata_simple_formatter_type', ['label' => 'Wyjaśnienie oceny', 'format' => 'richhtml'])
+            ->add('lead', 'ckeditor', ['label' => 'Wstęp'])
+            ->add('content', 'ckeditor', ['label' => 'Artykuł'])
+            ->add('ratingExplanation', 'ckeditor', ['label' => 'Wyjaśnienie oceny'])
             ->add('rating', null, ['label' => 'Ocena'])
             ->add('normClass', null, ['label' => 'Klasa wg PN-EN 303-5:2012'])
             ->add('typicalModelPower', null, ['label' => 'Moc wzorcowego modelu'])

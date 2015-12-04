@@ -35,6 +35,11 @@ class FuelType
      */
     protected $boilerPowers;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Search", mappedBy="fuelType")
+     */
+    protected $searches;
+
     public function __construct()
     {
         $this->boilerPowers = new \Doctrine\Common\Collections\ArrayCollection();
@@ -127,5 +132,38 @@ class FuelType
     public function getBoilerPowers()
     {
         return $this->boilerPowers;
+    }
+
+    /**
+     * Add searches
+     *
+     * @param \Kraken\RankingBundle\Entity\Search $searches
+     * @return FuelType
+     */
+    public function addSearch(\Kraken\RankingBundle\Entity\Search $searches)
+    {
+        $this->searches[] = $searches;
+
+        return $this;
+    }
+
+    /**
+     * Remove searches
+     *
+     * @param \Kraken\RankingBundle\Entity\Search $searches
+     */
+    public function removeSearch(\Kraken\RankingBundle\Entity\Search $searches)
+    {
+        $this->searches->removeElement($searches);
+    }
+
+    /**
+     * Get searches
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSearches()
+    {
+        return $this->searches;
     }
 }

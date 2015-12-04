@@ -1,5 +1,7 @@
 {% extends 'KrakenRankingBundle::base.html.twig' %}
 
+{% block title %}{{ boiler.name }} - ranking kotłów węglowych{% endblock title %}
+
 {% block headline %}{{ boiler.name }}{% endblock headline %}
 
 {% block content_row %}
@@ -44,7 +46,7 @@
               <th scope="row">Dostępne moce</th>
               <td>
                   {% for power in boiler.boilerPowers %}
-                      <span class="label label-primary boiler-power">{{ power.power }}kW</span>
+                      <span class="label label-primary boiler-power">{{ power.power|number_format }}kW</span>
                   {% endfor %}
               </td>
             </tr>
@@ -83,8 +85,44 @@
         </ul>
         <div id="boilerTabsContent" class="tab-content">
           <div role="tabpanel" class="tab-pane fade active in" id="overview" aria-labelledby="overview-tab">
-              <h2>W dużym skrócie</h2>
               {{ boiler.lead|raw }}
+              <hr/>
+              {% set hasUnknownProperties = boiler.unknownBoilerProperties|length > 0 %}
+              <div class="col-sm-{{ hasUnknownProperties ? '4' : '6' }}">
+                  <h4>Zalety</h4>
+                  <ul class="list-group">
+                  {% for bp in boiler.positiveBoilerProperties %}
+                    <li class="list-group-item list-group-item-success">
+                        <h5><strong>{{ bp.property.label }}</strong></h5>
+                        <p>{{ bp.property.content }}</p>
+                    </li>
+                  {% endfor %}
+                  </ul>
+              </div>
+              {% if hasUnknownProperties %}
+              <div class="col-sm-4">
+                  <h4>Niewiadome</h4>
+                  <ul class="list-group">
+                  {% for bp in boiler.unknownBoilerProperties %}
+                    <li class="list-group-item">
+                        <h5><strong>{{ bp.property.label }}</strong></h5>
+                        <p>{{ bp.property.content }}</p>
+                    </li>
+                  {% endfor %}
+                  </ul>
+              </div>
+              {% endif %}
+              <div class="col-sm-{{ hasUnknownProperties ? '4' : '6' }}">
+                  <h4>Wady</h4>
+                  <ul class="list-group">
+                  {% for bp in boiler.negativeBoilerProperties %}
+                    <li class="list-group-item list-group-item-danger">
+                        <h5><strong>{{ bp.property.label }}</strong></h5>
+                        <p>{{ bp.property.content }}</p>
+                    </li>
+                  {% endfor %}
+                  </ul>
+              </div>
           </div>
           <div role="tabpanel" class="tab-pane fade" id="details" aria-labelledby="details-tab">
               <h2>Detale techniczne</h2>
@@ -106,7 +144,7 @@
                   <dl>
                   {% for change in boiler.changes %}
                       <dt>{{ change.date|date('d.m.Y') }}: {{ change.content }}</dt>
-                      <dd>{% if change.oldRating %}Zmiana oceny: <strong>{{ change.oldRating }} &rarr; {{ change.newRating }}{% else %}Ocena bez zmian.{% endif %}</dd>
+                      <dd>{% if change.oldRating %}Zmiana oceny: <strong>{{ change.oldRating }}</strong> &rarr; <strong>{{ change.newRating }}</strong>{% else %}Ocena bez zmian.{% endif %}</dd>
                   {% endfor %}
                   </dl>
                {% endif %}

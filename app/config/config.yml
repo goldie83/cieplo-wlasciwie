@@ -132,3 +132,15 @@ vich_uploader:
         cross_section:
             uri_prefix:         /uploads/cross_sections
             upload_destination: %kernel.root_dir%/../web/uploads/cross_sections
+
+liip_imagine:
+    resolvers:
+       default:
+          web_path: ~
+
+    filter_sets:
+        cache: ~
+        thumbnail:
+            quality: 75
+            filters:
+                thumbnail: { size: [200, 150], mode: inset }

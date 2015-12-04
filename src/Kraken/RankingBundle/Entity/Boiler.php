@@ -794,6 +794,53 @@ class Boiler
         return $this->ratingExplanation;
     }
 
+
+    /**
+     * Set userManual
+     *
+     * @param string $userManual
+     * @return Boiler
+     */
+    public function setUserManual($userManual)
+    {
+        $this->userManual = $userManual;
+
+        return $this;
+    }
+
+    /**
+     * Get userManual
+     *
+     * @return string
+     */
+    public function getUserManual()
+    {
+        return $this->userManual;
+    }
+
+    /**
+     * Set forClosedSystem
+     *
+     * @param boolean $forClosedSystem
+     * @return Boiler
+     */
+    public function setForClosedSystem($forClosedSystem)
+    {
+        $this->forClosedSystem = $forClosedSystem;
+
+        return $this;
+    }
+
+    /**
+     * Get forClosedSystem
+     *
+     * @return boolean
+     */
+    public function getForClosedSystem()
+    {
+        return $this->forClosedSystem;
+    }
+
     public function hasCrossSectionImage()
     {
         return $this->crossSection != '';
@@ -830,49 +877,42 @@ class Boiler
         return ($this->typicalModelExchanger/$this->typicalModelPower)/0.125*100;
     }
 
-    /**
-     * Set userManual
-     *
-     * @param string $userManual
-     * @return Boiler
-     */
-    public function setUserManual($userManual)
+    public function getPositiveBoilerProperties()
     {
-        $this->userManual = $userManual;
+        $properties = [];
 
-        return $this;
+        foreach ($this->boilerProperties as $property) {
+            if ($property->getProperty()->isPositive()) {
+                $properties[] = $property;
+            }
+        }
+
+        return $properties;
     }
 
-    /**
-     * Get userManual
-     *
-     * @return string 
-     */
-    public function getUserManual()
+    public function getNegativeBoilerProperties()
     {
-        return $this->userManual;
+        $properties = [];
+
+        foreach ($this->boilerProperties as $property) {
+            if ($property->getProperty()->isNegative()) {
+                $properties[] = $property;
+            }
+        }
+
+        return $properties;
     }
 
-    /**
-     * Set forClosedSystem
-     *
-     * @param boolean $forClosedSystem
-     * @return Boiler
-     */
-    public function setForClosedSystem($forClosedSystem)
+    public function getUnknownBoilerProperties()
     {
-        $this->forClosedSystem = $forClosedSystem;
+        $properties = [];
 
-        return $this;
-    }
+        foreach ($this->boilerProperties as $property) {
+            if ($property->getProperty()->isUnknown()) {
+                $properties[] = $property;
+            }
+        }
 
-    /**
-     * Get forClosedSystem
-     *
-     * @return boolean 
-     */
-    public function getForClosedSystem()
-    {
-        return $this->forClosedSystem;
+        return $properties;
     }
 }

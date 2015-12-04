@@ -49,6 +49,12 @@ class Category
      * @ORM\OneToMany(targetEntity="Boiler", mappedBy="category")
      */
     protected $boilers;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Boiler", mappedBy="search")
+     */
+    protected $searches;
+
     /**
      * Constructor
      */
@@ -218,5 +224,38 @@ class Category
     public function getSingularName()
     {
         return $this->singularName;
+    }
+
+    /**
+     * Add searches
+     *
+     * @param \Kraken\RankingBundle\Entity\Boiler $searches
+     * @return Category
+     */
+    public function addSearch(\Kraken\RankingBundle\Entity\Boiler $searches)
+    {
+        $this->searches[] = $searches;
+
+        return $this;
+    }
+
+    /**
+     * Remove searches
+     *
+     * @param \Kraken\RankingBundle\Entity\Boiler $searches
+     */
+    public function removeSearch(\Kraken\RankingBundle\Entity\Boiler $searches)
+    {
+        $this->searches->removeElement($searches);
+    }
+
+    /**
+     * Get searches
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getSearches()
+    {
+        return $this->searches;
     }
 }

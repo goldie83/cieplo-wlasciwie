@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 use Kraken\RankingBundle\Entity\Boiler;
 use Kraken\RankingBundle\Entity\Category;
+use Kraken\RankingBundle\Entity\Search;
 use Kraken\RankingBundle\Form\SearchForm;
 
 
@@ -32,7 +33,12 @@ class GeneralController extends BaseController
      */
     public function categoryAction(Category $category)
     {
-        return $this->render('KrakenRankingBundle:Ranking:category.html.twig', ['category' => $category]);
+        $search = new Search;
+        $search->setCategory($category);
+
+        $form = $this->createForm(new SearchForm(), $search);
+
+        return $this->render('KrakenRankingBundle:Ranking:category.html.twig', ['category' => $category, 'form' => $form->createView()]);
     }
 
     /**

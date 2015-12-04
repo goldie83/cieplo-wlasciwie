@@ -12,16 +12,36 @@ class SearchForm extends AbstractType
     {
         $builder
             ->add('modelName', null, [
-                'label' => 'Nazwa modelu lub producenta',
-                'mapped' => false,
+                'label' => 'Nazwa producenta lub modelu',
+                'required' => false,
             ])
-            ->add('power', 'number', [
-                'label' => 'Moc',
-                'mapped' => false,
+            ->add('category', null, [
+                'label' => 'Rodzaj',
+                'placeholder' => 'dowolny',
+                'required' => false,
             ])
-            ->add('type', 'number', [
+            ->add('fuelType', null, [
+                'label' => 'Paliwa',
+                'expanded' => true,
+                'multiple' => true,
+                'required' => false,
+            ])
+            ->add('power', 'choice', [
+                'choices' => ['10' => 'do 10kW', '15' => '10‒15kW', '20' => '15‒20kW', '25' => '20‒25kW', '25+' => 'ponad 25kW'],
                 'label' => 'Moc',
-                'mapped' => false,
+                'required' => false,
+            ])
+            ->add('boilerClass', 'choice', [
+                'choices' => [3, 4, 5],
+                'label' => 'Klasa wg PN-EN 303-5:2012',
+                'placeholder' => 'dowolna',
+                'required' => false,
+            ])
+            ->add('rating', 'choice', [
+                'choices' => ['A', 'B', 'C', 'D', 'E'],
+                'label' => 'Ocena w rankingu',
+                'placeholder' => 'dowolna',
+                'required' => false,
             ])
         ;
     }
@@ -29,7 +49,7 @@ class SearchForm extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-//             'data_class' => 'AppBundle\Entity\Boiler',
+            'data_class' => 'Kraken\RankingBundle\Entity\Search',
         ]);
     }
 

@@ -38,3 +38,19 @@
 #boilerTabsContent > div {
     margin-top: 20px;
 }
+
+footer {
+    margin: 50px 0 0;
+    padding: 10px 0;
+    border-top: 1px solid #ddd;
+    color: #888;
+}
+
+.form-horizontal .form-group {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.form-horizontal fieldset {
+    margin: 20px 0;
+}

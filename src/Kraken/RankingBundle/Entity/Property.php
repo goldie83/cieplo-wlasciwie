@@ -154,4 +154,19 @@ class Property
     {
         return $this->meaning;
     }
+
+    public function isPositive()
+    {
+        return $this->meaning == 1;
+    }
+
+    public function isNegative()
+    {
+        return $this->meaning == -1;
+    }
+
+    public function isUnknown()
+    {
+        return $this->meaning == 0;
+    }
 }
