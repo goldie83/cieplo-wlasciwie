@@ -31,9 +31,9 @@ class SearchForm extends AbstractType
                 'label' => 'Moc',
                 'required' => false,
             ])
-            ->add('boilerClass', 'choice', [
+            ->add('normClass', 'choice', [
                 'choices' => [3, 4, 5],
-                'label' => 'Klasa wg PN-EN 303-5:2012',
+                'label' => 'Klasa',
                 'placeholder' => 'dowolna',
                 'required' => false,
             ])
@@ -41,6 +41,10 @@ class SearchForm extends AbstractType
                 'choices' => ['A', 'B', 'C', 'D', 'E'],
                 'label' => 'Ocena w rankingu',
                 'placeholder' => 'dowolna',
+                'required' => false,
+            ])
+            ->add('forClosedSystem', null, [
+                'label' => 'Kotły do układu zamkniętego',
                 'required' => false,
             ])
         ;

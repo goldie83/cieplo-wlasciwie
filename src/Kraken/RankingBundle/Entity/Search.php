@@ -26,7 +26,7 @@ class Search
     protected $created;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true, name="model_name")
      */
     protected $modelName;
 
@@ -39,25 +39,31 @@ class Search
      * @ORM\ManyToMany(targetEntity="FuelType", cascade={"all"}, orphanRemoval=true)
      * @ORM\JoinTable(name="search_fuel_types",
      *      joinColumns={@ORM\JoinColumn(name="search_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="fuel_type_id", referencedColumnName="id", unique=true)}
+     *      inverseJoinColumns={@ORM\JoinColumn(name="fuel_type_id", referencedColumnName="id")}
      *      )
      **/
     protected $fuelType;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     protected $power;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true, name="norm_class")
      */
-    protected $boilerClass;
+    protected $normClass;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     protected $rating;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $forClosedSystem;
+
     /**
      * Constructor
      */
@@ -74,6 +80,11 @@ class Search
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getUid()
+    {
+        return base_convert($this->id, 10, 36);
     }
 
     /**
@@ -146,26 +157,26 @@ class Search
     }
 
     /**
-     * Set boilerClass
+     * Set normClass
      *
-     * @param string $boilerClass
+     * @param string $normClass
      * @return Search
      */
-    public function setBoilerClass($boilerClass)
+    public function setNormClass($normClass)
     {
-        $this->boilerClass = $boilerClass;
+        $this->normClass = $normClass;
 
         return $this;
     }
 
     /**
-     * Get boilerClass
+     * Get normClass
      *
      * @return string
      */
-    public function getBoilerClass()
+    public function getNormClass()
     {
-        return $this->boilerClass;
+        return $this->normClass;
     }
 
     /**
@@ -240,10 +251,44 @@ class Search
     /**
      * Get category
      *
-     * @return \Kraken\RankingBundle\Entity\Category 
+     * @return \Kraken\RankingBundle\Entity\Category
      */
     public function getCategory()
     {
         return $this->category;
+    }
+
+    /**
+     * Set forClosedSystem
+     *
+     * @param boolean $forClosedSystem
+     * @return Search
+     */
+    public function setForClosedSystem($forClosedSystem)
+    {
+        $this->forClosedSystem = $forClosedSystem;
+
+        return $this;
+    }
+
+    /**
+     * Get forClosedSystem
+     *
+     * @return boolean
+     */
+    public function isForClosedSystem()
+    {
+        return $this->forClosedSystem;
+    }
+
+    public function isEmpty()
+    {
+        return $this->modelName == ''
+            && $this->category == ''
+            && $this->fuelType->count() == 0
+            && $this->power == ''
+            && $this->boilerClass == ''
+            && $this->rating == ''
+            && $this->forClosedSystem == false;
     }
 }

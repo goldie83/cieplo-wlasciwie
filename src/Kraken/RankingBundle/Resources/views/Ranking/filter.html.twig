@@ -1,5 +1,5 @@
 <div class="row">
-    <form class="form-horizontal">
+    <form class="form-horizontal" method="POST" action="{{ url('ranking_search')}}">
       <fieldset>
           <legend>Szukam konkretnej sztuki</legend>
           {{ form_row(form.modelName) }}

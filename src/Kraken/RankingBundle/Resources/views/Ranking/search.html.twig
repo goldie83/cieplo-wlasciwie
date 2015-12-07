@@ -1,6 +1,6 @@
 {% extends 'KrakenRankingBundle::base.html.twig' %}
 
-{% block headline %}{{ category.name }}{% endblock headline %}
+{% block headline %}Wyszukiwanie{% endblock headline %}
 
 {% block content_row %}
 <div class="row">
@@ -11,15 +11,18 @@
         </form>
     </div>
     <div class="col-sm-8">
+    {% if search.empty %}
+        <div class="alert alert-danger" role="alert"><strong>Wszystkiego na raz nie da rady.</strong> Wybierz przynajmniej jedno z kryteriów wyszukiwania.</div>
+    {% elseif boilers %}
         <table class="table table-hover">
             <tbody>
-            {% for boiler in category.boilers %}
+            {% for boiler in boilers %}
                 <tr>
                     <td class="col-sm-2">
                         <img src="{{ vich_uploader_asset(boiler, 'imageFile')|imagine_filter('thumbnail') }}" />
                     </td>
                     <td class="col-sm-8">
-                        <h3><a href="{{ url('ranking_boiler_overview', {'category': category.slug, 'boiler': boiler.slug}) }}">{{ boiler.name }}</a></h3>
+                        <h3><a href="{{ url('ranking_boiler_overview', {'category': boiler.category.slug, 'boiler': boiler.slug}) }}">{{ boiler.name }}</a></h3>
                         <p>{{ boiler.category.singularName }}</p>
                         <p>Producent: {{ boiler.manufacturer.name }}</p>
                         <p>{% for p in boiler.positiveBoilerProperties %}<span class="label label-success">{{ p }}</span>&nbsp;{% endfor %}</p>
@@ -32,6 +35,9 @@
             {% endfor %}
             </tbody>
         </table>
+    {% else %}
+        <div class="alert alert-warning" role="alert"><strong>Niestety.</strong> Nie ma tu kotła, który spełniałby te kryteria.</div>
+    {% endif %}
     </div>
 </div>
 {% endblock content_row %}
