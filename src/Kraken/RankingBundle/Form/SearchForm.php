@@ -2,6 +2,7 @@
 
 namespace Kraken\RankingBundle\Form;
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -15,10 +16,20 @@ class SearchForm extends AbstractType
                 'label' => 'Nazwa producenta lub modelu',
                 'required' => false,
             ])
+            ->add('manufacturer', null, [
+                'label' => 'Producent',
+                'placeholder' => 'dowolny',
+                'required' => false,
+            ])
             ->add('category', null, [
+                'property' => 'indentedName',
                 'label' => 'Rodzaj',
                 'placeholder' => 'dowolny',
                 'required' => false,
+                'query_builder' => function (EntityRepository $er) use ($options) {
+                    return $er->createQueryBuilder('c')
+                        ->orderBy('c.sort');
+                },
             ])
             ->add('fuelType', null, [
                 'label' => 'Paliwa',
@@ -27,6 +38,7 @@ class SearchForm extends AbstractType
                 'required' => false,
             ])
             ->add('power', 'choice', [
+                'placeholder' => 'dowolna',
                 'choices' => ['10' => 'do 10kW', '15' => '10‒15kW', '20' => '15‒20kW', '25' => '20‒25kW', '25+' => 'ponad 25kW'],
                 'label' => 'Moc',
                 'required' => false,

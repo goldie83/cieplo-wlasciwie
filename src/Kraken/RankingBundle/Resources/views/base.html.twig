@@ -5,7 +5,7 @@
 {% block navbar %}
     {% embed '@MopaBootstrap/Navbar/navbar.html.twig' with { fixedTop: false, inverse: true, id: 'navbar-example' } %}
         {% block brand %}
-            <a class="navbar-brand" href="{{ path('homepage') }}">Ranking kotłów węglowych</a>
+            <a class="navbar-brand" href="{{ path('ranking_homepage') }}">Ranking kotłów węglowych</a>
         {% endblock %}
 
         {% block menu %}

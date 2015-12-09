@@ -35,11 +35,6 @@ class FuelType
      */
     protected $boilerPowers;
 
-    /**
-     * @ORM\OneToMany(targetEntity="Search", mappedBy="fuelType")
-     */
-    protected $searches;
-
     public function __construct()
     {
         $this->boilerPowers = new \Doctrine\Common\Collections\ArrayCollection();
@@ -160,7 +155,7 @@ class FuelType
     /**
      * Get searches
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getSearches()
     {

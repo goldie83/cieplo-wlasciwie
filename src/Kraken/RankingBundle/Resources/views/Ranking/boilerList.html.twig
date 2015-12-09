@@ -1,0 +1,31 @@
+{% if search is defined and search.empty %}
+    <div class="alert alert-danger" role="alert"><strong>Wszystkiego na raz nie da rady.</strong> Wybierz przynajmniej jedno z kryteriów wyszukiwania.</div>
+{% elseif boilers %}
+    <ul class="nav nav-pills">
+      <li role="presentation" class="active"><a href="#">Najtańsze</a></li>
+      <li role="presentation"><a href="#">Najlepiej ocenione</a></li>
+    </ul>
+    <table class="table table-hover">
+        <tbody>
+        {% for boiler in boilers %}
+            <tr>
+                <td class="col-sm-2">
+                    <img src="{{ vich_uploader_asset(boiler, 'imageFile')|imagine_filter('thumbnail') }}" />
+                </td>
+                <td class="col-sm-8">
+                    <h3><a href="{{ url('ranking_boiler_overview', {'category': boiler.category.slug, 'boiler': boiler.slug}) }}">{{ boiler.name }}</a></h3>
+                    <p>{{ boiler.category.singularName }}</p>
+                    <p>Producent: {{ boiler.manufacturer.name }}</p>
+                    <p>{% for p in boiler.positiveBoilerProperties %}<span class="label label-success">{{ p }}</span>&nbsp;{% endfor %}</p>
+                </td>
+                <td class="col-sm-2" style="text-align:right">
+                    <p><span class="label label-primary boiler-class {{ boiler.rating|lower }}-class">{{ boiler.rating }}</span></p>
+                    <p>cena: od {{ boiler.typicalModelPrice|number_format(0, ',', ' ') }}zł</p>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <div class="alert alert-warning" role="alert"><strong>Niestety.</strong> Nie ma tu kotła, który spełniałby te kryteria.</div>
+{% endif %}

@@ -3,6 +3,7 @@
 namespace Kraken\RankingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -24,6 +25,12 @@ class Manufacturer
     protected $name;
 
     /**
+     * @Gedmo\Slug(fields={"name"})
+     * @ORM\Column(length=128, unique=true)
+     */
+    protected $slug;
+
+    /**
      * @ORM\Column(type="string")
      * @Assert\Url()
      */
@@ -33,6 +40,12 @@ class Manufacturer
      * @ORM\OneToMany(targetEntity="Boiler", mappedBy="manufacturer")
      */
     protected $boilers;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Search", mappedBy="manufacturer")
+     */
+    protected $searches;
+
     /**
      * Constructor
      */
@@ -133,5 +146,61 @@ class Manufacturer
     public function getBoilers()
     {
         return $this->boilers;
+    }
+
+    /**
+     * Add searches
+     *
+     * @param \Kraken\RankingBundle\Entity\Search $searches
+     * @return Manufacturer
+     */
+    public function addSearch(\Kraken\RankingBundle\Entity\Search $searches)
+    {
+        $this->searches[] = $searches;
+
+        return $this;
+    }
+
+    /**
+     * Remove searches
+     *
+     * @param \Kraken\RankingBundle\Entity\Search $searches
+     */
+    public function removeSearch(\Kraken\RankingBundle\Entity\Search $searches)
+    {
+        $this->searches->removeElement($searches);
+    }
+
+    /**
+     * Get searches
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getSearches()
+    {
+        return $this->searches;
+    }
+
+    /**
+     * Set slug
+     *
+     * @param string $slug
+     * @return Manufacturer
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * Get slug
+     *
+     * @return string 
+     */
+    public function getSlug()
+    {
+        return $this->slug;
     }
 }

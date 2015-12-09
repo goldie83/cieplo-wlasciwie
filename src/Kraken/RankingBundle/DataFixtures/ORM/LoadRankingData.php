@@ -14,17 +14,45 @@ class LoadRankingData implements FixtureInterface
 {
     public function load(ObjectManager $manager)
     {
+        $c1 = new Category();
+        $c1->setName('Kotły zasypowe');
+        $c1->setSingularName('Kocioł zasypowy');
+        $c1->setSort(1);
+        $manager->persist($c1);
+
         $c = new Category();
         $c->setName('Kotły górnego spalania');
+        $c->setSingularName('Kocioł górnego spalania');
+        $c->setSort(2);
+        $c->setParent($c1);
         $manager->persist($c);
 
         $c = new Category();
         $c->setName('Kotły dolnego spalania');
+        $c->setSingularName('Kocioł dolnego spalania');
+        $c->setSort(3);
+        $c->setParent($c1);
         $manager->persist($c);
 
-        $c3 = new Category();
-        $c3->setName('Kotły podajnikowe');
-        $manager->persist($c3);
+        $c = new Category();
+        $c->setName('Kotły górno-dolne');
+        $c->setSingularName('Kocioł górno-dolny');
+        $c->setSort(4);
+        $c->setParent($c1);
+        $manager->persist($c);
+
+        $c2 = new Category();
+        $c2->setName('Kotły podajnikowe');
+        $c2->setSingularName('Kocioł podajnikowy');
+        $c2->setSort(5);
+        $manager->persist($c2);
+
+        $c = new Category();
+        $c->setName('Kotły retortowe');
+        $c->setSingularName('Kocioł z palnikiem retortowym');
+        $c->setSort(6);
+        $c->setParent($c2);
+        $manager->persist($c);
 
 
         $p1 = new Property;

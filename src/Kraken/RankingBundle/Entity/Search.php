@@ -31,6 +31,11 @@ class Search
     protected $modelName;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Manufacturer", inversedBy="searches")
+     */
+    protected $manufacturer;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="searches")
      */
     protected $category;
@@ -284,11 +289,69 @@ class Search
     public function isEmpty()
     {
         return $this->modelName == ''
+            && $this->manufacturer == ''
             && $this->category == ''
             && $this->fuelType->count() == 0
             && $this->power == ''
-            && $this->boilerClass == ''
+            && $this->normClass == ''
             && $this->rating == ''
             && $this->forClosedSystem == false;
+    }
+
+    public function isOnlyCategorySelected()
+    {
+        return $this->modelName == ''
+            && $this->manufacturer == ''
+            && $this->category != ''
+            && $this->fuelType->count() == 0
+            && $this->power == ''
+            && $this->normClass == ''
+            && $this->rating == ''
+            && $this->forClosedSystem == false;
+    }
+
+    public function isOnlyManufacturerSelected()
+    {
+        return $this->modelName == ''
+            && $this->manufacturer != ''
+            && $this->category == ''
+            && $this->fuelType->count() == 0
+            && $this->power == ''
+            && $this->normClass == ''
+            && $this->rating == ''
+            && $this->forClosedSystem == false;
+    }
+
+    /**
+     * Get forClosedSystem
+     *
+     * @return boolean
+     */
+    public function getForClosedSystem()
+    {
+        return $this->forClosedSystem;
+    }
+
+    /**
+     * Set manufacturer
+     *
+     * @param \Kraken\RankingBundle\Entity\Manufacturer $manufacturer
+     * @return Search
+     */
+    public function setManufacturer(\Kraken\RankingBundle\Entity\Manufacturer $manufacturer = null)
+    {
+        $this->manufacturer = $manufacturer;
+
+        return $this;
+    }
+
+    /**
+     * Get manufacturer
+     *
+     * @return \Kraken\RankingBundle\Entity\Manufacturer
+     */
+    public function getManufacturer()
+    {
+        return $this->manufacturer;
     }
 }

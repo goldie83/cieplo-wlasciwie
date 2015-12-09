@@ -1,6 +1,6 @@
 {% extends 'KrakenRankingBundle::base.html.twig' %}
 
-{% block headline %}Wyszukiwanie{% endblock headline %}
+{% block headline %}{{ manufacturer.name }}{% endblock headline %}
 
 {% block content_row %}
 <div class="row">
@@ -11,7 +11,7 @@
         </form>
     </div>
     <div class="col-sm-8">
-        {% include('KrakenRankingBundle:Ranking:boilerList.html.twig') with {boilers: boilers, search: search} %}
+        {% include('KrakenRankingBundle:Ranking:boilerList.html.twig') with {boilers: boilers} %}
     </div>
 </div>
 {% endblock content_row %}

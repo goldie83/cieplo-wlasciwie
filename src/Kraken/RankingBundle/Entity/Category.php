@@ -41,6 +41,16 @@ class Category
     protected $description;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Category", inversedBy="children")
+     */
+    protected $parent;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Category", mappedBy="parent")
+     */
+    protected $children;
+
+    /**
      * @ORM\Column(type="integer", nullable=true)
      */
     protected $sort = 0;
@@ -51,7 +61,7 @@ class Category
     protected $boilers;
 
     /**
-     * @ORM\OneToMany(targetEntity="Boiler", mappedBy="search")
+     * @ORM\OneToMany(targetEntity="Search", mappedBy="category")
      */
     protected $searches;
 
@@ -252,10 +262,82 @@ class Category
     /**
      * Get searches
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getSearches()
     {
         return $this->searches;
+    }
+
+    /**
+     * Set parent
+     *
+     * @param \Kraken\RankingBundle\Entity\Category $parent
+     * @return Category
+     */
+    public function setParent(\Kraken\RankingBundle\Entity\Category $parent = null)
+    {
+        $this->parent = $parent;
+
+        return $this;
+    }
+
+    /**
+     * Get parent
+     *
+     * @return \Kraken\RankingBundle\Entity\Category
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+
+    /**
+     * Add children
+     *
+     * @param \Kraken\RankingBundle\Entity\Category $children
+     * @return Category
+     */
+    public function addChild(\Kraken\RankingBundle\Entity\Category $children)
+    {
+        $this->children[] = $children;
+
+        return $this;
+    }
+
+    /**
+     * Remove children
+     *
+     * @param \Kraken\RankingBundle\Entity\Category $children
+     */
+    public function removeChild(\Kraken\RankingBundle\Entity\Category $children)
+    {
+        $this->children->removeElement($children);
+    }
+
+    /**
+     * Get children
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
+
+    public function getChildrenIds()
+    {
+        $ids = [];
+
+        foreach ($this->children as $c) {
+            $ids[] = $c->getId();
+        }
+
+        return $ids;
+    }
+
+    public function getIndentedName()
+    {
+        return count($this->children) == 0 ? '-> ' . $this->name : $this->name;
     }
 }

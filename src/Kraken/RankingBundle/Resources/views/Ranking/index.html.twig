@@ -2,19 +2,37 @@
 
 {% block page_header %}{% endblock page_header %}
 
-
 {% block content_row %}
 <div class="row">
-    <div class="col-sm-4">
-        <h2>Znajdź kocioł w rankingu</h2>
-        {% include 'KrakenRankingBundle:Ranking:filter.html.twig' with {'form': searchForm} %}
+    <div class="col-sm-8">
+        <div style="height:300px">
+            <h1>Wybór najbardziej obiecujących kotłów</h1>
+            <h3>Jak najmniej syfu, jak najwięcej ciepła.</h3>
+            <p>W rankingu zebrane są kotły najlepsze pod kątem konstrukcji i wyposażenia.</p>
+        </div>
+        <div class="row">
+            <form class="form-horizontal" method="POST" action="{{ url('ranking_search')}}">
+            <div class="col-sm-6">
+                  <fieldset>
+                      <legend>Szukam konkretnej sztuki</legend>
+                      {{ form_row(searchForm.modelName) }}
+                      <button type="submit" class="btn btn-primary">Szukaj</button>
+                  </fieldset>
+            </div>
+            <div class="col-sm-6">
+                  <fieldset>
+                      <legend>Szukam według parametrów</legend>
+                      {{ form_rest(searchForm) }}
+                      <button type="submit" class="btn btn-primary">Szukaj</button>
+                  </fieldset>
+            </div>
+            </form>
+        </div>
     </div>
     <div class="col-sm-4">
-    </div>
-    <div class="col-sm-4">
-        <h2>Dodaj kocioł do rankingu</h2>
-        <p>Nie znajdujesz w rankingu kotła, który cię interesuje? </p>
-        <button type="button" class="btn btn-default btn-lg">Prześlij propozycję</button>
+        <h2>Prześlij kocioł do oceny</h2>
+        <p>Nie ma tu kotła, który cię interesuje? Podrzuć namiary na niego.</p>
+        <button type="button" class="btn btn-default btn-lg">Prześlij propozycję do rankingu</button>
     </div>
 </div>
 {% endblock content_row %}

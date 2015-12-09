@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 use Kraken\RankingBundle\Entity\Boiler;
 use Kraken\RankingBundle\Entity\Category;
+use Kraken\RankingBundle\Entity\Manufacturer;
 use Kraken\RankingBundle\Entity\Search;
 use Kraken\RankingBundle\Form\SearchForm;
 
@@ -41,6 +42,15 @@ class GeneralController extends BaseController
 
             if ($form->isValid()) {
                 $searchRecord = $form->getData();
+
+                if ($searchRecord->isOnlyCategorySelected()) {
+                    return $this->redirectToRoute('ranking_boiler_category', ['category' => $searchRecord->getCategory()->getSlug()]);
+                }
+
+                if ($searchRecord->isOnlyManufacturerSelected()) {
+                    return $this->redirectToRoute('ranking_boiler_manufacturer', ['manufacturer' => $searchRecord->getManufacturer()->getSlug()]);
+                }
+
                 $em->persist($searchRecord);
                 $em->flush();
 
@@ -53,14 +63,18 @@ class GeneralController extends BaseController
             ->findOneBy(['id' => intval($uid, 36)]);
         $form = $this->createForm(new SearchForm(), $searchRecord);
 
-        $query = $em
-            ->createQueryBuilder()
+        $qb = $em->createQueryBuilder();
+        $query = $qb
             ->select('b')
             ->from('KrakenRankingBundle:Boiler', 'b');
 
         if ($searchRecord->getModelName() != '') {
             $query
-                ->andWhere('b.name LIKE :model_name')
+                ->innerJoin('b.manufacturer', 'm')
+                ->where($qb->expr()->orX(
+                    $qb->expr()->like('b.name', ':model_name'),
+                    $qb->expr()->like('m.name', ':model_name')
+                ))
                 ->setParameter('model_name', '%'.$searchRecord->getModelName().'%');
         }
 
@@ -70,7 +84,13 @@ class GeneralController extends BaseController
                 ->setParameter('category', $searchRecord->getCategory()->getId());
         }
 
-        if ($searchRecord->getFuelType() != '') {
+        if ($searchRecord->getManufacturer() != '') {
+            $query
+                ->andWhere('b.manufacturer = :manufacturer')
+                ->setParameter('manufacturer', $searchRecord->getManufacturer()->getId());
+        }
+
+        if ($searchRecord->getFuelType()->count() > 0) {
             $fuels = [];
             foreach ($searchRecord->getFuelType() as $f) {
                 $fuels[] = $f->getId();
@@ -129,7 +149,43 @@ class GeneralController extends BaseController
 
         $form = $this->createForm(new SearchForm(), $search);
 
-        return $this->render('KrakenRankingBundle:Ranking:category.html.twig', ['category' => $category, 'form' => $form->createView()]);
+        $boilers = $this->getDoctrine()->getManager()
+            ->createQueryBuilder()
+            ->select('b')
+            ->from('KrakenRankingBundle:Boiler', 'b')
+            ->where('b.category = :category')
+            ->orWhere('b.category IN (:subcategories)')
+            ->setParameter('category', $category->getId())
+            ->setParameter('subcategories', $category->getChildrenIds())
+            ->orderBy('b.rating')
+            ->getQuery()
+            ->getResult();
+
+        return $this->render('KrakenRankingBundle:Ranking:category.html.twig', ['category' => $category, 'boilers' => $boilers, 'form' => $form->createView()]);
+    }
+
+    /**
+     * @Route("/producent/{manufacturer}/", name="ranking_boiler_manufacturer")
+     * @ParamConverter("manufacturer", class="KrakenRankingBundle:Manufacturer", options={"repository_method" = "findOneBySlug"})
+     */
+    public function manufacturerAction(Manufacturer $manufacturer)
+    {
+        $search = new Search;
+        $search->setManufacturer($manufacturer);
+
+        $form = $this->createForm(new SearchForm(), $search);
+
+        $boilers = $this->getDoctrine()->getManager()
+            ->createQueryBuilder()
+            ->select('b')
+            ->from('KrakenRankingBundle:Boiler', 'b')
+            ->where('b.manufacturer = :manufacturer')
+            ->setParameter('manufacturer', $manufacturer->getId())
+            ->orderBy('b.rating')
+            ->getQuery()
+            ->getResult();
+
+        return $this->render('KrakenRankingBundle:Ranking:manufacturer.html.twig', ['manufacturer' => $manufacturer, 'boilers' => $boilers, 'form' => $form->createView()]);
     }
 
     /**
