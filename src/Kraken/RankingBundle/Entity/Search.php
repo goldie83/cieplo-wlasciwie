@@ -65,6 +65,11 @@ class Search
     protected $rating;
 
     /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    protected $material;
+
+    /**
      * @ORM\Column(type="boolean")
      */
     protected $forClosedSystem;
@@ -295,6 +300,7 @@ class Search
             && $this->power == ''
             && $this->normClass == ''
             && $this->rating == ''
+            && $this->material == ''
             && $this->forClosedSystem == false;
     }
 
@@ -307,6 +313,7 @@ class Search
             && $this->power == ''
             && $this->normClass == ''
             && $this->rating == ''
+            && $this->material == ''
             && $this->forClosedSystem == false;
     }
 
@@ -319,6 +326,7 @@ class Search
             && $this->power == ''
             && $this->normClass == ''
             && $this->rating == ''
+            && $this->material == ''
             && $this->forClosedSystem == false;
     }
 
@@ -353,5 +361,28 @@ class Search
     public function getManufacturer()
     {
         return $this->manufacturer;
+    }
+
+    /**
+     * Set material
+     *
+     * @param string $material
+     * @return Search
+     */
+    public function setMaterial($material)
+    {
+        $this->material = $material;
+
+        return $this;
+    }
+
+    /**
+     * Get material
+     *
+     * @return string
+     */
+    public function getMaterial()
+    {
+        return $this->material;
     }
 }

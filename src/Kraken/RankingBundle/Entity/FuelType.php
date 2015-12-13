@@ -31,9 +31,10 @@ class FuelType
     protected $slug;
 
     /**
-     * @ORM\OneToMany(targetEntity="BoilerPower", mappedBy="fuelType")
+     * @ORM\OneToMany(targetEntity="BoilerFuelType", mappedBy="fuelType")
      */
-    protected $boilerPowers;
+    protected $boilerFuelTypes;
+
 
     public function __construct()
     {
@@ -160,5 +161,38 @@ class FuelType
     public function getSearches()
     {
         return $this->searches;
+    }
+
+    /**
+     * Add boilerFuelTypes
+     *
+     * @param \Kraken\RankingBundle\Entity\BoilerFuelType $boilerFuelTypes
+     * @return FuelType
+     */
+    public function addBoilerFuelType(\Kraken\RankingBundle\Entity\BoilerFuelType $boilerFuelTypes)
+    {
+        $this->boilerFuelTypes[] = $boilerFuelTypes;
+
+        return $this;
+    }
+
+    /**
+     * Remove boilerFuelTypes
+     *
+     * @param \Kraken\RankingBundle\Entity\BoilerFuelType $boilerFuelTypes
+     */
+    public function removeBoilerFuelType(\Kraken\RankingBundle\Entity\BoilerFuelType $boilerFuelTypes)
+    {
+        $this->boilerFuelTypes->removeElement($boilerFuelTypes);
+    }
+
+    /**
+     * Get boilerFuelTypes
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getBoilerFuelTypes()
+    {
+        return $this->boilerFuelTypes;
     }
 }

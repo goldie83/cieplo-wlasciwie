@@ -3,7 +3,14 @@
 }
 
 .boiler-class {
-    font-size: 120%;
+    color: #fff;
+    padding: 10px;
+    display: inline-block;
+}
+
+.boiler-list .boiler-property {
+    font-size: 80%;
+    padding: 5px;
 }
 
 .a-plus-class {
@@ -53,4 +60,20 @@ footer {
 
 .form-horizontal fieldset {
     margin: 20px 0;
+}
+
+.sort-menu {
+    margin: 10px 0;
+}
+
+.sort-menu .hint {
+    font-size: 14px;
+    color: #000;
+    line-height:20px;
+    padding:10px;
+}
+
+.jumbo {
+    background-color: #ccc;
+    padding: 20px;
 }

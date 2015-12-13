@@ -5,10 +5,11 @@
 {% block content_row %}
 <div class="row">
     <div class="col-sm-8">
-        <div style="height:300px">
+        <div style="height:300px" class="jumbo">
             <h1>Wybór najbardziej obiecujących kotłów</h1>
             <h3>Jak najmniej syfu, jak najwięcej ciepła.</h3>
             <p>W rankingu zebrane są kotły najlepsze pod kątem konstrukcji i wyposażenia.</p>
+            <a class="btn btn-info btn-large" href="{{ path('ranking_about') }}">Więcej o rankingu</a>
         </div>
         <div class="row">
             <form class="form-horizontal" method="POST" action="{{ url('ranking_search')}}">

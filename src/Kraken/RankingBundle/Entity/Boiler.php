@@ -77,9 +77,13 @@ class Boiler
     protected $changes;
 
     /**
-     * @ORM\OneToMany(targetEntity="BoilerProperty", mappedBy="boiler", cascade={"all"}, orphanRemoval=true)
-     */
-    protected $boilerProperties;
+     * @ORM\ManyToMany(targetEntity="PropertyValue", cascade={"all"}, orphanRemoval=true)
+     * @ORM\JoinTable(name="boiler_property_values",
+     *      joinColumns={@ORM\JoinColumn(name="boiler_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="property_value_id", referencedColumnName="id", unique=true)}
+     *      )
+     **/
+    protected $propertyValues;
 
     /**
      * @ORM\OneToMany(targetEntity="BoilerPower", mappedBy="boiler", cascade={"all"}, orphanRemoval=true)
@@ -87,13 +91,18 @@ class Boiler
     protected $boilerPowers;
 
     /**
-     * @ORM\ManyToMany(targetEntity="FuelType", cascade={"all"}, orphanRemoval=true)
-     * @ORM\JoinTable(name="boiler_fuel_types",
+     * @ORM\OneToMany(targetEntity="BoilerFuelType", mappedBy="boiler", cascade={"all"}, orphanRemoval=true)
+     */
+    protected $boilerFuelTypes;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Notice", cascade={"all"}, orphanRemoval=true)
+     * @ORM\JoinTable(name="boiler_notices",
      *      joinColumns={@ORM\JoinColumn(name="boiler_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="fuel_type_id", referencedColumnName="id", unique=true)}
+     *      inverseJoinColumns={@ORM\JoinColumn(name="notice_id", referencedColumnName="id", unique=true)}
      *      )
      **/
-    protected $acceptedFuelTypes;
+    protected $notices;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -151,6 +160,11 @@ class Boiler
     protected $userManual;
 
     /**
+     * @ORM\Column(type="string", nullable=false)
+     */
+    protected $material;
+
+    /**
      * @ORM\Column(type="boolean")
      */
     protected $forClosedSystem;
@@ -172,7 +186,7 @@ class Boiler
     public function __construct()
     {
         $this->changes = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->boilerProperties = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->notices = new \Doctrine\Common\Collections\ArrayCollection();
         $this->boilerPowers = new \Doctrine\Common\Collections\ArrayCollection();
         $this->acceptedFuelTypes = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -650,36 +664,36 @@ class Boiler
     }
 
     /**
-     * Add boilerProperties
+     * Add notices
      *
-     * @param \Kraken\RankingBundle\Entity\BoilerProperty $boilerProperties
+     * @param \Kraken\RankingBundle\Entity\BoilerProperty $notices
      * @return Boiler
      */
-    public function addBoilerProperty(\Kraken\RankingBundle\Entity\BoilerProperty $boilerProperties)
+    public function addBoilerProperty(\Kraken\RankingBundle\Entity\BoilerProperty $notices)
     {
-        $this->boilerProperties[] = $boilerProperties;
+        $this->notices[] = $notices;
 
         return $this;
     }
 
     /**
-     * Remove boilerProperties
+     * Remove notices
      *
-     * @param \Kraken\RankingBundle\Entity\BoilerProperty $boilerProperties
+     * @param \Kraken\RankingBundle\Entity\BoilerProperty $notices
      */
-    public function removeBoilerProperty(\Kraken\RankingBundle\Entity\BoilerProperty $boilerProperties)
+    public function removeBoilerProperty(\Kraken\RankingBundle\Entity\BoilerProperty $notices)
     {
-        $this->boilerProperties->removeElement($boilerProperties);
+        $this->notices->removeElement($notices);
     }
 
     /**
-     * Get boilerProperties
+     * Get notices
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getBoilerProperties()
+    public function getNotices()
     {
-        return $this->boilerProperties;
+        return $this->notices;
     }
 
     /**
@@ -877,12 +891,12 @@ class Boiler
         return ($this->typicalModelExchanger/$this->typicalModelPower)/0.125*100;
     }
 
-    public function getPositiveBoilerProperties()
+    public function getPositiveNotices()
     {
         $properties = [];
 
-        foreach ($this->boilerProperties as $property) {
-            if ($property->getProperty()->isPositive()) {
+        foreach ($this->notices as $property) {
+            if ($property->getType() == 'advantage') {
                 $properties[] = $property;
             }
         }
@@ -890,12 +904,12 @@ class Boiler
         return $properties;
     }
 
-    public function getNegativeBoilerProperties()
+    public function getNegativeNotices()
     {
         $properties = [];
 
-        foreach ($this->boilerProperties as $property) {
-            if ($property->getProperty()->isNegative()) {
+        foreach ($this->notices as $property) {
+            if ($property->getType() == 'disadvantage') {
                 $properties[] = $property;
             }
         }
@@ -903,16 +917,138 @@ class Boiler
         return $properties;
     }
 
-    public function getUnknownBoilerProperties()
+    public function getUnknownNotices()
     {
         $properties = [];
 
-        foreach ($this->boilerProperties as $property) {
-            if ($property->getProperty()->isUnknown()) {
+        foreach ($this->notices as $property) {
+            if ($property->getType() == 'unknown') {
                 $properties[] = $property;
             }
         }
 
         return $properties;
+    }
+
+    /**
+     * Set material
+     *
+     * @param string $material
+     * @return Boiler
+     */
+    public function setMaterial($material)
+    {
+        $this->material = $material;
+
+        return $this;
+    }
+
+    /**
+     * Get material
+     *
+     * @return string
+     */
+    public function getMaterial()
+    {
+        return $this->material;
+    }
+
+    /**
+     * Add propertyValues
+     *
+     * @param \Kraken\RankingBundle\Entity\PropertyValue $propertyValues
+     * @return Boiler
+     */
+    public function addPropertyValue(\Kraken\RankingBundle\Entity\PropertyValue $propertyValues)
+    {
+        $this->propertyValues[] = $propertyValues;
+
+        return $this;
+    }
+
+    /**
+     * Remove propertyValues
+     *
+     * @param \Kraken\RankingBundle\Entity\PropertyValue $propertyValues
+     */
+    public function removePropertyValue(\Kraken\RankingBundle\Entity\PropertyValue $propertyValues)
+    {
+        $this->propertyValues->removeElement($propertyValues);
+    }
+
+    /**
+     * Get propertyValues
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getPropertyValues()
+    {
+        return $this->propertyValues;
+    }
+
+    /**
+     * Add notices
+     *
+     * @param \Kraken\RankingBundle\Entity\Notice $notices
+     * @return Boiler
+     */
+    public function addNotice(\Kraken\RankingBundle\Entity\Notice $notices)
+    {
+        $this->notices[] = $notices;
+
+        return $this;
+    }
+
+    /**
+     * Remove notices
+     *
+     * @param \Kraken\RankingBundle\Entity\Notice $notices
+     */
+    public function removeNotice(\Kraken\RankingBundle\Entity\Notice $notices)
+    {
+        $this->notices->removeElement($notices);
+    }
+
+    /**
+     * Add boilerFuelTypes
+     *
+     * @param \Kraken\RankingBundle\Entity\BoilerFuelType $boilerFuelTypes
+     * @return Boiler
+     */
+    public function addBoilerFuelType(\Kraken\RankingBundle\Entity\BoilerFuelType $boilerFuelTypes)
+    {
+        $this->boilerFuelTypes[] = $boilerFuelTypes;
+
+        return $this;
+    }
+
+    /**
+     * Remove boilerFuelTypes
+     *
+     * @param \Kraken\RankingBundle\Entity\BoilerFuelType $boilerFuelTypes
+     */
+    public function removeBoilerFuelType(\Kraken\RankingBundle\Entity\BoilerFuelType $boilerFuelTypes)
+    {
+        $this->boilerFuelTypes->removeElement($boilerFuelTypes);
+    }
+
+    /**
+     * Get boilerFuelTypes
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getBoilerFuelTypes()
+    {
+        return $this->boilerFuelTypes;
+    }
+
+    public function isHandFueled()
+    {
+        return $this->category->getParent() == 'Kotły zasypowe';
+    }
+
+    public function typicalModelWorkTime()
+    {
+        return 8;//TODO
     }
 }

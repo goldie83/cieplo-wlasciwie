@@ -7,23 +7,29 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 
-class BoilerPowerAdmin extends Admin
+class ManufacturerAdmin extends Admin
 {
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('boiler', null)
-            ->add('power', null, ['label' => 'Moc'])
+            ->add('name', null, ['label' => 'Nazwa'])
+            ->add('website', null, ['label' => 'Strona producenta'])
         ;
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-//         $datagridMapper->add('name');
+        $datagridMapper
+            ->add('name')
+            ->add('slug')
+        ;
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
-//         $listMapper->addIdentifier('name');
+        $listMapper
+            ->addIdentifier('name')
+            ->add('website')
+        ;
     }
 }

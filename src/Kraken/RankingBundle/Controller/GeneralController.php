@@ -30,9 +30,17 @@ class GeneralController extends BaseController
     }
 
     /**
-     * @Route("/szukaj/{uid}", name="ranking_search", defaults={"uid" = 0})
+     * @Route("/o-rankingu", name="ranking_about")
      */
-    public function searchAction($uid, Request $request)
+    public function aboutAction()
+    {
+        return $this->render('KrakenRankingBundle:Ranking:about.html.twig');
+    }
+
+    /**
+     * @Route("/szukaj/{uid}/{sort}", name="ranking_search", defaults={"uid" = 0, "sort" = ""})
+     */
+    public function searchAction($uid, $sort, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -125,10 +133,26 @@ class GeneralController extends BaseController
                 ->setParameter('rating', $searchRecord->getRating());
         }
 
+        if ($searchRecord->getMaterial() != '') {
+            $query
+                ->andWhere('b.material = :material')
+                ->setParameter('material', $searchRecord->getMaterial());
+        }
+
         if ($searchRecord->isForClosedSystem()) {
             $query
                 ->andWhere('b.forClosedSystem = :for_closed_system')
                 ->setParameter('for_closed_system', $searchRecord->isForClosedSystem());
+        }
+
+        if ($sort == 'najtansze') {
+            $query->addOrderBy('b.typicalModelPrice', 'ASC');
+        } elseif ($sort == 'najlepsze') {
+            $query->addOrderBy('b.rating', 'ASC');
+        } else {
+            $query
+                ->addOrderBy('b.rating', 'ASC')
+                ->addOrderBy('b.typicalModelPrice', 'ASC');
         }
 
         $boilers = $query
@@ -139,49 +163,34 @@ class GeneralController extends BaseController
     }
 
     /**
-     * @Route("/{category}/", name="ranking_boiler_category")
-     * @ParamConverter("category", class="KrakenRankingBundle:Category", options={"repository_method" = "findOneBySlug"})
-     */
-    public function categoryAction(Category $category)
-    {
-        $search = new Search;
-        $search->setCategory($category);
-
-        $form = $this->createForm(new SearchForm(), $search);
-
-        $boilers = $this->getDoctrine()->getManager()
-            ->createQueryBuilder()
-            ->select('b')
-            ->from('KrakenRankingBundle:Boiler', 'b')
-            ->where('b.category = :category')
-            ->orWhere('b.category IN (:subcategories)')
-            ->setParameter('category', $category->getId())
-            ->setParameter('subcategories', $category->getChildrenIds())
-            ->orderBy('b.rating')
-            ->getQuery()
-            ->getResult();
-
-        return $this->render('KrakenRankingBundle:Ranking:category.html.twig', ['category' => $category, 'boilers' => $boilers, 'form' => $form->createView()]);
-    }
-
-    /**
-     * @Route("/producent/{manufacturer}/", name="ranking_boiler_manufacturer")
+     * @Route("/producent/{manufacturer}/{sort}", name="ranking_boiler_manufacturer", defaults={"sort" = ""})
      * @ParamConverter("manufacturer", class="KrakenRankingBundle:Manufacturer", options={"repository_method" = "findOneBySlug"})
      */
-    public function manufacturerAction(Manufacturer $manufacturer)
+    public function manufacturerAction(Manufacturer $manufacturer, $sort)
     {
         $search = new Search;
         $search->setManufacturer($manufacturer);
 
         $form = $this->createForm(new SearchForm(), $search);
 
-        $boilers = $this->getDoctrine()->getManager()
+        $query = $this->getDoctrine()->getManager()
             ->createQueryBuilder()
             ->select('b')
             ->from('KrakenRankingBundle:Boiler', 'b')
             ->where('b.manufacturer = :manufacturer')
-            ->setParameter('manufacturer', $manufacturer->getId())
-            ->orderBy('b.rating')
+            ->setParameter('manufacturer', $manufacturer->getId());
+
+        if ($sort == 'najtansze') {
+            $query->addOrderBy('b.typicalModelPrice', 'ASC');
+        } elseif ($sort == 'najlepsze') {
+            $query->addOrderBy('b.rating', 'ASC');
+        } else {
+            $query
+                ->addOrderBy('b.rating', 'ASC')
+                ->addOrderBy('b.typicalModelPrice', 'ASC');
+        }
+
+        $boilers = $query
             ->getQuery()
             ->getResult();
 
@@ -189,7 +198,44 @@ class GeneralController extends BaseController
     }
 
     /**
-     * @Route("/{category}/{boiler}", name="ranking_boiler_overview")
+     * @Route("/{category}/{sort}", name="ranking_boiler_category", defaults={"sort" = ""})
+     * @ParamConverter("category", class="KrakenRankingBundle:Category", options={"repository_method" = "findOneBySlug"})
+     */
+    public function categoryAction(Category $category, $sort)
+    {
+        $search = new Search;
+        $search->setCategory($category);
+
+        $form = $this->createForm(new SearchForm(), $search);
+
+        $query = $this->getDoctrine()->getManager()
+            ->createQueryBuilder()
+            ->select('b')
+            ->from('KrakenRankingBundle:Boiler', 'b')
+            ->where('b.category = :category')
+            ->orWhere('b.category IN (:subcategories)')
+            ->setParameter('category', $category->getId())
+            ->setParameter('subcategories', $category->getChildrenIds());
+
+        if ($sort == 'najtansze') {
+            $query->addOrderBy('b.typicalModelPrice', 'ASC');
+        } elseif ($sort == 'najlepsze') {
+            $query->addOrderBy('b.rating', 'ASC');
+        } else {
+            $query
+                ->addOrderBy('b.rating', 'ASC')
+                ->addOrderBy('b.typicalModelPrice', 'ASC');
+        }
+
+        $boilers = $query
+            ->getQuery()
+            ->getResult();
+
+        return $this->render('KrakenRankingBundle:Ranking:category.html.twig', ['category' => $category, 'boilers' => $boilers, 'form' => $form->createView()]);
+    }
+
+    /**
+     * @Route("/{category}/kociol/{boiler}", name="ranking_boiler_overview")
      * @ParamConverter("category", class="KrakenRankingBundle:Category", options={"repository_method" = "findOneBySlug"})
      * @ParamConverter("boiler", class="KrakenRankingBundle:Boiler", options={"repository_method" = "findOneBySlug"})
      */

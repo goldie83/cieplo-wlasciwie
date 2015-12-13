@@ -43,6 +43,12 @@ class SearchForm extends AbstractType
                 'label' => 'Moc',
                 'required' => false,
             ])
+            ->add('material', 'choice', [
+                'placeholder' => 'dowolny',
+                'choices' => ['steel' => 'stal', 'cast_iron' => 'żeliwo'],
+                'label' => 'Materiał',
+                'required' => false,
+            ])
             ->add('normClass', 'choice', [
                 'choices' => [3, 4, 5],
                 'label' => 'Klasa',

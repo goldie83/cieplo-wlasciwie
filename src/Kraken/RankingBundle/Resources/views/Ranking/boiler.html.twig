@@ -18,26 +18,36 @@
             </tr>
             <tr>
               <th scope="row">Producent</th>
-              <td>{{ boiler.manufacturer }}</td>
+              <td><a href="{{ path('ranking_boiler_manufacturer', {'manufacturer': boiler.manufacturer.slug }) }}">{{ boiler.manufacturer.name }}</a></td>
             </tr>
             <tr>
               <th scope="row">Rodzaj kotła</th>
-              <td>{{ boiler.category.singularName }}</td>
+              <td><a href="{{ path('ranking_boiler_category', {'category': boiler.category.slug }) }}">{{ boiler.category.singularName }}</a></td>
             </tr>
+            {% if boiler.exchangerNormPercent > 0 %}
             <tr>
               <th scope="row">Powierzchnia wymiennika</th>
               <td><strong>{{ boiler.exchangerNormPercent }}%</strong> współczesnego standardu</td>
             </tr>
+            {% endif %}
+            <tr>
+              <th scope="row">{{ boiler.handFueled ? 'Pojemność zasypowa' : 'Pojemność zasobnika' }}</th>
+              <td>{{ boiler.typicalModelCapacity }}kg</td>
+            </tr>
+            <tr>
+              <th scope="row">Przeciętna stałopalność</th>
+              <td>{{ boiler.typicalModelWorkTime }}h</td>
+            </tr>
             <tr>
               <th scope="row">Do układu zamkniętego</th>
-              <td><strong>{{ boiler.forClosedSystem ? 'tak' : 'nie' }}</strong></td>
+              <td><span class="label label-{{ boiler.forClosedSystem ? 'success' : 'danger' }}">{{ boiler.forClosedSystem ? 'tak' : 'nie' }}</span></td>
             </tr>
             <tr>
               <th scope="row">Paliwa</th>
               <td>
                   <ul>
-                  {% for fuel in boiler.acceptedFuelTypes %}
-                      <li>{{ fuel }}</li>
+                  {% for bft in boiler.boilerFuelTypes %}
+                      <li>{{ bft.fuelType }}</li>
                   {% endfor %}
                   </ul>
               </td>
@@ -87,11 +97,11 @@
           <div role="tabpanel" class="tab-pane fade active in" id="overview" aria-labelledby="overview-tab">
               {{ boiler.lead|raw }}
               <hr/>
-              {% set hasUnknownProperties = boiler.unknownBoilerProperties|length > 0 %}
-              <div class="col-sm-{{ hasUnknownProperties ? '4' : '6' }}">
+              {% set hasUnknownNotices = boiler.unknownNotices|length > 0 %}
+              <div class="col-sm-{{ hasUnknownNotices ? '4' : '6' }}">
                   <h4>Zalety</h4>
                   <ul class="list-group">
-                  {% for bp in boiler.positiveBoilerProperties %}
+                  {% for bp in boiler.positiveNotices %}
                     <li class="list-group-item list-group-item-success">
                         <h5><strong>{{ bp.property.label }}</strong></h5>
                         <p>{{ bp.property.content }}</p>
@@ -99,11 +109,11 @@
                   {% endfor %}
                   </ul>
               </div>
-              {% if hasUnknownProperties %}
+              {% if hasUnknownNotices %}
               <div class="col-sm-4">
                   <h4>Niewiadome</h4>
                   <ul class="list-group">
-                  {% for bp in boiler.unknownBoilerProperties %}
+                  {% for bp in boiler.unknownNotices %}
                     <li class="list-group-item">
                         <h5><strong>{{ bp.property.label }}</strong></h5>
                         <p>{{ bp.property.content }}</p>
@@ -112,10 +122,10 @@
                   </ul>
               </div>
               {% endif %}
-              <div class="col-sm-{{ hasUnknownProperties ? '4' : '6' }}">
+              <div class="col-sm-{{ hasUnknownNotices ? '4' : '6' }}">
                   <h4>Wady</h4>
                   <ul class="list-group">
-                  {% for bp in boiler.negativeBoilerProperties %}
+                  {% for bp in boiler.negativeNotices %}
                     <li class="list-group-item list-group-item-danger">
                         <h5><strong>{{ bp.property.label }}</strong></h5>
                         <p>{{ bp.property.content }}</p>
@@ -128,7 +138,7 @@
               <h2>Detale techniczne</h2>
               {% if boiler.hasCrossSectionImage %}
               <div class="thumbnail">
-                  <img src="{{ vich_uploader_asset(boiler, 'crossSectionFile') }}" />
+                  <img src="{{ vich_uploader_asset(boiler, 'crossSectionFile') }}" style="max-width:480px;margin:0 auto" />
                   <div class="caption text-center">
                       <p>Przekrój kotła {{ boiler.name }}</p>
                   </div>

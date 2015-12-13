@@ -19,14 +19,9 @@ class Property
     protected $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="BoilerProperty", mappedBy="property")
+     * @ORM\Column(type="string")
      */
-    protected $boilerProperties;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    protected $meaning;
+    protected $type;
 
     /**
      * @ORM\Column(type="string")
@@ -38,9 +33,14 @@ class Property
      */
     protected $content;
 
+    /**
+     * @ORM\OneToMany(targetEntity="PropertyValue", mappedBy="property")
+     */
+    protected $propertyValues;
+
+
     public function __construct()
     {
-        $this->boilerProperties = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function __toString()
@@ -100,73 +100,58 @@ class Property
     }
 
     /**
-     * Add boilerProperties
+     * Add propertyValues
      *
-     * @param \Kraken\RankingBundle\Entity\BoilerProperty $boilerProperties
+     * @param \Kraken\RankingBundle\Entity\PropertyValue $propertyValues
      * @return Property
      */
-    public function addBoilerProperty(\Kraken\RankingBundle\Entity\BoilerProperty $boilerProperties)
+    public function addPropertyValue(\Kraken\RankingBundle\Entity\PropertyValue $propertyValues)
     {
-        $this->boilerProperties[] = $boilerProperties;
+        $this->propertyValues[] = $propertyValues;
 
         return $this;
     }
 
     /**
-     * Remove boilerProperties
+     * Remove propertyValues
      *
-     * @param \Kraken\RankingBundle\Entity\BoilerProperty $boilerProperties
+     * @param \Kraken\RankingBundle\Entity\PropertyValue $propertyValues
      */
-    public function removeBoilerProperty(\Kraken\RankingBundle\Entity\BoilerProperty $boilerProperties)
+    public function removePropertyValue(\Kraken\RankingBundle\Entity\PropertyValue $propertyValues)
     {
-        $this->boilerProperties->removeElement($boilerProperties);
+        $this->propertyValues->removeElement($propertyValues);
     }
 
     /**
-     * Get boilerProperties
+     * Get propertyValues
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getBoilerProperties()
+    public function getPropertyValues()
     {
-        return $this->boilerProperties;
+        return $this->propertyValues;
     }
 
     /**
-     * Set meaning
+     * Set type
      *
-     * @param integer $meaning
+     * @param string $type
      * @return Property
      */
-    public function setMeaning($meaning)
+    public function setType($type)
     {
-        $this->meaning = $meaning;
+        $this->type = $type;
 
         return $this;
     }
 
     /**
-     * Get meaning
+     * Get type
      *
-     * @return integer
+     * @return string
      */
-    public function getMeaning()
+    public function getType()
     {
-        return $this->meaning;
-    }
-
-    public function isPositive()
-    {
-        return $this->meaning == 1;
-    }
-
-    public function isNegative()
-    {
-        return $this->meaning == -1;
-    }
-
-    public function isUnknown()
-    {
-        return $this->meaning == 0;
+        return $this->type;
     }
 }

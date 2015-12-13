@@ -16,9 +16,10 @@ class BoilerAdmin extends Admin
             ->add('name', 'text', ['label' => 'Pełna nazwa'])
             ->add('category', null, ['label' => 'Rodzaj kotła'])
             ->add('manufacturer', null, ['label' => 'Producent'])
+            ->add('material', 'choice', ['choices' => ['steel' => 'Stal', 'cast_iron' => 'Żeliwo'], 'label' => 'Materiał konstrukcyjny wymiennika'])
             ->add('imageFile', 'vich_file', ['label' => 'Główny obrazek', 'required' => false])
             ->add('crossSectionFile', 'vich_file', ['label' => 'Przekrój', 'required' => false])
-            ->add('boilerProperties', 'sonata_type_collection', ['label' => 'Lista cech'], [
+            ->add('propertyValues', 'sonata_type_collection', ['label' => 'Lista cech'], [
                 'edit' => 'inline',
                 'inline' => 'table',
             ])
@@ -26,7 +27,11 @@ class BoilerAdmin extends Admin
                 'edit' => 'inline',
                 'inline' => 'table',
             ])
-            ->add('acceptedFuelTypes', 'sonata_type_collection', ['label' => 'Lista paliw'], [
+            ->add('boilerFuelTypes', 'sonata_type_collection', ['label' => 'Lista paliw'], [
+                'edit' => 'inline',
+                'inline' => 'table',
+            ])
+            ->add('notices', 'sonata_type_collection', ['label' => 'Zalety/wady'], [
                 'edit' => 'inline',
                 'inline' => 'table',
             ])
@@ -39,7 +44,7 @@ class BoilerAdmin extends Admin
             ->add('typicalModelExchanger', null, ['label' => 'Pow. wymiennika'])
             ->add('typicalModelCapacity', null, ['label' => 'Poj. zasypowa'])
             ->add('typicalModelPrice', null, ['label' => 'Cena'])
-            ->add('warranty', null, ['label' => 'Długość gwarancji (mies.)'])
+            ->add('warranty', null, ['label' => 'Długość gwarancji (miesiące)'])
             ->add('userManual', null, ['label' => 'Link do DTR'])
             ->add('forClosedSystem', null, ['label' => 'Układ zamknięty'])
             ->add('changes', 'sonata_type_collection', ['label' => 'Log zmian'], [

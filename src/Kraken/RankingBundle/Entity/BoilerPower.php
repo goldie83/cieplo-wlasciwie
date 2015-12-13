@@ -30,11 +30,10 @@ class BoilerPower
     protected $power;
 
     /**
-     * @ORM\ManyToOne(targetEntity="FuelType", inversedBy="boilerPowers")
-     * @ORM\JoinColumn(name="fuel_type_id", referencedColumnName="id", nullable=false)
+     * Get id
+     *
+     * @return integer 
      */
-    protected $fuelType;
-
     public function getId()
     {
         return $this->id;
@@ -56,7 +55,7 @@ class BoilerPower
     /**
      * Get power
      *
-     * @return string
+     * @return string 
      */
     public function getPower()
     {
@@ -79,33 +78,10 @@ class BoilerPower
     /**
      * Get boiler
      *
-     * @return \Kraken\RankingBundle\Entity\Boiler
+     * @return \Kraken\RankingBundle\Entity\Boiler 
      */
     public function getBoiler()
     {
         return $this->boiler;
-    }
-
-    /**
-     * Set fuelType
-     *
-     * @param \Kraken\RankingBundle\Entity\FuelType $fuelType
-     * @return BoilerPower
-     */
-    public function setFuelType(\Kraken\RankingBundle\Entity\FuelType $fuelType = null)
-    {
-        $this->fuelType = $fuelType;
-
-        return $this;
-    }
-
-    /**
-     * Get fuelType
-     *
-     * @return \Kraken\RankingBundle\Entity\FuelType
-     */
-    public function getFuelType()
-    {
-        return $this->fuelType;
     }
 }

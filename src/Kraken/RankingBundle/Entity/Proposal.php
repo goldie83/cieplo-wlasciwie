@@ -19,11 +19,6 @@ class Proposal
     protected $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="BoilerProperty", mappedBy="property")
-     */
-    protected $boilerProperties;
-
-    /**
      * @ORM\Column(type="boolean")
      */
     protected $positive = true;
