@@ -5,35 +5,61 @@
 {% block content_row %}
 <div class="row">
     <div class="col-sm-8">
-        <div style="height:300px" class="jumbo">
-            <h1>Wybór najbardziej obiecujących kotłów</h1>
-            <h3>Jak najmniej syfu, jak najwięcej ciepła.</h3>
-            <p>W rankingu zebrane są kotły najlepsze pod kątem konstrukcji i wyposażenia.</p>
-            <a class="btn btn-info btn-large" href="{{ path('ranking_about') }}">Więcej o rankingu</a>
+        <div class="jumbo">
+            <div class="wrap">
+                <h1>Najlepsze kotły na węgiel i drewno. Czyli jakie?</h1>
+                <p>Ranking kotłów to niezależny, niekomercyjny przegląd rynku.
+                Znajdziesz tu kotły bez poważnych wad konstrukcyjnych, które nie kopcą i są jak najbardziej efektywne w codziennym użytku.</p><br/><br/>
+                <a class="btn btn-success btn-large" href="{{ path('ranking_about') }}">Więcej o rankingu</a>
+            </div>
         </div>
         <div class="row">
             <form class="form-horizontal" method="POST" action="{{ url('ranking_search')}}">
-            <div class="col-sm-6">
-                  <fieldset>
-                      <legend>Szukam konkretnej sztuki</legend>
-                      {{ form_row(searchForm.modelName) }}
-                      <button type="submit" class="btn btn-primary">Szukaj</button>
-                  </fieldset>
+            <div class="row">
+                <div class="col-sm-12">
+                      <fieldset>
+                          <legend>Szukam konkretnej sztuki</legend>
+                              <div class="col-sm-4">
+                                  {{ form_label(searchForm.modelName) }}
+                              </div>
+                              <div class="col-sm-6">
+                                  {{ form_widget(searchForm.modelName) }}
+                              </div>
+                              <div class="col-sm-2">
+                                  <button type="submit" class="btn btn-primary">Szukaj</button>
+                              </div>
+                      </fieldset>
+                </div>
             </div>
-            <div class="col-sm-6">
-                  <fieldset>
-                      <legend>Szukam według parametrów</legend>
-                      {{ form_rest(searchForm) }}
-                      <button type="submit" class="btn btn-primary">Szukaj</button>
-                  </fieldset>
+
+            <div class="row">
+                <div class="col-sm-12">
+                      <fieldset>
+                          <legend>Szukam kotła o takich parametrach</legend>
+                          {{ form_row(searchForm.manufacturer) }}
+                          {{ form_row(searchForm.category) }}
+                          {{ form_row(searchForm.fuelType) }}
+                          {{ form_row(searchForm.forClosedSystem) }}
+                          {{ form_row(searchForm.cleanlyBurning) }}
+                          {{ form_row(searchForm.power) }}
+                          {{ form_row(searchForm.material) }}
+                          {{ form_row(searchForm.normClass) }}
+                          {{ form_row(searchForm.rating) }}
+                          {{ form_rest(searchForm) }}
+                          <button type="submit" class="btn btn-primary pull-right" style="margin-right:15px">Szukaj</button>
+                      </fieldset>
+                </div>
             </div>
             </form>
         </div>
     </div>
     <div class="col-sm-4">
-        <h2>Prześlij kocioł do oceny</h2>
-        <p>Nie ma tu kotła, który cię interesuje? Podrzuć namiary na niego.</p>
-        <button type="button" class="btn btn-default btn-lg">Prześlij propozycję do rankingu</button>
+        <h2>Oceń swój kocioł</h2>
+        <p>Jako użytkownik kotła wiesz dużo o kulturze jego pracy i trwałości. Podziel się tą wiedzą z innymi, aby ułatwić im wybór.</p>
+        <a class="btn btn-warning btn-lg" href="{{ path('ranking_review') }}">Dodaj opinię</a>
+        <h2>Podrzuć kocioł do oceny</h2>
+        <p>Stale poszukujemy nowych, zwłaszcza dobrych modeli. Nie ma tu kotła, który cię interesuje? Podrzuć nam namiary, a przyjrzymy się mu.</p>
+        <a class="btn btn-default btn-lg" href="{{ path('ranking_proposal') }}">Prześlij propozycję do rankingu</a>
     </div>
 </div>
 {% endblock content_row %}

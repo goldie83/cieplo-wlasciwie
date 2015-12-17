@@ -1,11 +1,13 @@
 {% extends 'KrakenRankingBundle::base.html.twig' %}
 
+{% form_theme form 'KrakenWarmBundle:Form:form_div_layout.html.twig' %}
+
 {% block headline %}Wyszukiwanie{% endblock headline %}
 
 {% block content_row %}
 <div class="row">
     <div class="col-sm-4">
-        <form class="form-horizontal" method="POST" action="{{ url('ranking_search')}}">
+        <form method="POST" action="{{ url('ranking_search')}}">
             {{ form_rest(form) }}
             <button type="submit" class="btn btn-primary">Szukaj</button>
         </form>

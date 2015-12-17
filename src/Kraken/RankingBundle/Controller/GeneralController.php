@@ -38,6 +38,22 @@ class GeneralController extends BaseController
     }
 
     /**
+     * @Route("/propozycje-do-rankingu", name="ranking_proposal")
+     */
+    public function proposalAction()
+    {
+        return $this->render('KrakenRankingBundle:Ranking:proposal.html.twig');
+    }
+
+    /**
+     * @Route("/dodaj-opinie-o-kotle", name="ranking_review")
+     */
+    public function reviewAction()
+    {
+        return $this->render('KrakenRankingBundle:Ranking:review.html.twig');
+    }
+
+    /**
      * @Route("/szukaj/{uid}/{sort}", name="ranking_search", defaults={"uid" = 0, "sort" = ""})
      */
     public function searchAction($uid, $sort, Request $request)
@@ -105,7 +121,7 @@ class GeneralController extends BaseController
             }
 
             $query
-                ->innerJoin('b.acceptedFuelTypes', 'f')
+                ->innerJoin('b.boilerFuelTypes', 'f')
                 ->andWhere('f.id IN (:fuels)')
                 ->setParameter('fuels', $fuels);
         }

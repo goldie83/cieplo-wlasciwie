@@ -27,6 +27,7 @@
                     <h3 class="boiler-class {{ boiler.rating|lower }}-class">{{ boiler.rating }}</h3>
                     <p>cena: od {{ boiler.typicalModelPrice|number_format(0, ',', ' ') }}zł</p>
                     <p>Gwarancja: {{ boiler.warrantyYears }}</p>
+                    <p>{% if boiler.forClosedSystem %}<span class="label label-danger">do układu zamkniętego</span>{% endif %}</p>
                 </td>
             </tr>
         {% endfor %}

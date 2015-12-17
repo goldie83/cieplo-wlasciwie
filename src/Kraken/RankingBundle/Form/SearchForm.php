@@ -15,6 +15,7 @@ class SearchForm extends AbstractType
             ->add('modelName', null, [
                 'label' => 'Nazwa producenta lub modelu',
                 'required' => false,
+                'horizontal_label_class' => '',
             ])
             ->add('manufacturer', null, [
                 'label' => 'Producent',
@@ -33,6 +34,7 @@ class SearchForm extends AbstractType
             ])
             ->add('fuelType', null, [
                 'label' => 'Paliwa',
+                'widget_type' => 'inline',
                 'expanded' => true,
                 'multiple' => true,
                 'required' => false,
@@ -62,7 +64,11 @@ class SearchForm extends AbstractType
                 'required' => false,
             ])
             ->add('forClosedSystem', null, [
-                'label' => 'Kotły do układu zamkniętego',
+                'label' => 'Dopuszczony do układu zamkniętego',
+                'required' => false,
+            ])
+            ->add('cleanlyBurning', null, [
+                'label' => 'Spalający czysto bez potrzeby przeróbek',
                 'required' => false,
             ])
         ;

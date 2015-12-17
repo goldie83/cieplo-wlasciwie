@@ -75,6 +75,11 @@ class Search
     protected $forClosedSystem;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $cleanlyBurning;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -384,5 +389,28 @@ class Search
     public function getMaterial()
     {
         return $this->material;
+    }
+
+    /**
+     * Set cleanlyBurning
+     *
+     * @param boolean $cleanlyBurning
+     * @return Search
+     */
+    public function setCleanlyBurning($cleanlyBurning)
+    {
+        $this->cleanlyBurning = $cleanlyBurning;
+
+        return $this;
+    }
+
+    /**
+     * Get cleanlyBurning
+     *
+     * @return boolean 
+     */
+    public function getCleanlyBurning()
+    {
+        return $this->cleanlyBurning;
     }
 }

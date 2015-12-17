@@ -3,9 +3,9 @@
 {% block title %}Ranking kotłów węglowych{% endblock %}
 
 {% block navbar %}
-    {% embed '@MopaBootstrap/Navbar/navbar.html.twig' with { fixedTop: false, inverse: true, id: 'navbar-example' } %}
+    {% embed '@MopaBootstrap/Navbar/navbar.html.twig' with { fixedTop: false, inverse: false, id: 'navbar-example' } %}
         {% block brand %}
-            <a class="navbar-brand" href="{{ path('ranking_homepage') }}">Ranking kotłów węglowych</a>
+            <a class="navbar-brand" style="padding:5px 15px" href="{{ path('ranking_homepage') }}"><img src="{{ asset('bundles/krakenranking/images/logo_ranking.png') }}" alt="Ranking kotłów" style="height:38px" /></a>
         {% endblock %}
 
         {% block menu %}

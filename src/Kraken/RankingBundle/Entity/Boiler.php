@@ -188,7 +188,7 @@ class Boiler
         $this->changes = new \Doctrine\Common\Collections\ArrayCollection();
         $this->notices = new \Doctrine\Common\Collections\ArrayCollection();
         $this->boilerPowers = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->acceptedFuelTypes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->boilerFuelTypes = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function __toString()

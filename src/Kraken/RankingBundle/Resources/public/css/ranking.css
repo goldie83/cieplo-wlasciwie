@@ -76,4 +76,30 @@ footer {
 .jumbo {
     background-color: #ccc;
     padding: 20px;
+    height:350px;
+    background:url('http://czysteogrzewanie.pl/wp-content/themes/twentytwelve/img/lead.jpg') 50% 20%;
+    position:relative;
+}
+
+.jumbo .wrap {
+    position:absolute;
+    bottom:20px;
+    left:10px;
+}
+
+.jumbo h1 {
+    background:rgba(0,0,0,0.5);
+    color:#fff;
+    display:inline-block;
+    padding:10px;
+    font-size:32px;
+}
+
+.jumbo p {
+    background:rgba(0,0,0,0.5);
+    color:#fff;
+    display:inline-block;
+    margin:0 10px 0 0;
+    padding:10px;
+    font-size:16px;
 }

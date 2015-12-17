@@ -30,6 +30,7 @@ twig:
         - 'KrakenWarmBundle:Form:form_div_layout.html.twig'
         - 'VichUploaderBundle:Form:fields.html.twig'
         - 'SonataCoreBundle:Form:datepicker.html.twig'
+        - 'MopaBootstrapBundle:Form:fields.html.twig'
 
 # Assetic Configuration
 assetic:
@@ -109,6 +110,8 @@ mopa_bootstrap:
     form:
         render_required_asterisk: true
         render_optional_text: false
+        horizontal_label_class: col-sm-4
+        horizontal_input_wrapper_class: col-sm-8
         collection:
             widget_remove_btn:
                 attr:
