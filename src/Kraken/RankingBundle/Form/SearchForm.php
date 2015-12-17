@@ -68,7 +68,7 @@ class SearchForm extends AbstractType
                 'required' => false,
             ])
             ->add('cleanlyBurning', null, [
-                'label' => 'Spalający czysto bez potrzeby przeróbek',
+                'label' => 'Nie wymaga przeróbek aby palić bez problemów',
                 'required' => false,
             ])
         ;
