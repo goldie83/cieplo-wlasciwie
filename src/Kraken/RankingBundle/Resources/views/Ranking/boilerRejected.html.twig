@@ -1,0 +1,40 @@
+{% extends 'KrakenRankingBundle::base.html.twig' %}
+
+{% block title %}{{ boiler.name }} - ranking kotłów węglowych{% endblock title %}
+
+{% block headline %}{{ boiler.name }}  <small>(poza rankingiem)</small>{% endblock headline %}
+
+{% block content_row %}
+<div class="row">
+    <div class="col-sm-4">
+        <table class="table table-striped">
+          <tbody>
+            <tr>
+              <th scope="row">Producent</th>
+              <td><a href="{{ path('ranking_boiler_manufacturer', {'manufacturer': boiler.manufacturer.slug }) }}">{{ boiler.manufacturer.name }}</a></td>
+            </tr>
+            <tr>
+              <th scope="row">Rodzaj kotła</th>
+              <td><a href="{{ path('ranking_boiler_category', {'category': boiler.category.slug }) }}">{{ boiler.category.singularName }}</a></td>
+            </tr>
+            <tr>
+              <th scope="row">Strona producenta</th>
+              <td><a href="{{ boiler.manufacturerSite }}" target="_blank">przejdź do strony producenta</a></td>
+            </tr>
+          </tbody>
+        </table>
+        <p>Ostatnia aktualizacja: {{ boiler.updated|date('d.m.Y') }}</p>
+    </div>
+    <div class="col-sm-8">
+              <p>Kocioł <strong>{{ boiler }}</strong> nie załapał się do rankingu. Oto powody:</p>
+              {{ boiler.ratingExplanation|raw }}
+          </div>
+        </div>
+    </div>
+</div>
+{% endblock content_row %}
+
+{% block bottom_javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/krakenranking/js/boiler.js') }}"></script>
+{% endblock %}

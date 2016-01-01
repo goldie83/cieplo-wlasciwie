@@ -1,19 +1,26 @@
-{% if search is defined and search.empty %}
+{% if search is defined and search.empty and not search.rejected %}
     <div class="alert alert-danger" role="alert"><strong>Wszystkiego na raz nie da rady.</strong> Wybierz przynajmniej jedno z kryteriów wyszukiwania.</div>
 {% elseif boilers %}
-    {% set currentRoute = app.request.attributes.get('_route') %}
-    {% set routeParams = app.request.attributes.get('_route_params') %}
-    {% set sort = routeParams.sort ?: '' %}
-    <ul class="nav nav-pills sort-menu">
-      <li class="hint">Wyświetl najpierw:</li>
-      <li role="presentation" {% if sort == '' or sort == 'najtansze-z-najlepszych' %}class="active"{% endif %}><a href="{{ path(currentRoute, routeParams|merge({'sort': 'najtansze-z-najlepszych'})) }}">Najtańsze z najlepszych</a></li>
-      <li role="presentation" {% if sort == 'najtansze' %}class="active"{% endif %}><a href="{{ path(currentRoute, routeParams|merge({'sort': 'najtansze'})) }}">Najtańsze</a></li>
-      <li role="presentation" {% if sort == 'najlepsze' %}class="active"{% endif %}><a href="{{ path(currentRoute, routeParams|merge({'sort': 'najlepsze'})) }}">Najlepsze</a></li>
-    </ul>
+    {% if enableSort is not defined or enableSort == true %}
+        {% set currentRoute = app.request.attributes.get('_route') %}
+        {% set routeParams = app.request.attributes.get('_route_params') %}
+        {% set sort = routeParams.sort ?: '' %}
+        <ul class="nav nav-pills sort-menu">
+          <li class="hint">Wyświetl najpierw:</li>
+          <li role="presentation" {% if sort == '' or sort == 'najtansze-z-najlepszych' %}class="active"{% endif %}><a href="{{ path(currentRoute, routeParams|merge({'sort': 'najtansze-z-najlepszych'})) }}">Najtańsze z najlepszych</a></li>
+          <li role="presentation" {% if sort == 'najtansze' %}class="active"{% endif %}><a href="{{ path(currentRoute, routeParams|merge({'sort': 'najtansze'})) }}">Najtańsze</a></li>
+          <li role="presentation" {% if sort == 'najlepsze' %}class="active"{% endif %}><a href="{{ path(currentRoute, routeParams|merge({'sort': 'najlepsze'})) }}">Najlepsze</a></li>
+        </ul>
+    {% endif %}
     <table class="table table-hover boiler-list">
         <tbody>
         {% for boiler in boilers %}
             <tr>
+            {% if boiler.rejected %}
+                <td class="col-sm-12" style="background:#ddd;">
+                    <h3 style="margin:10px"><span class="label label-default pull-right">Poza rankingiem</span> <a href="{{ url('ranking_boiler_overview', {'category': boiler.category.slug, 'boiler': boiler.slug}) }}">{{ boiler.name }}</a></h3>
+                </td>
+            {% else %}
                 <td class="col-sm-2">
                     <img src="{{ vich_uploader_asset(boiler, 'imageFile')|imagine_filter('thumbnail') }}" />
                 </td>
@@ -29,6 +36,7 @@
                     <p>Gwarancja: {{ boiler.warrantyYears }}</p>
                     <p>{% if boiler.forClosedSystem %}<span class="label label-danger">do układu zamkniętego</span>{% endif %}</p>
                 </td>
+            {% endif %}
             </tr>
         {% endfor %}
         </tbody>

@@ -19,26 +19,27 @@ class Proposal
     protected $id;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @Assert\Url(
+     *    checkDNS = true,
+     *    dnsMessage = "Wygląda na to, że taka strona nie istnieje",
+     *    message = "Podany adres jest nieprawidłowy"
+     * )
+     * @ORM\Column(type="string")
      */
-    protected $positive = true;
+    protected $url;
 
     /**
      * @ORM\Column(type="string")
+     * @Assert\Email(
+     *    message = "To nie jest prawidłowy adres e-mail"
+     * )
      */
-    protected $label;
+    protected $email;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
     protected $content;
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->boilerProperties = new \Doctrine\Common\Collections\ArrayCollection();
-    }
 
     /**
      * Get id
@@ -51,56 +52,33 @@ class Proposal
     }
 
     /**
-     * Set positive
+     * Set url
      *
-     * @param boolean $positive
-     * @return Property
+     * @param string $url
+     * @return Proposal
      */
-    public function setPositive($positive)
+    public function setUrl($url)
     {
-        $this->positive = $positive;
+        $this->url = $url;
 
         return $this;
     }
 
     /**
-     * Get positive
-     *
-     * @return boolean
-     */
-    public function getPositive()
-    {
-        return $this->positive;
-    }
-
-    /**
-     * Set label
-     *
-     * @param string $label
-     * @return Property
-     */
-    public function setLabel($label)
-    {
-        $this->label = $label;
-
-        return $this;
-    }
-
-    /**
-     * Get label
+     * Get url
      *
      * @return string
      */
-    public function getLabel()
+    public function getUrl()
     {
-        return $this->label;
+        return $this->url;
     }
 
     /**
      * Set content
      *
      * @param string $content
-     * @return Property
+     * @return Proposal
      */
     public function setContent($content)
     {
@@ -120,35 +98,25 @@ class Proposal
     }
 
     /**
-     * Add boilerProperties
+     * Set email
      *
-     * @param \Kraken\RankingBundle\Entity\BoilerProperty $boilerProperties
-     * @return Property
+     * @param string $email
+     * @return Proposal
      */
-    public function addBoilerProperty(\Kraken\RankingBundle\Entity\BoilerProperty $boilerProperties)
+    public function setEmail($email)
     {
-        $this->boilerProperties[] = $boilerProperties;
+        $this->email = $email;
 
         return $this;
     }
 
     /**
-     * Remove boilerProperties
+     * Get email
      *
-     * @param \Kraken\RankingBundle\Entity\BoilerProperty $boilerProperties
+     * @return string
      */
-    public function removeBoilerProperty(\Kraken\RankingBundle\Entity\BoilerProperty $boilerProperties)
+    public function getEmail()
     {
-        $this->boilerProperties->removeElement($boilerProperties);
-    }
-
-    /**
-     * Get boilerProperties
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getBoilerProperties()
-    {
-        return $this->boilerProperties;
+        return $this->email;
     }
 }

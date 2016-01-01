@@ -1,5 +1,7 @@
 {% extends 'KrakenRankingBundle::base.html.twig' %}
 
+{% form_theme form 'KrakenWarmBundle:Form:form_div_layout.html.twig' %}
+
 {% block headline %}Kotły firmy {{ manufacturer.name }}{% endblock headline %}
 
 {% block content_row %}

@@ -14,7 +14,9 @@ use Kraken\RankingBundle\Entity\Boiler;
 use Kraken\RankingBundle\Entity\Category;
 use Kraken\RankingBundle\Entity\Manufacturer;
 use Kraken\RankingBundle\Entity\Search;
+use Kraken\RankingBundle\Form\FileProposalForm;
 use Kraken\RankingBundle\Form\SearchForm;
+use Kraken\RankingBundle\Form\SearchRejectedForm;
 
 
 class GeneralController extends BaseController
@@ -38,11 +40,117 @@ class GeneralController extends BaseController
     }
 
     /**
+     * @Route("/kryteria", name="ranking_criteria")
+     */
+    public function criteriaAction()
+    {
+        return $this->render('KrakenRankingBundle:Ranking:about.html.twig');
+    }
+
+    /**
      * @Route("/propozycje-do-rankingu", name="ranking_proposal")
      */
-    public function proposalAction()
+    public function proposalAction(Request $request)
     {
-        return $this->render('KrakenRankingBundle:Ranking:proposal.html.twig');
+        $em = $this->getDoctrine()->getManager();
+        $form = $this->createForm(new FileProposalForm(), null);
+
+        if ($request->isMethod('post')) {
+            $form->handleRequest($request);
+
+            if ($form->isValid()) {
+                $proposal = $form->getData();
+                $em->persist($proposal);
+                $em->flush();
+
+                $this->addFlash(
+                    'success',
+                    'OK. Twoja propozycja dotarła gdzie trzeba i niebawem pojawi się w rankingu.'
+                );
+
+                return $this->redirectToRoute('ranking_proposal');
+            } else {
+                $this->addFlash(
+                    'error',
+                    'Oj... chyba nie wszystko jest w porządku.'
+                );
+            }
+        }
+
+        return $this->render('KrakenRankingBundle:Ranking:proposal.html.twig', ['form' => $form->createView()]);
+    }
+
+    /**
+     * @Route("/salon-odrzuconych/{uid}", name="ranking_rejected", defaults={"uid" = 0})
+     */
+    public function rejectedAction($uid, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        if ($request->isMethod('post')) {
+            $search = new Search;
+            $search->setRejected(true);
+
+            $form = $this->createForm(new SearchRejectedForm(), $search);
+            $form->handleRequest($request);
+
+            if ($form->isValid()) {
+                $searchRecord = $form->getData();
+
+                $em->persist($searchRecord);
+                $em->flush();
+
+                return $this->redirectToRoute('ranking_rejected', ['uid' => base_convert($searchRecord->getId(), 10, 36)]);
+            }
+        }
+
+        if ($uid > 0) {
+            $searchRecord = $this->getDoctrine()
+                ->getRepository('KrakenRankingBundle:Search')
+                ->findOneBy(['id' => intval($uid, 36)]);
+        } else {
+            $searchRecord = new Search;
+            $searchRecord->setRejected(true);
+        }
+
+        $form = $this->createForm(new SearchRejectedForm(), $searchRecord);
+
+        $qb = $em->createQueryBuilder();
+        $query = $qb
+            ->select('b')
+            ->from('KrakenRankingBundle:Boiler', 'b')
+            ->where('b.rejected = :rejected')
+            ->setParameter('rejected', true);
+
+        if ($uid > 0) {
+            if ($searchRecord->getModelName() != '') {
+                $query
+                    ->innerJoin('b.manufacturer', 'm')
+                    ->andWhere($qb->expr()->orX(
+                        $qb->expr()->like('b.name', ':model_name'),
+                        $qb->expr()->like('m.name', ':model_name')
+                    ))
+                    ->setParameter('model_name', '%'.$searchRecord->getModelName().'%');
+            }
+
+            if ($searchRecord->getCategory() != '') {
+                $query
+                    ->andWhere('b.category = :category')
+                    ->setParameter('category', $searchRecord->getCategory()->getId());
+            }
+
+            if ($searchRecord->getManufacturer() != '') {
+                $query
+                    ->andWhere('b.manufacturer = :manufacturer')
+                    ->setParameter('manufacturer', $searchRecord->getManufacturer()->getId());
+            }
+        }
+
+        $boilers = $query
+            ->getQuery()
+            ->getResult();
+
+        return $this->render('KrakenRankingBundle:Ranking:rejected.html.twig', ['form' => $form->createView(), 'boilers' => $boilers, 'search' => $searchRecord]);
     }
 
     /**
@@ -257,7 +365,9 @@ class GeneralController extends BaseController
      */
     public function boilerAction(Category $category, Boiler $boiler)
     {
-        return $this->render('KrakenRankingBundle:Ranking:boiler.html.twig', ['boiler' => $boiler]);
+        $templateName = $boiler->isRejected() ? 'boilerRejected' : 'boiler';
+
+        return $this->render('KrakenRankingBundle:Ranking:'.$templateName.'.html.twig', ['boiler' => $boiler]);
     }
 
     /**

@@ -147,3 +147,18 @@ liip_imagine:
             quality: 75
             filters:
                 thumbnail: { size: [200, 150], mode: inset }
+
+open_graph_protocol:
+    libraries:
+        base:
+            class: Beyerz\OpenGraphProtocolBundle\Libraries\Base
+            default_values:
+                site_name: Ranking kotłów CzysteOgrzewanie.pl
+                type: website
+                title: Ranking kotłów CzysteOgrzewanie.pl
+                url: http://ranking.czysteogrzewanie.pl
+                image: http://czysteogrzewanie.pl/wp-content/uploads/2013/02/i_like_roofs.jpg
+                description: Techniczny przegląd rynku kotłów na węgiel i drewno
+        facebook:
+            class: Beyerz\OpenGraphProtocolBundle\Libraries\Facebook
+            default_values: { app_id: 327276617378519, app_secret: e3138af4b4ec48f465c65aa375f387c1 }

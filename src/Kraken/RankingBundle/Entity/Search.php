@@ -70,14 +70,19 @@ class Search
     protected $material;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      */
     protected $forClosedSystem;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", nullable=true)
      */
-    protected $cleanlyBurning;
+    protected $needsMinorFixes;
+
+    /**
+     * @ORM\Column(type="boolean", name="is_rejected", nullable=true)
+     */
+    protected $rejected;
 
     /**
      * Constructor
@@ -306,7 +311,8 @@ class Search
             && $this->normClass == ''
             && $this->rating == ''
             && $this->material == ''
-            && $this->forClosedSystem == false;
+            && $this->forClosedSystem == false
+            && $this->needsMinorFixes == false;
     }
 
     public function isOnlyCategorySelected()
@@ -319,7 +325,8 @@ class Search
             && $this->normClass == ''
             && $this->rating == ''
             && $this->material == ''
-            && $this->forClosedSystem == false;
+            && $this->forClosedSystem == false
+            && $this->needsMinorFixes == false;
     }
 
     public function isOnlyManufacturerSelected()
@@ -332,7 +339,8 @@ class Search
             && $this->normClass == ''
             && $this->rating == ''
             && $this->material == ''
-            && $this->forClosedSystem == false;
+            && $this->forClosedSystem == false
+            && $this->needsMinorFixes == false;
     }
 
     /**
@@ -392,25 +400,48 @@ class Search
     }
 
     /**
-     * Set cleanlyBurning
+     * Set needsMinorFixes
      *
-     * @param boolean $cleanlyBurning
+     * @param boolean $needsMinorFixes
      * @return Search
      */
-    public function setCleanlyBurning($cleanlyBurning)
+    public function setNeedsMinorFixes($needsMinorFixes)
     {
-        $this->cleanlyBurning = $cleanlyBurning;
+        $this->needsMinorFixes = $needsMinorFixes;
 
         return $this;
     }
 
     /**
-     * Get cleanlyBurning
+     * Get needsMinorFixes
      *
-     * @return boolean 
+     * @return boolean
      */
-    public function getCleanlyBurning()
+    public function getNeedsMinorFixes()
     {
-        return $this->cleanlyBurning;
+        return $this->needsMinorFixes;
+    }
+
+    /**
+     * Set rejected
+     *
+     * @param boolean $rejected
+     * @return Search
+     */
+    public function setRejected($rejected)
+    {
+        $this->rejected = $rejected;
+
+        return $this;
+    }
+
+    /**
+     * Get rejected
+     *
+     * @return boolean
+     */
+    public function isRejected()
+    {
+        return $this->rejected;
     }
 }

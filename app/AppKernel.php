@@ -37,6 +37,7 @@ class AppKernel extends Kernel
             new Ivory\CKEditorBundle\IvoryCKEditorBundle(),
             new Sonata\FormatterBundle\SonataFormatterBundle(),
             new Liip\ImagineBundle\LiipImagineBundle(),
+            new Beyerz\OpenGraphProtocolBundle\OpenGraphProtocolBundle(),
             new Kraken\WarmBundle\KrakenWarmBundle(),
             new Kraken\RankingBundle\KrakenRankingBundle(),
         );

@@ -23,7 +23,7 @@ class SearchForm extends AbstractType
                 'required' => false,
             ])
             ->add('category', null, [
-                'property' => 'indentedName',
+                'choice_label' => 'indentedName',
                 'label' => 'Rodzaj',
                 'placeholder' => 'dowolny',
                 'required' => false,
@@ -54,6 +54,10 @@ class SearchForm extends AbstractType
             ->add('normClass', 'choice', [
                 'choices' => [3, 4, 5],
                 'label' => 'Klasa',
+                'help_block'  => 'wg normy PN-EN 303-5:2012',
+                'attr' => array(
+                    'help_text' => 'wg normy PN-EN 303-5:2012',
+                ),
                 'placeholder' => 'dowolna',
                 'required' => false,
             ])
@@ -67,8 +71,9 @@ class SearchForm extends AbstractType
                 'label' => 'Dopuszczony do układu zamkniętego',
                 'required' => false,
             ])
-            ->add('cleanlyBurning', null, [
-                'label' => 'Nie wymaga przeróbek aby palić bez problemów',
+            ->add('needsMinorFixes', null, [
+                'label' => 'Wymaga drobnych poprawek, aby palić czysto i bez problemów',
+                'help_block' => 'Zaznacz tę opcję, aby wyświetlić także lekko wybrakowane kotły. Czasem trzeba w nich zablokować zbędny otwór, czasem dorobić inny, który jest potrzebny, ale go nie ma. To drobne zmiany, które nie powinny naruszać gwarancji, ale jeśli nie masz możliwości ich wykonać, to lepiej znajdź kocioł, który fabrycznie nie ma takich wad.',
                 'required' => false,
             ])
         ;

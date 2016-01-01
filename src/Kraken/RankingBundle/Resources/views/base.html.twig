@@ -16,7 +16,7 @@
 
 {% block footer %}
 <div class="container">
-  <p>Ranking kotłów jest częścią serwisu <a href="http://czysteogrzewanie.pl" target="_blank">Czyste Ogrzewanie</a>, który promuje tanie, świadome i ekologiczne ogrzewanie pozornie staroświeckimi paliwami.</p>
+  <p>Ranking kotłów jest częścią serwisu <a href="http://czysteogrzewanie.pl" target="_blank">Czyste Ogrzewanie</a>, który pokazuje jak znikomym kosztem uczynić ogrzewanie węglem i drewnem efektywniejszym i czystszym.</p>
 </div>
 {% endblock footer %}
 
@@ -43,3 +43,7 @@
     <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
 {% endblock foot_script_assetic %}
+
+{% block head_bottom %}
+    {{ ogp()|raw }}
+{% endblock head_bottom %}

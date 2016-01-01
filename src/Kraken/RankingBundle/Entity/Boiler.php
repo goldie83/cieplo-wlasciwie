@@ -160,14 +160,24 @@ class Boiler
     protected $userManual;
 
     /**
+     * @ORM\Column(type="string")
+     */
+    protected $manufacturerSite;
+
+    /**
      * @ORM\Column(type="string", nullable=false)
      */
     protected $material;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", name="is_for_closed_system")
      */
     protected $forClosedSystem;
+
+    /**
+     * @ORM\Column(type="boolean", name="is_rejected")
+     */
+    protected $rejected;
 
     /**
      * @Gedmo\Timestampable(on="create")
@@ -1050,5 +1060,56 @@ class Boiler
     public function typicalModelWorkTime()
     {
         return 8;//TODO
+    }
+
+    /**
+     * Set rejected
+     *
+     * @param boolean $rejected
+     * @return Boiler
+     */
+    public function setRejected($rejected)
+    {
+        $this->rejected = $rejected;
+
+        return $this;
+    }
+
+    public function isRejected()
+    {
+        return $this->rejected;
+    }
+
+    /**
+     * Set manufacturerSite
+     *
+     * @param string $manufacturerSite
+     * @return Boiler
+     */
+    public function setManufacturerSite($manufacturerSite)
+    {
+        $this->manufacturerSite = $manufacturerSite;
+
+        return $this;
+    }
+
+    /**
+     * Get manufacturerSite
+     *
+     * @return string 
+     */
+    public function getManufacturerSite()
+    {
+        return $this->manufacturerSite;
+    }
+
+    /**
+     * Get rejected
+     *
+     * @return boolean 
+     */
+    public function getRejected()
+    {
+        return $this->rejected;
     }
 }

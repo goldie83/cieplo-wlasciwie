@@ -80,6 +80,10 @@
               <td>{% if boiler.userManual %}<a href="{{ boiler.userManual }}" target="_blank">dostępna</a>{% else %}<i>niedostępna</i>{% endif %}</td>
             </tr>
             <tr>
+              <th scope="row">Strona producenta</th>
+              <td><a href="{{ boiler.manufacturerSite }}" target="_blank">przejdź do strony producenta</a></td>
+            </tr>
+            <tr>
               <th scope="row">Orientacyjna cena</th>
               <td>od {{ boiler.typicalModelPrice|number_format(0, ',', ' ') }}zł ({{ boiler.typicalModelPower|number_format }}kW)</td>
             </tr>
