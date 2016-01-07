@@ -26,7 +26,7 @@ class GeneralController extends BaseController
      */
     public function homepageAction()
     {
-        $form = $this->createForm(new SearchForm());
+        $form = $this->createForm(new SearchForm(), new Search());
 
         return $this->render('KrakenRankingBundle:Ranking:index.html.twig', ['searchForm' => $form->createView()]);
     }
@@ -266,7 +266,13 @@ class GeneralController extends BaseController
         if ($searchRecord->isForClosedSystem()) {
             $query
                 ->andWhere('b.forClosedSystem = :for_closed_system')
-                ->setParameter('for_closed_system', $searchRecord->isForClosedSystem());
+                ->setParameter('for_closed_system', true);
+        }
+
+        if ($searchRecord->needsFixing()) {
+            $query
+                ->andWhere('b.needsFixing = :needs_fixing')
+                ->setParameter('needs_fixing', !$searchRecord->needsFixing());
         }
 
         if ($sort == 'najtansze') {

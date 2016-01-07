@@ -115,7 +115,7 @@ class Boiler
     protected $content;
 
     /**
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(type="text", name="rating_explanation", nullable=true)
      */
     protected $ratingExplanation;
 
@@ -125,27 +125,27 @@ class Boiler
     protected $rating;
 
     /**
-     * @ORM\Column(type="string", length=1, nullable=true)
+     * @ORM\Column(type="string", name="norm_class", length=1, nullable=true)
      */
     protected $normClass;
 
     /**
-     * @ORM\Column(type="decimal", precision=4, scale=2, nullable=true)
+     * @ORM\Column(type="decimal", name="typical_model_power", precision=4, scale=2, nullable=true)
      */
     protected $typicalModelPower;
 
     /**
-     * @ORM\Column(type="decimal", precision=4, scale=2, nullable=true)
+     * @ORM\Column(type="decimal", name="typical_model_exchanger", precision=4, scale=2, nullable=true)
      */
     protected $typicalModelExchanger;
 
     /**
-     * @ORM\Column(type="decimal", nullable=true)
+     * @ORM\Column(type="decimal", name="typical_model_capacity", nullable=true)
      */
     protected $typicalModelCapacity;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="integer", name="typical_model_price", nullable=true)
      */
     protected $typicalModelPrice;
 
@@ -160,7 +160,7 @@ class Boiler
     protected $userManual;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", name="manufacturer_site", nullable=true)
      */
     protected $manufacturerSite;
 
@@ -173,6 +173,11 @@ class Boiler
      * @ORM\Column(type="boolean", name="is_for_closed_system")
      */
     protected $forClosedSystem;
+
+    /**
+     * @ORM\Column(type="boolean", name="needs_fixing")
+     */
+    protected $needsFixing;
 
     /**
      * @ORM\Column(type="boolean", name="is_rejected")
@@ -1096,7 +1101,7 @@ class Boiler
     /**
      * Get manufacturerSite
      *
-     * @return string 
+     * @return string
      */
     public function getManufacturerSite()
     {
@@ -1106,10 +1111,33 @@ class Boiler
     /**
      * Get rejected
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getRejected()
     {
         return $this->rejected;
+    }
+
+    /**
+     * Set needsFixing
+     *
+     * @param boolean $needsFixing
+     * @return Boiler
+     */
+    public function setNeedsFixing($needsFixing)
+    {
+        $this->needsFixing = $needsFixing;
+
+        return $this;
+    }
+
+    /**
+     * Get needsFixing
+     *
+     * @return boolean
+     */
+    public function getNeedsFixing()
+    {
+        return $this->needsFixing;
     }
 }

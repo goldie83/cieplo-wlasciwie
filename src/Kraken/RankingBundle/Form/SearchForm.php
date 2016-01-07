@@ -71,9 +71,9 @@ class SearchForm extends AbstractType
                 'label' => 'Dopuszczony do układu zamkniętego',
                 'required' => false,
             ])
-            ->add('needsMinorFixes', null, [
-                'label' => 'Wymaga drobnych poprawek, aby palić czysto i bez problemów',
-                'help_block' => 'Zaznacz tę opcję, aby wyświetlić także lekko wybrakowane kotły. Czasem trzeba w nich zablokować zbędny otwór, czasem dorobić inny, który jest potrzebny, ale go nie ma. To drobne zmiany, które nie powinny naruszać gwarancji, ale jeśli nie masz możliwości ich wykonać, to lepiej znajdź kocioł, który fabrycznie nie ma takich wad.',
+            ->add('needsFixing', null, [
+                'label' => 'Nie wymaga poprawek aby palić czysto',
+                'help_block' => 'Pokazuje tylko te kotły, w których nie trzeba niczego poprawiać po fabryce, aby palić bez dymu i nadmiernego grzania komina.',
                 'required' => false,
             ])
         ;

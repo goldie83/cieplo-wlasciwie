@@ -1,0 +1,12 @@
+main:
+    resource: routing.yml
+
+warm:
+    resource: "@KrakenWarmBundle/Resources/config/routing.yml"
+    prefix:   /
+    host: "cieplowlasciwie.pl"
+
+ranking:
+    resource: "@KrakenRankingBundle/Resources/config/routing.yml"
+    prefix:   /
+    host: "ranking.czysteogrzewanie.pl"

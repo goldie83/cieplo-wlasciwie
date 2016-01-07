@@ -55,7 +55,7 @@ class Search
     protected $power;
 
     /**
-     * @ORM\Column(type="string", nullable=true, name="norm_class")
+     * @ORM\Column(type="string", name="norm_class", nullable=true)
      */
     protected $normClass;
 
@@ -70,14 +70,14 @@ class Search
     protected $material;
 
     /**
-     * @ORM\Column(type="boolean", nullable=true)
+     * @ORM\Column(type="boolean", name="is_for_closed_system", nullable=true)
      */
     protected $forClosedSystem;
 
     /**
-     * @ORM\Column(type="boolean", nullable=true)
+     * @ORM\Column(type="boolean", name="needs_fixing", nullable=true)
      */
-    protected $needsMinorFixes;
+    protected $needsFixing = true;
 
     /**
      * @ORM\Column(type="boolean", name="is_rejected", nullable=true)
@@ -312,7 +312,7 @@ class Search
             && $this->rating == ''
             && $this->material == ''
             && $this->forClosedSystem == false
-            && $this->needsMinorFixes == false;
+            && $this->needsFixing == false;
     }
 
     public function isOnlyCategorySelected()
@@ -326,7 +326,7 @@ class Search
             && $this->rating == ''
             && $this->material == ''
             && $this->forClosedSystem == false
-            && $this->needsMinorFixes == false;
+            && $this->needsFixing == false;
     }
 
     public function isOnlyManufacturerSelected()
@@ -340,7 +340,7 @@ class Search
             && $this->rating == ''
             && $this->material == ''
             && $this->forClosedSystem == false
-            && $this->needsMinorFixes == false;
+            && $this->needsFixing == false;
     }
 
     /**
@@ -400,26 +400,26 @@ class Search
     }
 
     /**
-     * Set needsMinorFixes
+     * Set needsFixing
      *
-     * @param boolean $needsMinorFixes
+     * @param boolean $needsFixing
      * @return Search
      */
-    public function setNeedsMinorFixes($needsMinorFixes)
+    public function setNeedsFixing($needsFixing)
     {
-        $this->needsMinorFixes = $needsMinorFixes;
+        $this->needsFixing = $needsFixing;
 
         return $this;
     }
 
     /**
-     * Get needsMinorFixes
+     * Get needsFixing
      *
      * @return boolean
      */
-    public function getNeedsMinorFixes()
+    public function getNeedsFixing()
     {
-        return $this->needsMinorFixes;
+        return $this->needsFixing;
     }
 
     /**
@@ -441,6 +441,16 @@ class Search
      * @return boolean
      */
     public function isRejected()
+    {
+        return $this->rejected;
+    }
+
+    /**
+     * Get rejected
+     *
+     * @return boolean
+     */
+    public function getRejected()
     {
         return $this->rejected;
     }

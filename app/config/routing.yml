@@ -16,12 +16,10 @@ _sonata_admin:
 _liip_imagine:
     resource: "@LiipImagineBundle/Resources/config/routing.xml"
 
-warm:
-    resource: "@KrakenWarmBundle/Resources/config/routing.yml"
-    prefix:   /
-    host: "cieplowlasciwie.pl"
+gallery:
+    resource: '@SonataMediaBundle/Resources/config/routing/gallery.xml'
+    prefix: /media/gallery
 
-ranking:
-    resource: "@KrakenRankingBundle/Resources/config/routing.yml"
-    prefix:   /
-    host: "ranking.czysteogrzewanie.pl"
+media:
+    resource: '@SonataMediaBundle/Resources/config/routing/media.xml'
+    prefix: /media

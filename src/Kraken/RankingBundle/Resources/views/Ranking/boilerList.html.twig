@@ -17,7 +17,7 @@
         {% for boiler in boilers %}
             <tr>
             {% if boiler.rejected %}
-                <td class="col-sm-12" style="background:#ddd;">
+                <td class="col-sm-12" style="border-bottom:2px solid white;background:#ddd;">
                     <h3 style="margin:10px"><span class="label label-default pull-right">Poza rankingiem</span> <a href="{{ url('ranking_boiler_overview', {'category': boiler.category.slug, 'boiler': boiler.slug}) }}">{{ boiler.name }}</a></h3>
                 </td>
             {% else %}
