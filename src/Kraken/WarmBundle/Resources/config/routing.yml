@@ -1,15 +1,22 @@
 homepage:
     path:  /
-    defaults: { _controller: KrakenWarmBundle:Default:landing }
+    defaults: { _controller: KrakenWarmBundle:Static:landing }
 
 start:
     path:  /start/{slug}
-    defaults: { _controller: KrakenWarmBundle:Calculator:index, slug: ~ }
+    defaults: { _controller: KrakenWarmBundle:Calculator:start, slug: ~ }
+
+location:
+    path:  /lokalizacja/{slug}
+    defaults: { _controller: KrakenWarmBundle:Calculator:location }
+
+dimensions:
+    path:  /wymiary/{slug}
+    defaults: { _controller: KrakenWarmBundle:Calculator:dimensions }
 
 what:
     path:  /co_to_jest
-    defaults: { _controller: KrakenWarmBundle:Default:what }
-
+    defaults: { _controller: KrakenWarmBundle:Static:what }
 details:
     path:  /szczegoly/{slug}
     defaults: { _controller: KrakenWarmBundle:Calculator:details }
@@ -46,15 +53,15 @@ old_result:
 
 how_it_works:
     path:  /jak-to-dziala
-    defaults: { _controller: KrakenWarmBundle:Default:howItWorks }
+    defaults: { _controller: KrakenWarmBundle:Static:howItWorks }
 
 why_not_works:
     path:  /czemu-nie-dziala
-    defaults: { _controller: KrakenWarmBundle:Default:whyNotWorks }
+    defaults: { _controller: KrakenWarmBundle:Static:whyNotWorks }
 
 rules:
     path:  /zasady
-    defaults: { _controller: KrakenWarmBundle:Default:rules }
+    defaults: { _controller: KrakenWarmBundle:Static:rules }
 
 my_results:
     path:  /moje-wyniki

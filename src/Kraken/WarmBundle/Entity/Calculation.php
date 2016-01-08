@@ -35,14 +35,13 @@ class Calculation
     protected $building_type;
 
     /**
-     * @ORM\Column(type="integer", length=4)
+     * @ORM\Column(type="integer", length=4, nullable=true)
      * @Assert\Range(min="1900", minMessage="Jeśli dom jest sprzed XX wieku, wybierz 1900 rok")
      */
     protected $construction_year;
 
     /**
-     * @ORM\Column(type="decimal", precision=4, scale=2, nullable=false)
-     * @Assert\NotBlank()
+     * @ORM\Column(type="decimal", precision=4, scale=2, nullable=true)
      * @Assert\Range(min="10", minMessage = "To zbyt niska temperatura dla budynku mieszkalnego", max="50", maxMessage = "To zbyt wysoka temperatura dla budynku mieszkalnego", invalidMessage="Nieprawidłowa wartość")
      */
     protected $indoor_temperature;

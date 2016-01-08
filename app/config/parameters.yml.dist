@@ -16,3 +16,5 @@ parameters:
 
     locale:             pl
     secret:             asdfasdfasdf
+
+    assets_version:     20160108

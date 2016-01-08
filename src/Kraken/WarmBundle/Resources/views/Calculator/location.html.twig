@@ -1,0 +1,86 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+
+<div class="row text-center">
+  <div class="col-md-12">
+    <div class="btn-group calculation-steps">
+      <a href="{{ path('start', {slug: calc.slug}) }}" class="btn btn-raised">Start</a>
+      <a href="javascript:void(0)" class="btn btn-warning btn-raised">Lokalizacja</a>
+      <a href="javascript:void(0)" class="btn btn-raised">Wymiary</a>
+      <a href="javascript:void(0)" class="btn btn-raised">Ściany</a>
+      <a href="javascript:void(0)" class="btn btn-raised">Poddasze i parter</a>
+      <a href="javascript:void(0)" class="btn btn-raised">Ogrzewanie</a>
+      <a href="javascript:void(0)" class="btn btn-success btn-raised">Wynik</a>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="well bs-component">
+        <form action="{{ path('location', {slug: calc.slug}) }}" class="form-horizontal" method="post">
+            {{ form_start(form, { 'style': 'horizontal', 'label_col': 4, 'widget_col': 8}) }}
+            {{ form_errors(form) }}
+
+            <h2>Położenie budynku w przestrzeni i czasie</h2>
+            {{ form_row(form.construction_year) }}
+
+            <div class="form-group">
+              <label class="required control-label col-sm-4">Lokalizacja budynku&nbsp;<span class="asterisk">*</span></label>
+              <div class="col-sm-8">
+                  <div class="alert alert-info">
+                    <strong>Spokojnie, nie zamierzamy cię nachodzić.</strong> Wystarczy dokładność kilku kilometrów.
+                  </div>
+                  <div id="map_canvas" style="height: 500px;"></div>
+              </div>
+            </div>
+            <script type="text/javascript">
+                var map518fb086278c0 = new google.maps.Map(
+                    document.getElementById("map_canvas"), {
+                        "zoom":6,
+                        "mapTypeId":"roadmap",
+                        "mapTypeControl":false,
+                        "zoomControl":true,
+                        "streetViewControl":false
+                    });
+                var map518fb086278c0Bounds = new google.maps.LatLngBounds();
+                var mapMarker518fb086279aa = new google.maps.Marker({
+                    position: new google.maps.LatLng({{ calc.latitude }}, {{ calc.longitude }}),
+                    draggable: true,
+                    map: map518fb086278c0
+                });
+                google.maps.event.addListener(mapMarker518fb086279aa, 'dragend', function()
+                {
+                    var pos = mapMarker518fb086279aa.getPosition();
+                    $("#calculation_latitude").val(pos.lat());
+                    $("#calculation_longitude").val(pos.lng());
+                });
+
+                google.maps.event.addListener(map518fb086278c0, 'click', function(event) {
+                    mapMarker518fb086279aa.setPosition(event.latLng);
+
+                    var pos = mapMarker518fb086279aa.getPosition();
+                    $("#calculation_latitude").val(pos.lat());
+                    $("#calculation_longitude").val(pos.lng());
+                });
+
+                map518fb086278c0.setCenter(new google.maps.LatLng(51.917168, 19.138184));
+            </script>
+            {{ form_row(form.latitude) }}
+            {{ form_row(form.longitude) }}
+
+            <div class="form-actions">
+              <p><span class="asterisk">*</span> - pola wymagane</p>
+              {{ form_rest(form) }}
+              <button type="submit" class="btn btn-raised btn-primary pull-right">Dalej</button>
+            </div>
+        </form>
+        <div class="clearfix"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

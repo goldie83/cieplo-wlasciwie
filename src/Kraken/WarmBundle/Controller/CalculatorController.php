@@ -5,10 +5,14 @@ namespace Kraken\WarmBundle\Controller;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Kraken\WarmBundle\Form\CalculationFormType;
+use Kraken\WarmBundle\Form\CalculationStepDimensionsType;
+use Kraken\WarmBundle\Form\CalculationStepLocationType;
+use Kraken\WarmBundle\Form\CalculationStepOneType;
 use Kraken\WarmBundle\Form\HouseApartmentType;
 use Kraken\WarmBundle\Form\HouseType;
 use Kraken\WarmBundle\Entity\Calculation;
@@ -17,7 +21,7 @@ use Kraken\WarmBundle\Entity\Layer;
 
 class CalculatorController extends Controller
 {
-    public function indexAction($slug = null)
+    public function startAction($slug = null, Request $request)
     {
         $calc = null;
 
@@ -36,46 +40,26 @@ class CalculatorController extends Controller
         }
 
         $em = $this->getDoctrine()->getManager();
+        $form = $this->createForm(new CalculationStepOneType(), $calc);
 
-        $form = $this->createForm(new CalculationFormType(), $calc);
+        if ($request->isMethod('post')) {
 
-        if ($this->getRequest()->getMethod() == 'POST') {
-            $originalFuelConsumptions = new ArrayCollection();
-
-            foreach ($calc->getFuelConsumptions() as $fc) {
-                $originalFuelConsumptions->add($fc);
-            }
-
-            $form->bind($this->getRequest());
+            $form->bind($request);
 
             if ($form->isValid()) {
-                $obj = $form->getData();
+                $calculation = $form->getData();
+                $isEditing = $calculation->getId() != null;
 
-                foreach ($originalFuelConsumptions as $fc) {
-                    if (false === $obj->getFuelConsumptions()->contains($fc)) {
-                        $em->remove($fc);
-                    }
-                }
-
-                foreach ($obj->getFuelConsumptions() as $fc) {
-                    if ($fc->getFuel() && $fc->getConsumption() > 0) {
-                        $fc->setCalculation($obj);
-                    }
-                }
-
-                $isEditing = $obj->getId() != null;
-
-                $obj->setHeatedArea(null); // to reassign city & recalculate cached values
-                $em->persist($obj);
+                $calculation->setHeatedArea(null); // to reassign city & recalculate cached values
+                $em->persist($calculation);
                 $em->flush();
 
-                $calcSlug = base_convert($obj->getId(), 10, 36);
-                $redirect = $this->generateUrl('details', array(
+                $calcSlug = base_convert($calculation->getId(), 10, 36);
+                $redirect = $this->generateUrl('location', array(
                     'slug' => $calcSlug,
                 ));
 
                 if (!$isEditing) {
-                    $request = $this->get('request');
                     $cookieValue = $request->cookies->get('sup_bro');
                     $slugs = explode(';', $cookieValue);
 
@@ -94,7 +78,85 @@ class CalculatorController extends Controller
             }
         }
 
-        return $this->render('KrakenWarmBundle:Default:index.html.twig', array(
+        return $this->render('KrakenWarmBundle:Calculator:start.html.twig', array(
+            'calc' => $calc,
+            'form' => $form->createView(),
+        ));
+    }
+
+    public function locationAction($slug)
+    {
+        if (!$this->userIsAuthor($slug)) {
+            throw $this->createNotFoundException('Jakiś zły masz ten link. Nic tu nie ma.');
+        }
+
+        $calc = $this->getDoctrine()
+            ->getRepository('KrakenWarmBundle:Calculation')
+            ->findOneBy(array('id' => intval($slug, 36)));
+
+        $em = $this->getDoctrine()->getManager();
+
+        $form = $this->createForm(new CalculationStepLocationType(), $calc);
+
+        if ($this->getRequest()->isMethod('post')) {
+            $form->bind($this->getRequest());
+
+            if ($form->isValid()) {
+                $obj = $form->getData();
+
+                $obj->setHeatedArea(null); // to reassign city & recalculate cached values
+                $em->persist($obj);
+                $em->flush();
+
+                $calcSlug = base_convert($obj->getId(), 10, 36);
+                $redirect = $this->generateUrl('dimensions', array(
+                    'slug' => $calcSlug,
+                ));
+
+                return $this->redirect($redirect);
+            }
+        }
+
+        return $this->render('KrakenWarmBundle:Calculator:location.html.twig', array(
+            'calc' => $calc,
+            'form' => $form->createView(),
+        ));
+    }
+
+    public function dimensionsAction($slug)
+    {
+        if (!$this->userIsAuthor($slug)) {
+            throw $this->createNotFoundException('Jakiś zły masz ten link. Nic tu nie ma.');
+        }
+
+        $calc = $this->getDoctrine()
+            ->getRepository('KrakenWarmBundle:Calculation')
+            ->findOneBy(array('id' => intval($slug, 36)));
+
+        $em = $this->getDoctrine()->getManager();
+
+        $form = $this->createForm(new CalculationStepDimensionsType(), $calc);
+
+        if ($this->getRequest()->isMethod('post')) {
+            $form->bind($this->getRequest());
+
+            if ($form->isValid()) {
+                $obj = $form->getData();
+
+                $obj->setHeatedArea(null); // to reassign city & recalculate cached values
+                $em->persist($obj);
+                $em->flush();
+
+                $calcSlug = base_convert($obj->getId(), 10, 36);
+                $redirect = $this->generateUrl('details', array(
+                    'slug' => $calcSlug,
+                ));
+
+                return $this->redirect($redirect);
+            }
+        }
+
+        return $this->render('KrakenWarmBundle:Calculator:dimensions.html.twig', array(
             'calc' => $calc,
             'form' => $form->createView(),
         ));
@@ -342,7 +404,7 @@ class CalculatorController extends Controller
         }
 
         $payload = json_decode(file_get_contents('php://input'), true);
-        
+
         if (isset($payload['fuels'])) {
             $customFuels = [];
             foreach ($payload['fuels'] as $type => $stuff) {
