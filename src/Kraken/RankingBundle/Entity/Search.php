@@ -417,7 +417,7 @@ class Search
      *
      * @return boolean
      */
-    public function getNeedsFixing()
+    public function needsFixing()
     {
         return $this->needsFixing;
     }

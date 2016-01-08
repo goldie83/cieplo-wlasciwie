@@ -27,10 +27,9 @@ twig:
     debug:            %kernel.debug%
     strict_variables: %kernel.debug%
     form_themes:
-        - 'KrakenWarmBundle:Form:form_div_layout.html.twig'
+        - 'MopaBootstrapBundle:Form:fields.html.twig'
         - 'VichUploaderBundle:Form:fields.html.twig'
         - 'SonataCoreBundle:Form:datepicker.html.twig'
-        - 'MopaBootstrapBundle:Form:fields.html.twig'
 
 # Assetic Configuration
 assetic:
@@ -103,15 +102,6 @@ stof_doctrine_extensions:
     orm:
         default:
             timestampable: true
-
-braincrafted_bootstrap:
-    less_filter: less # "less", "lessphp" or "none"
-    auto_configure:
-        assetic: true
-        twig: true
-        knp_menu: true
-        knp_paginator: true
-    jquery_path: %kernel.root_dir%/../vendor/jquery/jquery/jquery-1.10.2.js
 
 mopa_bootstrap:
     form:
