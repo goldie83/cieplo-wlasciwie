@@ -10,6 +10,6 @@
     "tests"
   ],
   "dependencies": {
-    "bootstrap-material-design": "~0.5.5",
+    "bootstrap-material-design": "~0.5.5"
   }
 }

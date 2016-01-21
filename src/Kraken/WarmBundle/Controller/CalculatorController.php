@@ -26,7 +26,7 @@ class CalculatorController extends Controller
         $calc = null;
 
         if ($slug) {
-            if (!$this->userIsAuthor($slug)) {
+            if (!$this->userIsAuthor($slug, $request)) {
                 throw $this->createNotFoundException('Jakiś zły masz ten link. Nic tu nie ma.');
             }
 
@@ -84,9 +84,9 @@ class CalculatorController extends Controller
         ));
     }
 
-    public function locationAction($slug)
+    public function locationAction($slug, Request $request)
     {
-        if (!$this->userIsAuthor($slug)) {
+        if (!$this->userIsAuthor($slug, $request)) {
             throw $this->createNotFoundException('Jakiś zły masz ten link. Nic tu nie ma.');
         }
 
@@ -98,8 +98,8 @@ class CalculatorController extends Controller
 
         $form = $this->createForm(new CalculationStepLocationType(), $calc);
 
-        if ($this->getRequest()->isMethod('post')) {
-            $form->bind($this->getRequest());
+        if ($request->isMethod('post')) {
+            $form->bind($request);
 
             if ($form->isValid()) {
                 $obj = $form->getData();
@@ -123,9 +123,9 @@ class CalculatorController extends Controller
         ));
     }
 
-    public function dimensionsAction($slug)
+    public function dimensionsAction($slug, Request $request)
     {
-        if (!$this->userIsAuthor($slug)) {
+        if (!$this->userIsAuthor($slug, $request)) {
             throw $this->createNotFoundException('Jakiś zły masz ten link. Nic tu nie ma.');
         }
 
@@ -136,24 +136,30 @@ class CalculatorController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $form = $this->createForm(new CalculationStepDimensionsType(), $calc);
+        $form->handleRequest($request);
 
-        if ($this->getRequest()->isMethod('post')) {
-            $form->bind($this->getRequest());
+        if ($form->isSubmitted() && $form->isValid()) {
+            $obj = $form->getData();
 
-            if ($form->isValid()) {
-                $obj = $form->getData();
+            $obj->setHeatedArea(null); // to reassign city & recalculate cached values
 
-                $obj->setHeatedArea(null); // to reassign city & recalculate cached values
-                $em->persist($obj);
-                $em->flush();
+            $house = $obj->getHouse() ?: new House();
+            $house->setBuildingLength($form->get('building_length')->getData() ?: 0);
+            $house->setBuildingWidth($form->get('building_width')->getData() ?: 0);
 
-                $calcSlug = base_convert($obj->getId(), 10, 36);
-                $redirect = $this->generateUrl('details', array(
-                    'slug' => $calcSlug,
-                ));
-
-                return $this->redirect($redirect);
+            if (!$obj->getHouse()) {
+                $obj->setHouse($house);
             }
+
+            $em->persist($obj);
+            $em->flush();
+
+            $calcSlug = base_convert($obj->getId(), 10, 36);
+            $redirect = $this->generateUrl('details', array(
+                'slug' => $calcSlug,
+            ));
+
+            return $this->redirect($redirect);
         }
 
         return $this->render('KrakenWarmBundle:Calculator:dimensions.html.twig', array(
@@ -162,16 +168,15 @@ class CalculatorController extends Controller
         ));
     }
 
-    protected function userIsAuthor($slug)
+    protected function userIsAuthor($slug, Request $request)
     {
-        $request = $this->get('request');
         $cookieValue = $request->cookies->get('sup_bro');
         $slugs = explode(';', $cookieValue);
 
         return in_array($slug, $slugs);
     }
 
-    public function detailsAction($slug)
+    public function detailsAction($slug, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -179,7 +184,7 @@ class CalculatorController extends Controller
             ->getRepository('KrakenWarmBundle:Calculation')
             ->findOneBy(array('id' => intval($slug, 36)));
 
-        if (!$calc || !$this->userIsAuthor($slug)) {
+        if (!$calc || !$this->userIsAuthor($slug, $request)) {
             throw $this->createNotFoundException('Jakiś zły masz ten link. Nic tu nie ma.');
         }
 
@@ -197,8 +202,8 @@ class CalculatorController extends Controller
             $form = $this->createForm(new HouseApartmentType(), $house);
         }
 
-        if ($this->getRequest()->getMethod() == 'POST') {
-            $form->bind($this->getRequest());
+        if ($request->getMethod() == 'POST') {
+            $form->bind($request);
             if ($form->isValid()) {
                 $house = $form->getData();
 
@@ -425,7 +430,7 @@ class CalculatorController extends Controller
         return new Response('', 204);
     }
 
-    public function resultAction($slug)
+    public function resultAction($slug, Request $request)
     {
         $calc = $this->getDoctrine()
             ->getRepository('KrakenWarmBundle:Calculation')
@@ -468,7 +473,7 @@ class CalculatorController extends Controller
             'climate' => $this->get('kraken_warm.climate'),
             'calc' => $calc,
             'city' => $calc->getCity(),
-            'isAuthor' => $this->userIsAuthor($slug),
+            'isAuthor' => $this->userIsAuthor($slug, $request),
         ));
     }
 

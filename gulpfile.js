@@ -53,6 +53,7 @@ gulp.task('vendor:css', ['clean:css'], function(){
 gulp.task('vendor:js', ['clean:js'], function(){
   return gulp.src([
     './bower/jquery/dist/jquery.js',
+    './bower/raphael/raphael-min.js',
     './bower/bootstrap/dist/js/bootstrap.js',
     './bower/bootstrap-material-design/dist/js/material.js',
     './bower/bootstrap-material-design/dist/js/ripples.js'
@@ -81,7 +82,8 @@ gulp.task('app:css', ['clean:css'], function(){
 
 gulp.task('app:js', ['clean:css'], function(){
   return gulp.src([
-    './app/Resources/js/app.js'
+    './app/Resources/js/app.js',
+    './app/Resources/js/dimensions.js'
   ]).pipe(concat('app.js')).pipe(uglify()).pipe(gulp.dest('./web/assets/js'));
 });
 

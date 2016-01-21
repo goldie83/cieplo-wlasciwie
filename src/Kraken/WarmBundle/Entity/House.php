@@ -25,6 +25,13 @@ class House
      * @Assert\NotBlank
      * @Assert\Range(min="1", minMessage="Porządny dom powinien mieć min. 1m szerokości", max="100", maxMessage = "Powyżej 100m szerokości to już hangar, a nie dom mieszkalny")
      */
+    protected $area;
+
+    /**
+     * @ORM\Column(type="decimal", precision=6, scale=2)
+     * @Assert\NotBlank
+     * @Assert\Range(min="1", minMessage="Porządny dom powinien mieć min. 1m szerokości", max="100", maxMessage = "Powyżej 100m szerokości to już hangar, a nie dom mieszkalny")
+     */
     protected $building_length;
 
     /**
