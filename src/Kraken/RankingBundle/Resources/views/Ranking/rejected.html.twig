@@ -1,19 +1,19 @@
-{% extends 'KrakenRankingBundle::base.html.twig' %}
+{% extends '::base_ranking.html.twig' %}
 
-{% block headline %}Salon odrzuconych{% endblock headline %}
+{% form_theme form 'KrakenRankingBundle:Form:form_div_layout.html.twig' %}
 
-{% form_theme form 'KrakenWarmBundle:Form:form_div_layout.html.twig' %}
+{% block page_title %}Salon odrzuconych{% endblock %}
 
-{% block content_row %}
+{% block body %}
 <div class="row">
     <div class="col-sm-4">
-        <form class="form-horizontal" method="POST" action="{{ url('ranking_rejected')}}">
+        <form method="POST" action="{{ url('ranking_rejected')}}">
             {{ form_rest(form) }}
-            <button type="submit" class="btn btn-primary">Szukaj</button>
+            <button type="submit" class="btn btn-raised btn-primary">Szukaj</button>
         </form>
     </div>
     <div class="col-sm-8">
         {% include('KrakenRankingBundle:Ranking:boilerList.html.twig') with {boilers: boilers, enableSort: false} %}
     </div>
 </div>
-{% endblock content_row %}
+{% endblock body %}

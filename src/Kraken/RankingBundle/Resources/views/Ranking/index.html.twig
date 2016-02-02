@@ -1,16 +1,15 @@
-{% extends 'KrakenRankingBundle::base.html.twig' %}
+{% extends '::base_ranking.html.twig' %}
 
-{% block page_header %}{% endblock page_header %}
-
-{% block content_row %}
-<div class="row">
+{% block body %}
+<div class="container">
+<div class="row well bs-component">
     <div class="col-sm-8">
         <div class="jumbo">
             <div class="wrap">
                 <h1>Najlepsze kotły na węgiel i drewno. Czyli jakie?</h1>
                 <p>Ranking kotłów to niezależny, niekomercyjny przegląd rynku.
                 Znajdziesz tu kotły bez poważnych wad konstrukcyjnych, w których da się palić nie kopcąc.</p><br/><br/>
-                <a class="btn btn-success btn-large" href="{{ path('ranking_about') }}">Więcej o rankingu</a>
+                <a class="btn btn-raised btn-success btn-large" href="{{ path('ranking_about') }}">Więcej o rankingu</a>
             </div>
         </div>
         <div class="row">
@@ -26,7 +25,7 @@
                                   {{ form_widget(searchForm.modelName) }}
                               </div>
                               <div class="col-sm-2">
-                                  <button type="submit" class="btn btn-primary">Szukaj</button>
+                                  <button type="submit" class="btn btn-raised btn-primary">Szukaj</button>
                               </div>
                       </fieldset>
                 </div>
@@ -35,7 +34,7 @@
             <div class="row">
                 <div class="col-sm-12">
                       <fieldset>
-                          <legend>Szukam kotła o takich parametrach</legend>
+                          <legend>Szukam kotła o wybranych parametrach</legend>
                           {{ form_row(searchForm.manufacturer) }}
                           {{ form_row(searchForm.category) }}
                           {{ form_row(searchForm.fuelType) }}
@@ -51,7 +50,7 @@
                           {{ form_row(searchForm.normClass) }}
                           {{ form_row(searchForm.rating) }}
                           {{ form_rest(searchForm) }}
-                          <button type="submit" class="btn btn-primary pull-right" style="margin-right:15px">Szukaj</button>
+                          <button type="submit" class="btn btn-raised btn-primary pull-right" style="margin-right:15px">Szukaj</button>
                       </fieldset>
                 </div>
             </div>
@@ -61,10 +60,11 @@
     <div class="col-sm-4">
         <h2>Oceń swój kocioł</h2>
         <p>Najwięcej o jakości pracy kotła mówi jego codzienne użytkowanie. Twoje doświadczenia pomogą innym w wyborze kotła odpowiedniego do ich potrzeb.</p>
-        <a class="btn btn-warning btn-lg" href="{{ path('ranking_review') }}">Dodaj opinię</a>
+        <a class="btn btn-raised btn-warning btn-lg" href="{{ path('ranking_review') }}">Dodaj opinię</a>
         <h2>Zaproponuj kocioł do&nbsp;rankingu</h2>
         <p>Stale poszukujemy nowych, zwłaszcza dobrych modeli. Nie ma tu kotła, który cię interesuje? Podrzuć nam namiary, a przyjrzymy się mu.</p>
-        <a class="btn btn-default btn-lg" href="{{ path('ranking_proposal') }}">Prześlij propozycję do rankingu</a>
+        <a class="btn btn-raised btn-default btn-lg" href="{{ path('ranking_proposal') }}">Prześlij propozycję do rankingu</a>
     </div>
 </div>
-{% endblock content_row %}
+</div>
+{% endblock body %}

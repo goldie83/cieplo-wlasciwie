@@ -1,4 +1,4 @@
-{% extends 'MopaBootstrapBundle::base_less.html.twig' %}
+{% extends 'MopaBootstrapBundle::base.html.twig' %}
 
 {% block title %}Ranking kotłów węglowych{% endblock %}
 
@@ -21,12 +21,8 @@
 {% endblock footer %}
 
 {% block head_style %}
-    {% stylesheets
-        '@MopaBootstrapBundle/Resources/public/less/mopabootstrapbundle.less'
-        '@KrakenRankingBundle/Resources/public/css/*.css'
-    %}
-    <link href="{{ asset_url }}" type="text/css" rel="stylesheet" media="screen" />
-    {% endstylesheets %}
+    <link href="{{ asset('assets/css/vendor.css') }}" rel="stylesheet">
+    <link href="{{ asset('assets/css/ranking.css') }}" rel="stylesheet">
 {% endblock head_style %}
 
 {% block head_script %}
@@ -34,14 +30,8 @@
 {% endblock head_script %}
 
 {% block foot_script_assetic %}
-    {% javascripts
-    '@MopaBootstrapBundle/Resources/public/bootstrap/js/tooltip.js'
-    '@MopaBootstrapBundle/Resources/public/bootstrap/js/*.js'
-    '@MopaBootstrapBundle/Resources/public/js/mopabootstrap-collection.js'
-    '@MopaBootstrapBundle/Resources/public/js/mopabootstrap-subnav.js'
-    %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
+    <script src="{{ asset('assets/js/vendor.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/js/ranking_vendor.js') }}" type="text/javascript"></script>
 {% endblock foot_script_assetic %}
 
 {% block head_bottom %}

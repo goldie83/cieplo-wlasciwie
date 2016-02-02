@@ -16,7 +16,7 @@ class LayerType extends AbstractType
         $builder
             ->add('material', null, array(
                 'required' => $options['force_required'],
-                'label' => 'Materiał',
+                'label' => $options['material_label'],
                 'query_builder' => function (EntityRepository $er) use ($options) {
                     return $er->createQueryBuilder('m')
                         ->andWhere(sprintf('m.%s = 1', $options['material_type']))
@@ -26,11 +26,9 @@ class LayerType extends AbstractType
             ->add('size', 'integer', array(
                 'required' => $options['force_required'],
                 'label' => 'Grubość',
-                'attr' => array(
-                    'input_group' => array(
-                        'append' => 'cm',
-                    ),
-                ),
+                'widget_addon_append' => [
+                    'text' => 'cm',
+                ],
             ))
         ;
     }
@@ -41,6 +39,7 @@ class LayerType extends AbstractType
             'data_class' => 'Kraken\WarmBundle\Entity\Layer',
             'material_type' => 'for_wall_construction_layer',
             'force_required' => false,
+            'material_label' => 'Materiał',
         ));
     }
 

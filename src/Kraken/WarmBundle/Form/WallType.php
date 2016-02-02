@@ -13,22 +13,20 @@ class WallType extends AbstractType
         parent::buildForm($builder, $options);
 
         $builder
-            ->add('has_another_layer', 'checkbox', array(
-                'label' => 'Ściana zewnętrzna ma drugą warstwę z innego materiału',
-                'mapped' => false,
-            ))
             ->add('has_isolation_inside', 'checkbox', array(
-                'label' => 'Ściana zewnętrzna ma izolację w środku',
+                'label' => 'Ściana ma izolację w środku',
+                'required' => false,
                 'mapped' => false,
             ))
             ->add('has_isolation_outside', 'checkbox', array(
                 'label' => 'Dom jest docieplony',
+                'required' => false,
                 'mapped' => false,
             ))
             ->add('construction_layer', new LayerType(), array(
                 'material_type' => 'for_wall_construction_layer',
                 'force_required' => true,
-                'required' => true,
+                'required' => false,
             ))
             ->add('isolation_layer', new LayerType(), array(
                 'material_type' => 'for_wall_internal_layer',

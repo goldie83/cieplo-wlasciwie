@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Context\ExecutionContext;
 /**
  * @ORM\Entity
  * @ORM\Table(name="house")
- * @Assert\Callback(methods={"areIsolationLayersValid", "isNumberFloorsValid"})
+ * @Assert\Callback(methods={"areIsolationLayersValid", "areDimensionsValid", "areWallsValid"})
  */
 class House
 {
@@ -21,29 +21,50 @@ class House
     protected $id;
 
     /**
-     * @ORM\Column(type="decimal", precision=6, scale=2)
-     * @Assert\NotBlank
-     * @Assert\Range(min="1", minMessage="Porządny dom powinien mieć min. 1m szerokości", max="100", maxMessage = "Powyżej 100m szerokości to już hangar, a nie dom mieszkalny")
+     * @ORM\Column(type="decimal", precision=6, scale=2, nullable=true)
      */
     protected $area;
 
     /**
-     * @ORM\Column(type="decimal", precision=6, scale=2)
-     * @Assert\NotBlank
-     * @Assert\Range(min="1", minMessage="Porządny dom powinien mieć min. 1m szerokości", max="100", maxMessage = "Powyżej 100m szerokości to już hangar, a nie dom mieszkalny")
+     * @ORM\Column(type="decimal", precision=6, scale=2, nullable=true)
+     * @Assert\Range(min="1", minMessage="Porządny dom powinien mieć min. 1m szerokości")
      */
     protected $building_length;
 
     /**
-     * @ORM\Column(type="decimal", precision=6, scale=2)
-     * @Assert\NotBlank
-     * @Assert\Range(min="1", minMessage = "Porządny dom powinien mieć min. 1m długości", max="100", maxMessage = "Powyżej 100m długości to już hangar, a nie dom mieszkalny")
+     * @ORM\Column(type="decimal", precision=6, scale=2, nullable=true)
+     * @Assert\Range(min="1", minMessage = "Porządny dom powinien mieć min. 1m długości")
      */
     protected $building_width;
 
     /**
-     * @ORM\Column(type="integer", length=2)
-     * @Assert\NotBlank
+     * @ORM\Column(type="string")
+     */
+    protected $building_shape;
+
+    /**
+     * @ORM\Column(type="decimal", precision=6, scale=2, nullable=true)
+     */
+    protected $building_contour_free_area;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $building_floors;
+
+    /**
+     * @ORM\Column(type="json_array")
+     * @Assert\NotBlank(message="Przynajmniej jedno piętro powinno być ogrzewane")
+     */
+    protected $building_heated_floors;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    protected $building_roof;
+
+    /**
+     * @ORM\Column(type="integer", length=2, nullable=true)
      * @Assert\Range(min="1", minMessage = "Nawet ziemianka ma min. 1 piętro", max="99", maxMessage = "Nie wierzę, że masz więcej niż 100 pięter w swojej chałupie")
      */
     protected $number_floors;
@@ -55,8 +76,7 @@ class House
     protected $floor_height;
 
     /**
-     * @ORM\Column(type="integer", length=2)
-     * @Assert\NotBlank
+     * @ORM\Column(type="integer", length=2, nullable=true)
      * @Assert\Range(min="1", minMessage = "Nawet ziemianka ma min. 1 piętro ogrzewane", max="99", maxMessage = "Za mało mam palców by to policzyć")
      */
     protected $number_heated_floors;
@@ -83,11 +103,20 @@ class House
     protected $doors_type;
 
     /**
-     * @ORM\Column(type="integer", length=2)
-     * @Assert\NotBlank
+     * @ORM\Column(type="integer", length=2, nullable=true)
      * @Assert\Range(min="1", minMessage = "Min. 1 okno powinieneś posiadać", max="99", maxMessage = "Więcej jak 99 okien nie jest ci potrzebne. Sprzedaj połowę.")
      */
     protected $number_windows;
+
+    /**
+     * @ORM\Column(type="integer", length=2, nullable=true)
+     */
+    protected $number_balcony_doors;
+
+    /**
+     * @ORM\Column(type="integer", length=2, nullable=true)
+     */
+    protected $number_huge_glazings;
 
     /**
      * @ORM\Column(type="string", columnDefinition="ENUM('old_single_glass', 'old_double_glass', 'old_improved', 'semi_new_double_glass', 'new_double_glass', 'new_triple_glass')")
@@ -166,58 +195,107 @@ class House
      */
     protected $apartment;
 
+    /**
+     * @ORM\Column(type="decimal", nullable=false)
+     * @Assert\Range(min="1", minMessage = "Min. grubość ściany to 1cm")
+     */
+    protected $wall_size;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Material")
+     * @ORM\JoinColumn(name="primary_wall_material_id", referencedColumnName="id", nullable=true)
+     */
+    protected $primary_wall_material;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Material")
+     * @ORM\JoinColumn(name="secondary_wall_material_id", referencedColumnName="id", nullable=true)
+     */
+    protected $secondary_wall_material;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Layer", cascade={"all"})
+     * @ORM\JoinColumn(name="isolation_layer_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     */
+    protected $internal_isolation_layer;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Layer", cascade={"all"})
+     * @ORM\JoinColumn(name="extra_isolation_layer_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     */
+    protected $external_isolation_layer;
+
     public function areIsolationLayersValid(ExecutionContext $context)
     {
         if ($this->highest_ceiling_isolation_layer) {
             if ($this->highest_ceiling_isolation_layer->getSize() && !$this->highest_ceiling_isolation_layer->getMaterial()) {
-                $context->addViolationAt('highest_ceiling_isolation_layer', 'Wybierz materiał warstwy izolacji dachu', array(), null);
+                $context->addViolationAt('highest_ceiling_isolation_layer', 'Wybierz materiał warstwy izolacji dachu', [], null);
             }
             if (!$this->highest_ceiling_isolation_layer->getSize() && $this->highest_ceiling_isolation_layer->getMaterial()) {
-                $context->addViolationAt('highest_ceiling_isolation_layer', 'Wybierz grubość warstwy izolacji dachu', array(), null);
+                $context->addViolationAt('highest_ceiling_isolation_layer', 'Wybierz grubość warstwy izolacji dachu', [], null);
             }
         }
 
         if ($this->lowest_ceiling_isolation_layer) {
             if ($this->lowest_ceiling_isolation_layer->getSize() && !$this->lowest_ceiling_isolation_layer->getMaterial()) {
-                $context->addViolationAt('lowest_ceiling_isolation_layer', 'Wybierz materiał warstwy izolacji stropu nad parterem', array(), null);
+                $context->addViolationAt('lowest_ceiling_isolation_layer', 'Wybierz materiał warstwy izolacji stropu nad parterem', [], null);
             }
             if (!$this->lowest_ceiling_isolation_layer->getSize() && $this->lowest_ceiling_isolation_layer->getMaterial()) {
-                $context->addViolationAt('lowest_ceiling_isolation_layer', 'Wybierz grubość warstwy izolacji stropu nad parterem', array(), null);
+                $context->addViolationAt('lowest_ceiling_isolation_layer', 'Wybierz grubość warstwy izolacji stropu nad parterem', [], null);
             }
         }
 
         if ($this->basement_floor_isolation_layer) {
             if ($this->basement_floor_isolation_layer->getSize() && !$this->basement_floor_isolation_layer->getMaterial()) {
-                $context->addViolationAt('basement_floor_isolation_layer', 'Wybierz materiał warstwy izolacji podłogi piwnicy', array(), null);
+                $context->addViolationAt('basement_floor_isolation_layer', 'Wybierz materiał warstwy izolacji podłogi piwnicy', [], null);
             }
             if (!$this->basement_floor_isolation_layer->getSize() && $this->basement_floor_isolation_layer->getMaterial()) {
-                $context->addViolationAt('basement_floor_isolation_layer', 'Wybierz grubość warstwy izolacji podłogi piwnicy', array(), null);
+                $context->addViolationAt('basement_floor_isolation_layer', 'Wybierz grubość warstwy izolacji podłogi piwnicy', [], null);
             }
         }
 
         if ($this->ground_floor_isolation_layer) {
             if ($this->ground_floor_isolation_layer->getSize() && !$this->ground_floor_isolation_layer->getMaterial()) {
-                $context->addViolationAt('ground_floor_isolation_layer', 'Wybierz materiał warstwy izolacji podłogi parteru', array(), null);
+                $context->addViolationAt('ground_floor_isolation_layer', 'Wybierz materiał warstwy izolacji podłogi parteru', [], null);
             }
             if (!$this->ground_floor_isolation_layer->getSize() && $this->ground_floor_isolation_layer->getMaterial()) {
-                $context->addViolationAt('ground_floor_isolation_layer', 'Wybierz grubość warstwy izolacji podłogi parteru', array(), null);
+                $context->addViolationAt('ground_floor_isolation_layer', 'Wybierz grubość warstwy izolacji podłogi parteru', [], null);
             }
         }
 
         if ($this->roof_isolation_layer) {
             if ($this->roof_isolation_layer->getSize() && !$this->roof_isolation_layer->getMaterial()) {
-                $context->addViolationAt('roof_isolation_layer', 'Wybierz materiał warstwy izolacji dachu', array(), null);
+                $context->addViolationAt('roof_isolation_layer', 'Wybierz materiał warstwy izolacji dachu', [], null);
             }
             if (!$this->roof_isolation_layer->getSize() && $this->roof_isolation_layer->getMaterial()) {
-                $context->addViolationAt('roof_isolation_layer', 'Wybierz grubość warstwy izolacji dachu', array(), null);
+                $context->addViolationAt('roof_isolation_layer', 'Wybierz grubość warstwy izolacji dachu', [], null);
             }
         }
     }
 
-    public function isNumberFloorsValid(ExecutionContext $context)
+    public function areDimensionsValid(ExecutionContext $context)
     {
-        if ($this->number_floors < $this->number_heated_floors) {
-            $context->addViolationAt('number_heated_floors', 'Nie możesz ogrzewać więcej pięter niż ma twój dom', array(), null);
+        if (!$this->area && !$this->building_length && !$this->building_width) {
+            $context->addViolationAt('area', 'Podaj powierzchnię zabudowy lub wymiary obrysu budynku', [], null);
+        }
+
+        if ($this->building_length && !$this->building_width) {
+            $context->addViolationAt('building_width', 'Podaj szerokość obrysu budynku', [], null);
+        }
+
+        if (!$this->building_length && $this->building_width) {
+            $context->addViolationAt('building_length', 'Podaj długość obrysu budynku', [], null);
+        }
+    }
+
+    public function areWallsValid(ExecutionContext $context)
+    {
+        if ($this->construction_type == 'traditional' && $this->primary_wall_material == null) {
+            $context->addViolationAt('primary_wall_material', 'Wybierz podstawowy materiał konstrukcyjny ścian zewnętrznych', [], null);
+        }
+
+        if ($this->construction_type == 'canadian' && !$this->internal_isolation_layer->getMaterial()) {
+            $context->addViolationAt('internal_isolation_layer', 'Dla domu szkieletowego musisz podać jaki materiał izolacyjny wypełnia ściany', [], null);
         }
     }
 
@@ -237,6 +315,12 @@ class House
     {
         $this->walls = new \Doctrine\Common\Collections\ArrayCollection();
         $this->floor_height = 2.6;
+        $this->building_floors = 1;
+        $this->building_roof = 'steep';
+        $this->building_heated_floors = [1, 2];
+        $this->construction_type = 'traditional';
+        $this->doors_type = 'new_wooden';
+        $this->windows_type = 'new_double_glass';
     }
 
     /**
@@ -824,5 +908,304 @@ class House
         $this->construction_type = $construction_type;
 
         return $this;
+    }
+
+    /**
+     * Set area
+     *
+     * @param string $area
+     * @return House
+     */
+    public function setArea($area)
+    {
+        $this->area = $area;
+
+        return $this;
+    }
+
+    /**
+     * Get area
+     *
+     * @return string
+     */
+    public function getArea()
+    {
+        return $this->area;
+    }
+
+    /**
+     * Set building_shape
+     *
+     * @param string $buildingShape
+     * @return House
+     */
+    public function setBuildingShape($buildingShape)
+    {
+        $this->building_shape = $buildingShape;
+
+        return $this;
+    }
+
+    /**
+     * Get building_shape
+     *
+     * @return string
+     */
+    public function getBuildingShape()
+    {
+        return $this->building_shape;
+    }
+
+    /**
+     * Set building_contour_free_area
+     *
+     * @param string $buildingContourFreeArea
+     * @return House
+     */
+    public function setBuildingContourFreeArea($buildingContourFreeArea)
+    {
+        $this->building_contour_free_area = $buildingContourFreeArea;
+
+        return $this;
+    }
+
+    /**
+     * Get building_contour_free_area
+     *
+     * @return string
+     */
+    public function getBuildingContourFreeArea()
+    {
+        return $this->building_contour_free_area;
+    }
+
+    /**
+     * Set building_floors
+     *
+     * @param integer $buildingFloors
+     * @return House
+     */
+    public function setBuildingFloors($buildingFloors)
+    {
+        $this->building_floors = $buildingFloors;
+
+        return $this;
+    }
+
+    /**
+     * Get building_floors
+     *
+     * @return integer
+     */
+    public function getBuildingFloors()
+    {
+        return $this->building_floors;
+    }
+
+    /**
+     * Set building_heated_floors
+     *
+     * @param array $buildingHeatedFloors
+     * @return House
+     */
+    public function setBuildingHeatedFloors($buildingHeatedFloors)
+    {
+        $this->building_heated_floors = $buildingHeatedFloors;
+
+        return $this;
+    }
+
+    /**
+     * Get building_heated_floors
+     *
+     * @return array
+     */
+    public function getBuildingHeatedFloors()
+    {
+        return $this->building_heated_floors;
+    }
+
+    /**
+     * Set building_roof
+     *
+     * @param string $buildingRoof
+     * @return House
+     */
+    public function setBuildingRoof($buildingRoof)
+    {
+        $this->building_roof = $buildingRoof;
+
+        return $this;
+    }
+
+    /**
+     * Get building_roof
+     *
+     * @return string
+     */
+    public function getBuildingRoof()
+    {
+        return $this->building_roof;
+    }
+
+    /**
+     * Set primary_wall_material
+     *
+     * @param \Kraken\WarmBundle\Entity\Material $primaryWallMaterial
+     * @return House
+     */
+    public function setPrimaryWallMaterial(\Kraken\WarmBundle\Entity\Material $primaryWallMaterial = null)
+    {
+        $this->primary_wall_material = $primaryWallMaterial;
+
+        return $this;
+    }
+
+    /**
+     * Get primary_wall_material
+     *
+     * @return \Kraken\WarmBundle\Entity\Material
+     */
+    public function getPrimaryWallMaterial()
+    {
+        return $this->primary_wall_material;
+    }
+
+    /**
+     * Set secondary_wall_material
+     *
+     * @param \Kraken\WarmBundle\Entity\Material $secondaryWallMaterial
+     * @return House
+     */
+    public function setSecondaryWallMaterial(\Kraken\WarmBundle\Entity\Material $secondaryWallMaterial = null)
+    {
+        $this->secondary_wall_material = $secondaryWallMaterial;
+
+        return $this;
+    }
+
+    /**
+     * Get secondary_wall_material
+     *
+     * @return \Kraken\WarmBundle\Entity\Material
+     */
+    public function getSecondaryWallMaterial()
+    {
+        return $this->secondary_wall_material;
+    }
+
+    /**
+     * Set internal_isolation_layer
+     *
+     * @param \Kraken\WarmBundle\Entity\Layer $internalIsolationLayer
+     * @return House
+     */
+    public function setInternalIsolationLayer(\Kraken\WarmBundle\Entity\Layer $internalIsolationLayer = null)
+    {
+        $this->internal_isolation_layer = $internalIsolationLayer;
+
+        return $this;
+    }
+
+    /**
+     * Get internal_isolation_layer
+     *
+     * @return \Kraken\WarmBundle\Entity\Layer
+     */
+    public function getInternalIsolationLayer()
+    {
+        return $this->internal_isolation_layer;
+    }
+
+    /**
+     * Set external_isolation_layer
+     *
+     * @param \Kraken\WarmBundle\Entity\Layer $externalIsolationLayer
+     * @return House
+     */
+    public function setExternalIsolationLayer(\Kraken\WarmBundle\Entity\Layer $externalIsolationLayer = null)
+    {
+        $this->external_isolation_layer = $externalIsolationLayer;
+
+        return $this;
+    }
+
+    /**
+     * Get external_isolation_layer
+     *
+     * @return \Kraken\WarmBundle\Entity\Layer
+     */
+    public function getExternalIsolationLayer()
+    {
+        return $this->external_isolation_layer;
+    }
+
+    /**
+     * Set wall_size
+     *
+     * @param string $wallSize
+     * @return House
+     */
+    public function setWallSize($wallSize)
+    {
+        $this->wall_size = $wallSize;
+
+        return $this;
+    }
+
+    /**
+     * Get wall_size
+     *
+     * @return string
+     */
+    public function getWallSize()
+    {
+        return $this->wall_size;
+    }
+
+    /**
+     * Set number_balcony_doors
+     *
+     * @param integer $numberBalconyDoors
+     * @return House
+     */
+    public function setNumberBalconyDoors($numberBalconyDoors)
+    {
+        $this->number_balcony_doors = $numberBalconyDoors;
+
+        return $this;
+    }
+
+    /**
+     * Get number_balcony_doors
+     *
+     * @return integer
+     */
+    public function getNumberBalconyDoors()
+    {
+        return $this->number_balcony_doors;
+    }
+
+    /**
+     * Set number_huge_glazings
+     *
+     * @param integer $numberHugeGlazings
+     * @return House
+     */
+    public function setNumberHugeGlazings($numberHugeGlazings)
+    {
+        $this->number_huge_glazings = $numberHugeGlazings;
+
+        return $this;
+    }
+
+    /**
+     * Get number_huge_glazings
+     *
+     * @return integer
+     */
+    public function getNumberHugeGlazings()
+    {
+        return $this->number_huge_glazings;
     }
 }

@@ -1,12 +1,31 @@
 (function(window, $){
 
+    function refreshAreaPreview() {
+        var enoughData = $('#calculation_area').val() > 0 || ($('#calculation_building_width').val() > 0 && $('#calculation_building_length').val() > 0)
+
+        var floorArea = 0;
+        if ($('#calculation_area').val() > 0) {
+            fakeEdge = Math.sqrt($('#calculation_area').val()) - 0.8; // assume 40cm thick wall
+            floorArea = fakeEdge * fakeEdge;
+        } else {
+            floorArea = ($('#calculation_building_width').val() - 0.8) * ($('#calculation_building_length').val() - 0.8) - $('#calculation_building_contour_free_area').val();
+        }
+        var heatedArea = $('#heated_floors input:checked').size() * floorArea;
+        var totalArea = ($('#heated_floors label:visible').size() - 1) * floorArea;
+
+        $('#heated_area').text(parseInt(heatedArea));
+        $('#total_area').text(parseInt(totalArea));
+
+        $('#area_preview').toggle(enoughData);
+    }
+
     function refreshHeatedFloors() {
         floors = parseInt($('#calculation_building_floors').val());
         if ($('#calculation_building_roof').val() == 'steep') {
             floors +=1;
         }
 
-        $('#calculation_building_heated_floors_0').parents('.checkbox').toggle($('#calculation_building_has_basement').is(':checked'));
+        $('#calculation_building_heated_floors_0').parents('.checkbox').toggle($('#calculation_has_basement').is(':checked'));
         $('#calculation_building_heated_floors_1').parents('.checkbox').toggle(floors >= 1);
 
         $('#calculation_building_heated_floors_2').parents('.checkbox').toggle(floors >= 2);
@@ -29,20 +48,30 @@
         });
     }
 
+
+    $('#calculation_area').change(function () {
+        refreshAreaPreview();
+    });
+    $('#calculation_building_width').change(function () {
+        refreshAreaPreview();
+    });
+    $('#calculation_building_length').change(function () {
+        refreshAreaPreview();
+    });
+    $('#calculation_building_length').change(function () {
+        refreshAreaPreview();
+    });
+    $('#calculation_building_contour_free_area').change(function () {
+        refreshAreaPreview();
+    });
+
     $('#calculation_building_shape').change(function () {
         $('#contour_free_area').toggle($(this).val() != 'regular');
     });
 
     $('#calculation_has_area_0').on('click', function() {
         $('#has_area_no').hide();
-
-        $('#calculation_area').val('');
-
-        $('#has_area_yes').show();
-    });
-
-    $('#calculation_has_area_1').on('click', function() {
-        $('#has_area_yes').hide();
+        $('#contour_explanation').hide();
 
         $('#calculation_building_shape').val('regular');
         $('#calculation_building_length').val('');
@@ -50,29 +79,43 @@
         $('#calculation_building_contour_free_area').val('');
         $('#contour_free_area').hide();
 
+        $('#has_area_yes').show();
+    });
+
+    $('#calculation_has_area_1').on('click', function() {
+        $('#has_area_yes').hide();
+
+        $('#calculation_area').val('');
+
+        $('#contour_explanation').show();
         $('#has_area_no').show();
     });
 
     refreshHeatedFloors();
+    refreshAreaPreview();
 
     var paper = null;
 
     $('#calculation_building_floors').on('change', function(paper) {
         refreshHeatedFloors();
+        refreshAreaPreview();
 
         drawPreview(paper);
     });
     $('#calculation_building_roof').on('change', function(paper) {
         refreshHeatedFloors();
+        refreshAreaPreview();
 
         drawPreview(paper);
     });
-    $('#calculation_building_has_basement').on('change', function(paper) {
+    $('#calculation_has_basement').on('change', function(paper) {
         refreshHeatedFloors();
+        refreshAreaPreview();
 
         drawPreview(paper);
     });
     $('#heated_floors').on('change', function(paper) {
+        refreshAreaPreview();
         drawPreview(paper);
     });
 
@@ -99,7 +142,7 @@
         //parameters
         var totalFloors = parseInt($('#calculation_building_floors').val()) + 1;
         var roofType = $('#calculation_building_roof').val();
-        var hasBasement = $('#calculation_building_has_basement').is(':checked');
+        var hasBasement = $('#calculation_has_basement').is(':checked');
         var heatedFloors = $('#heated_floors input:checked').map(function() {return parseInt(this.value);}).get();
 
         paper.rect(0, 0, paperWidth, skyHeight, 0).attr({fill: "#5ECAF1", stroke: "none"});

@@ -1,10 +1,10 @@
-{% extends 'KrakenRankingBundle::base.html.twig' %}
+{% extends '::base_ranking.html.twig' %}
 
 {% block title %}{{ boiler.name }} - ranking kotłów węglowych{% endblock title %}
 
-{% block headline %}{{ boiler.name }}  <small>(poza rankingiem)</small>{% endblock headline %}
+{% block page_title %}{{ boiler.name }} <small>(odrzucony)</small>{% endblock page_title %}
 
-{% block content_row %}
+{% block body %}
 <div class="row">
     <div class="col-sm-4">
         <table class="table table-striped">
@@ -32,9 +32,9 @@
         </div>
     </div>
 </div>
-{% endblock content_row %}
+{% endblock body %}
 
-{% block bottom_javascripts %}
+{% block javascripts %}
     {{ parent() }}
     <script src="{{ asset('bundles/krakenranking/js/boiler.js') }}"></script>
 {% endblock %}

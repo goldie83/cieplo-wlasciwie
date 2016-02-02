@@ -12,11 +12,13 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Kraken\WarmBundle\Form\CalculationFormType;
 use Kraken\WarmBundle\Form\CalculationStepDimensionsType;
 use Kraken\WarmBundle\Form\CalculationStepLocationType;
+use Kraken\WarmBundle\Form\CalculationStepWallsType;
 use Kraken\WarmBundle\Form\CalculationStepOneType;
 use Kraken\WarmBundle\Form\HouseApartmentType;
 use Kraken\WarmBundle\Form\HouseType;
 use Kraken\WarmBundle\Entity\Calculation;
 use Kraken\WarmBundle\Entity\House;
+use Kraken\WarmBundle\Entity\Wall;
 use Kraken\WarmBundle\Entity\Layer;
 
 class CalculatorController extends Controller
@@ -135,27 +137,19 @@ class CalculatorController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        $form = $this->createForm(new CalculationStepDimensionsType(), $calc);
+        $form = $this->createForm(new CalculationStepDimensionsType(), $calc->getHouse());
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $obj = $form->getData();
+            $house = $form->getData();
 
-            $obj->setHeatedArea(null); // to reassign city & recalculate cached values
-
-            $house = $obj->getHouse() ?: new House();
-            $house->setBuildingLength($form->get('building_length')->getData() ?: 0);
-            $house->setBuildingWidth($form->get('building_width')->getData() ?: 0);
-
-            if (!$obj->getHouse()) {
-                $obj->setHouse($house);
-            }
-
-            $em->persist($obj);
+            $em->persist($house);
+            $calc->setHouse($house);
+            $em->persist($calc);
             $em->flush();
 
-            $calcSlug = base_convert($obj->getId(), 10, 36);
-            $redirect = $this->generateUrl('details', array(
+            $calcSlug = base_convert($calc->getId(), 10, 36);
+            $redirect = $this->generateUrl('walls', array(
                 'slug' => $calcSlug,
             ));
 
@@ -163,6 +157,51 @@ class CalculatorController extends Controller
         }
 
         return $this->render('KrakenWarmBundle:Calculator:dimensions.html.twig', array(
+            'calc' => $calc,
+            'form' => $form->createView(),
+        ));
+    }
+
+    public function wallsAction($slug, Request $request)
+    {
+        if (!$this->userIsAuthor($slug, $request)) {
+            throw $this->createNotFoundException('Jakiś zły masz ten link. Nic tu nie ma.');
+        }
+
+        $calc = $this->getDoctrine()
+            ->getRepository('KrakenWarmBundle:Calculation')
+            ->findOneBy(array('id' => intval($slug, 36)));
+
+        $em = $this->getDoctrine()->getManager();
+
+        $house = $calc->getHouse();
+
+        if ($house->getConstructionType() == '') {
+            $house->setConstructionType('traditional');
+            $house->setWindowsType('new_double_glass');
+            $house->setDoorsType('new_wooden');
+        }
+
+        $form = $this->createForm(new CalculationStepWallsType(), $house);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $house = $form->getData();
+
+            $em->persist($house);
+            $calc->setHouse($house);
+            $em->persist($calc);
+            $em->flush();
+
+            $calcSlug = base_convert($calc->getId(), 10, 36);
+            $redirect = $this->generateUrl('walls', array(
+                'slug' => $calcSlug,
+            ));
+
+            return $this->redirect($redirect);
+        }
+
+        return $this->render('KrakenWarmBundle:Calculator:walls.html.twig', array(
             'calc' => $calc,
             'form' => $form->createView(),
         ));

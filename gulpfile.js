@@ -50,6 +50,12 @@ gulp.task('vendor:css', ['clean:css'], function(){
   ]).pipe(concat('vendor.css')).pipe(cssmin()).pipe(gulp.dest('./web/assets/css'));
 });
 
+gulp.task('vendor:ranking_css', [], function(){
+  return gulp.src([
+    './vendor/mopa/bootstrap-bundle/Mopa/Bundle/BootstrapBundle/Resources/public/sass/mopabootstrapbundle.scss',
+  ]).pipe(concat('ranking_vendor.css')).pipe(cssmin()).pipe(gulp.dest('./web/assets/css'));
+});
+
 gulp.task('vendor:js', ['clean:js'], function(){
   return gulp.src([
     './bower/jquery/dist/jquery.js',
@@ -58,6 +64,15 @@ gulp.task('vendor:js', ['clean:js'], function(){
     './bower/bootstrap-material-design/dist/js/material.js',
     './bower/bootstrap-material-design/dist/js/ripples.js'
   ]).pipe(concat('vendor.js')).pipe(uglify()).pipe(gulp.dest('./web/assets/js'));
+});
+
+gulp.task('vendor:ranking_js', [], function(){
+  return gulp.src([
+    './vendor/mopa/bootstrap-bundle/Mopa/Bundle/BootstrapBundle/Resources/public/bootstrap/js/tooltip.js',
+    './vendor/mopa/bootstrap-bundle/Mopa/Bundle/BootstrapBundle/Resources/public/bootstrap/js/*.js',
+    './vendor/mopa/bootstrap-bundle/Mopa/Bundle/BootstrapBundle/Resources/public/js/mopabootstrap-collection.js',
+    './vendor/mopa/bootstrap-bundle/Mopa/Bundle/BootstrapBundle/Resources/public/js/mopabootstrap-subnav.js',
+  ]).pipe(concat('ranking_vendor.js')).pipe(uglify()).pipe(gulp.dest('./web/assets/js'));
 });
 
 gulp.task('vendor:fonts', ['clean:fonts'], function(){
@@ -82,8 +97,7 @@ gulp.task('app:css', ['clean:css'], function(){
 
 gulp.task('app:js', ['clean:css'], function(){
   return gulp.src([
-    './app/Resources/js/app.js',
-    './app/Resources/js/dimensions.js'
+    './app/Resources/js/app.js'
   ]).pipe(concat('app.js')).pipe(uglify()).pipe(gulp.dest('./web/assets/js'));
 });
 
@@ -93,13 +107,27 @@ gulp.task('app:images', ['clean:images'], function(){
   ]).pipe(flatten()).pipe(gulp.dest('./web/assets/images'));
 });
 
+gulp.task('app:ranking_css', [], function(){
+  return gulp.src('./src/Kraken/RankingBundle/Resources/public/scss/ranking.scss').pipe(compass({
+    project: path.join(__dirname),
+    logging: true,
+    css: 'web/assets/css',
+    sass: 'src/Kraken/RankingBundle/Resources/public/scss',
+    font: 'web/assets/fonts',
+    style: 'compressed',
+    import_path: [
+      // Remember to add all paths
+    ]
+  }));
+});
+
 gulp.task('watch', function(){
   gulp.watch('./app/Resources/scss/**/*.scss', ['vendor:css', 'app:css', 'version:bump']);
   gulp.watch('./app/Resources/js/**/*.js', ['vendor.js', 'app:js', 'version:bump']);
 });
 
 gulp.task('clean', ['clean:js', 'clean:css', 'clean:fonts', 'clean:images']);
-gulp.task('vendor', ['vendor:js', 'vendor:css', 'vendor:fonts']);
-gulp.task('app', ['app:js', 'app:css', 'app:images']);
+gulp.task('vendor', ['vendor:js', 'vendor:css', 'vendor:ranking_js', 'vendor:ranking_css', 'vendor:fonts']);
+gulp.task('app', ['app:js', 'app:css', 'app:ranking_css', 'app:images']);
 gulp.task('build', ['clean', 'vendor', 'app']);
 gulp.task('default', ['build', 'version:bump']);

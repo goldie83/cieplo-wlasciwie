@@ -21,21 +21,25 @@
         <form action="{{ path('dimensions', {slug: calc.slug}) }}" class="form-horizontal" method="post">
         <div class="row">
             <div class="col-md-12">
-                  {{ form_errors(form) }}
                   <h2>Powierzchnia zabudowy</h2>
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
+                {% if not form.vars.valid %}
+                    <div class="alert alert-danger">
+                        <strong>Nie wszystko jest dobrze.</strong> Sprawdź pola oznaczone czerwonym kolorem.
+                    </div>
+                {% endif %}
                 {{ form_row(form.has_area) }}
-                <div id="has_area_yes" style="display:none">
+                <div id="has_area_yes" {% if form.has_area.vars.data == 'no' and form.area.vars.data == '' and form.area.vars.errors|length == 0 %}style="display:none"{% endif %}>
                     {{ form_row(form.area) }}
                 </div>
-                <div id="has_area_no" style="display:none">
+                <div id="has_area_no" {% if form.has_area.vars.data == 'yes' and form.building_length.vars.errors|length == 0 %}style="display:none"{% endif %}>
                     {{ form_row(form.building_shape) }}
                     {{ form_row(form.building_length) }}
                     {{ form_row(form.building_width) }}
-                    <div id="contour_free_area" style="display:none">
+                    <div id="contour_free_area" {% if form.building_contour_free_area.vars.data == '' %}style="display:none"{% endif %}>
                         {{ form_row(form.building_contour_free_area) }}
                     </div>
                 </div>
@@ -43,8 +47,9 @@
             <div class="col-md-6">
                 <div class="alert alert-info">
                   <h4>Co to jest powierzchnia zabudowy?</h4>
-                  To powierzchnia zewnętrznego obrysu budynku.
+                  <strong>To powierzchnia gruntu, jaką zajmuje budynek</strong>. Znajdziesz ją w projekcie domu pod taką właśnie nazwą. Jeśli nie znasz dokładnej wartości, lepiej podaj zewnętrzne wymiary budynku a tu samo policzy się co trzeba.
                 </div>
+                <img id="contour_explanation" src="{{ asset('bundles/krakenwarm/images/obrys.jpg') }}" style="max-width:100%; {% if form.has_area.vars.data == 'yes' and form.building_length.vars.data == ''  and form.building_length.vars.errors|length == 0 %}display:none{% endif %}" />
             </div>
             <div class="clearfix"></div>
         </div>
@@ -57,14 +62,16 @@
             <div class="col-md-6">
                 {{ form_row(form.building_floors) }}
                 {{ form_row(form.building_roof) }}
-                {{ form_row(form.building_has_basement) }}
+                {{ form_row(form.has_basement) }}
                 <div id="heated_floors">
                     {{ form_row(form.building_heated_floors) }}
                 </div>
                 {{ form_row(form.floor_height) }}
+TODO: balkony i garaż
             </div>
             <div class="col-md-6">
                 <h3>Podgląd sytuacji</h3>
+                <h4 id="area_preview" style="display:none">Przybliżona powierzchnia budynku: ogrzewana&nbsp;<strong><span id="heated_area">0</span>m<sup>2</sup></strong>, całkowita&nbsp;<strong><span id="total_area">0</span>m<sup>2</sup></strong></h4>
                 <div id="house_preview"></div>
             </div>
             <div class="clearfix"></div>
@@ -82,4 +89,9 @@
     </div>
 </div>
 
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/krakenwarm/js/dimensions.js') }}"></script>
 {% endblock %}

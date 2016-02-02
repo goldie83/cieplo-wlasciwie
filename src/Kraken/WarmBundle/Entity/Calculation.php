@@ -373,7 +373,7 @@ class Calculation
      */
     public function getHouse()
     {
-        return $this->house;
+        return $this->house ?: House::create();
     }
 
     /**
@@ -521,6 +521,7 @@ class Calculation
     public function __construct()
     {
         $this->fuel_consumptions = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->house = House::create();
     }
 
     /**

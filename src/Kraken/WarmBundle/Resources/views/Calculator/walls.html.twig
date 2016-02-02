@@ -1,0 +1,115 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+
+<div class="row text-center">
+    <div class="col-md-12">
+        <div class="btn-group calculation-steps">
+            <a href="{{ path('start', {slug: calc.slug}) }}" class="btn btn-raised">Start</a>
+            <a href="{{ path('location', {slug: calc.slug}) }}" class="btn btn-raised">Lokalizacja</a>
+            <a href="{{ path('dimensions', {slug: calc.slug}) }}" class="btn btn-raised">Wymiary</a>
+            <a href="javascript:void(0)" class="btn btn-warning btn-raised">Ściany</a>
+            <a href="javascript:void(0)" class="btn btn-raised">Poddasze i parter</a>
+            <a href="javascript:void(0)" class="btn btn-raised">Ogrzewanie</a>
+            <a href="javascript:void(0)" class="btn btn-success btn-raised">Wynik</a>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="well bs-component">
+        <form action="{{ path('walls', {slug: calc.slug}) }}" class="form-horizontal" method="post">
+        <div class="row">
+            <div class="col-md-12">
+                  <h2>Ściany zewnętrzne</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                {% if not form.vars.valid %}
+                    <div class="alert alert-danger">
+                        <strong>Nie wszystko jest dobrze.</strong> Sprawdź pola oznaczone czerwonym kolorem.
+                    </div>
+                    {{ form_errors(form) }}
+                {% endif %}
+
+                {{ form_row(form.construction_type) }}
+                {{ form_row(form.wall_size) }}
+                <div id="traditional_materials">
+                    {{ form_row(form.primary_wall_material) }}
+                    {{ form_row(form.secondary_wall_material) }}
+                </div>
+
+                {{ form_row(form.has_isolation_inside) }}
+                <div id="wall_isolation_layer" style="display:none">
+                    {{ form_row(form.internal_isolation_layer.material) }}
+                    {{ form_row(form.internal_isolation_layer.size) }}
+                </div>
+
+                {{ form_row(form.has_isolation_outside) }}
+                <div id="wall_extra_isolation_layer" style="display:none">
+                      {{ form_row(form.external_isolation_layer.material) }}
+                      {{ form_row(form.external_isolation_layer.size) }}
+                </div>
+
+            </div>
+            <div class="col-md-6">
+                <h4>Czym się różnią te rodzaje konstrukcji budynku?</h4>
+                <p><strong>Konstrukcja tradycyjna</strong> to ciężkie ściany z "pełnych" materiałów, np. betonu, cegły czy drewnianych bali. Czyli znakomita większość budynków w tym kraju.</p>
+                <p><strong>Konstrukcja szkieletowa (dom kanadyjski)</strong> to budynek na drewnianym szkielecie nośnym, gdzie wypełnienie ścian stanowi izolacja (np. wełna mineralna).</p>
+                <p>&nbsp;</p>
+                <h4>Podstawowy i dodatkowy materiał ścian</h4>
+                <p>Jeśli mur w całości zbudowany jest np. z cegły - wybierz cegłę jako podstawowy materiał i nie wybieraj żadnego materiału dodatkowego.</p>
+                <p>Jeśli ściany zbudowane są z wielu materiałów - wybierz jako materiał podstawowy ten którego jest najwięcej a jako dodatkowy: drugi w kolejności.</p>
+                <p>&nbsp;</p>
+                <h4>Czy ściana ma jakąś izolację w środku?</h4>
+                <p>Wewnątrz ścian w starszych budynkach zwykle znajduje się 5-centymetrowa pustka powietrzna.</p>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Okna</h2>
+                {{ form_row(form.windows_type) }}
+                {{ form_row(form.number_windows) }}
+                {{ form_row(form.number_balcony_doors) }}
+                {{ form_row(form.number_huge_glazings) }}
+            </div>
+            <div class="col-md-6">
+                <h4>Jak policzyć okna?</h4>
+                <p>Jako sztukę rozumiemy tu okno o wymiarach <strong>140x180cm</strong>. Mniejsze okna policz jako pół tej sztuki, większe jako półtora, zsumuj i wpisz co wychodzi.</p>
+                <p>Osobno policz drzwi balkonowe oraz duże przeszklenia. Duże przeszklenie to okno na całą ścianę, tu załóżmy o&nbsp;wymiarach <strong>2,5x3m</strong>.</p>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Drzwi</h2>
+                {{ form_row(form.doors_type) }}
+                {{ form_row(form.number_doors) }}
+            </div>
+            <div class="col-md-6">
+                <h4>Jak policzyć drzwi?</h4>
+                <p>Policz wszystkie zewnętrzne drzwi wyjściowe. Nie wliczaj drzwi garażowych ani balkonowych (jeśli są w pełni przeszklone, liczą się do okien jak wyżej).</p>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-actions">
+                  <p><span class="asterisk">*</span> - pola wymagane</p>
+                  {{ form_rest(form) }}
+                  <button type="submit" class="btn btn-raised btn-primary pull-right">Dalej</button>
+                </div>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/krakenwarm/js/walls.js') }}"></script>
+{% endblock %}

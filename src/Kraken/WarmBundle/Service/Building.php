@@ -616,7 +616,7 @@ class Building implements BuildingInterface
 
     public function getStandardWindowArea()
     {
-        return 1.4 * 1.5;
+        return 1.4 * 1.8;
     }
 
     public function getWindowsArea()

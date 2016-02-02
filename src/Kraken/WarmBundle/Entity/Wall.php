@@ -9,7 +9,6 @@ use Symfony\Component\Validator\Context\ExecutionContext;
 /**
  * @ORM\Entity
  * @ORM\Table(name="wall")
- * @Assert\Callback(methods={"areWallLayersValid"})
  */
 class Wall
 {
@@ -53,28 +52,6 @@ class Wall
      */
     protected $extra_isolation_layer;
 
-    public function areWallLayersValid(ExecutionContext $context)
-    {
-        if (!$this->construction_layer
-            || !$this->construction_layer->getSize()
-            || !$this->construction_layer->getMaterial()
-        ) {
-            $context->addViolationAt('construction_layer', 'Wybierz materiał i grubość warstwy nośnej ściany', array(), null);
-        }
-
-        if ($this->extra_isolation_layer) {
-            if ($this->extra_isolation_layer->getSize() && !$this->extra_isolation_layer->getMaterial()) {
-                $context->addViolationAt('extra_isolation_layer', 'Wybierz materiał docieplenia ściany', array(), null);
-            }
-            if (!$this->extra_isolation_layer->getSize() && $this->extra_isolation_layer->getMaterial()) {
-                $context->addViolationAt('extra_isolation_layer', 'Wybierz grubość docieplenia ściany', array(), null);
-            }
-        }
-    }
-
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
     }

@@ -21,25 +21,24 @@ class CalculationStepDimensionsType extends AbstractType
                 ],
                 'expanded' => true,
                 'required' => true,
+                'data' => 'no',
                 'mapped' => false,
-                'label' => 'Jak zacząć?',
+                'label' => 'Powierzchnia zabudowy',
             ])
             ->add('area', 'number', [
                 'widget_addon_append' => [
                     'text' => 'mkw.',
                 ],
                 'required' => false,
-                'mapped' => false,
                 'label' => 'Powierzchnia zabudowy',
             ])
             ->add('building_shape', 'choice', [
                 'choices' => [
-                    'regular' => 'Regularny prostokąt',
+                    'regular' => 'Mniej więcej regularny czworokąt',
                     'irregular' => 'Nieregularny kształt',
                 ],
                 'data' => 'regular',
                 'required' => true,
-                'mapped' => false,
                 'label' => 'Kształt obrysu budynku',
             ])
             ->add('building_length', 'number', [
@@ -47,23 +46,20 @@ class CalculationStepDimensionsType extends AbstractType
                     'text' => 'm',
                 ],
                 'required' => false,
-                'mapped' => false,
-                'label' => 'Długość',
+                'label' => 'Długość obrysu budynku',
             ])
             ->add('building_width', 'number', [
                 'widget_addon_append' => [
                     'text' => 'm',
                 ],
                 'required' => false,
-                'mapped' => false,
-                'label' => 'Szerokość',
+                'label' => 'Szerokość obrysu budynku',
             ])
             ->add('building_contour_free_area', 'number', [
                 'widget_addon_append' => [
                     'text' => 'mkw.',
                 ],
                 'required' => false,
-                'mapped' => false,
                 'label' => 'Powierzchnia wcięć w obrysie budynku',
             ])
             ->add('building_floors', 'choice', [
@@ -74,9 +70,7 @@ class CalculationStepDimensionsType extends AbstractType
                     4 => 'Trzypiętrowy',
                     5 => 'Czteropiętrowy',
                 ],
-                'data' => 1,
                 'required' => true,
-                'mapped' => false,
                 'label' => 'Dom jest',
             ])
             ->add('building_roof', 'choice', [
@@ -84,14 +78,11 @@ class CalculationStepDimensionsType extends AbstractType
                     'steep' => 'Skośny',
                     'flat' => 'Płaski',
                 ],
-                'data' => 'steep',
                 'required' => true,
-                'mapped' => false,
                 'label' => 'Dach jest',
             ])
-            ->add('building_has_basement', 'checkbox', [
+            ->add('has_basement', 'checkbox', [
                 'required' => false,
-                'mapped' => false,
                 'label' => 'Dom jest podpiwniczony',
             ])
             ->add('building_heated_floors', 'choice', [
@@ -104,23 +95,18 @@ class CalculationStepDimensionsType extends AbstractType
                     5 => '4. piętro',
                     6 => '5. piętro',
                 ],
-                'data' => [1, 2],
                 'required' => true,
                 'multiple' => true,
                 'expanded' => true,
-                'allow_extra_fields' => true,
-                'mapped' => false,
                 'label' => 'Które piętra są ogrzewane?',
             ])
             ->add('floor_height', 'choice', array(
                 'choices' => array(
-                    '2.3' => 'Niskie (poniżej 2,5m)',
-                    '2.6' => 'Standardowe (ok. 2,6m)',
-                    '3.0' => 'Wysokie (3m i więcej)',
+                    2.3 => 'Niskie (poniżej 2,5m)',
+                    2.6 => 'Standardowe (ok. 2,6m)',
+                    3.0 => 'Wysokie (3m i więcej)',
                 ),
                 'label' => 'Wysokość pięter',
-                'mapped' => false,
-                'data' => '2.6',
                 'required' => true,
             ))
         ;
@@ -129,8 +115,7 @@ class CalculationStepDimensionsType extends AbstractType
     public function configureOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'Kraken\WarmBundle\Entity\Calculation',
-            'cascade_validation' => true,
+            'data_class' => 'Kraken\WarmBundle\Entity\House',
         ));
     }
 
