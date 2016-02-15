@@ -167,46 +167,16 @@ class Calculation
         return count($consumption) > 0 && $consumption->get(0)->getFuel() != null ? $consumption->get(0)->getFuel()->getType() : '';
     }
 
-    public function getLabel()
-    {
-        $types = array(
-            'single_house' => 'Budynek jednorodzinny',
-            'double_house' => 'Bliźniak',
-            'row_house' => 'Dom w zabudowie szeregowej',
-            'apartment' => 'Mieszkanie',
-        );
-
-        //TODO tego tu być nie będzie
-//         $house = $this->getHouse();
-//         $l = $house->getExternalBuildingLength();
-//         $w = $house->getExternalBuildingWidth();
-//         $floors = $house->getNumberFloors();
-
-        return $types[$this->building_type]/*.', '.round($w * $l * $floors).'m2'*/;
-    }
-
     public function getSlug()
     {
         return base_convert($this->getId(), 10, 36);
     }
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * Set construction_year.
-     *
-     * @param int $constructionYear
-     *
-     * @return Calculation
-     */
     public function setConstructionYear($constructionYear)
     {
         $this->construction_year = $constructionYear;
@@ -214,23 +184,11 @@ class Calculation
         return $this;
     }
 
-    /**
-     * Get construction_year.
-     *
-     * @return int
-     */
     public function getConstructionYear()
     {
         return $this->construction_year;
     }
 
-    /**
-     * Set latitude.
-     *
-     * @param float $latitude
-     *
-     * @return Calculation
-     */
     public function setLatitude($latitude)
     {
         $this->latitude = $latitude;
@@ -238,23 +196,11 @@ class Calculation
         return $this;
     }
 
-    /**
-     * Get latitude.
-     *
-     * @return float
-     */
     public function getLatitude()
     {
         return $this->latitude;
     }
 
-    /**
-     * Set longitude.
-     *
-     * @param float $longitude
-     *
-     * @return Calculation
-     */
     public function setLongitude($longitude)
     {
         $this->longitude = $longitude;
@@ -262,23 +208,11 @@ class Calculation
         return $this;
     }
 
-    /**
-     * Get longitude.
-     *
-     * @return float
-     */
     public function getLongitude()
     {
         return $this->longitude;
     }
 
-    /**
-     * Set created.
-     *
-     * @param \DateTime $created
-     *
-     * @return Calculation
-     */
     public function setCreated($created)
     {
         $this->created = $created;
@@ -286,23 +220,11 @@ class Calculation
         return $this;
     }
 
-    /**
-     * Get created.
-     *
-     * @return \DateTime
-     */
     public function getCreated()
     {
         return $this->created;
     }
 
-    /**
-     * Set updated.
-     *
-     * @param \DateTime $updated
-     *
-     * @return Calculation
-     */
     public function setUpdated($updated)
     {
         $this->updated = $updated;
@@ -310,23 +232,11 @@ class Calculation
         return $this;
     }
 
-    /**
-     * Get updated.
-     *
-     * @return \DateTime
-     */
     public function getUpdated()
     {
         return $this->updated;
     }
 
-    /**
-     * Set building_type.
-     *
-     * @param string $buildingType
-     *
-     * @return Calculation
-     */
     public function setBuildingType($buildingType)
     {
         $this->building_type = $buildingType;
@@ -334,23 +244,11 @@ class Calculation
         return $this;
     }
 
-    /**
-     * Get building_type.
-     *
-     * @return string
-     */
     public function getBuildingType()
     {
         return $this->building_type;
     }
 
-    /**
-     * Set indoor_temperature.
-     *
-     * @param float $indoorTemperature
-     *
-     * @return Calculation
-     */
     public function setIndoorTemperature($indoorTemperature)
     {
         $this->indoor_temperature = $indoorTemperature;
@@ -358,23 +256,11 @@ class Calculation
         return $this;
     }
 
-    /**
-     * Get indoor_temperature.
-     *
-     * @return float
-     */
     public function getIndoorTemperature()
     {
         return $this->indoor_temperature;
     }
 
-    /**
-     * Set house.
-     *
-     * @param \Kraken\WarmBundle\Entity\House $house
-     *
-     * @return Calculation
-     */
     public function setHouse(\Kraken\WarmBundle\Entity\House $house = null)
     {
         $this->house = $house;
@@ -382,23 +268,11 @@ class Calculation
         return $this;
     }
 
-    /**
-     * Get house.
-     *
-     * @return \Kraken\WarmBundle\Entity\House
-     */
     public function getHouse()
     {
         return $this->house ?: House::create();
     }
 
-    /**
-     * Set stove_power.
-     *
-     * @param float $stovePower
-     *
-     * @return Calculation
-     */
     public function setStovePower($stovePower)
     {
         $this->stove_power = $stovePower;
@@ -406,11 +280,6 @@ class Calculation
         return $this;
     }
 
-    /**
-     * Get stove_power.
-     *
-     * @return float
-     */
     public function getStovePower()
     {
         return $this->stove_power;
@@ -438,13 +307,6 @@ class Calculation
         return false;
     }
 
-    /**
-     * Set heated_area.
-     *
-     * @param string $heatedArea
-     *
-     * @return Calculation
-     */
     public function setHeatedArea($heatedArea)
     {
         $this->heated_area = $heatedArea;
@@ -452,23 +314,11 @@ class Calculation
         return $this;
     }
 
-    /**
-     * Get heated_area.
-     *
-     * @return string
-     */
     public function getHeatedArea()
     {
         return $this->heated_area;
     }
 
-    /**
-     * Set heating_power.
-     *
-     * @param string $heatingPower
-     *
-     * @return Calculation
-     */
     public function setHeatingPower($heatingPower)
     {
         $this->heating_power = $heatingPower;
@@ -476,11 +326,6 @@ class Calculation
         return $this;
     }
 
-    /**
-     * Get heating_power.
-     *
-     * @return string
-     */
     public function getHeatingPower()
     {
         return $this->heating_power;
