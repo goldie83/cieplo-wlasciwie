@@ -107,6 +107,21 @@ class Calculation
      */
     protected $city;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    protected $include_hot_water;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $hot_water_persons;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    protected $hot_water_use;
+
     public static function create()
     {
         $calc = new self();
@@ -161,12 +176,13 @@ class Calculation
             'apartment' => 'Mieszkanie',
         );
 
-        $house = $this->getHouse();
-        $l = $house->getBuildingLength();
-        $w = $house->getBuildingWidth();
-        $floors = $house->getNumberFloors();
+        //TODO tego tu być nie będzie
+//         $house = $this->getHouse();
+//         $l = $house->getExternalBuildingLength();
+//         $w = $house->getExternalBuildingWidth();
+//         $floors = $house->getNumberFloors();
 
-        return $types[$this->building_type].', '.round($w * $l * $floors).'m2';
+        return $types[$this->building_type]/*.', '.round($w * $l * $floors).'m2'*/;
     }
 
     public function getSlug()
@@ -582,5 +598,74 @@ class Calculation
     public function getCustomData()
     {
         return $this->custom_data;
+    }
+
+    /**
+     * Set include_hot_water
+     *
+     * @param boolean $includeHotWater
+     * @return Calculation
+     */
+    public function setIncludeHotWater($includeHotWater)
+    {
+        $this->include_hot_water = $includeHotWater;
+
+        return $this;
+    }
+
+    /**
+     * Get include_hot_water
+     *
+     * @return boolean
+     */
+    public function getIncludeHotWater()
+    {
+        return $this->include_hot_water;
+    }
+
+    /**
+     * Set hot_water_persons
+     *
+     * @param integer $hotWaterPersons
+     * @return Calculation
+     */
+    public function setHotWaterPersons($hotWaterPersons)
+    {
+        $this->hot_water_persons = $hotWaterPersons;
+
+        return $this;
+    }
+
+    /**
+     * Get hot_water_persons
+     *
+     * @return integer
+     */
+    public function getHotWaterPersons()
+    {
+        return $this->hot_water_persons;
+    }
+
+    /**
+     * Set hot_water_use
+     *
+     * @param integer $hotWaterUse
+     * @return Calculation
+     */
+    public function setHotWaterUse($hotWaterUse)
+    {
+        $this->hot_water_use = $hotWaterUse;
+
+        return $this;
+    }
+
+    /**
+     * Get hot_water_use
+     *
+     * @return integer
+     */
+    public function getHotWaterUse()
+    {
+        return $this->hot_water_use;
     }
 }

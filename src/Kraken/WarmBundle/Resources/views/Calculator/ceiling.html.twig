@@ -1,0 +1,56 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+
+<div class="row text-center">
+    <div class="col-md-12">
+        <div class="btn-group calculation-steps">
+            <a href="{{ path('start', {slug: calc.slug}) }}" class="btn btn-raised">Start</a>
+            <a href="{{ path('location', {slug: calc.slug}) }}" class="btn btn-raised">Lokalizacja</a>
+            <a href="{{ path('dimensions', {slug: calc.slug}) }}" class="btn btn-raised">Wymiary</a>
+            <a href="{{ path('walls', {slug: calc.slug}) }}" class="btn btn-raised">Ściany</a>
+            <a href="javascript:void(0)" class="btn btn-warning btn-raised">Poddasze i parter</a>
+            <a href="javascript:void(0)" class="btn btn-raised">Ogrzewanie</a>
+            <a href="javascript:void(0)" class="btn btn-success btn-raised">Wynik</a>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="well bs-component">
+        <form action="{{ path('ceiling', {slug: calc.slug}) }}" class="form-horizontal" method="post">
+        <div class="row">
+            <div class="col-md-12">
+                  <h2>Poddasze i parter</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                {% if not form.vars.valid %}
+                    <div class="alert alert-danger">
+                        <strong>Nie wszystko jest dobrze.</strong> Sprawdź pola oznaczone czerwonym kolorem.
+                    </div>
+                    {{ form_errors(form) }}
+                {% endif %}
+TODO dostosować nazewnictwo do faktycznie ogrzewanych pięter
+                {{ form_rest(form) }}
+            </div>
+            <div class="col-md-6">
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-actions">
+                  <p><span class="asterisk">*</span> - pola wymagane</p>
+                  {{ form_rest(form) }}
+                  <button type="submit" class="btn btn-raised btn-primary pull-right">Dalej</button>
+                </div>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+

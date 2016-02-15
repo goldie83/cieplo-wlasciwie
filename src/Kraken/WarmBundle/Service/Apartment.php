@@ -74,7 +74,7 @@ class Apartment extends Building implements BuildingInterface
             ? ($lowestCeilingIsolation->getSize() / 100) / $lowestCeilingIsolation->getMaterial()->getLambda()
             : 0;
 
-        return $house->getBuildingLength() * $house->getBuildingWidth() * 1 / ($this->getInternalCeilingResistance() + $ceilingIsolationResistance);
+        return $house->getExternalBuildingLength() * $house->getExternalBuildingWidth() * 1 / ($this->getInternalCeilingResistance() + $ceilingIsolationResistance);
     }
 
     public function getCeilingEnergyLossToUnheated()
@@ -92,7 +92,7 @@ class Apartment extends Building implements BuildingInterface
             ? ($highestCeilingIsolation->getSize() / 100) / $highestCeilingIsolation->getMaterial()->getLambda()
             : 0;
 
-        return $house->getBuildingLength() * $house->getBuildingWidth() * 1 / ($this->getInternalCeilingResistance() + $ceilingIsolationResistance);
+        return $house->getExternalBuildingLength() * $house->getExternalBuildingWidth() * 1 / ($this->getInternalCeilingResistance() + $ceilingIsolationResistance);
     }
 
     public function getNumberOfWalls()
@@ -104,24 +104,22 @@ class Apartment extends Building implements BuildingInterface
     {
         $internalWall = $this->wall_factory->getInternalWall($this->getInstance(), $addIsolation);
 
-        return $this->wall->getThermalConductance($internalWall) * $this->getInternalWallArea($internalWall);
+        return $this->wall->getThermalConductance() * $this->getInternalWallArea();
     }
 
     public function getWallsEnergyLossFactor()
     {
-        $externalWall = $this->getInstance()->getHouse()->getWalls()->first();
-
-        return $this->wall->getThermalConductance($externalWall) * $this->getRealWallArea($externalWall)
-            + $this->getDoorsEnergyLossFactor($externalWall)
-            + $this->getWindowsEnergyLossFactor($externalWall);
+        return $this->wall->getThermalConductance() * $this->getRealWallArea()
+            + $this->getDoorsEnergyLossFactor()
+            + $this->getWindowsEnergyLossFactor();
     }
 
     public function getInternalWallArea()
     {
         $houseHeight = $this->getHouseHeight();
 
-        $l = $this->getInstance()->getHouse()->getBuildingLength();
-        $w = $this->getInstance()->getHouse()->getBuildingWidth();
+        $l = $this->getInstance()->getHouse()->getExternalBuildingLength();
+        $w = $this->getInstance()->getHouse()->getExternalBuildingWidth();
 
         $walls = $this->getInstance()->getHouse()->getApartment()->getNumberUnheatedWalls();
         $sum = 0;
@@ -169,7 +167,7 @@ class Apartment extends Building implements BuildingInterface
                 ? ($highestCeilingIsolation->getSize() / 100) / $highestCeilingIsolation->getMaterial()->getLambda()
                 : 0;
 
-            return $house->getBuildingLength() * $house->getBuildingWidth() * 1 / ($this->getInternalCeilingResistance() + $ceilingIsolationResistance);
+            return $house->getExternalBuildingLength() * $house->getExternalBuildingWidth() * 1 / ($this->getInternalCeilingResistance() + $ceilingIsolationResistance);
         }
 
         return 0;
@@ -178,8 +176,8 @@ class Apartment extends Building implements BuildingInterface
     public function getFloorEnergyLossFactor()
     {
         $house = $this->getInstance()->getHouse();
-        $l = $house->getBuildingLength();
-        $w = $house->getBuildingWidth();
+        $l = $house->getExternalBuildingLength();
+        $w = $house->getExternalBuildingWidth();
         $floorArea = $l * $w;
 
         $what = $house->getApartment()->getWhatsUnder();
@@ -200,7 +198,7 @@ class Apartment extends Building implements BuildingInterface
             $floorLambda = $isolationResistance > 0
                 ? 1 / $isolationResistance
                 : 1;
-            $wallSize = $this->wall->getSize($house->getWalls()->first());
+            $wallSize = $house->getWallSize();
 
             $proportion = ($l * $w) / (0.5 * ($l + $w));
             $equivalentSize = $wallSize + $groundLambda / $floorLambda;

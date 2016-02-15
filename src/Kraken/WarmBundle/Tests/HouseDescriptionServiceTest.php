@@ -20,7 +20,7 @@ class HouseDescriptionServiceTest extends \PHPUnit_Framework_TestCase
     public function testHeadline()
     {
         $house = new House();
-        $house->setNumberFloors(3);
+        $house->setBuildingFloors(4);
         $house->setBuildingLength(10);
         $house->setBuildingWidth(12);
 
@@ -36,7 +36,7 @@ class HouseDescriptionServiceTest extends \PHPUnit_Framework_TestCase
 
         $desc = new HouseDescriptionService($instance, Mockery::mock('Kraken\WarmBundle\Service\Building'));
 
-        $this->assertEquals('Budynek jednorodzinny trzypiętrowy A.D. 2002 (10m x 12m w obrysie zewn.)', $desc->getHeadline());
+        $this->assertEquals('Budynek jednorodzinny trzypiętrowy A.D. 2002', $desc->getHeadline());
     }
 
     public function testAreaDetails()
@@ -92,7 +92,7 @@ class HouseDescriptionServiceTest extends \PHPUnit_Framework_TestCase
     {
         $house = new House();
         $house->setConstructionType('canadian');
-        $house->setNumberFloors(3);
+        $house->setBuildingFloors(3);
         $house->setBuildingLength(10);
         $house->setBuildingWidth(12);
 
@@ -107,9 +107,8 @@ class HouseDescriptionServiceTest extends \PHPUnit_Framework_TestCase
         $l1 = new Layer;
         $l1->setMaterial($m3);
         $l1->setSize(15);
-        $w1 = new Wall;
-        $w1->setExtraIsolationLayer($l1);
-        $house->addWall($w1);
+        $house->setExternalIsolationLayer($l1);
+        $house->setWallSize(30);
 
         $calc = new Calculation();
         $calc->setBuildingType('single_house');
@@ -123,34 +122,25 @@ class HouseDescriptionServiceTest extends \PHPUnit_Framework_TestCase
 
         $desc = new HouseDescriptionService($instance, Mockery::mock('Kraken\WarmBundle\Service\Building'));
 
-        $this->assertEquals('15cm, w tym szkielet drewniany (dom kanadyjski) + styropian 15cm', $desc->getWallDetails());
-        
-        #2
-        $house->removeWall($w1);
-        $house->setConstructionType('traditional');
+        $this->assertEquals('30cm, konstrukcja: szkielet drewniany (dom kanadyjski), izolacja: styropian 15cm', $desc->getWallDetails());
 
-        $l1 = new Layer;
-        $l1->setMaterial($m1);
-        $l1->setSize(25);
-        $l2 = new Layer;
-        $l2->setMaterial($m2);
-        $l2->setSize(15);
+        #2
         $l3 = new Layer;
         $l3->setMaterial($m3);
         $l3->setSize(15);
-        $w1 = new Wall;
-        $w1->setConstructionLayer($l1);
-        $w1->setOutsideLayer($l2);
-        $w1->setExtraIsolationLayer($l3);
-        $house->addWall($w1);
 
-        $this->assertEquals('55cm, w tym cegła pełna 25cm + pustak żużlobetonowy 15cm + styropian 15cm', $desc->getWallDetails());
+        $house->setConstructionType('traditional');
+        $house->setPrimaryWallMaterial($m1);
+        $house->setSecondaryWallMaterial($m2);
+        $house->setExternalIsolationLayer($l3);
+
+        $this->assertEquals('30cm, konstrukcja: cegła pełna + pustak żużlobetonowy, izolacja: styropian 15cm', $desc->getWallDetails());
     }
 
     public function testGroundDetails()
     {
         $house = new House();
-        $house->setNumberFloors(3);
+        $house->setBuildingFloors(3);
         $house->setBuildingLength(10);
         $house->setBuildingWidth(12);
 
@@ -166,7 +156,7 @@ class HouseDescriptionServiceTest extends \PHPUnit_Framework_TestCase
 
         $desc = new HouseDescriptionService($instance, $building);
 
-        $this->assertEquals('podgłoga w piwnicy bez izolacji', $desc->getGroundDetails());
+        $this->assertEquals('bez izolacji', $desc->getGroundDetails());
 
         #2
         $m1 = new Material;
@@ -174,8 +164,8 @@ class HouseDescriptionServiceTest extends \PHPUnit_Framework_TestCase
         $l1 = new Layer;
         $l1->setMaterial($m1);
         $l1->setSize(15);
-        $house->setBasementFloorIsolationLayer($l1);
-        $this->assertEquals('izolacja podłogi w piwnicy: styropian 15cm', $desc->getGroundDetails());
+        $house->setBottomIsolationLayer($l1);
+        $this->assertEquals('styropian 15cm', $desc->getGroundDetails());
 
         #3
         $building = Mockery::mock('Kraken\WarmBundle\Service\Building');
@@ -184,8 +174,8 @@ class HouseDescriptionServiceTest extends \PHPUnit_Framework_TestCase
 
         $desc = new HouseDescriptionService($instance, $building);
 
-        $house->setGroundFloorIsolationLayer($l1);
-        $this->assertEquals('izolacja podłogi na gruncie: styropian 15cm', $desc->getGroundDetails());
+        $house->setBottomIsolationLayer($l1);
+        $this->assertEquals('styropian 15cm', $desc->getGroundDetails());
 
         #4
         $building = Mockery::mock('Kraken\WarmBundle\Service\Building');
@@ -194,8 +184,8 @@ class HouseDescriptionServiceTest extends \PHPUnit_Framework_TestCase
 
         $desc = new HouseDescriptionService($instance, $building);
 
-        $house->setLowestCeilingIsolationLayer($l1);
-        $this->assertEquals('izolacja stropu nad nieogrzewanym parterem: styropian 15cm', $desc->getGroundDetails());
+        $house->setBottomIsolationLayer($l1);
+        $this->assertEquals('styropian 15cm', $desc->getGroundDetails());
     }
 
     protected function mockSession()

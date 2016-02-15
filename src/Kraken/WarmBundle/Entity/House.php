@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Context\ExecutionContext;
 /**
  * @ORM\Entity
  * @ORM\Table(name="house")
- * @Assert\Callback(methods={"areIsolationLayersValid", "areDimensionsValid", "areWallsValid"})
+ * @Assert\Callback(methods={"areDimensionsValid", "areWallsValid"})
  */
 class House
 {
@@ -225,53 +225,17 @@ class House
      */
     protected $external_isolation_layer;
 
-    public function areIsolationLayersValid(ExecutionContext $context)
-    {
-        if ($this->highest_ceiling_isolation_layer) {
-            if ($this->highest_ceiling_isolation_layer->getSize() && !$this->highest_ceiling_isolation_layer->getMaterial()) {
-                $context->addViolationAt('highest_ceiling_isolation_layer', 'Wybierz materiał warstwy izolacji dachu', [], null);
-            }
-            if (!$this->highest_ceiling_isolation_layer->getSize() && $this->highest_ceiling_isolation_layer->getMaterial()) {
-                $context->addViolationAt('highest_ceiling_isolation_layer', 'Wybierz grubość warstwy izolacji dachu', [], null);
-            }
-        }
+    /**
+     * @ORM\ManyToOne(targetEntity="Layer", cascade={"all"})
+     * @ORM\JoinColumn(name="highest_ceiling_isolation_layer_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     */
+    protected $top_isolation_layer;
 
-        if ($this->lowest_ceiling_isolation_layer) {
-            if ($this->lowest_ceiling_isolation_layer->getSize() && !$this->lowest_ceiling_isolation_layer->getMaterial()) {
-                $context->addViolationAt('lowest_ceiling_isolation_layer', 'Wybierz materiał warstwy izolacji stropu nad parterem', [], null);
-            }
-            if (!$this->lowest_ceiling_isolation_layer->getSize() && $this->lowest_ceiling_isolation_layer->getMaterial()) {
-                $context->addViolationAt('lowest_ceiling_isolation_layer', 'Wybierz grubość warstwy izolacji stropu nad parterem', [], null);
-            }
-        }
-
-        if ($this->basement_floor_isolation_layer) {
-            if ($this->basement_floor_isolation_layer->getSize() && !$this->basement_floor_isolation_layer->getMaterial()) {
-                $context->addViolationAt('basement_floor_isolation_layer', 'Wybierz materiał warstwy izolacji podłogi piwnicy', [], null);
-            }
-            if (!$this->basement_floor_isolation_layer->getSize() && $this->basement_floor_isolation_layer->getMaterial()) {
-                $context->addViolationAt('basement_floor_isolation_layer', 'Wybierz grubość warstwy izolacji podłogi piwnicy', [], null);
-            }
-        }
-
-        if ($this->ground_floor_isolation_layer) {
-            if ($this->ground_floor_isolation_layer->getSize() && !$this->ground_floor_isolation_layer->getMaterial()) {
-                $context->addViolationAt('ground_floor_isolation_layer', 'Wybierz materiał warstwy izolacji podłogi parteru', [], null);
-            }
-            if (!$this->ground_floor_isolation_layer->getSize() && $this->ground_floor_isolation_layer->getMaterial()) {
-                $context->addViolationAt('ground_floor_isolation_layer', 'Wybierz grubość warstwy izolacji podłogi parteru', [], null);
-            }
-        }
-
-        if ($this->roof_isolation_layer) {
-            if ($this->roof_isolation_layer->getSize() && !$this->roof_isolation_layer->getMaterial()) {
-                $context->addViolationAt('roof_isolation_layer', 'Wybierz materiał warstwy izolacji dachu', [], null);
-            }
-            if (!$this->roof_isolation_layer->getSize() && $this->roof_isolation_layer->getMaterial()) {
-                $context->addViolationAt('roof_isolation_layer', 'Wybierz grubość warstwy izolacji dachu', [], null);
-            }
-        }
-    }
+    /**
+     * @ORM\ManyToOne(targetEntity="Layer", cascade={"all"})
+     * @ORM\JoinColumn(name="highest_ceiling_isolation_layer_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     */
+    protected $bottom_isolation_layer;
 
     public function areDimensionsValid(ExecutionContext $context)
     {
@@ -1207,5 +1171,51 @@ class House
     public function getNumberHugeGlazings()
     {
         return $this->number_huge_glazings;
+    }
+
+    /**
+     * Set top_isolation_layer
+     *
+     * @param \Kraken\WarmBundle\Entity\Layer $topIsolationLayer
+     * @return House
+     */
+    public function setTopIsolationLayer(\Kraken\WarmBundle\Entity\Layer $topIsolationLayer = null)
+    {
+        $this->top_isolation_layer = $topIsolationLayer;
+
+        return $this;
+    }
+
+    /**
+     * Get top_isolation_layer
+     *
+     * @return \Kraken\WarmBundle\Entity\Layer 
+     */
+    public function getTopIsolationLayer()
+    {
+        return $this->top_isolation_layer;
+    }
+
+    /**
+     * Set bottom_isolation_layer
+     *
+     * @param \Kraken\WarmBundle\Entity\Layer $bottomIsolationLayer
+     * @return House
+     */
+    public function setBottomIsolationLayer(\Kraken\WarmBundle\Entity\Layer $bottomIsolationLayer = null)
+    {
+        $this->bottom_isolation_layer = $bottomIsolationLayer;
+
+        return $this;
+    }
+
+    /**
+     * Get bottom_isolation_layer
+     *
+     * @return \Kraken\WarmBundle\Entity\Layer 
+     */
+    public function getBottomIsolationLayer()
+    {
+        return $this->bottom_isolation_layer;
     }
 }

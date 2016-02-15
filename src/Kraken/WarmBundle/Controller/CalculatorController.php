@@ -10,7 +10,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Kraken\WarmBundle\Form\CalculationFormType;
+use Kraken\WarmBundle\Form\CalculationStepCeilingType;
 use Kraken\WarmBundle\Form\CalculationStepDimensionsType;
+use Kraken\WarmBundle\Form\CalculationStepHeatingType;
 use Kraken\WarmBundle\Form\CalculationStepLocationType;
 use Kraken\WarmBundle\Form\CalculationStepWallsType;
 use Kraken\WarmBundle\Form\CalculationStepOneType;
@@ -194,7 +196,7 @@ class CalculatorController extends Controller
             $em->flush();
 
             $calcSlug = base_convert($calc->getId(), 10, 36);
-            $redirect = $this->generateUrl('walls', array(
+            $redirect = $this->generateUrl('ceiling', array(
                 'slug' => $calcSlug,
             ));
 
@@ -207,130 +209,99 @@ class CalculatorController extends Controller
         ));
     }
 
+    public function ceilingAction($slug, Request $request)
+    {
+        if (!$this->userIsAuthor($slug, $request)) {
+            throw $this->createNotFoundException('Jakiś zły masz ten link. Nic tu nie ma.');
+        }
+
+        $calc = $this->getDoctrine()
+            ->getRepository('KrakenWarmBundle:Calculation')
+            ->findOneBy(array('id' => intval($slug, 36)));
+
+        $em = $this->getDoctrine()->getManager();
+
+        $house = $calc->getHouse();
+
+        if ($house->getConstructionType() == '') {
+            $house->setConstructionType('traditional');
+            $house->setWindowsType('new_double_glass');
+            $house->setDoorsType('new_wooden');
+        }
+
+        $form = $this->createForm(new CalculationStepCeilingType(), $house);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $house = $form->getData();
+
+            $em->persist($house);
+            $calc->setHouse($house);
+            $em->persist($calc);
+            $em->flush();
+
+            $calcSlug = base_convert($calc->getId(), 10, 36);
+            $redirect = $this->generateUrl('heating', array(
+                'slug' => $calcSlug,
+            ));
+
+            return $this->redirect($redirect);
+        }
+
+        return $this->render('KrakenWarmBundle:Calculator:ceiling.html.twig', array(
+            'calc' => $calc,
+            'form' => $form->createView(),
+        ));
+    }
+
+    public function heatingAction($slug, Request $request)
+    {
+        if (!$this->userIsAuthor($slug, $request)) {
+            throw $this->createNotFoundException('Jakiś zły masz ten link. Nic tu nie ma.');
+        }
+
+        $calc = $this->getDoctrine()
+            ->getRepository('KrakenWarmBundle:Calculation')
+            ->findOneBy(array('id' => intval($slug, 36)));
+
+        $em = $this->getDoctrine()->getManager();
+
+        $form = $this->createForm(new CalculationStepHeatingType(), $calc);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $calc = $form->getData();
+            $calc->getHouse()->setVentilationType($form['ventilation_type']->getData());
+
+            $em->persist($calc);
+            $em->persist($calc->getHouse());
+            $em->flush();
+
+            $calcSlug = base_convert($calc->getId(), 10, 36);
+            $redirect = $this->generateUrl('result', array(
+                'slug' => $calcSlug,
+            ));
+
+            //TODO
+//             if (!$isEditing) {
+//                 $this->sendInfo($calc);
+//             }
+
+            return $this->redirect($redirect);
+        }
+
+        return $this->render('KrakenWarmBundle:Calculator:heating.html.twig', array(
+            'calc' => $calc,
+            'form' => $form->createView(),
+        ));
+    }
+
     protected function userIsAuthor($slug, Request $request)
     {
         $cookieValue = $request->cookies->get('sup_bro');
         $slugs = explode(';', $cookieValue);
 
         return in_array($slug, $slugs);
-    }
-
-    public function detailsAction($slug, Request $request)
-    {
-        $em = $this->getDoctrine()->getManager();
-
-        $calc = $this->getDoctrine()
-            ->getRepository('KrakenWarmBundle:Calculation')
-            ->findOneBy(array('id' => intval($slug, 36)));
-
-        if (!$calc || !$this->userIsAuthor($slug, $request)) {
-            throw $this->createNotFoundException('Jakiś zły masz ten link. Nic tu nie ma.');
-        }
-
-        $isEditing = $calc->getHouse() != null;
-        $buildingType = $calc->getBuildingType();
-        $template = 'single_house';
-        $house = $isEditing
-            ? $calc->getHouse()
-            : House::create();
-
-        if (in_array($buildingType, array('single_house', 'double_house', 'row_house'))) {
-            $form = $this->createForm(new HouseType(), $house);
-        } else {
-            $template = 'apartment';
-            $form = $this->createForm(new HouseApartmentType(), $house);
-        }
-
-        if ($request->getMethod() == 'POST') {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $house = $form->getData();
-
-                //TODO that's the only relation which produces empty Layer record. Dafuq.
-                if (!$house->getRoofIsolationLayer()) {
-                    $house->setRoofIsolationLayer(null);
-                }
-
-                //TODO what the hell?
-                if ($house->getGroundFloorIsolationLayer()) {
-                    if (!$house->getGroundFloorIsolationLayer()->getMaterial() || !$house->getGroundFloorIsolationLayer()->getSize()) {
-                        $em->remove($house->getGroundFloorIsolationLayer());
-                        $house->setGroundFloorIsolationLayer(null);
-                    }
-                }
-
-                if ($house->getHighestCeilingIsolationLayer()) {
-                    if (!$house->getHighestCeilingIsolationLayer()->getMaterial() || !$house->getHighestCeilingIsolationLayer()->getSize()) {
-                        $em->remove($house->getHighestCeilingIsolationLayer());
-                        $house->setHighestCeilingIsolationLayer(null);
-                    }
-                }
-
-                if ($house->getRoofIsolationLayer()) {
-                    if (!$house->getRoofIsolationLayer()->getMaterial() || !$house->getRoofIsolationLayer()->getSize()) {
-                        $em->remove($house->getRoofIsolationLayer());
-                        $house->setRoofIsolationLayer(null);
-                    }
-                }
-
-                if ($house->getBasementFloorIsolationLayer()) {
-                    if (!$house->getBasementFloorIsolationLayer()->getMaterial() || !$house->getBasementFloorIsolationLayer()->getSize()) {
-                        $em->remove($house->getBasementFloorIsolationLayer());
-                        $house->setBasementFloorIsolationLayer(null);
-                    }
-                }
-
-                if ($house->getLowestCeilingIsolationLayer()) {
-                    if (!$house->getLowestCeilingIsolationLayer()->getMaterial() || !$house->getLowestCeilingIsolationLayer()->getSize()) {
-                        $em->remove($house->getLowestCeilingIsolationLayer());
-                        $house->setLowestCeilingIsolationLayer(null);
-                    }
-                }
-
-                $em->persist($house);
-                $calc->setHouse($house);
-
-                foreach ($house->getWalls() as $i => $wall) {
-                    if ($wall->getIsolationLayer()) {
-                        if (!$wall->getIsolationLayer()->getMaterial() || !$wall->getIsolationLayer()->getSize()) {
-                            $em->remove($wall->getIsolationLayer());
-                            $wall->setIsolationLayer(null);
-                        }
-                    }
-
-                    if ($wall->getOutsideLayer()) {
-                        if (!$wall->getOutsideLayer()->getMaterial() || !$wall->getOutsideLayer()->getSize()) {
-                            $em->remove($wall->getOutsideLayer());
-                            $wall->setOutsideLayer(null);
-                        }
-                    }
-
-                    if ($wall->getExtraIsolationLayer()) {
-                        if (!$wall->getExtraIsolationLayer()->getMaterial() || !$wall->getExtraIsolationLayer()->getSize()) {
-                            $em->remove($wall->getExtraIsolationLayer());
-                            $wall->setExtraIsolationLayer(null);
-                        }
-                    }
-
-                    $wall->setHouse($house);
-                    $em->persist($wall);
-                }
-
-                $em->persist($calc);
-                $em->flush();
-
-                if (!$isEditing) {
-                    $this->sendInfo($calc);
-                }
-
-                return $this->redirect($this->generateUrl('result', array('slug' => $calc->getSlug())));
-            }
-        }
-
-        return $this->render('KrakenWarmBundle:Default:'.$template.'.html.twig', array(
-            'form' => $form->createView(),
-            'calc_slug' => $calc->getSlug(),
-        ));
     }
 
     protected function sendInfo(Calculation $calc)

@@ -18,6 +18,14 @@ walls:
     path:  /sciany/{slug}
     defaults: { _controller: KrakenWarmBundle:Calculator:walls }
 
+ceiling:
+    path:  /poddasze_parter/{slug}
+    defaults: { _controller: KrakenWarmBundle:Calculator:ceiling }
+
+heating:
+    path:  /ogrzewanie/{slug}
+    defaults: { _controller: KrakenWarmBundle:Calculator:heating }
+
 what:
     path:  /co_to_jest
     defaults: { _controller: KrakenWarmBundle:Static:what }

@@ -232,12 +232,8 @@ class UpgradeService
         $customCalculation = clone unserialize(serialize($originalCalculation));
         $this->instance->setCustomCalculation($customCalculation);
 
-        $originalWall = $originalCalculation->getHouse()->getWalls()->first();
-
-        if (!$originalWall->getExtraIsolationLayer() || $originalWall->getExtraIsolationLayer()->getSize() < 10) {
+        if (!$originalCalculation->getHouse()->getExternalIsolationLayer() || $originalCalculation->getHouse()->getExternalIsolationLayer()->getSize() < 10) {
             $isolationSize = 15;
-
-            $wall = $customCalculation->getHouse()->getWalls()->first();
 
             $m = new Material();
             $m->setLambda($this->presentStyrofoamLambda);
@@ -246,7 +242,7 @@ class UpgradeService
             $l->setMaterial($m);
             $l->setSize($isolationSize);
 
-            $wall->setExtraIsolationLayer($l);
+            $customCalculation->getHouse()->setExternalIsolationLayer($l);
 
             $newEnergyLoss = $this->building->getEnergyLossToOutside() + $this->building->getEnergyLossToUnheated();
 
@@ -262,7 +258,7 @@ class UpgradeService
         $customCalculation = clone unserialize(serialize($originalCalculation));
         $this->instance->setCustomCalculation($customCalculation);
         $house = $customCalculation->getHouse();
-        $roofType = $house->getRoofType();
+        $roofType = $house->getBuildingRoof();
 
         $flatRoof = $roofType == 'flat' || $roofType == false;
 

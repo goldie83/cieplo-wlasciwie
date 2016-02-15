@@ -13,47 +13,39 @@ class WallService
         $this->instance = $instance;
     }
 
-    /**
-     * Get thermal conductance factor, including all layers and stuffs.
-     */
-    public function getThermalConductance(Wall $wall)
+    public function getThermalConductance()
     {
         $thermalResistance = 0;
+        $house = $this->instance->get()->getHouse();
+        $wallConstructionSize = $house->getWallSize()/100;
+        $internalIsolation = $house->getInternalIsolationLayer();
+        $externalIsolation = $house->getExternalIsolationLayer();
+        $primaryMaterial = $house->getPrimaryWallMaterial();
+        $secondaryMaterial = $house->getSecondaryWallMaterial();
 
-        foreach ($wall->getLayers() as $layer) {
-            $lambda = $layer->getMaterial()->getLambda();
-            $size = $layer->getSize() / 100;
-
-            if (stristr($layer->getMaterial()->getName(), 'pustka')) {
-                $thermalResistance += 0.18;
-            } elseif ($size != 0 && $lambda != 0) {
-                $thermalResistance += $size / $lambda;
-            }
+        if ($internalIsolation) {
+            $wallConstructionSize -= ($internalIsolation->getSize()/100);
+            $thermalResistance += stristr($internalIsolation->getMaterial()->getName(), 'pustka')
+                ? 0.18
+                : ($internalIsolation->getSize()/100)/$internalIsolation->getMaterial()->getLambda();
         }
 
-        //TODO thermal bridges
-        /*if ($this->instance->getHouse()->getHasBalcony()) {
-            $thermalResistance += 1/0.15;
-        } elseif ($this->instance->getHouse()->getNumberWindows() > 5) {
-            $thermalResistance += 1/0.1;
-        }*/
+        if ($externalIsolation) {
+            $wallConstructionSize -= ($externalIsolation->getSize()/100);
+            $thermalResistance += ($externalIsolation->getSize()/100)/$externalIsolation->getMaterial()->getLambda();
+        }
+
+        if ($house->getConstructionType() == 'traditional') {
+            if ($secondaryMaterial) {
+                $thermalResistance += (0.65*$wallConstructionSize)/$primaryMaterial->getLambda();
+                $thermalResistance += (0.35*$wallConstructionSize)/$secondaryMaterial->getLambda();
+            } else {
+                $thermalResistance += $wallConstructionSize/$primaryMaterial->getLambda();
+            }
+        }
 
         return $thermalResistance > 0
             ? round(1 / $thermalResistance, 2)
             : 0;
-    }
-
-    /**
-     * Get wall size, including all layers and stuffs.
-     */
-    public function getSize(Wall $wall)
-    {
-        $thickness = 0.05; // plasters and stuffs
-
-        foreach ($wall->getLayers() as $layer) {
-            $thickness += $layer->getSize() / 100;
-        }
-
-        return $thickness;
     }
 }

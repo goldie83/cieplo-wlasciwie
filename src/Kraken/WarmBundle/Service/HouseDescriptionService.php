@@ -66,17 +66,18 @@ class HouseDescriptionService
         $type = $this->instance->get()->getBuildingType();
         $house = $this->instance->get()->getHouse();
 
-        $sizes = sprintf('%sm x %sm w obrysie zewn.', $house->getBuildingLength(), $house->getBuildingWidth());
-        $nbFloors = $house->getNumberFloors();
+        $nbFloors = $house->getBuildingFloors();
 
         if ($type == 'apartment') {
             $floor = $nbFloors.'-poziomowe';
         } else {
-            $floors = array(
+            $floors = [
                 1 => 'parterowy',
-                2 => 'dwupiętrowy',
-                3 => 'trzypiętrowy',
-            );
+                2 => 'jednopiętrowy',
+                3 => 'dwupiętrowy',
+                4 => 'trzypiętrowy',
+                5 => 'czteropiętrowy',
+            ];
 
             $floor = isset($floors[$nbFloors]) ? $floors[$nbFloors] : $nbFloors.'-piętrowy';
 
@@ -85,7 +86,7 @@ class HouseDescriptionService
             }
         }
 
-        return $this->houseTypes[$type].' '.$floor.' A.D. '.$this->instance->get()->getConstructionYear().' ('.$sizes.')';
+        return $this->houseTypes[$type].' '.$floor.' A.D. '.$this->instance->get()->getConstructionYear();
     }
 
     public function getAreaDetails()
@@ -131,41 +132,39 @@ class HouseDescriptionService
     public function getWallDetails()
     {
         $house = $this->instance->get()->getHouse();
-        $wall = $house->getWalls()->first();
         $wallDetails = [];
-        $wallSize = 0;
-
-        $includeLayer = function ($layer) use (&$wallDetails, &$wallSize) {
-            if ($layer != null) {
-                $wallDetails[] = sprintf('%s %scm', $layer->getMaterial()->getName(), $layer->getSize());
-                $wallSize += $layer->getSize();
-            }
-        };
+        $isolationDetails = [];
 
         if ($house->getConstructionType() == 'canadian') {
             $wallDetails[] = 'szkielet drewniany (dom kanadyjski)';
         } else {
-            $includeLayer($wall->getConstructionLayer());
+            $wallDetails[] = $house->getPrimaryWallMaterial()->getName();
+
+            if ($house->getSecondaryWallMaterial()) {
+                $wallDetails[] = strtolower($house->getSecondaryWallMaterial()->getName());
+            }
         }
 
-        $includeLayer($wall->getIsolationLayer());
-        $includeLayer($wall->getOutsideLayer());
-        $includeLayer($wall->getExtraIsolationLayer());
+        if ($house->getInternalIsolationLayer()) {
+            $isolationDetails[] = sprintf('%s %scm', $house->getInternalIsolationLayer()->getMaterial()->getName(), $house->getInternalIsolationLayer()->getSize());
+        }
 
-        return sprintf('%scm, w tym %s', $wallSize, implode(' + ', $wallDetails));
+        if ($house->getExternalIsolationLayer()) {
+            $isolationDetails[] = sprintf('%s %scm', $house->getExternalIsolationLayer()->getMaterial()->getName(), $house->getExternalIsolationLayer()->getSize());
+        }
+
+        return strtolower(sprintf('%scm, konstrukcja: %s, izolacja: %s', $house->getWallSize(), implode(' + ', $wallDetails), implode(' + ', $isolationDetails)));
     }
 
     public function getRoofDetails()
     {
         $house = $this->instance->get()->getHouse();
-        $roofType = $house->getRoofType();
+        $roofInformation = [$this->roofTypes[$house->getBuildingRoof()]];
 
-        $roofInformation = [$this->roofTypes[$roofType]];
-
-        if (($isolation = $house->getRoofIsolationLayer()) != null) {
-            $roofInformation[] = sprintf('izolacja: %s %scm', $isolation->getMaterial()->getName(), $isolation->getSize());
-        } elseif (($isolation = $house->getHighestCeilingIsolationLayer()) != null) {
-            $roofInformation[] = sprintf('izolacja: %s %scm', $isolation->getMaterial()->getName(), $isolation->getSize());
+        if (($isolation = $house->getTopIsolationLayer()) != null) {
+            $roofInformation[] = sprintf('%s %scm', $isolation->getMaterial()->getName(), $isolation->getSize());
+        } else {
+            $roofInformation[] = 'bez izolacji';
         }
 
         return implode(', ', $roofInformation);
@@ -175,25 +174,13 @@ class HouseDescriptionService
     {
         $house = $this->instance->get()->getHouse();
 
-        if ($this->building->isBasementHeated()) {
-            if (($isolation = $house->getBasementFloorIsolationLayer()) != null) {
-                return sprintf('izolacja podłogi w piwnicy: %s %scm', $isolation->getMaterial()->getName(), $isolation->getSize());
-            } else {
-                return 'podgłoga w piwnicy bez izolacji';
-            }
-        } elseif ($this->building->isGroundFloorHeated()) {
-            if (($isolation = $house->getGroundFloorIsolationLayer()) != null) {
-                return sprintf('izolacja podłogi na gruncie: %s %scm', $isolation->getMaterial()->getName(), $isolation->getSize());
-            } else {
-                return 'podłoga na gruncie bez izolacji';
-            }
+        if (($isolation = $house->getBottomIsolationLayer()) != null) {
+            $roofInformation[] = sprintf('%s %scm', $isolation->getMaterial()->getName(), $isolation->getSize());
         } else {
-            if (($isolation = $house->getLowestCeilingIsolationLayer()) != null) {
-                return sprintf('izolacja stropu nad nieogrzewanym parterem: %s %scm', $isolation->getMaterial()->getName(), $isolation->getSize());
-            } else {
-                return 'strop nad nieogrzewanym parterem bez izolacji';
-            }
+            $roofInformation[] = 'bez izolacji';
         }
+
+        return implode(', ', $roofInformation);
     }
 
     public function getDoorsWindowsDetails()
@@ -201,9 +188,9 @@ class HouseDescriptionService
         $house = $this->instance->get()->getHouse();
 
         return sprintf(
-            'Okna: %s (%s&nbsp;szt.), Drzwi: %s (%s&nbsp;szt.)', 
-            strtolower($this->windowsTypes[$house->getWindowsType()]), 
-            $house->getNumberWindows(), 
+            'Okna: %s (%s&nbsp;szt.), Drzwi: %s (%s&nbsp;szt.)',
+            strtolower($this->windowsTypes[$house->getWindowsType()]),
+            $house->getNumberWindows(),
             strtolower($this->doorsTypes[$house->getDoorsType()]),
             $house->getNumberDoors()
         );

@@ -1,0 +1,75 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+
+<div class="row text-center">
+    <div class="col-md-12">
+        <div class="btn-group calculation-steps">
+            <a href="{{ path('start', {slug: calc.slug}) }}" class="btn btn-raised">Start</a>
+            <a href="{{ path('location', {slug: calc.slug}) }}" class="btn btn-raised">Lokalizacja</a>
+            <a href="{{ path('dimensions', {slug: calc.slug}) }}" class="btn btn-raised">Wymiary</a>
+            <a href="{{ path('walls', {slug: calc.slug}) }}" class="btn btn-raised">Ściany</a>
+            <a href="{{ path('ceiling', {slug: calc.slug}) }}" class="btn btn-raised">Poddasze i parter</a>
+            <a href="javascript:void(0)" class="btn btn-warning btn-raised">Ogrzewanie</a>
+            <a href="javascript:void(0)" class="btn btn-success btn-raised">Wynik</a>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="well bs-component">
+        <form action="{{ path('heating', {slug: calc.slug}) }}" class="form-horizontal" method="post">
+        <div class="row">
+            <div class="col-md-12">
+                  <h2>Ogrzewanie</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                {% if not form.vars.valid %}
+                    <div class="alert alert-danger">
+                        <strong>Nie wszystko jest dobrze.</strong> Sprawdź pola oznaczone czerwonym kolorem.
+                    </div>
+                    {{ form_errors(form) }}
+                {% endif %}
+                {{ form_row(form.indoor_temperature) }}
+                {{ form_row(form.ventilation_type) }}
+                {{ form_row(form.include_hot_water) }}
+                <div id="hot_water" style="display:none">
+                {{ form_row(form.hot_water_persons) }}
+                {{ form_row(form.hot_water_use) }}
+                </div>
+                <h3>Obecny sposób ogrzewania</h3>
+                <p>Możesz podać obecny lub planowany sposób ogrzewania, a otrzymasz <strong>porównanie opłacalności względem innych źródeł ciepła</strong>.<br/>
+                Jeśli podasz obecne zużycie opału/energii, to dowiesz się z jaką efektywnością ogrzewasz.</p>
+                {{ form_row(form.heating_device) }}
+                {{ form_row(form.stove_power) }}
+                {{ form_row(form.fuel_consumptions) }}
+TODO zużycie paliw zepsute!
+                <h3>Wysłać link do obliczeń na maila?</h3>
+                {{ form_row(form.email) }}
+                {{ form_rest(form) }}
+            </div>
+            <div class="col-md-6">
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-actions">
+                  <p><span class="asterisk">*</span> - pola wymagane</p>
+                  {{ form_rest(form) }}
+                  <button type="submit" class="btn btn-raised btn-primary pull-right">Wynik</button>
+                </div>
+            </div>
+        </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/krakenwarm/js/heating.js') }}"></script>
+{% endblock %}

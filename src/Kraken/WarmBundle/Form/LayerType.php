@@ -18,9 +18,13 @@ class LayerType extends AbstractType
                 'required' => $options['force_required'],
                 'label' => $options['material_label'],
                 'query_builder' => function (EntityRepository $er) use ($options) {
-                    return $er->createQueryBuilder('m')
-                        ->andWhere(sprintf('m.%s = 1', $options['material_type']))
-                        ->orderBy('m.name', 'ASC');
+                    $qb = $er->createQueryBuilder('m');
+                    $types = is_array($options['material_type']) ? $options['material_type'] : [$options['material_type']];
+                    foreach ($types as $type) {
+                        $qb->orWhere(sprintf('m.%s = 1', $type));
+                    }
+
+                    return $qb->orderBy('m.name', 'ASC');
                 },
             ))
             ->add('size', 'integer', array(
