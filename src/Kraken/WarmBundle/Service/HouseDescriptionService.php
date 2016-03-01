@@ -9,6 +9,7 @@ class HouseDescriptionService
 {
     protected $instance;
     protected $building;
+    protected $dimensions;
 
     protected $houseTypes = [
         'single_house' => 'Budynek jednorodzinny',
@@ -55,10 +56,11 @@ class HouseDescriptionService
         'ground' => 'Grunt',
     ];
 
-    public function __construct(InstanceService $instance, Building $building)
+    public function __construct(InstanceService $instance, Building $building, DimensionsService $dimensions)
     {
         $this->instance = $instance;
         $this->building = $building;
+        $this->dimensions = $dimensions;
     }
 
     public function getHeadline()
@@ -86,7 +88,7 @@ class HouseDescriptionService
             }
         }
 
-        return $this->houseTypes[$type].' '.$floor.' A.D. '.$this->instance->get()->getConstructionYear();
+        return $this->houseTypes[$type].' '.$floor;
     }
 
     public function getAreaDetails()
@@ -95,10 +97,10 @@ class HouseDescriptionService
         $apartment = $house->getApartment();
 
         if ($apartment) {
-            return sprintf('%sm<sup>2</sup>', ceil($this->building->getHeatedHouseArea()));
+            return sprintf('%sm<sup>2</sup>', ceil($this->dimensions->getHeatedHouseArea()));
         }
 
-        return sprintf('ogrzewana: %sm<sup>2</sup>, całkowita: %sm<sup>2</sup>', ceil($this->building->getHeatedHouseArea()), ceil($this->building->getTotalHouseArea()));
+        return sprintf('ogrzewana: %sm<sup>2</sup>, całkowita: %sm<sup>2</sup>', ceil($this->dimensions->getHeatedHouseArea()), ceil($this->dimensions->getTotalHouseArea()));
     }
 
     public function getHeatedFloorsDetails()

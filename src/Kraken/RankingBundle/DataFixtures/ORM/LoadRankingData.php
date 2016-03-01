@@ -55,19 +55,16 @@ class LoadRankingData implements FixtureInterface
 
 
         $p1 = new Property;
-        $p1->setPositive(true);
         $p1->setLabel('Sterownik adaptacyjny');
         $p1->setContent('Sam dobiera parametry pracy, bez konieczności ręcznych nastaw');
         $manager->persist($p1);
 
         $p2 = new Property;
-        $p2->setPositive(true);
         $p2->setLabel('Palnik II generacji');
         $p2->setContent('Jest w stanie spalać gorsze, spiekające węgle oraz miał');
         $manager->persist($p2);
 
         $p3 = new Property;
-        $p3->setPositive(true);
         $p3->setLabel('Dopuszczenie do układu zamkniętego');
         $p3->setContent('Kocioł posiada potwierdzone pisemnie zezwolenie na montaż w układzie zamkniętym');
         $manager->persist($p3);
@@ -80,7 +77,7 @@ class LoadRankingData implements FixtureInterface
 
         $b = new Boiler();
         $b->setName('Ogniwo Eko Plus');
-        $b->setCategory($c3);
+        $b->setCategory($c2);
         $b->setManufacturer($m);
 
         $bp1 = new BoilerProperty;

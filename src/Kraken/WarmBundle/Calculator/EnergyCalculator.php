@@ -2,8 +2,10 @@
 
 namespace Kraken\WarmBundle\Calculator;
 
+use Kraken\WarmBundle\Service\DimensionsService;
 use Kraken\WarmBundle\Service\FuelService;
 use Kraken\WarmBundle\Service\InstanceService;
+use Kraken\WarmBundle\Service\HotWaterService;
 
 class EnergyCalculator
 {
@@ -12,14 +14,18 @@ class EnergyCalculator
     protected $fuel_service;
     protected $building;
     protected $climate;
+    protected $dimensions;
+    protected $hotWater;
 
-    public function __construct(InstanceService $instance, HeatingSeason $heatingSeason, FuelService $fuelService, BuildingInterface $building, ClimateZoneService $climate)
+    public function __construct(InstanceService $instance, HeatingSeason $heatingSeason, FuelService $fuelService, BuildingInterface $building, ClimateZoneService $climate, DimensionsService $dimensions, HotWaterService $hotWater)
     {
         $this->instance = $instance;
         $this->heating_season = $heatingSeason;
         $this->fuel_service = $fuelService;
         $this->building = $building;
         $this->climate = $climate;
+        $this->dimensions = $dimensions;
+        $this->hotWater = $hotWater;
     }
 
     /*
@@ -54,27 +60,37 @@ class EnergyCalculator
 
     public function getNecessaryStovePower($fuel = 'coal')
     {
-        $power = $this->getMaxHeatingPower() / 1000;
+        $power = 1.1 * ($this->getMaxHeatingPower() / 1000);
 
         if ($fuel == 'sand_coal') {
-            return 2 * $power;
+            $power *= 2;
         }
 
-        return 1.1 * $power;
+        if ($this->hotWater->isIncluded()) {
+            $power += $this->hotWater->getPower();
+        }
+
+        return $power;
     }
 
     public function getSuggestedAutomaticStovePower()
     {
         $powerNeeded = $this->getMaxHeatingPower() / 1000;
 
-        $variants = array(
-            9 => '7 lub 10',
-            14 => '10-12',
+        if ($this->hotWater->isIncluded()) {
+            $powerNeeded += $this->hotWater->getPower();
+        }
+
+        $variants = [
+            8 => '7-10',
+            12 => '10-12',
+            14 => '12-14',
+            16 => '14-15',
             19 => '17',
             26 => '24',
             38 => '35',
             42 => '40',
-        );
+        ];
 
         foreach ($variants as $threshold => $power) {
             if ($powerNeeded <= $threshold) {
@@ -87,7 +103,7 @@ class EnergyCalculator
 
     public function getYearlyEnergyConsumptionFactor()
     {
-        return $this->getYearlyEnergyConsumption() / $this->building->getHeatedArea();
+        return $this->getYearlyEnergyConsumption() / $this->dimensions->getHeatedArea();
     }
 
     public function getYearlyStoveEfficiency()
@@ -125,7 +141,7 @@ class EnergyCalculator
      */
     public function getHeatDemandFactor()
     {
-        return $this->getMaxHeatingPower() / $this->building->getHeatedArea();
+        return $this->getMaxHeatingPower() / $this->dimensions->getHeatedArea();
     }
 
     /*
@@ -148,7 +164,7 @@ class EnergyCalculator
 
     public function getMaxHeatingPowerPerArea()
     {
-        return $this->getMaxHeatingPower() / $this->building->getHeatedArea();
+        return $this->getMaxHeatingPower() / $this->dimensions->getHeatedArea();
     }
 
     /*
@@ -185,5 +201,38 @@ class EnergyCalculator
         $factor = $this->getNecessaryStovePower() > 10 ? 1.5 : 2;
 
         return $actualStovePower > $factor * $this->getNecessaryStovePower();
+    }
+
+    public function getDailyFuelConsumption($fuel, $day)
+    {
+        $energy = [
+            'coal' => 7.8 * 0.6,
+            'wood' => 5.5 * 0.6,
+            'natural_gas' => 10.5 * 0.9,
+        ];
+
+        $hourlyDemand = $day == 'max' ? $this->getMaxHeatingPower() : $this->getAvgHeatingPower();
+        $dailyDemand = ($hourlyDemand*24)/1000;
+
+        return ceil($dailyDemand/$energy[$fuel]);
+    }
+
+    public function getYearlyFuelConsumption($fuel)
+    {
+        $energy = [
+            'coal' => 7.8 * 0.6,
+            'wood' => 5.5 * 0.6,
+            'natural_gas' => 10.5 * 0.9,
+        ];
+
+        $amount = ceil($this->getYearlyEnergyConsumption()/$energy[$fuel]);
+
+        if ($fuel == 'coal') {
+            $amount /= 1000;
+        } elseif ($fuel == 'wood') {
+            $amount = ceil($amount/500);
+        }
+
+        return $amount;
     }
 }

@@ -13,8 +13,6 @@ interface BuildingInterface
      * @return float
      */
     public function getEnergyLossToUnheated();
-    public function getHeatedArea();
-    public function getNumberOfWalls();
 
     /**
      * @return \Kraken\WarmBundle\Entity\House|null

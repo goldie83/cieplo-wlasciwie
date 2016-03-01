@@ -25,11 +25,11 @@ services:
 
     kraken_warm.house_description:
         class: Kraken\WarmBundle\Service\HouseDescriptionService
-        arguments: [@kraken_warm.instance, @kraken_warm.building]
+        arguments: [@kraken_warm.instance, @kraken_warm.building, @kraken_warm.dimensions]
 
     kraken_warm.energy_calculator:
         class: Kraken\WarmBundle\Calculator\EnergyCalculator
-        arguments: [@kraken_warm.instance, @kraken_warm.heating_season, @kraken_warm.fuel, @kraken_warm.building, @kraken_warm.climate]
+        arguments: [@kraken_warm.instance, @kraken_warm.heating_season, @kraken_warm.fuel, @kraken_warm.building, @kraken_warm.climate, @kraken_warm.dimensions, @kraken_warm.hot_water]
 
     kraken_warm.advice:
         class: Kraken\WarmBundle\Calculator\AdviceGenerator
@@ -47,11 +47,19 @@ services:
         class: Kraken\WarmBundle\Calculator\BuildingClassifier
         arguments: [@kraken_warm.energy_calculator]
 
+    kraken_warm.dimensions:
+        class: Kraken\WarmBundle\Service\DimensionsService
+        arguments: [@kraken_warm.instance]
+
     kraken_warm.fuel:
         class: Kraken\WarmBundle\Service\FuelService
 
     kraken_warm.wall:
         class: Kraken\WarmBundle\Service\WallService
+        arguments: [@kraken_warm.instance]
+
+    kraken_warm.hot_water:
+        class: Kraken\WarmBundle\Service\HotWaterService
         arguments: [@kraken_warm.instance]
 
     kraken_warm.upgrade:
@@ -67,7 +75,7 @@ services:
 
     kraken_warm.ventilation:
         class: Kraken\WarmBundle\Service\VentilationService
-        arguments: [@kraken_warm.instance]
+        arguments: [@kraken_warm.instance, @kraken_warm.dimensions]
 
     kraken_warm.building_factory:
         class:            "Kraken\WarmBundle\Service\BuildingFactory"
@@ -80,3 +88,4 @@ services:
             - "@kraken_warm.ventilation"
             - "@kraken_warm.wall"
             - "@kraken_warm.wall.factory"
+            - "@kraken_warm.dimensions"

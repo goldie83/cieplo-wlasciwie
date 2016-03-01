@@ -6,18 +6,20 @@ class VentilationService
 {
     protected $instance;
     protected $house_service;
+    protected $dimensions;
 
-    public function __construct(InstanceService $instance)
+    public function __construct(InstanceService $instance, DimensionsService $dimensions)
     {
         $this->instance = $instance;
+        $this->dimensions = $dimensions;
     }
 
     public function getAirStream(Building $building)
     {
-        $airCapacity = $building->getHouseCubature();
+        $airCapacity = $this->dimensions->getHouseCubature();
         $exchangeMultiplicity = $this->getAirExchangeMultiplicity($building);
         $neighbourhoodClosenessFactor = 0.03;
-        $buildingHeightFactor = $building->getHouseHeight() > 10 ? 1.2 : 1;
+        $buildingHeightFactor = $this->dimensions->getHouseHeight() > 10 ? 1.2 : 1;
 
         $infiltration = $airCapacity * $exchangeMultiplicity * $neighbourhoodClosenessFactor * $buildingHeightFactor;
 
@@ -26,7 +28,7 @@ class VentilationService
 
     public function getMinimalAirStream(Building $building)
     {
-        $airCapacity = $building->getHouseCubature();
+        $airCapacity = $this->dimensions->getHouseCubature();
 
         return 0.5 * $airCapacity;
     }

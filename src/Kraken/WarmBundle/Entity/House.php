@@ -215,25 +215,25 @@ class House
 
     /**
      * @ORM\ManyToOne(targetEntity="Layer", cascade={"all"})
-     * @ORM\JoinColumn(name="isolation_layer_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     * @ORM\JoinColumn(name="internal_isolation_layer_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
     protected $internal_isolation_layer;
 
     /**
      * @ORM\ManyToOne(targetEntity="Layer", cascade={"all"})
-     * @ORM\JoinColumn(name="extra_isolation_layer_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     * @ORM\JoinColumn(name="external_isolation_layer_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
     protected $external_isolation_layer;
 
     /**
      * @ORM\ManyToOne(targetEntity="Layer", cascade={"all"})
-     * @ORM\JoinColumn(name="highest_ceiling_isolation_layer_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     * @ORM\JoinColumn(name="top_isolation_layer_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
     protected $top_isolation_layer;
 
     /**
      * @ORM\ManyToOne(targetEntity="Layer", cascade={"all"})
-     * @ORM\JoinColumn(name="highest_ceiling_isolation_layer_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
+     * @ORM\JoinColumn(name="bottom_isolation_layer_id", referencedColumnName="id", nullable=true, onDelete="SET NULL")
      */
     protected $bottom_isolation_layer;
 
@@ -1189,7 +1189,7 @@ class House
     /**
      * Get top_isolation_layer
      *
-     * @return \Kraken\WarmBundle\Entity\Layer 
+     * @return \Kraken\WarmBundle\Entity\Layer
      */
     public function getTopIsolationLayer()
     {
@@ -1212,7 +1212,7 @@ class House
     /**
      * Get bottom_isolation_layer
      *
-     * @return \Kraken\WarmBundle\Entity\Layer 
+     * @return \Kraken\WarmBundle\Entity\Layer
      */
     public function getBottomIsolationLayer()
     {

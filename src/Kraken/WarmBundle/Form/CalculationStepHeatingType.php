@@ -77,9 +77,9 @@ class CalculationStepHeatingType extends AbstractType
                 'label' => 'Liczba osób używający ciepłej wody',
             ])
             ->add('hot_water_use', 'choice', [
-                'label' => 'Przewidywana intensywność zużycia wody',
+                'label' => 'Intensywność zużycia wody',
                 'choices' => [
-                    'shower' => 'tylko prysznice',
+                    'shower' => 'w domu tylko prysznice',
                     'shower_bath' => 'głównie prysznice, czasem wanna',
                     'bath' => 'codziennie wanna dla każdego',
                 ],

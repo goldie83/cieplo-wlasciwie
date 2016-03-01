@@ -3,6 +3,7 @@
 namespace Kraken\WarmBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
+use Kraken\WarmBundle\Entity\Calculation;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -15,18 +16,7 @@ class CalculationStepLocationType extends AbstractType
 
         $builder
             ->add('construction_year', 'choice', array(
-                'choices' => [
-                    2011 => '2011 – 2016',
-                    2000 => '2000 – 2010',
-                    1990 => 'lata 90-te',
-                    1980 => 'lata 80-te',
-                    1970 => 'lata 70-te',
-                    1960 => 'lata 60-te',
-                    1950 => 'lata 50-te',
-                    1940 => 'lata 40-te',
-                    1939 => 'gdzieś przed II wojną',
-                    1914 => 'gdzieś przed I wojną',
-                ],
+                'choices' => Calculation::$constructionYears,
                 'required' => true,
                 'label' => 'Lata budowy domu',
             ))

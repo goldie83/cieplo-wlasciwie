@@ -122,6 +122,19 @@ class Calculation
      */
     protected $hot_water_use;
 
+    public static $constructionYears = [
+        2011 => '2011 – 2016',
+        2000 => '2000 – 2010',
+        1990 => 'lata 90-te',
+        1980 => 'lata 80-te',
+        1970 => 'lata 70-te',
+        1960 => 'lata 60-te',
+        1950 => 'lata 50-te',
+        1940 => 'lata 40-te',
+        1939 => 'gdzieś przed II wojną',
+        1914 => 'gdzieś przed I wojną',
+    ];
+
     public static function create()
     {
         $calc = new self();
@@ -187,6 +200,11 @@ class Calculation
     public function getConstructionYear()
     {
         return $this->construction_year;
+    }
+
+    public function getConstructionPeriod()
+    {
+        return self::$constructionYears[$this->construction_year];
     }
 
     public function setLatitude($latitude)

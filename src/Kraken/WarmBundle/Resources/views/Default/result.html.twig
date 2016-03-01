@@ -15,43 +15,29 @@
 
 <div class="container">
     <div class="well bs-component">
-        <div class="page-header">
-          <h1>{{ describer.headline|raw }} <small>{{ city.name }} i okolice</small></h1>
-        </div>
-
         <div class="row">
-            <div class="col-md-12">
-                <ul class="nav nav-pills pull-left">
-                  <li class="active"><a href="{{ url('result', {'slug': calc.slug}) }}">Bilans cieplny</a></li>
-                  <li><a href="{{ url('heaters', {'slug': calc.slug}) }}">Dobór grzejników</a></li>
-                </ul>
-
-                {{ block('edit_button') }}
-            </div>
+          <div class="col-md-6">
+              <h1>{{ describer.headline|raw }}</h1>
+              <p class="lead">z lat {{ calc.constructionPeriod }}, {{ dimensions.heatedHouseArea }}m<sup>2</sup> ogrzewane, {{ city.name }} i okolice</p>
+          </div>
+          <div class="rank col-md-6">
+              <span class="class-badge {{ classifier.classString }}-class">{{ classifier.class }}</span>
+              <h3>{{ classifier.classLabel }}</h3>
+          </div>
         </div>
 
         <div class="row" id="info">
           <div class="col-md-6">
-            <div class="rank">
-                <span class="class-badge {{ classifier.classString }}-class">{{ classifier.class }}</span>
-                <h3>{{ classifier.classLabel }}</h3>
-            </div>
-            <p style="text-align:right;font-size:11px"><a href="{{ url('how_it_works') }}#klasyfikacja" target="_blank">Co to znaczy?</a></p>
-
             <h3>W skrócie o budynku</h3>
             <table class="table table-condensed">
-                <thead>
-                    <tr><th colspan="2">{{ describer.headline|raw }}</th></tr>
-                </thead>
                 <tbody>
-                    <tr><td class="col-md-4">Lokalizacja</td><td>{{ city.name }} i okolice</td></tr>
                 {% if calc.buildingType == 'apartment' %}
-                    <tr><td class="col-md-4">Powierzchnia ogrzewana</td><td class="col-md-8">{{ describer.areaDetails|raw }}</td></tr>
+                    <tr><td class="col-md-4">Powierzchnia</td><td class="col-md-8">{{ describer.areaDetails|raw }}</td></tr>
                     <tr><td class="col-md-4">Ściany</td><td class="col-md-8">{{ describer.wallDetails}}</td></tr>
                     <tr><td class="col-md-4">Ogrzewane piętra</td><td class="col-md-8">{{ describer.heatedFloorsDetails }}</td></tr>
                     <tr><td class="col-md-4">Usytuowanie</td><td class="col-md-8">{{ describer.apartmentSituationDetails|raw }}</td></tr>
                 {% else %}
-                    <tr><td class="col-md-4">Powierzchnia budynku</td><td class="col-md-8">{{ describer.areaDetails|raw }}</td></tr>
+                    <tr><td class="col-md-4">Powierzchnia</td><td class="col-md-8">{{ describer.areaDetails|raw }}</td></tr>
                     <tr><td class="col-md-4">Ściany</td><td class="col-md-8">{{ describer.wallDetails}}</td></tr>
                     <tr><td class="col-md-4">Ogrzewane piętra</td><td class="col-md-8">{{ describer.heatedFloorsDetails }}</td></tr>
                     {% if building.hasUnheatedFloors %}
@@ -64,21 +50,41 @@
                     <tr><td class="col-md-4">Wentylacja</td><td class="col-md-8">{{ describer.ventilationDetails}}</td></tr>
                 </tbody>
             </table>
-          </div>
-          <div class="col-md-6">
-            <div class="alert alert-success">
-                <h4>Udostępnij wynik</h4>
-                {% set resultUrl = url('result', {'slug': app.request.get('slug') }) %}
-                Link do niniejszego wyniku to: <strong><a href="{{ resultUrl }}">{{ resultUrl }}</a></strong>. <br />Używając go możesz później wrócić do tej strony, przesłać ten wynik innej osobie lub umieścić np. na forum.
-            </div>
 
-            <h3>Warunki klimatyczne ({{ city.name }})</h3>
+            <h3>Warunki klimatyczne</h3>
             {% set averageTemperature = heatingSeason.getAverageTemperature(calc) %}
             {% set lastYearAverageTemperature = heatingSeason.getLastYearAverageTemperature(calc) %}
+            <p>{{ city.name }} leży w <strong>{{ climate.climateZone }}.</strong> <a href="http://www.hvacr.pl/public/styles/img_640/public/vademecum/mainPhoto/12/strefy_klimatyczne_polska.jpg" target="_blank">strefie klimatycznej</a>.
+             Dlatego zapotrzebowanie na ciepło oblicza się dla średniej dobowej temperatury <strong>{{ climate.designOutdoorTemperature }}&deg;C</strong>.</p>
             <p>Przeciętny sezon grzewczy trwa u ciebie ok. <strong>{{ heatingSeason.getSeasonLength(calc) }} dni</strong>, ze średnią temperaturą <strong>{{ averageTemperature|number_format(2, ',', ' ') }}&deg;C</strong>.</p>
             <p>Poprzedni sezon grzewczy trwał ok. <strong>{{ heatingSeason.getLastSeasonLength(calc) }} dni</strong>, ze średnią temperaturą <strong>{{ lastYearAverageTemperature|number_format(2, ',', ' ') }}&deg;C</strong>.</p>
-            <p>{{ city.name }} leży w <strong>{{ climate.climateZone }}.</strong> <a href="http://www.hvacr.pl/public/styles/img_640/public/vademecum/mainPhoto/12/strefy_klimatyczne_polska.jpg" target="_blank">strefie klimatycznej</a>.
-            w której maksymalne zapotrzebowanie na ciepło oblicza się dla średniej dobowej temperatury <strong>{{ climate.designOutdoorTemperature }}&deg;C</strong>.</p>
+          </div>
+          <div class="col-md-6">
+            <h3>Ile ciepła potrzebuje twój dom</h3>
+            <p><strong>{{ calc.indoorTemperature|number_format(1, ',', ' ') }}&deg;C</strong> to średnia dobowa temperatura w twoim domu w ciągu zimy.</p>
+
+            <h4><span class="label label-warning">{{ (calculator.maxHeatingPower/1000)|number_format(1, ',', ' ') ~ 'kW' }}</span> maksymalna moc grzewcza</h4>
+            <p>Tyle będzie potrzebne w "najmroźniejszy" dzień, przy średniej dobowej <strong>{{ climate.designOutdoorTemperature }}&deg;C</strong></p>
+            <h4><span class="label label-default">{{ (calculator.avgHeatingPower/1000)|number_format(1, ',', ' ') ~ 'kW' }}</span> średnia moc grzewcza</h4>
+            <p>Tyle będzie potrzebne w przeciętny dzień zimy, przy średniej dobowej <strong>{{ heatingSeason.getAverageTemperature()|number_format(1, ',', ' ') }}&deg;C</strong></p>
+            <h4><span class="label label-default">{{ calculator.maxHeatingPowerPerArea|number_format(0, ',', ' ') }}W/m<sup>2</sup></span> wskaźnik zapotrzebowania na moc</h4>
+            {% if calculator.maxHeatingPowerPerArea < 85 %}
+                <p>Dlaczego więc producent/sprzedawca/instalator kotła startują od 100W/m<sup>2</sup> wzwyż?</p>
+            {% else %}
+                <p>&nbsp;</p>
+            {% endif %}
+            <h4><span class="label label-default">{{ calculator.yearlyEnergyConsumption|number_format(0, ',', ' ') }}kWh</span> całkowite roczne zużycie energii na ogrzewanie</h4>
+            <p>Nieważne czym grzejesz, tyle ciepła musisz wyprodukować.</p>
+            <h4><span class="label label-default">{{ calculator.yearlyEnergyConsumptionFactor|number_format(0, ',', ' ') }}kWh/m<sup>2</sup>*rok</span> wskaźnik zużycia energii</h4>
+            <p>Na tej podstawie twój dom zalicza się do <a href="http://cieplowlasciwie.pl/jak-to-dziala#klasyfikacja" target="_blank">klasy energetycznej&nbsp;<strong>{{ classifier.class }}</strong></a></p>
+
+            {% if hotWater.included %}
+                <h3>Przygotowanie ciepłej wody użytkowej (CWU)</h3>
+                <h4><span class="label label-warning">{{ (hotWater.power)|number_format(0, ',', ' ') ~ 'kW' }}</span> dodatkowa moc potrzebna do grzania CWU</h4>
+                <p>To wystarczy. Po to stawia się duży zasobnik, aby można było grzać go powoli, niedużą mocą. Dla odmiany grzanie przepływowe wymaga mocy ponad 30kW.</p>
+                <h4><span class="label label-default">~{{ (hotWater.tankCapacity)|number_format(0, ',', ' ') ~ 'l' }}</span> minimalna pojemność bojlera</h4>
+                <p>W najgorszym razie nagrzanie całego zasobnika od temperatury kranowej do <strong>60&deg;C</strong> potrwa 2 godziny.</p>
+             {% endif %}
           </div>
         </div>
 
@@ -88,57 +94,72 @@
         <div class="row">
           <div class="col-md-6">
               <h3>Jak obecnie ogrzewasz</h3>
-                {% set stoveEfficiency = calc.fuelConsumptionProvided ? calculator.yearlyStoveEfficiency*100 : 0 %}
-                <dl>
-                  {% if calc.heatingDevice %}
-                    <h4>{{ calc.heatingDevice.name }} {% if calc.stovePower %}o mocy {{ calc.stovePower|number_format(0, ',', ' ') ~ 'kW' }}{% endif %}</h4>
-                  {% endif %}
-                  {% if calc.fuelConsumptionProvided %}
-                    <dt>{{ fuelService.formatFuelConsumption(calc) }}</dt>
-                    <dd>zużycie paliwa w sezonie grzewczym</dd>
-                  {% endif %}
-                  {% if calc.fuelCost %}
-                    <dt>{{ calc.fuelCost|number_format(0, ',', ' ') }}zł</dt>
-                    <dd>roczny koszt ogrzewania</dd>
-                  {% endif %}
-                  <dt>{{ calc.indoorTemperature|number_format(1, ',', ' ') }}&deg;C</dt>
-                  <dd>średnia temperatura w domu w ciągu zimy</dd>
-                </dl>
-
-                {% if calc.stovePower %}
-                  {% if calculator.isStoveOversized and (not calc.fuelConsumptionProvided or stoveEfficiency < 40) %}
-                      <div class="alert alert-danger">
-                        <h4>Zbyt duża moc kotła drenuje ci portfel</h4>
-                        Przez ten zbędny zapas mocy płacisz za opał, który bez pożytku ucieka kominem.
-                        <a href="http://czysteogrzewanie.pl/zakupy/mocy-przybywaj-dobor-mocy-kotla-weglowego/#Co_zrobi_z_przewymiarowanym_kotem" target="_blank">Zobacz, dlaczego tak jest i jak to tanio naprawić</a>.
-                      </div>
-                  {% endif %}
+              {% set stoveEfficiency = calc.fuelConsumptionProvided ? calculator.yearlyStoveEfficiency*100 : 0 %}
+              <dl>
+                {% if calc.heatingDevice %}
+                  <h4>{{ calc.heatingDevice.name }} {% if calc.stovePower %}o mocy {{ calc.stovePower|number_format(0, ',', ' ') ~ 'kW' }}{% endif %}</h4>
                 {% endif %}
+                {% if calc.fuelConsumptionProvided %}
+                  <dt>{{ fuelService.formatFuelConsumption(calc) }}</dt>
+                  <dd>zużycie paliwa w sezonie grzewczym</dd>
+                {% endif %}
+                {% if calc.fuelCost %}
+                  <dt>{{ calc.fuelCost|number_format(0, ',', ' ') }}zł</dt>
+                  <dd>roczny koszt ogrzewania</dd>
+                {% endif %}
+              </dl>
 
-                {{ include('KrakenWarmBundle:Default:legacySetupEfficiency.html.twig', { 'calc': calc }) }}
+              {% if calc.stovePower %}
+                {% if calculator.isStoveOversized and (not calc.fuelConsumptionProvided or stoveEfficiency < 40) %}
+                    <div class="alert alert-danger">
+                      <h4>Zbyt duża moc kotła drenuje ci portfel</h4>
+                      Przez ten zbędny zapas mocy płacisz za opał, który bez pożytku ucieka kominem.
+                      <a href="http://czysteogrzewanie.pl/zakupy/mocy-przybywaj-dobor-mocy-kotla-weglowego/#Co_zrobi_z_przewymiarowanym_kotem" target="_blank">Zobacz, dlaczego tak jest i jak to tanio naprawić</a>.
+                    </div>
+                {% endif %}
+              {% endif %}
+
+              {{ include('KrakenWarmBundle:Default:legacySetupEfficiency.html.twig', { 'calc': calc }) }}
+
+              <h3>Jakie powinno być zużycie opału</h3>
+              <h4>W najmroźniejszy dzień</h4>
+              <ul>
+                  <li>~{{ calculator.dailyFuelConsumption('coal', 'max') }}kg węgla kamiennego na dobę, lub</li>
+                  <li>~{{ calculator.dailyFuelConsumption('wood', 'max') }}kg drewna na dobę, lub</li>
+                  <li>~{{ calculator.dailyFuelConsumption('natural_gas', 'max') }}m<sup>3</sup> gazu ziemnego na dobę</li>
+              </ul>
+              <h4>W przeciętny dzień zimy</h4>
+              <ul>
+                  <li>~{{ calculator.dailyFuelConsumption('coal', 'avg') }}kg węgla kamiennego na dobę, lub</li>
+                  <li>~{{ calculator.dailyFuelConsumption('wood', 'avg') }}kg drewna na dobę, lub</li>
+                  <li>~{{ calculator.dailyFuelConsumption('natural_gas', 'avg') }}m<sup>3</sup> gazu ziemnego na dobę</li>
+              </ul>
+              <h4>W ciągu sezonu grzewczego</h4>
+              <ul>
+                  <li>~{{ calculator.yearlyFuelConsumption('coal')|number_format(1, ',', ' ') }}t węgla kamiennego, lub</li>
+                  <li>~{{ calculator.yearlyFuelConsumption('wood')|number_format(0, ',', ' ') }}mp drewna, lub</li>
+                  <li>~{{ calculator.yearlyFuelConsumption('natural_gas')|number_format(0, ',', ' ') }}m<sup>3</sup> gazu ziemnego</li>
+              </ul>
           </div>
           <div class="col-md-6">
-              <h3>Ile ciepła potrzebuje twój dom</h3>
-              <dl>
-                <dt>{{ (calculator.maxHeatingPower/1000)|number_format(1, ',', ' ') ~ 'kW' }}</dt>
-                <dd>maksymalna moc grzewcza jakiej potrzebuje twój dom w największy mróz</dd>
-                <dt>{{ calculator.maxHeatingPowerPerArea|number_format(0, ',', ' ') }}W/m<sup>2</sup></dt>
-                <dd>wskaźnik mocy kotła względem ogrzewanego metrażu</dd>
-                <dt>{{ calculator.yearlyEnergyConsumption|number_format(0, ',', ' ') }}kWh</dt>
-                <dd>tyle ciepła zużyje dom w ciągu całego sezonu grzewczego</dd>
-                <dt>{{ calculator.yearlyEnergyConsumptionFactor|number_format(0, ',', ' ') }}kWh/m<sup>2</sup>*rok</dt>
-                <dd>zużycie roczne energii w przeliczeniu na 1m<sup>2</sup> - zalicza twój dom do klasy energetycznej&nbsp;<strong>{{ classifier.class }}</strong></dd>
-              </dl>
-              <h4>W najmroźniejszy dzień zimy <small>średnia dobowa {{ heatingSeason.getLowestTemperature()|number_format(0, ',', ' ') }}&deg;C na zewnątrz</small></h4>
-              <dl>
-                <dt>{{ (calculator.maxHeatingPower/1000)|number_format(1, ',', ' ') ~ 'kW' }}</dt>
-                <dd>potrzebna moc grzewcza</dd>
-              </dl>
-              <h4>W przeciętny dzień zimy <small>{{ heatingSeason.getAverageTemperature()|number_format(1, ',', ' ') }}&deg;C na zewnątrz</small></h4>
-              <dl>
-                <dt>{{ (calculator.avgHeatingPower/1000)|number_format(1, ',', ' ') ~ 'kW' }}</dt>
-                <dd>potrzebna moc grzewcza</dd>
-              </dl>
+              <h3>Jakiej mocy kotła potrzebujesz</h3>
+              <h4><span class="label label-warning">{{ powerNeeded|number_format(0, ',', ' ') ~ 'kW' }}</span> to potrzebna moc grzewcza {% if hotWater.included %}(C.O. + CWU){% else %}(C.O. bez CWU){% endif %}</h4>
+              <p>Ta moc uwzględnia w pełni zapotrzebowanie budynku na ciepło do ogrzewania{% if hotWater.included %}, moc na potrzeby przygotowania ciepłej wody (CWU){% endif %} oraz rozsądny zapas przewidziany normami.</p>
+              <p>Nie znaczy to, że masz wstawić kocioł idealnie o takiej mocy, ale <strong>nie kupuj dwa-trzy razy większego</strong> nawet jeśli sprzedawca, instalator, szwagier i sąsiad zgodnie twierdzą inaczej. <a href="http://czysteogrzewanie.pl/zakupy/mocy-przybywaj-dobor-mocy-kotla-weglowego/#Czym_grozi_zbyt_dua_moc_kota" target="_blank">To ty zapłacisz za jego nadmierny apetyt na opał</a>, a fachowcy i <em>doradcy społeczni</em> umyją ręce.</p>
+              <h4>Sugerowane moce kotłów zależnie od rodzaju</h4>
+              <h5>Kocioł zasypowy: <span class="label label-warning">{{ (1.1*powerNeeded)|number_format(0, ',', ' ') ~ '-' ~ (1.25*powerNeeded)|number_format(0, ',', ' ') ~ 'kW' }}</span></h5>
+              <div class="alert alert-info">
+                  <h4>Zwracaj uwagę na paliwo podstawowe kotła</h4>
+                  Moc nominalna kotłów zasypowych obowiązuje dla paliwa podstawowego &mdash; przeważnie jest to węgiel kamienny. Jeśli zamierzasz zawsze palić czymś mniej kalorycznym, weź pod uwagę, że <strong>moc kotła będzie niższa</strong>, np. dla drewna o&nbsp;ok.&nbsp;30%.
+              </div>
+              <h5>Kocioł miałowy: <span class="label label-warning">{{ sandCoalPowerNeeded|number_format(0, ',', ' ') ~ '-' ~  (1.2*sandCoalPowerNeeded)|number_format(0, ',', ' ') ~ 'kW' }}</span></h5>
+              <dd><a href="http://czysteogrzewanie.pl/zakupy/mocy-przybywaj-dobor-mocy-kotla-weglowego/#Wyjtek_dla_kotw_miaowych" target="_blank">Kocioł miałowy dobiera się nieco inaczej</a>. Taka moc ma pojemność zasypu wystarczającą do bezobsługowej pracy przez jedną dobę, jeśli będzie rozpalany od góry (a to jedyny wygodny sposób palenia miałem).</dd>
+              {% set automaticStovePower = calculator.suggestedAutomaticStovePower %}
+              <h5>Kocioł podajnikowy: <span class="label label-warning">{{ automaticStovePower ~ 'kW' }}</span></h5>
+              <p>Kotły podajnikowe (zwłaszcza te najmniejsze) posiadają co najmniej kilka kilowatów zapasu ponad moc nominalną (czy tak jest i o ile - dowiesz się z DTR kotła), więc często nie ma potrzeby kupowania wyższego wariantu mocy, gdy potrzeby domu są na styk z wariantem niższym.</p>
+              <h5>Kocioł gazowy: <span class="label label-warning">{{ (1.2*powerNeeded)|number_format(0, ',', ' ') ~ 'kW' }}</span></h5>
+              <p>Kotły gazowe pracują z dobrą sprawnością nawet na niskich mocach, dlatego przy wyborze kieruj się zaleceniami producenta (również w doborze mocy na potrzeby CWU).<br />
+                  Instalując kocioł kondensacyjny pamiętaj o takim zaprojektowaniu instalacji, <a href="http://czysteogrzewanie.pl/zakupy/mocy-przybywaj-dobor-mocy-kotla-weglowego/#Koty_gazowe" target="_blank">aby temperatura wody nie musiała przekraczać 60&deg;C</a> - inaczej nici z kondensacji i rachunki wzrosną.</p>
           </div>
         </div>
 
@@ -164,7 +185,7 @@
         </div>
 
         <div class="page-header" id="rady">
-          <h2>Jak żyć</h2>
+          <h2>Co warto zmienić</h2>
         </div>
         <div class="row">
           <div class="col-md-6">
@@ -220,38 +241,6 @@
                   </div>
               </div>
             </div>
-
-            <h3>Jakiej mocy kotła szukać?</h3>
-            <div class="alert alert-danger">Podane niżej moce dotyczą wyłącznie ogrzewania budynku. Dla podgrzewania wody (CWU) <a href="http://czysteogrzewanie.pl/zakupy/co-za-duzo-to-niezdrowo-dobor-mocy-kotla-weglowego/#Ile_mocy_na_potrzeby_CWU" target="_blank">trzeba dodać co nieco kilowatów</a>.</div>
-            <dl>
-            {% if powerNeeded > 3 %}
-              <dt>{{ (1.1*powerNeeded)|number_format(0, ',', ' ') ~ '-' ~ (1.25*powerNeeded)|number_format(0, ',', ' ') ~ 'kW' }} dla kotła zasypowego</dt>
-              <dd>Nie kupuj dwa-trzy raz większego kotła nawet jeśli sprzedawca, instalator, szwagier i sąsiedzi twierdzą inaczej. <a href="http://czysteogrzewanie.pl/zakupy/mocy-przybywaj-dobor-mocy-kotla-weglowego/#Czym_grozi_zbyt_dua_moc_kota" target="_blank">To ty będziesz miał z nim kosztowne problemy</a>, a oni umyją ręce tak czy inaczej.
-              </dd>
-              {% set automaticStovePower = calculator.suggestedAutomaticStovePower %}
-              <dt>{{ automaticStovePower ~ 'kW' }} dla kotła podajnikowego</dt>
-              <dd>Kotły podajnikowe (zwłaszcza te najmniejsze) posiadają nawet 30% zapasu ponad moc nominalną (potwierdzenie znajdziesz w DTR kotła), więc często nie ma potrzeby kupowania wyższego wariantu mocy, gdy potrzeby domu są na styk z wariantem niższym.</dd>
-              <dt>{{ sandCoalPowerNeeded|number_format(0, ',', ' ') ~ '-' ~  (1.2*sandCoalPowerNeeded)|number_format(0, ',', ' ') ~ 'kW' }} dla kotła miałowego</dt>
-              <dd><a href="http://czysteogrzewanie.pl/zakupy/mocy-przybywaj-dobor-mocy-kotla-weglowego/#Wyjtek_dla_kotw_miaowych" target="_blank">Kocioł miałowy dobiera się nieco inaczej</a>. Taka moc ma pojemność zasypu wystarczającą do bezobsługowej pracy przez jedną dobę, jeśli będzie rozpalany od góry (a to jedyny wygodny sposób palenia miałem).</dd>
-            {% else %}
-                <dt>Zapomnij o kotle węglowym</dt>
-                <p>Nie istnieją kotły węglowe pracujące efektywnie z tak małą mocą.</p>
-            {% endif %}
-              <dt>min. {{ (1.2*powerNeeded)|number_format(0, ',', ' ') ~ 'kW' }} dla kotła gazowego</dt>
-              <dd>Kotły gazowe pracują z dobrą sprawnością nawet na niskich mocach, dlatego przy wyborze kieruj się zaleceniami producenta (również w doborze mocy na potrzeby CWU).<br />
-                  Instalując kocioł kondensacyjny pamiętaj o takim zaprojektowaniu instalacji, <a href="http://czysteogrzewanie.pl/zakupy/mocy-przybywaj-dobor-mocy-kotla-weglowego/#Koty_gazowe" target="_blank">aby temperatura wody nie musiała przekraczać 60&deg;C</a> - inaczej nici z kondensacji i rachunki wzrosną.</dd>
-            </dl>
-            {% if powerNeeded > 3 and powerNeeded <= 10 %}
-                <div class="alert alert-warning">
-                  <h4>Co jeśli nie znajdę kotła zasypowego o tak małej mocy?</h4>
-                  <ul>
-                      <li><a href="http://czysteogrzewanie.pl/warsztat/bufor-ciepla/" target="_blank"><strong>zainstaluj bufor ciepła</strong></a> - dzięki niemu kocioł zasypowy zbliża się wygodą obsługi i efektywnością do kotłów na ekogroszek, a koszty ogrzewania są niższe dzięki tańszemu paliwu i lepszej efektywności pracy. Wtedy moc kotła może być większa, bo dobiera się ją do pojemności bufora, a nie do budynku.</li>
-                      <li><a href="http://czysteogrzewanie.pl/2014/05/nie-pakuj-smieciucha-do-nowego-domu" target="_blank">rozważ inne rodzaje ogrzewania</a>, np. kocioł na ekogroszek, pellet, gaz ziemny czy pompę ciepła. W nowych malutkich domach różnice w rachunkach między tymi źródłami ciepła to 200-300zł.</li>
-                      <li>w ostateczności bierz kocioł zasypowy o mocy ok. 10-12kW, ale jeśli zaprzęgniesz go do instalacji z przewagą podłogówki, to szybko doświadczysz problemów (ot choćby hurtowej produkcji smoły), których uniknąłbyś montując od razu <a href="http://czysteogrzewanie.pl/warsztat/bufor-ciepla/" target="_blank">bufor ciepła</a>.</li>
-                  </ul>
-                </div>
-            {% endif %}
-
           </div>
           <div class="col-md-6">
           {% if calc.fuelConsumptionProvided %}
@@ -314,6 +303,7 @@
         </div>
 
         {{ block('edit_button') }}
+        <br style="clear:both"/>
     </div>
 </div>
 
