@@ -237,6 +237,11 @@ class House
      */
     protected $bottom_isolation_layer;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    protected $is_row_house_on_corner;
+
     public function areDimensionsValid(ExecutionContext $context)
     {
         if (!$this->area && !$this->building_length && !$this->building_width) {
@@ -1215,5 +1220,17 @@ class House
     public function getBottomIsolationLayer()
     {
         return $this->bottom_isolation_layer;
+    }
+
+    public function isRowHouseOnCorner()
+    {
+        return $this->is_row_house_on_corner;
+    }
+
+    public function setRowHouseOnCorner($onCorner)
+    {
+        $this->setRowHouseOnCorner($onCorner);
+
+        return $this;
     }
 }

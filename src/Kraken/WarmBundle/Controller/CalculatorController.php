@@ -146,7 +146,7 @@ class CalculatorController extends Controller
         if ($calc->getBuildingType() == 'apartment') {
             $form = $this->createForm(new CalculationApartmentStepDimensionsType(), $calc->getHouse());
         } else {
-            $form = $this->createForm(new CalculationStepDimensionsType(), $calc->getHouse());
+            $form = $this->createForm(new CalculationStepDimensionsType(), $calc->getHouse(), ['building_type' => $calc->getBuildingType()]);
         }
 
         $form->handleRequest($request);

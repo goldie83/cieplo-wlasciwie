@@ -116,12 +116,26 @@ class CalculationStepDimensionsType extends AbstractType
                 'label' => 'Dom ma garaż w bryle budynku',
             ])
         ;
+
+        if ($options['building_type'] == 'row_house') {
+            $builder
+                ->add('is_row_house_on_corner', 'choice', [
+                    'label' => 'Pozycja w zabudowie szeregowej',
+                    'choices' => [
+                        'Dom w środku szeregu (dwóch bezpośrednich sąsiadów)',
+                        'Dom narożny (jeden bezpośredni sąsiad)',
+                    ],
+                    'expanded' => true
+                ])
+            ;
+        }
     }
 
     public function configureOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'Kraken\WarmBundle\Entity\House',
+            'building_type' => 'single_house',
         ));
     }
 

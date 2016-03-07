@@ -206,7 +206,7 @@ class DimensionsService
         if ($this->getInstance()->getBuildingType() == 'apartment') {
             return $this->getInstance()->getHouse()->getApartment()->getNumberExternalWalls();
         } elseif ($this->getInstance()->getBuildingType() == 'row_house') {
-            return 2;
+            return $this->getInstance()->getHouse()->isRowHouseOnCorner() ? 3 : 2;
         } elseif ($this->getInstance()->getBuildingType() == 'double_house') {
             return 3;
         }
