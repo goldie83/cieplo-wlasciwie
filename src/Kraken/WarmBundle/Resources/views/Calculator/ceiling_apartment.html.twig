@@ -13,7 +13,7 @@
         <form action="{{ path('ceiling', {slug: calc.slug}) }}" class="form-horizontal" method="post">
         <div class="row">
             <div class="col-md-12">
-                  <h2>Poddasze i parter</h2>
+                  <h2>Sąsiedztwo</h2>
             </div>
         </div>
         <div class="row">
@@ -24,7 +24,20 @@
                     </div>
                     {{ form_errors(form) }}
                 {% endif %}
-TODO dostosować nazewnictwo do faktycznie ogrzewanych pięter
+                {{ form_row(form.whats_over) }}
+                <div id="top_isolation_details" style="display:none">
+                    {{ form_row(form.has_top_isolation) }}
+                    <div id="top_isolation_layer" style="display:none">
+                        {{ form_row(form.top_isolation_layer) }}
+                    </div>
+                </div>
+                {{ form_row(form.whats_under) }}
+                <div id="bottom_isolation_details" style="display:none">
+                    {{ form_row(form.has_bottom_isolation) }}
+                    <div id="bottom_isolation_layer" style="display:none">
+                        {{ form_row(form.bottom_isolation_layer) }}
+                    </div>
+                </div>
                 {{ form_rest(form) }}
             </div>
             <div class="col-md-6">
@@ -35,7 +48,6 @@ TODO dostosować nazewnictwo do faktycznie ogrzewanych pięter
             <div class="col-md-12">
                 <div class="form-actions">
                   <p><span class="asterisk">*</span> - pola wymagane</p>
-                  {{ form_rest(form) }}
                   <button type="submit" class="btn btn-raised btn-primary pull-right">Dalej</button>
                 </div>
             </div>
@@ -44,5 +56,10 @@ TODO dostosować nazewnictwo do faktycznie ogrzewanych pięter
     </div>
 </div>
 
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/krakenwarm/js/ceiling_apartment.js') }}"></script>
 {% endblock %}
 

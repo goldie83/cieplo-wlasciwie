@@ -109,6 +109,12 @@ class CalculationStepDimensionsType extends AbstractType
                 'label' => 'Wysokość pięter',
                 'required' => true,
             ))
+            ->add('has_balcony', null, [
+                'label' => 'Dom ma balkon(y)',
+            ])
+            ->add('has_garage', null, [
+                'label' => 'Dom ma garaż w bryle budynku',
+            ])
         ;
     }
 

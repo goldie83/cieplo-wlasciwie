@@ -62,7 +62,8 @@ gulp.task('vendor:js', ['clean:js'], function(){
     './bower/raphael/raphael-min.js',
     './bower/bootstrap/dist/js/bootstrap.js',
     './bower/bootstrap-material-design/dist/js/material.js',
-    './bower/bootstrap-material-design/dist/js/ripples.js'
+    './bower/bootstrap-material-design/dist/js/ripples.js',
+    './vendor/mopa/bootstrap-bundle/Mopa/Bundle/BootstrapBundle/Resources/public/js/mopabootstrap-collection.js'
   ]).pipe(concat('vendor.js')).pipe(uglify()).pipe(gulp.dest('./web/assets/js'));
 });
 

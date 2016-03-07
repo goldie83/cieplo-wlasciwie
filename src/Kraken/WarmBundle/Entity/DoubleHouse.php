@@ -141,8 +141,6 @@ class DoubleHouse
     public static function create()
     {
         $house = new House();
-        $wall = new Wall();
-        $house->addWall($wall);
 
         return $house;
     }

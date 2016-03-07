@@ -9,6 +9,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Kraken\WarmBundle\Form\CalculationApartmentStepDimensionsType;
+use Kraken\WarmBundle\Form\CalculationApartmentStepCeilingType;
 use Kraken\WarmBundle\Form\CalculationFormType;
 use Kraken\WarmBundle\Form\CalculationStepCeilingType;
 use Kraken\WarmBundle\Form\CalculationStepDimensionsType;
@@ -18,10 +20,11 @@ use Kraken\WarmBundle\Form\CalculationStepWallsType;
 use Kraken\WarmBundle\Form\CalculationStepOneType;
 use Kraken\WarmBundle\Form\HouseApartmentType;
 use Kraken\WarmBundle\Form\HouseType;
+use Kraken\WarmBundle\Entity\Apartment;
 use Kraken\WarmBundle\Entity\Calculation;
 use Kraken\WarmBundle\Entity\House;
-use Kraken\WarmBundle\Entity\Wall;
 use Kraken\WarmBundle\Entity\Layer;
+use Kraken\WarmBundle\Entity\Wall;
 
 class CalculatorController extends Controller
 {
@@ -41,6 +44,7 @@ class CalculatorController extends Controller
 
         if (!$calc) {
             $calc = Calculation::create();
+            $this->get('session')->set('is_form_filled_first_time', true);
         }
 
         $em = $this->getDoctrine()->getManager();
@@ -139,7 +143,12 @@ class CalculatorController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        $form = $this->createForm(new CalculationStepDimensionsType(), $calc->getHouse());
+        if ($calc->getBuildingType() == 'apartment') {
+            $form = $this->createForm(new CalculationApartmentStepDimensionsType(), $calc->getHouse());
+        } else {
+            $form = $this->createForm(new CalculationStepDimensionsType(), $calc->getHouse());
+        }
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -158,7 +167,11 @@ class CalculatorController extends Controller
             return $this->redirect($redirect);
         }
 
-        return $this->render('KrakenWarmBundle:Calculator:dimensions.html.twig', array(
+        $template = $calc->getBuildingType() == 'apartment'
+            ? 'KrakenWarmBundle:Calculator:dimensions_apartment.html.twig'
+            : 'KrakenWarmBundle:Calculator:dimensions.html.twig';
+
+        return $this->render($template, array(
             'calc' => $calc,
             'form' => $form->createView(),
         ));
@@ -229,14 +242,48 @@ class CalculatorController extends Controller
             $house->setDoorsType('new_wooden');
         }
 
-        $form = $this->createForm(new CalculationStepCeilingType(), $house);
+        if ($calc->getBuildingType() == 'apartment') {
+            if (!$calc->getHouse()->getApartment()) {
+                $apartment = Apartment::create();
+                $house->setApartment($apartment);
+            }
+
+            $form = $this->createForm(new CalculationApartmentStepCeilingType(), $house->getApartment());
+
+            if ($house->getTopIsolationLayer()) {
+                $form->get('top_isolation_layer')->setData($house->getTopIsolationLayer());
+            }
+            if ($house->getBottomIsolationLayer()) {
+                $form->get('bottom_isolation_layer')->setData($house->getBottomIsolationLayer());
+            }
+        } else {
+            $form = $this->createForm(new CalculationStepCeilingType(), $house);
+        }
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $house = $form->getData();
+            $object = $form->getData();
 
-            $em->persist($house);
-            $calc->setHouse($house);
+            if ($object instanceof Apartment) {
+                if ($form->get('top_isolation_layer')->get('size')->getData() > 0) {
+                    $house->setTopIsolationLayer($form->get('top_isolation_layer')->getData());
+                } elseif ($form->get('top_isolation_layer')->getData() != null) {
+                    $em->remove($form->get('top_isolation_layer')->getData());
+                    $calc->getHouse()->setTopIsolationLayer(null);
+                }
+
+                if ($form->get('bottom_isolation_layer')->get('size')->getData() > 0) {
+                    $house->setBottomIsolationLayer($form->get('bottom_isolation_layer')->getData());
+                } elseif ($form->get('bottom_isolation_layer')->getData() != null) {
+                    $em->remove($form->get('bottom_isolation_layer')->getData());
+                    $calc->getHouse()->setBottomIsolationLayer(null);
+                }
+            } elseif ($object instanceof House) {
+                $calc->setHouse($object);
+            }
+
+            $em->persist($object);
             $em->persist($calc);
             $em->flush();
 
@@ -248,7 +295,11 @@ class CalculatorController extends Controller
             return $this->redirect($redirect);
         }
 
-        return $this->render('KrakenWarmBundle:Calculator:ceiling.html.twig', array(
+        $template = $calc->getBuildingType() == 'apartment'
+            ? 'KrakenWarmBundle:Calculator:ceiling_apartment.html.twig'
+            : 'KrakenWarmBundle:Calculator:ceiling.html.twig';
+
+        return $this->render($template, array(
             'calc' => $calc,
             'form' => $form->createView(),
         ));
@@ -282,10 +333,9 @@ class CalculatorController extends Controller
                 'slug' => $calcSlug,
             ));
 
-            //TODO
-//             if (!$isEditing) {
-//                 $this->sendInfo($calc);
-//             }
+            if ($this->get('session')->get('is_form_filled_first_time')) {
+                $this->sendInfo($calc);
+            }
 
             return $this->redirect($redirect);
         }
@@ -312,7 +362,7 @@ class CalculatorController extends Controller
 
         $message = \Swift_Message::newInstance()
             ->setSubject('Podsumowanie grzewcze twojego domu')
-            ->setFrom(array('juzefwt@gmail.com' => 'CieploWlasciwie.pl'))
+            ->setFrom([$this->getParameter('mailer_user') => 'CieploWlasciwie.pl'])
             ->setTo($calc->getEmail())
             ->setContentType('text/html')
             ->setBody(
@@ -323,6 +373,11 @@ class CalculatorController extends Controller
             )
         ;
         $this->get('mailer')->send($message);
+
+        // erase e-mail as promised
+        $calc->setEmail('');
+        $this->getDoctrine()->getManager()->persist($calc);
+        $this->getDoctrine()->getManager()->flush();
     }
 
     public function breakdownAction($id)

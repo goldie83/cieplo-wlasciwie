@@ -28,7 +28,7 @@ class HotWaterService
         $hotWaterDemand = [
             'shower' => 30,
             'shower_bath' => 50,
-            'bath' => 80,
+            'bath' => 70,
         ];
 
         $needs = isset($hotWaterDemand[$this->instance->getHotWaterUse()])

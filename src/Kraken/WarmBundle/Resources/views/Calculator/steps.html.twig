@@ -1,0 +1,9 @@
+<div class="btn-group calculation-steps">
+    <a href="{{ path('start', {slug: calc.slug}) }}" class="btn btn-raised">Start</a>
+    <a href="{{ step > 0 ? path('location', {slug: calc.slug}) : 'javascript:void(0)' }}" class="btn btn-raised {{ step == 1 ? 'btn-warning' : '' }}">Lokalizacja</a>
+    <a href="{{ step > 1 ? path('dimensions', {slug: calc.slug}) : 'javascript:void(0)' }}" class="btn btn-raised {{ step == 2 ? 'btn-warning' : '' }}">Wymiary</a>
+    <a href="{{ step > 2 ? path('walls', {slug: calc.slug}) : 'javascript:void(0)' }}" class="btn btn-raised {{ step == 3 ? 'btn-warning' : '' }}">Ściany</a>
+    <a href="{{ step > 3 ? path('ceiling', {slug: calc.slug}) : 'javascript:void(0)' }}" class="btn btn-raised {{ step == 4 ? 'btn-warning' : '' }}">{{ calc.buildingType == 'apartment' ? 'Sąsiedztwo' : 'Poddasze i parter' }}</a>
+    <a href="{{ step > 4 ? path('heating', {slug: calc.slug}) : 'javascript:void(0)' }}" class="btn btn-raised {{ step == 5 ? 'btn-warning' : '' }}">Ogrzewanie</a>
+    <a href="javascript:void(0)" class="btn btn-success btn-raised">Wynik</a>
+</div>

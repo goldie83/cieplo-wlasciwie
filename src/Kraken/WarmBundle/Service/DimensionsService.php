@@ -141,6 +141,7 @@ class DimensionsService
 
     public function getHeatedHouseArea()
     {
+//TODO minus garaż
         return $this->getFloorArea() * count($this->getInstance()->getHouse()->getBuildingHeatedFloors());
     }
 

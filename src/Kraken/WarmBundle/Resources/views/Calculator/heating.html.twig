@@ -5,13 +5,7 @@
 <div class="row text-center">
     <div class="col-md-12">
         <div class="btn-group calculation-steps">
-            <a href="{{ path('start', {slug: calc.slug}) }}" class="btn btn-raised">Start</a>
-            <a href="{{ path('location', {slug: calc.slug}) }}" class="btn btn-raised">Lokalizacja</a>
-            <a href="{{ path('dimensions', {slug: calc.slug}) }}" class="btn btn-raised">Wymiary</a>
-            <a href="{{ path('walls', {slug: calc.slug}) }}" class="btn btn-raised">Ściany</a>
-            <a href="{{ path('ceiling', {slug: calc.slug}) }}" class="btn btn-raised">Poddasze i parter</a>
-            <a href="javascript:void(0)" class="btn btn-warning btn-raised">Ogrzewanie</a>
-            <a href="javascript:void(0)" class="btn btn-success btn-raised">Wynik</a>
+            {% include('KrakenWarmBundle:Calculator:steps.html.twig') with {step: 5} %}
         </div>
     </div>
 </div>
@@ -39,18 +33,32 @@
                 {{ form_row(form.hot_water_persons) }}
                 {{ form_row(form.hot_water_use) }}
                 </div>
+            </div>
+            <div class="col-md-6">
+                <div class="alert alert-info">
+                    <h4>Jaką temperaturę podać?</h4>
+                    Taką, jaką uznajesz za komfortową w domu zimą bez noszenia dwóch swetrów i&nbsp;kaleson. Za standardową temperaturę pokojową w takich obliczeniach przyjmuje się 20&deg;C.<br />
+                    <strong>Jeśli marzniesz poniżej 25&deg;C &mdash; wpisz właśnie tyle</strong>. Chodzi o&nbsp;to, by obliczenia oddały realne zużycie ciepła w twoim domu.
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
                 <h3>Obecny sposób ogrzewania</h3>
-                <p>Możesz podać obecny lub planowany sposób ogrzewania, a otrzymasz <strong>porównanie opłacalności względem innych źródeł ciepła</strong>.<br/>
-                Jeśli podasz obecne zużycie opału/energii, to dowiesz się z jaką efektywnością ogrzewasz.</p>
                 {{ form_row(form.heating_device) }}
                 {{ form_row(form.stove_power) }}
                 {{ form_row(form.fuel_consumptions) }}
-TODO zużycie paliw zepsute!
                 <h3>Wysłać link do obliczeń na maila?</h3>
+                <p>Spokojnie, nie dostaniesz od nas spamu. Nie przechowujemy twojego adresu, jest użyty jednorazowo do wysłania wiadomości z linkiem do wyniku.</p>
                 {{ form_row(form.email) }}
                 {{ form_rest(form) }}
             </div>
             <div class="col-md-6">
+                <div class="alert alert-info">
+                    Możesz podać obecny lub planowany sposób ogrzewania, a otrzymasz <strong>porównanie opłacalności względem innych źródeł ciepła</strong>.<br/>
+                    Jeśli podasz dotychczasowe zużycie opału/energii w ciągu sezonu grzewczego, to dowiesz się, z jaką efektywnością ogrzewasz i co możesz poprawić.
+                </div>
             </div>
             <div class="clearfix"></div>
         </div>

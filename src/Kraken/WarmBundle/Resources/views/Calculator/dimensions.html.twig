@@ -4,15 +4,7 @@
 
 <div class="row text-center">
     <div class="col-md-12">
-        <div class="btn-group calculation-steps">
-            <a href="{{ path('start', {slug: calc.slug}) }}" class="btn btn-raised">Start</a>
-            <a href="{{ path('location', {slug: calc.slug}) }}" class="btn btn-raised">Lokalizacja</a>
-            <a href="javascript:void(0)" class="btn btn-warning btn-raised">Wymiary</a>
-            <a href="javascript:void(0)" class="btn btn-raised">Ściany</a>
-            <a href="javascript:void(0)" class="btn btn-raised">Poddasze i parter</a>
-            <a href="javascript:void(0)" class="btn btn-raised">Ogrzewanie</a>
-            <a href="javascript:void(0)" class="btn btn-success btn-raised">Wynik</a>
-        </div>
+        {% include('KrakenWarmBundle:Calculator:steps.html.twig') with {step: 2} %}
     </div>
 </div>
 
@@ -67,7 +59,8 @@
                     {{ form_row(form.building_heated_floors) }}
                 </div>
                 {{ form_row(form.floor_height) }}
-TODO: balkony i garaż
+                {{ form_row(form.has_balcony) }}
+                {{ form_row(form.has_garage) }}
             </div>
             <div class="col-md-6">
                 <h3>Podgląd sytuacji</h3>

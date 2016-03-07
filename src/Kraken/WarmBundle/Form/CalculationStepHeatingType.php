@@ -28,9 +28,10 @@ class CalculationStepHeatingType extends AbstractType
                 'widget_addon_append' => [
                     'text' => 'kW',
                 ],
+                'help_block' => 'Pomiń to pole jeśli nie znasz mocy urządzenia',
             ))
             ->add('fuel_consumptions', 'collection', [
-                'label' => 'Zużycie paliw',
+                'label' => 'Dotychczasowe zużycie paliw na ogrzewanie',
                 'required' => false,
                 'type' => new FuelConsumptionType(),
                 'allow_add' => true,
@@ -59,7 +60,6 @@ class CalculationStepHeatingType extends AbstractType
                 'widget_addon_append' => [
                     'text' => '&deg;C',
                 ],
-                'help_block' => 'Podaj temperaturę jaką uznajesz za komfortową bez noszenia dwóch swetrów i kalesonów. Za standardową temperaturę pokojową przyjmuje się 20 st.C',
             ))
             ->add('ventilation_type', 'choice', array(
                 'choices' => array(
@@ -71,10 +71,10 @@ class CalculationStepHeatingType extends AbstractType
                 'mapped' => false
             ))
             ->add('include_hot_water', null, [
-                'label' => 'Dolicz ogrzewanie wody (CWU)',
+                'label' => 'Dolicz grzanie wody kranowej (CWU)',
             ])
             ->add('hot_water_persons', null, [
-                'label' => 'Liczba osób używający ciepłej wody',
+                'label' => 'Ile osób będzie używać ciepłej wody?',
             ])
             ->add('hot_water_use', 'choice', [
                 'label' => 'Intensywność zużycia wody',

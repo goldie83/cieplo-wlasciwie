@@ -4,10 +4,12 @@ namespace Kraken\WarmBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContext;
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="apartment")
+ * @Assert\Callback(methods={"isNeighbourhoodValid"})
  */
 class Apartment
 {
@@ -47,21 +49,31 @@ class Apartment
      */
     protected $houses;
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
-    public function getId()
+    public function isNeighbourhoodValid(ExecutionContext $context)
     {
-        return $this->id;
+        if ($this->number_external_walls + $this->number_unheated_walls > 4) {
+            $context->addViolationAt('number_external_walls', 'Mieszkanie ma w sumie co najwyżej cztery strony', [], null);
+        }
     }
-    /**
-     * Constructor.
-     */
+
+    public static function create()
+    {
+        $a = new self();
+
+        $a->setNumberExternalWalls(2);
+        $a->setNumberUnheatedWalls(1);
+
+        return $a;
+    }
+
     public function __construct()
     {
         $this->houses = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**

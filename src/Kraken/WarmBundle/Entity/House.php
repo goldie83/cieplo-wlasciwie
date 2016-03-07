@@ -38,7 +38,7 @@ class House
     protected $building_width;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     protected $building_shape;
 
@@ -48,7 +48,7 @@ class House
     protected $building_contour_free_area;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     protected $building_floors;
 
@@ -59,7 +59,7 @@ class House
     protected $building_heated_floors;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     protected $building_roof;
 
@@ -196,7 +196,7 @@ class House
     protected $apartment;
 
     /**
-     * @ORM\Column(type="decimal", nullable=false)
+     * @ORM\Column(type="decimal", nullable=true)
      * @Assert\Range(min="1", minMessage = "Min. grubość ściany to 1cm")
      */
     protected $wall_size;
@@ -254,7 +254,7 @@ class House
 
     public function areWallsValid(ExecutionContext $context)
     {
-        if ($this->construction_type == 'traditional' && $this->primary_wall_material == null) {
+        if ($this->construction_type == 'traditional' && $this->primary_wall_material == null && $this->wall_size > 0) {
             $context->addViolationAt('primary_wall_material', 'Wybierz podstawowy materiał konstrukcyjny ścian zewnętrznych', [], null);
         }
 
@@ -266,8 +266,6 @@ class House
     public static function create()
     {
         $house = new self();
-        $wall = new Wall();
-        $house->addWall($wall);
 
         return $house;
     }

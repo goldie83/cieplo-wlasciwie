@@ -123,8 +123,8 @@ class Calculation
     protected $hot_water_use;
 
     public static $constructionYears = [
-        2011 => '2011 – 2016',
-        2000 => '2000 – 2010',
+        2011 => 'lata 2011 – 2016',
+        2000 => 'lata 2000 – 2010',
         1990 => 'lata 90-te',
         1980 => 'lata 80-te',
         1970 => 'lata 70-te',
