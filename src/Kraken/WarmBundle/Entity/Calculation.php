@@ -118,7 +118,7 @@ class Calculation
     protected $hot_water_persons;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
     protected $hot_water_use;
 

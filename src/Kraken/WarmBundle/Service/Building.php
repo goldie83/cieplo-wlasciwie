@@ -69,24 +69,11 @@ class Building implements BuildingInterface
             return max(1, $number * 100);
         };
 
-        if ($this->getHouse()->getHasBasement() && !$this->isBasementHeated() && $this->floors->isGroundFloorHeated()) {
-            $groundLabel = 'Podłoga nad nieogrzewaną piwnicą';
-        } elseif (!$this->floors->isGroundFloorHeated()) {
-            $groundLabel = 'Strop nad nieogrzewanym parterem';
-        } else {
-            $groundLabel = 'Podłoga na gruncie';
-        }
-
-        $roofLabel = 'Dach';
-        if ($this->getHouse()->getBuildingRoof() != 'flat' && !$this->floors->isAtticHeated()) {
-            $roofLabel = 'Strop poddasza';
-        }
-
         $breakdown = array(
           'Wentylacja' => $round($v / $sum),
           'Ściany zewnętrzne' => $round($w / $sum),
-          $roofLabel => $round($r / $sum),
-          $groundLabel => $round($g / $sum),
+          $this->floors->getTopLabel() => $round($r / $sum),
+          $this->floors->getBottomLabel() => $round($g / $sum),
           'Okna' => $round($win / $sum),
           'Drzwi' => $round($d / $sum),
         );
@@ -335,7 +322,6 @@ class Building implements BuildingInterface
     {
         $house = $this->getHouse();
 
-        //TODO wygląda na zbędny syf
         if ($house->getHasBasement() && !$this->floors->isBasementHeated()) {
             $l = $this->dimensions->getExternalBuildingLength();
             $w = $this->dimensions->getExternalBuildingWidth();

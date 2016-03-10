@@ -329,6 +329,11 @@ class CalculatorController extends Controller
             $calc = $form->getData();
             $calc->getHouse()->setVentilationType($form['ventilation_type']->getData());
 
+            foreach ($form['fuel_consumptions']->getData() as $item) {
+                $item->setCalculation($calc);
+                $em->persist($item);
+            }
+
             $em->persist($calc);
             $em->persist($calc->getHouse());
             $em->flush();
@@ -541,7 +546,7 @@ class CalculatorController extends Controller
             'upgrade' => $this->get('kraken_warm.upgrade'),
             'comparison' => $this->get('kraken_warm.comparison'),
             'climate' => $this->get('kraken_warm.climate'),
-            'dimensions' => $this->get('kraken_warm.dimensions'),
+            'dimensions' => $dimensions,
             'floors' => $this->get('kraken_warm.floors'),
             'calc' => $calc,
             'city' => $calc->getCity(),

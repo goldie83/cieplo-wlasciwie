@@ -5,6 +5,7 @@ namespace Kraken\RankingBundle\DataFixtures\ORM;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Kraken\RankingBundle\Entity\Boiler;
+use Kraken\RankingBundle\Entity\BoilerProperty;
 use Kraken\RankingBundle\Entity\Category;
 use Kraken\RankingBundle\Entity\Manufacturer;
 use Kraken\RankingBundle\Entity\Property;

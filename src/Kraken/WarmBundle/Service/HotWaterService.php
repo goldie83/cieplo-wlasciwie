@@ -8,6 +8,12 @@ class HotWaterService
 {
     protected $instance;
 
+    public static $usages = [
+        'shower' => 'w domu tylko prysznice',
+        'shower_bath' => 'głównie prysznice, czasem wanna',
+        'bath' => 'codziennie wanna dla każdego',
+    ];
+
     public function __construct(InstanceService $instance)
     {
         $this->instance = $instance->get();
@@ -36,5 +42,10 @@ class HotWaterService
             : $hotWaterDemand['shower_bath'];
 
         return max(90, $this->instance->getHotWaterPersons() * $needs);
+    }
+
+    public function getUsageLabel()
+    {
+        return self::$usages[$this->instance->getHotWaterUse()];
     }
 }

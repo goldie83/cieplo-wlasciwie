@@ -44,6 +44,15 @@ class FloorsService
         return count($this->getHouse()->getBuildingHeatedFloors()) <= $this->getHouse()->getBuildingFloors();
     }
 
+    public function getTopLabel()
+    {
+        if (!$this->isAtticHeated()) {
+            return 'Strop';
+        }
+
+        return 'Dach';
+    }
+
     public function getTopIsolationLabel()
     {
         if (!$this->isAtticHeated()) {
@@ -51,6 +60,19 @@ class FloorsService
         }
 
         return 'Izolacja dachu';
+    }
+
+    public function getBottomLabel()
+    {
+        if ($this->isBasementHeated()) {
+            return 'Piwnica';
+        }
+
+        if ($this->isGroundFloorHeated()) {
+            return 'Podłoga parteru';
+        }
+
+        return 'Strop nad parterem';
     }
 
     public function getBottomIsolationLabel()

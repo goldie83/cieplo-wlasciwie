@@ -3,6 +3,7 @@
 namespace Kraken\WarmBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
+use Kraken\WarmBundle\Service\HotWaterService;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
@@ -78,11 +79,7 @@ class CalculationStepHeatingType extends AbstractType
             ])
             ->add('hot_water_use', 'choice', [
                 'label' => 'Intensywność zużycia wody',
-                'choices' => [
-                    'shower' => 'w domu tylko prysznice',
-                    'shower_bath' => 'głównie prysznice, czasem wanna',
-                    'bath' => 'codziennie wanna dla każdego',
-                ],
+                'choices' => HotWaterService::$usages,
             ])
         ;
     }

@@ -494,7 +494,7 @@ class DoubleHouse
      *
      * @return bool
      */
-    public function getHasGarage()
+    public function hasGarage()
     {
         return $this->has_garage;
     }

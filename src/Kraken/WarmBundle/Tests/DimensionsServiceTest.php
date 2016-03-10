@@ -8,7 +8,7 @@ use Kraken\WarmBundle\Entity\Layer;
 use Kraken\WarmBundle\Entity\Wall;
 use Kraken\WarmBundle\Entity\Material;
 use Kraken\WarmBundle\Service\InstanceService;
-use Kraken\WarmBundle\Service\Building;
+use Kraken\WarmBundle\Service\DimensionsService;
 use Kraken\WarmBundle\Service\DoubleBuilding;
 use Kraken\WarmBundle\Service\WallService;
 use Mockery;
@@ -24,9 +24,13 @@ class DimensionsServiceTest extends \PHPUnit_Framework_TestCase
         $house = new House();
         $house->setBuildingWidth(10);
         $house->setBuildingLength(10);
+        $house->setBuildingFloors(3);
+        $house->setBuildingRoof('flat');
+        $house->setBuildingHeatedFloors([1,2]);
         $house->setVentilationType('natural');
         $house->setPrimaryWallMaterial($m);
         $house->setWallSize(50);
+        $house->setNumberWindows(10);
 
         $calc = new Calculation();
         $calc->setHouse($house);
@@ -38,131 +42,323 @@ class DimensionsServiceTest extends \PHPUnit_Framework_TestCase
         return $instance;
     }
 
-    public function testWhatever()
+    public function testWindowsArea()
     {
-        $this->assertEquals(2+2, 4);
+        $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
+        $d = new DimensionsService($this->makeInstance(), $f);
+
+        $this->assertEquals(25, $d->getWindowsArea());
     }
 
-/*
-    public function testHouseCubature()
+    public function testTotalWallArea()
     {
+        $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
+        $f->shouldReceive('isGroundFloorHeated')->andReturn(true);
+        $f->shouldReceive('isBasementHeated')->andReturn(false);
+
         $instance = $this->makeInstance();
-        $instance->get()->getHouse()->setHasBasement(true);
-        $instance->get()->getHouse()->setBuildingFloors(2);
-        $instance->get()->getHouse()->setBuildingHeatedFloors([1,2]);
-        $instance->get()->getHouse()->setBuildingRoof('flat');
+        $d = new DimensionsService($instance, $f);
 
-        $building = $this->mockBuilding($instance);
-
-        $this->assertEquals(round(9 * 9 * 2 * 2.6, 2), $building->getHouseCubature());
-
-        $instance->get()->getHouse()->setBuildingFloors(2);
-        $instance->get()->getHouse()->setHasBasement(false);
-        $instance->get()->getHouse()->setBuildingHeatedFloors([1,2]);
-        $instance->get()->getHouse()->setBuildingRoof('oblique');
-
-        $this->assertEquals(round(9 * 9 * 2.6 * 1.6, 2), $building->getHouseCubature());
+        $this->assertEquals(236, $d->getTotalWallArea());
     }
 
-    public function testWallArea()
+    public function testTotalWallAreaWithBasement()
     {
-        $instance = $this->makeInstance();
-        $instance->get()->setBuildingType('single_house');
-        $instance->get()->getHouse()->setBuildingLength(10);
-        $instance->get()->getHouse()->setBuildingWidth(10);
-        $instance->get()->getHouse()->setBuildingFloors(1);
-        $instance->get()->getHouse()->setHasBasement(false);
-        $instance->get()->getHouse()->setBuildingHeatedFloors([1]);
-        $instance->get()->getHouse()->setBuildingRoof('flat');
-
-        $building = $this->mockBuilding($instance);
-
-        $this->assertEquals(4, $building->getNumberOfWalls());
-        $this->assertEquals(2.6, $building->getHouseHeight());
-        $this->assertEquals(104, $building->getWallArea($instance->get()->getHouse()->getWalls()->first()));
+        $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
+        $f->shouldReceive('isGroundFloorHeated')->andReturn(true);
+        $f->shouldReceive('isBasementHeated')->andReturn(true);
 
         $instance = $this->makeInstance();
-        $instance->get()->setBuildingType('double_house');
-        $instance->get()->getHouse()->setBuildingLength(10);
-        $instance->get()->getHouse()->setBuildingWidth(10);
-        $instance->get()->getHouse()->setBuildingFloors(2);
-        $instance->get()->getHouse()->setHasBasement(false);
-        $instance->get()->getHouse()->setBuildingHeatedFloors([1,2]);
+        $d = new DimensionsService($instance, $f);
+
+        $instance->get()->getHouse()->setBuildingFloors(3);
         $instance->get()->getHouse()->setBuildingRoof('flat');
+        $instance->get()->getHouse()->setBuildingHeatedFloors([0,1,2,3]);
 
-        $building = new DoubleBuilding($instance, $this->mockVentilation(), $this->mockWall(), $this->mockWallFactory(), $this->mockDimensions(), $this->mockFloors());
+        $this->assertEquals(354, $d->getTotalWallArea());
+    }
 
-        $this->assertEquals(3, $building->getNumberOfWalls());
-        $this->assertEquals(5.55, $building->getHouseHeight());
-        $this->assertEquals(166.5, $building->getWallArea($instance->get()->getHouse()->getWalls()->first()));
+    public function testTotalWallAreaWithSteepRoof()
+    {
+        $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
+        $f->shouldReceive('isGroundFloorHeated')->andReturn(true);
+        $f->shouldReceive('isBasementHeated')->andReturn(false);
+
+        $instance = $this->makeInstance();
+        $d = new DimensionsService($instance, $f);
+
+        $instance->get()->getHouse()->setBuildingFloors(3);
+        $instance->get()->getHouse()->setBuildingRoof('steep');
+        $instance->get()->getHouse()->setBuildingHeatedFloors([1,2,3]);
+
+        $this->assertEquals(270.8, $d->getTotalWallArea());
     }
 
     public function testNumberOfHeatedFloors()
     {
-        //jednopiętrowy, dach skosny - ogrzewany tylko parter
+        $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
         $instance = $this->makeInstance();
-        $instance->get()->getHouse()->setBuildingFloors(2);
-        $instance->get()->getHouse()->setBuildingHeatedFloors([1]);
-        $instance->get()->getHouse()->setHasBasement(false);
-        $instance->get()->getHouse()->setBuildingRoof('steep');
+        $d = new DimensionsService($instance, $f);
 
-        $building = $this->mockBuilding($instance);
+        $instance->get()->getHouse()->setBuildingFloors(3);
+        $instance->get()->getHouse()->setBuildingRoof('flat');
+        $instance->get()->getHouse()->setBuildingHeatedFloors([1,2,3]);
 
-        $this->assertEquals(1, $building->getNumberOfHeatedFloors());
-        $this->assertTrue($building->isGroundFloorHeated());
-        $this->assertFalse($building->isAtticHeated());
-        $this->assertFalse($building->isBasementHeated());
+        $this->assertEquals(3, $d->getNumberOfHeatedFloors());
+    }
 
-        // parterówka, płaski dach, - ogrzewany tylko parter
+    public function testExternalBuildingLengthRegularCaseWithArea()
+    {
+        $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
         $instance = $this->makeInstance();
+        $d = new DimensionsService($instance, $f);
+
+        $instance->get()->getHouse()->setArea(144);
+
+        $this->assertEquals(12, $d->getExternalBuildingLength());
+        $this->assertEquals(12, $d->getExternalBuildingWidth());
+    }
+
+    public function testExternalBuildingLengthRegularCaseWithDimensions()
+    {
+        $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
+        $instance = $this->makeInstance();
+        $d = new DimensionsService($instance, $f);
+
+        $instance->get()->getHouse()->setBuildingLength(15);
+        $instance->get()->getHouse()->setBuildingWidth(10);
+
+        $this->assertEquals(15, $d->getExternalBuildingLength());
+        $this->assertEquals(10, $d->getExternalBuildingWidth());
+    }
+
+    public function testExternalBuildingLengthIrregularCase()
+    {
+        $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
+        $instance = $this->makeInstance();
+        $d = new DimensionsService($instance, $f);
+
+        $instance->get()->getHouse()->setBuildingShape('irregular');
+        $instance->get()->getHouse()->setBuildingContourFreeArea(9);
+        $instance->get()->getHouse()->setBuildingLength(15);
+        $instance->get()->getHouse()->setBuildingWidth(8);
+
+        $this->assertEquals(18, $d->getExternalBuildingLength());
+        $this->assertEquals(11, $d->getExternalBuildingWidth());
+    }
+
+    public function testInternalBuildingLength()
+    {
+        $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
+        $instance = $this->makeInstance();
+        $d = new DimensionsService($instance, $f);
+
+        $instance->get()->getHouse()->setWallSize(50);
+        $instance->get()->getHouse()->setBuildingShape('irregular');
+        $instance->get()->getHouse()->setBuildingContourFreeArea(9);
+        $instance->get()->getHouse()->setBuildingLength(15);
+        $instance->get()->getHouse()->setBuildingWidth(8);
+
+        $this->assertEquals(17, $d->getInternalBuildingLength());
+        $this->assertEquals(10, $d->getInternalBuildingWidth());
+    }
+
+    public function testFloorArea()
+    {
+        $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
+        $instance = $this->makeInstance();
+        $d = new DimensionsService($instance, $f);
+
+        $instance->get()->getHouse()->setArea(100);
+
+        $this->assertEquals(100, $d->getFloorArea());
+    }
+
+    public function testFloorAreaWidthDimensions()
+    {
+        $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
+        $instance = $this->makeInstance();
+        $d = new DimensionsService($instance, $f);
+
+        $instance->get()->getHouse()->setArea(0);
+        $instance->get()->getHouse()->setWallSize(50);
+        $instance->get()->getHouse()->setBuildingWidth(10);
+        $instance->get()->getHouse()->setBuildingLength(10);
+
+        $this->assertEquals(81, $d->getFloorArea());
+    }
+
+    public function testTotalFloorsNumber()
+    {
+        $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
+        $instance = $this->makeInstance();
+        $d = new DimensionsService($instance, $f);
+
         $instance->get()->getHouse()->setBuildingFloors(1);
-        $instance->get()->getHouse()->setBuildingHeatedFloors([1]);
-        $instance->get()->getHouse()->setHasBasement(false);
         $instance->get()->getHouse()->setBuildingRoof('flat');
 
-        $building = $this->mockBuilding($instance);
+        $this->assertEquals(1, $d->getTotalFloorsNumber());
+    }
 
-        $this->assertEquals(1, $building->getNumberOfHeatedFloors());
-        $this->assertTrue($building->isGroundFloorHeated());
-        $this->assertTrue($building->isAtticHeated());
-        $this->assertFalse($building->isBasementHeated());
-
-        // 4 piętra, piwnica i skośny dach - ogrzewany parter i piętro
+    public function testTotalFloorsNumberWithSteepRoof()
+    {
+        $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
         $instance = $this->makeInstance();
-        $instance->get()->getHouse()->setBuildingFloors(3);
-        $instance->get()->getHouse()->setBuildingHeatedFloors([1,2]);
-        $instance->get()->getHouse()->setHasBasement(true);
+        $d = new DimensionsService($instance, $f);
+
+        $instance->get()->getHouse()->setBuildingFloors(1);
         $instance->get()->getHouse()->setBuildingRoof('steep');
 
-        $building = $this->mockBuilding($instance);
-
-        $this->assertEquals(2, $building->getNumberOfHeatedFloors());
-        $this->assertTrue($building->isGroundFloorHeated());
-        $this->assertFalse($building->isAtticHeated());
-        $this->assertFalse($building->isBasementHeated());
+        $this->assertEquals(2, $d->getTotalFloorsNumber());
     }
 
-    protected function mockVentilation()
+    public function testHeatedFloorsNumber()
     {
-        $mock = Mockery::mock('Kraken\WarmBundle\Service\VentilationService');
+        $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
+        $instance = $this->makeInstance();
+        $d = new DimensionsService($instance, $f);
 
-        return $mock;
+        $instance->get()->getHouse()->setBuildingFloors(1);
+        $instance->get()->getHouse()->setBuildingHeatedFloors([1]);
+        $instance->get()->getHouse()->setBuildingRoof('flat');
+
+        $this->assertEquals(1, $d->getHeatedFloorsNumber());
     }
 
-    protected function mockWall()
+    public function testHeatedFloorsNumberWithSteepRoof()
     {
-        $mock = Mockery::mock('Kraken\WarmBundle\Service\WallService');
-        $mock->shouldReceive('getSize')->andReturn(0.4);
-        $mock->shouldReceive('getThermalConductance')->andReturn(0.25);
+        $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
+        $instance = $this->makeInstance();
+        $d = new DimensionsService($instance, $f);
 
-        return $mock;
+        $instance->get()->getHouse()->setBuildingFloors(1);
+        $instance->get()->getHouse()->setBuildingHeatedFloors([1,2]);
+        $instance->get()->getHouse()->setBuildingRoof('steep');
+
+        $this->assertEquals(2, $d->getHeatedFloorsNumber());
     }
 
-    protected function mockWallFactory()
+    public function testTotalHouseArea()
     {
-        $mock = Mockery::mock('Kraken\WarmBundle\Service\WallFactory');
+        $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
+        $instance = $this->makeInstance();
+        $d = new DimensionsService($instance, $f);
 
-        return $mock;
+        $instance->get()->getHouse()->setBuildingFloors(1);
+        $instance->get()->getHouse()->setBuildingHeatedFloors([1]);
+        $instance->get()->getHouse()->setBuildingRoof('flat');
+        $instance->get()->getHouse()->setWallSize(50);
+        $instance->get()->getHouse()->setBuildingWidth(10);
+        $instance->get()->getHouse()->setBuildingLength(10);
+
+        $this->assertEquals(81, $d->getTotalHouseArea());
+    }
+
+    public function testTotalHouseAreaWithSteepRoof()
+    {
+        $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
+        $instance = $this->makeInstance();
+        $d = new DimensionsService($instance, $f);
+
+        $instance->get()->getHouse()->setBuildingFloors(1);
+        $instance->get()->getHouse()->setBuildingHeatedFloors([1,2]);
+        $instance->get()->getHouse()->setBuildingRoof('steep');
+        $instance->get()->getHouse()->setWallSize(50);
+        $instance->get()->getHouse()->setBuildingWidth(10);
+        $instance->get()->getHouse()->setBuildingLength(10);
+
+        $this->assertEquals(137.7, $d->getTotalHouseArea());
+    }
+
+    public function testHeatedHouseArea()
+    {
+        $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
+        $instance = $this->makeInstance();
+        $d = new DimensionsService($instance, $f);
+
+        $instance->get()->getHouse()->setBuildingFloors(1);
+        $instance->get()->getHouse()->setBuildingHeatedFloors([1]);
+        $instance->get()->getHouse()->setBuildingRoof('flat');
+        $instance->get()->getHouse()->setWallSize(50);
+        $instance->get()->getHouse()->setBuildingWidth(10);
+        $instance->get()->getHouse()->setBuildingLength(10);
+
+        $this->assertEquals(81, $d->getHeatedHouseArea());
+    }
+
+    public function testHeatedHouseAreaWithSteepRoofAndGarage()
+    {
+        $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
+        $f->shouldReceive('isAtticHeated')->andReturn(true);
+        $instance = $this->makeInstance();
+        $d = new DimensionsService($instance, $f);
+
+        $instance->get()->getHouse()->setBuildingFloors(1);
+        $instance->get()->getHouse()->setBuildingHeatedFloors([1,2]);
+        $instance->get()->getHouse()->setBuildingRoof('steep');
+        $instance->get()->getHouse()->setWallSize(50);
+        $instance->get()->getHouse()->setBuildingWidth(10);
+        $instance->get()->getHouse()->setBuildingLength(10);
+        $instance->get()->getHouse()->setHasGarage(true);
+
+        $this->assertEquals(117.7, $d->getHeatedHouseArea());
+    }
+
+    public function testDoorsArea()
+    {
+        $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
+        $instance = $this->makeInstance();
+        $d = new DimensionsService($instance, $f);
+
+        $instance->get()->getHouse()->setFloorHeight(3);
+        $instance->get()->getHouse()->setNumberDoors(2);
+
+        $this->assertEquals(4.8, $d->getDoorsArea());
+    }
+
+    public function testHouseCubature()
+    {
+        $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
+        $instance = $this->makeInstance();
+        $d = new DimensionsService($instance, $f);
+
+        $instance->get()->getHouse()->setBuildingFloors(1);
+        $instance->get()->getHouse()->setBuildingHeatedFloors([1,2]);
+        $instance->get()->getHouse()->setBuildingRoof('steep');
+        $instance->get()->getHouse()->setWallSize(50);
+        $instance->get()->getHouse()->setBuildingWidth(10);
+        $instance->get()->getHouse()->setBuildingLength(10);
+        $instance->get()->getHouse()->setHasGarage(true);
+
+        $this->assertEquals(336.96, $d->getHouseCubature());
+    }
+
+    public function testRoofArea()
+    {
+        $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
+        $instance = $this->makeInstance();
+        $d = new DimensionsService($instance, $f);
+
+        $instance->get()->getHouse()->setBuildingRoof('flat');
+        $instance->get()->getHouse()->setWallSize(50);
+        $instance->get()->getHouse()->setBuildingWidth(10);
+        $instance->get()->getHouse()->setBuildingLength(10);
+
+        $this->assertEquals(100, $d->getRoofArea());
+    }
+
+    public function testRoofAreaWithSteepRoof()
+    {
+        $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
+        $instance = $this->makeInstance();
+        $d = new DimensionsService($instance, $f);
+
+        $instance->get()->getHouse()->setBuildingRoof('steep');
+        $instance->get()->getHouse()->setWallSize(50);
+        $instance->get()->getHouse()->setBuildingWidth(10);
+        $instance->get()->getHouse()->setBuildingLength(10);
+
+        $this->assertEquals(112.71, $d->getRoofArea());
     }
 
     protected function mockSession()
@@ -178,19 +374,4 @@ class DimensionsServiceTest extends \PHPUnit_Framework_TestCase
 
         return $mock;
     }
-
-    protected function mockDimensions()
-    {
-        $mock = Mockery::mock('Kraken\WarmBundle\Service\DimensionsService');
-
-        return $mock;
-    }
-
-    protected function mockFloors()
-    {
-        $mock = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
-
-        return $mock;
-    }
-*/
 }

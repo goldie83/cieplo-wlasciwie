@@ -102,9 +102,9 @@ class CalculationStepDimensionsType extends AbstractType
             ])
             ->add('floor_height', 'choice', array(
                 'choices' => array(
-                    2.3 => 'Niskie (poniżej 2,5m)',
-                    2.6 => 'Standardowe (ok. 2,6m)',
-                    3.0 => 'Wysokie (3m i więcej)',
+                    '2.3' => 'Niskie (poniżej 2,5m)',
+                    '2.6' => 'Standardowe (ok. 2,6m)',
+                    '3.0' => 'Wysokie (3m i więcej)',
                 ),
                 'label' => 'Wysokość pięter',
                 'required' => true,

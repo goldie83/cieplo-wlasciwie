@@ -63,6 +63,10 @@ class DimensionsService
             --$walls;
         }
 
+        if ($this->getInstance()->getHouse()->getBuildingRoof() != 'flat') {
+            $houseHeight -= 0.8 * $this->getInstance()->getHouse()->getFloorHeight();
+        }
+
         return $sum * $houseHeight;
     }
 
@@ -89,17 +93,31 @@ class DimensionsService
     public function getExternalBuildingLength()
     {
         $house = $this->getInstance()->getHouse();
-//TODO nieregularna chaupa
 
-        return $house->getArea() > 0 ? ceil(sqrt($house->getArea())) : $house->getBuildingLength();
+        if ($house->getArea() > 0) {
+            return ceil(sqrt($house->getArea()));
+        }
+
+        if ($house->getBuildingShape() == 'irregular') {
+            return $house->getBuildingLength() + floor(sqrt($house->getBuildingContourFreeArea()));
+        }
+
+        return $house->getBuildingLength();
     }
 
     public function getExternalBuildingWidth()
     {
         $house = $this->getInstance()->getHouse();
-//TODO nieregularna chaupa
 
-        return $house->getArea() > 0 ? ceil(sqrt($house->getArea())) : $house->getBuildingWidth();
+        if ($house->getArea() > 0) {
+            return ceil(sqrt($house->getArea()));
+        }
+
+        if ($house->getBuildingShape() == 'irregular') {
+            return $house->getBuildingWidth() + floor(sqrt($house->getBuildingContourFreeArea()));
+        }
+
+        return $house->getBuildingWidth();
     }
 
     public function getInternalBuildingLength()
@@ -119,7 +137,6 @@ class DimensionsService
         if ($house->getArea() > 0) {
             return $house->getArea();
         } else {
-            $wallSize = $house->getWallSize() / 100;
             $l = $this->getInternalBuildingLength();
             $w = $this->getInternalBuildingWidth();
 
@@ -145,10 +162,7 @@ class DimensionsService
 
     public function getHeatedFloorsNumber()
     {
-        $house = $this->getInstance()->getHouse();
-        $floorsNumber = count($this->getInstance()->getHouse()->getBuildingHeatedFloors());
-
-        return $floorsNumber;
+        return count($this->getInstance()->getHouse()->getBuildingHeatedFloors());
     }
 
     public function getTotalHouseArea()
@@ -170,12 +184,15 @@ class DimensionsService
 
     public function getHeatedHouseArea()
     {
-//TODO minus garaż
         $house = $this->getInstance()->getHouse();
         $area = $this->getFloorArea() * $this->getHeatedFloorsNumber();
 
         if ($house->getBuildingRoof() != 'flat' && $this->floors->isAtticHeated()) {
             $area -= 0.3 * $this->getFloorArea();
+        }
+
+        if ($house->hasGarage()) {
+            $area -= 20;
         }
 
         return $area;
@@ -185,7 +202,11 @@ class DimensionsService
     {
         $numberFloors = $this->getNumberOfHeatedFloors();
 
-        return $numberFloors *  $this->getInstance()->getHouse()->getFloorHeight() + ($numberFloors - 1) * self::CEILING_THICKNESS;
+        if ($this->floors->isBasementHeated()) {
+            $numberFloors--;
+        }
+
+        return $numberFloors *  $this->getInstance()->getHouse()->getFloorHeight() + $numberFloors * self::CEILING_THICKNESS;
     }
 
     public function getDoorsArea()
@@ -220,21 +241,16 @@ class DimensionsService
 
     public function getRoofArea()
     {
-        $roofType = $this->getInstance()->getHouse()->getBuildingRoof();
         $l = $this->getExternalBuildingLength();
         $w = $this->getExternalBuildingWidth();
 
-        if ($roofType == 'oblique') {
-            // 30 degrees
-            return 2 * ($w / sqrt(3)) * $l;
+        if ($this->getInstance()->getHouse()->getBuildingRoof() != 'flat') {
+            $w = sqrt(pow($this->getExternalBuildingWidth()/2, 2) + pow(2.6, 2));
+
+            return round(2 * $w * $l, 2);
         }
 
-        if ($roofType == 'steep') {
-            // 60 degrees
-            return 2 * $w * $l;
-        }
-
-        return $l * $w;
+        return round($l * $w, 2);
     }
 
     public function getNumberOfWalls()
