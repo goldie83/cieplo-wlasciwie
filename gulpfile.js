@@ -104,7 +104,8 @@ gulp.task('app:js', ['clean:css'], function(){
 
 gulp.task('app:images', ['clean:images'], function(){
   return gulp.src([
-    './app/Resources/images/*'
+    './app/Resources/images/*',
+    './src/Kraken/WarmBundle/Resources/public/images/*'
   ]).pipe(flatten()).pipe(gulp.dest('./web/assets/images'));
 });
 

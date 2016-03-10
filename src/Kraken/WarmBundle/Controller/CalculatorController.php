@@ -601,6 +601,9 @@ class CalculatorController extends Controller
             ->getQuery()
             ->getResult();
 
-        return $this->render('KrakenWarmBundle:Calculator:myResults.html.twig', array('results' => $results));
+        return $this->render('KrakenWarmBundle:Calculator:myResults.html.twig', [
+            'results' => $results,
+            'dimensions' => $this->get('kraken_warm.dimensions')
+        ]);
     }
 }
