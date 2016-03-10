@@ -81,18 +81,8 @@ class LoadRankingData implements FixtureInterface
         $b->setCategory($c2);
         $b->setManufacturer($m);
 
-        $bp1 = new BoilerProperty;
-        $bp1->setProperty($p1);
-        $bp1->setBoiler($b);
-
-        $bp2 = new BoilerProperty;
-        $bp2->setProperty($p2);
-        $bp2->setBoiler($b);
 
         $manager->persist($b);
-        $manager->persist($bp1);
-        $manager->persist($bp2);
-
         $manager->flush();
     }
 }
