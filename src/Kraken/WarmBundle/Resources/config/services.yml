@@ -25,7 +25,7 @@ services:
 
     kraken_warm.house_description:
         class: Kraken\WarmBundle\Service\HouseDescriptionService
-        arguments: [@kraken_warm.instance, @kraken_warm.building, @kraken_warm.dimensions]
+        arguments: [@kraken_warm.instance, @kraken_warm.dimensions, @kraken_warm.floors]
 
     kraken_warm.energy_calculator:
         class: Kraken\WarmBundle\Calculator\EnergyCalculator
@@ -49,6 +49,10 @@ services:
 
     kraken_warm.dimensions:
         class: Kraken\WarmBundle\Service\DimensionsService
+        arguments: [@kraken_warm.instance, @kraken_warm.floors]
+
+    kraken_warm.floors:
+        class: Kraken\WarmBundle\Service\FloorsService
         arguments: [@kraken_warm.instance]
 
     kraken_warm.fuel:
@@ -64,7 +68,7 @@ services:
 
     kraken_warm.upgrade:
         class: Kraken\WarmBundle\Service\UpgradeService
-        arguments: [@kraken_warm.instance, @kraken_warm.building]
+        arguments: [@kraken_warm.instance, @kraken_warm.building, @kraken_warm.floors]
 
     kraken_warm.comparison:
         class: Kraken\WarmBundle\Service\ComparisonService
@@ -89,3 +93,4 @@ services:
             - "@kraken_warm.wall"
             - "@kraken_warm.wall.factory"
             - "@kraken_warm.dimensions"
+            - "@kraken_warm.floors"

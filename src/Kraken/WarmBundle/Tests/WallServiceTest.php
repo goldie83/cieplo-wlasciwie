@@ -12,7 +12,7 @@ use Mockery;
 
 class WallServiceTest extends \PHPUnit_Framework_TestCase
 {
-    public function testThermalConductance()
+    public function testThermalConductanceWithPrimaryWallMaterial()
     {
         $house = new House();
         $house->setVentilationType('natural');
@@ -43,34 +43,68 @@ class WallServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(0.27, $service->getThermalConductance());
     }
 
-    public function testThermalConductanceWithAirGapIsolation()
+    public function testThermalConductanceWithSecondaryWallMaterial()
     {
         $house = new House();
+        $house->setVentilationType('natural');
+
         $calc = new Calculation();
         $calc->setHouse($house);
+        $calc->setIndoorTemperature(20);
         $instance = new InstanceService($this->mockSession(), $this->mockEM());
         $instance->setCustomCalculation($calc);
 
         $service = new WallService($instance);
 
         $m1 = new Material();
-        $m1->setName('Pustka powietrzna');
-
-        $l1 = new Layer();
-        $l1->setSize(5);
-        $l1->setMaterial($m1);
-
+        $m1->setLambda(0.55);
         $m2 = new Material();
-        $m2->setLambda(0.56);
+        $m2->setLambda(0.25);
 
-        $house->setWallSize(45);
-        $house->setPrimaryWallMaterial($m2);
+        $house->setWallSize(50);
+        $house->setPrimaryWallMaterial($m1);
+        $house->setSecondaryWallMaterial($m2);
 
-        $this->assertEquals(1.24, $service->getThermalConductance());
+        $this->assertEquals(0.77, $service->getThermalConductance());
+    }
 
-        $house->setInternalIsolationLayer($l1);
+    public function testThermalConductanceWithFullFeaturedWall()
+    {
+        $house = new House();
+        $house->setVentilationType('natural');
 
-        $this->assertEquals(1.12, $service->getThermalConductance());
+        $calc = new Calculation();
+        $calc->setHouse($house);
+        $calc->setIndoorTemperature(20);
+        $instance = new InstanceService($this->mockSession(), $this->mockEM());
+        $instance->setCustomCalculation($calc);
+
+        $service = new WallService($instance);
+
+        $m1 = new Material();
+        $m1->setLambda(0.55);
+        $m2 = new Material();
+        $m2->setLambda(0.25);
+
+        $l = new Layer();
+        $airGap = new Material();
+        $airGap->setName('pustka powietrzna');
+        $l->setMaterial($airGap);
+        $l->setSize(5);
+
+        $l2 = new Layer();
+        $styro = new Material();
+        $styro->setLambda(0.04);
+        $l2->setMaterial($styro);
+        $l2->setSize(15);
+
+        $house->setWallSize(50);
+        $house->setPrimaryWallMaterial($m1);
+        $house->setSecondaryWallMaterial($m2);
+        $house->setInternalIsolationLayer($l);
+        $house->setExternalIsolationLayer($l2);
+
+        $this->assertEquals(0.21, $service->getThermalConductance());
     }
 
     protected function mockSession()

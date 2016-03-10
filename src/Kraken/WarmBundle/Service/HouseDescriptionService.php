@@ -8,8 +8,8 @@ use Kraken\WarmBundle\Entity\Fuel;
 class HouseDescriptionService
 {
     protected $instance;
-    protected $building;
     protected $dimensions;
+    protected $floors;
 
     protected $houseTypes = [
         'single_house' => 'Budynek jednorodzinny',
@@ -39,8 +39,8 @@ class HouseDescriptionService
 
     protected $roofTypes = [
         'flat' => 'dach płaski',
-        'oblique' => 'dach dwuspadowy',
-        'steep' => 'dach dwuspadowy stromy',
+        'oblique' => 'dach skośny',
+        'steep' => 'dach skośny',
     ];
 
     protected $ventilationTypes = [
@@ -56,11 +56,11 @@ class HouseDescriptionService
         'ground' => 'Grunt',
     ];
 
-    public function __construct(InstanceService $instance, Building $building, DimensionsService $dimensions)
+    public function __construct(InstanceService $instance, DimensionsService $dimensions, FloorsService $floors)
     {
         $this->instance = $instance;
-        $this->building = $building;
         $this->dimensions = $dimensions;
+        $this->floors = $floors;
     }
 
     public function getHeadline()
@@ -105,7 +105,7 @@ class HouseDescriptionService
 
     public function getHeatedFloorsDetails()
     {
-        $floors = $this->building->getFloors();
+        $floors = $this->getFloors();
 
         $heatedFloors = [];
         foreach ($floors as $floor) {
@@ -119,7 +119,7 @@ class HouseDescriptionService
 
     public function getUnheatedFloorsDetails()
     {
-        $floors = $this->building->getFloors();
+        $floors = $this->getFloors();
 
         $heatedFloors = [];
         foreach ($floors as $floor) {
@@ -228,5 +228,40 @@ class HouseDescriptionService
         ];
 
         return implode('<br />', $result);
+    }
+
+    public function getFloors()
+    {
+        $totalFloors = $this->dimensions->getTotalFloorsNumber();
+        $heatedFloors = $this->instance->get()->getHouse()->getBuildingHeatedFloors();
+
+        $floors = [];
+        $i = 0;
+
+        if ($this->instance->get()->getHouse()->getHasBasement()) {
+            $floors[] = array(
+                'name' => 'basement',
+                'label' => 'Piwnica',
+                'heated' => $this->floors->isBasementHeated(),
+            );
+            ++$i;
+        }
+
+        $floors[] = array(
+            'name' => 'ground_floor',
+            'label' => 'Parter',
+            'heated' => $this->floors->isGroundFloorHeated(),
+        );
+        ++$i;
+
+        for ($j = 2; $j <= $totalFloors; $j++) {
+            $floors[] = array(
+                'name' => $j == $totalFloors ? 'attic' : 'regular_floor_'.($j-1),
+                'label' => $j == $totalFloors ? 'Poddasze' : ($j-1).'. piętro',
+                'heated' => in_array($j, $heatedFloors),
+            );
+        }
+
+        return $floors;
     }
 }

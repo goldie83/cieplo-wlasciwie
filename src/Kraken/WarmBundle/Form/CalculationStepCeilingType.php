@@ -15,12 +15,12 @@ class CalculationStepCeilingType extends AbstractType
 
         $builder
             ->add('top_isolation_layer', new LayerType(), array(
-                'label' => 'Izolacja od góry',
+                'label' => $options['top_isolation_label'],
                 'material_type' => 'for_ceiling',
                 'required' => false,
             ))
             ->add('bottom_isolation_layer', new LayerType(), array(
-                'label' => 'Izolacja od dołu',
+                'label' => $options['bottom_isolation_label'],
                 'material_type' => ['for_floor', 'for_ceiling'],
                 'required' => false,
             ))
@@ -31,6 +31,8 @@ class CalculationStepCeilingType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'Kraken\WarmBundle\Entity\House',
+            'top_isolation_label' => 'Izolacja dachu',
+            'bottom_isolation_label' => 'Izolacja podłogi parteru',
         ));
     }
 

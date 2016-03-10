@@ -7,15 +7,17 @@ use Kraken\WarmBundle\Entity\Wall;
 class DimensionsService
 {
     private $instance;
+    private $floors;
 
     const STANDARD_WINDOW_AREA = 2.5; // 1,4x1,8m
     const BALCONY_DOOR_AREA = 2; // 2x1m
     const HUGE_GLAZING_AREA = 6.25; // 2,5x3m
     const CEILING_THICKNESS = 0.35;
 
-    public function __construct(InstanceService $instance)
+    public function __construct(InstanceService $instance, FloorsService $floors)
     {
         $this->instance = $instance;
+        $this->floors = $floors;
     }
 
     public function getInstance()
@@ -129,9 +131,36 @@ class DimensionsService
         }
     }
 
+    public function getTotalFloorsNumber()
+    {
+        $house = $this->getInstance()->getHouse();
+        $floorsNumber = $house->getBuildingFloors();
+
+        if ($house->getBuildingRoof() != 'flat') {
+            $floorsNumber++;
+        }
+
+        return $floorsNumber;
+    }
+
+    public function getHeatedFloorsNumber()
+    {
+        $house = $this->getInstance()->getHouse();
+        $floorsNumber = count($this->getInstance()->getHouse()->getBuildingHeatedFloors());
+
+        return $floorsNumber;
+    }
+
     public function getTotalHouseArea()
     {
-        return $this->getFloorArea() * $this->getInstance()->getHouse()->getBuildingFloors();
+        $house = $this->getInstance()->getHouse();
+        $area = $this->getFloorArea() * $this->getTotalFloorsNumber();
+
+        if ($house->getBuildingRoof() != 'flat') {
+            $area -= 0.3 * $this->getFloorArea();
+        }
+
+        return $area;
     }
 
     public function getHeatedArea()
@@ -142,7 +171,14 @@ class DimensionsService
     public function getHeatedHouseArea()
     {
 //TODO minus garaż
-        return $this->getFloorArea() * count($this->getInstance()->getHouse()->getBuildingHeatedFloors());
+        $house = $this->getInstance()->getHouse();
+        $area = $this->getFloorArea() * $this->getHeatedFloorsNumber();
+
+        if ($house->getBuildingRoof() != 'flat' && $this->floors->isAtticHeated()) {
+            $area -= 0.3 * $this->getFloorArea();
+        }
+
+        return $area;
     }
 
     public function getHouseHeight()

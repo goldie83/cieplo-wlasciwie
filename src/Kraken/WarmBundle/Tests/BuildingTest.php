@@ -41,7 +41,7 @@ class BuildingTest extends \PHPUnit_Framework_TestCase
     public function testEnergyLossThroughGroundFloor()
     {
         $instance = $this->makeInstance();
-        $building = new Building($instance, $this->mockVentilation(), $this->mockWall(), $this->mockWallFactory());
+        $building = $this->mockBuilding($instance);
 
         $this->assertEquals(28.68, $building->getEnergyLossThroughGroundFloor());
 
@@ -65,7 +65,7 @@ class BuildingTest extends \PHPUnit_Framework_TestCase
         $instance->get()->getHouse()->setBuildingFloors(2);
         $instance->get()->getHouse()->setBuildingHeatedFloors([0,1,2]);
 
-        $building = new Building($instance, $this->mockVentilation(), $this->mockWall(), $this->mockWallFactory());
+        $building = $this->mockBuilding($instance);
 
         $this->assertEquals(24.9, $building->getEnergyLossToUnderground());
 
@@ -79,7 +79,13 @@ class BuildingTest extends \PHPUnit_Framework_TestCase
 
         $instance->get()->getHouse()->setBottomIsolationLayer($isolation);
 
-        $this->assertEquals(14.1, $building->getEnergyLossToUnderground());
+        $this->assertEquals(6.21, $building->getEnergyLossToUnderground());
+
+        $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
+        $f->shouldReceive('isGroundFloorHeated')->andReturn(true);
+        $f->shouldReceive('isBasementHeated')->andReturn(false);
+
+        $building = $this->mockBuilding($instance, null, $f);
 
         $instance->get()->getHouse()->setHasBasement(true);
         $instance->get()->getHouse()->setNumberHeatedFloors(2);
@@ -94,7 +100,8 @@ class BuildingTest extends \PHPUnit_Framework_TestCase
         $instance->get()->getHouse()->setHasBasement(true);
         $instance->get()->getHouse()->setNumberHeatedFloors(2);
         $instance->get()->getHouse()->setBuildingHeatedFloors([0,1,2]);
-        $building = new Building($instance, $this->mockVentilation(), $this->mockWall(), $this->mockWallFactory());
+
+        $building = $this->mockBuilding($instance);
 
         $this->assertEquals(0, $building->getFloorEnergyLossToUnheated());
 
@@ -110,109 +117,18 @@ class BuildingTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(0, $building->getFloorEnergyLossToUnheated());
 
+
+        $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
+        $f->shouldReceive('isGroundFloorHeated')->andReturn(true);
+        $f->shouldReceive('isBasementHeated')->andReturn(false);
+
+        $building = $this->mockBuilding($instance, null, $f);
+
         $instance->get()->getHouse()->setHasBasement(true);
         $instance->get()->getHouse()->setNumberHeatedFloors(2);
         $instance->get()->getHouse()->setBuildingHeatedFloors([1,2]);
 
-        $this->assertEquals(7.61, $building->getFloorEnergyLossToUnheated());
-    }
-
-    public function testHouseCubature()
-    {
-        $instance = $this->makeInstance();
-        $instance->get()->getHouse()->setHasBasement(true);
-        $instance->get()->getHouse()->setBuildingFloors(2);
-        $instance->get()->getHouse()->setBuildingHeatedFloors([1,2]);
-        $instance->get()->getHouse()->setBuildingRoof('flat');
-
-        $building = new Building($instance, $this->mockVentilation(), $this->mockWall(), $this->mockWallFactory());
-
-        $this->assertEquals(round(9 * 9 * 2 * 2.6, 2), $building->getHouseCubature());
-
-        $instance->get()->getHouse()->setBuildingFloors(2);
-        $instance->get()->getHouse()->setHasBasement(false);
-        $instance->get()->getHouse()->setBuildingHeatedFloors([1,2]);
-        $instance->get()->getHouse()->setBuildingRoof('oblique');
-
-        $this->assertEquals(round(9 * 9 * 2.6 * 1.6, 2), $building->getHouseCubature());
-    }
-
-    public function testWallArea()
-    {
-        $instance = $this->makeInstance();
-        $instance->get()->setBuildingType('single_house');
-        $instance->get()->getHouse()->setBuildingLength(10);
-        $instance->get()->getHouse()->setBuildingWidth(10);
-        $instance->get()->getHouse()->setBuildingFloors(1);
-        $instance->get()->getHouse()->setHasBasement(false);
-        $instance->get()->getHouse()->setBuildingHeatedFloors([1]);
-        $instance->get()->getHouse()->setBuildingRoof('flat');
-
-        $building = new Building($instance, $this->mockVentilation(), $this->mockWall(), $this->mockWallFactory());
-
-        $this->assertEquals(4, $building->getNumberOfWalls());
-        $this->assertEquals(2.6, $building->getHouseHeight());
-        $this->assertEquals(104, $building->getWallArea($instance->get()->getHouse()->getWalls()->first()));
-
-        $instance = $this->makeInstance();
-        $instance->get()->setBuildingType('double_house');
-        $instance->get()->getHouse()->setBuildingLength(10);
-        $instance->get()->getHouse()->setBuildingWidth(10);
-        $instance->get()->getHouse()->setBuildingFloors(2);
-        $instance->get()->getHouse()->setHasBasement(false);
-        $instance->get()->getHouse()->setBuildingHeatedFloors([1,2]);
-        $instance->get()->getHouse()->setBuildingRoof('flat');
-
-        $building = new DoubleBuilding($instance, $this->mockVentilation(), $this->mockWall(), $this->mockWallFactory());
-
-        $this->assertEquals(3, $building->getNumberOfWalls());
-        $this->assertEquals(5.55, $building->getHouseHeight());
-        $this->assertEquals(166.5, $building->getWallArea($instance->get()->getHouse()->getWalls()->first()));
-    }
-
-    public function testNumberOfHeatedFloors()
-    {
-        //jednopiętrowy, dach skosny - ogrzewany tylko parter
-        $instance = $this->makeInstance();
-        $instance->get()->getHouse()->setBuildingFloors(2);
-        $instance->get()->getHouse()->setBuildingHeatedFloors([1]);
-        $instance->get()->getHouse()->setHasBasement(false);
-        $instance->get()->getHouse()->setBuildingRoof('steep');
-
-        $building = new Building($instance, $this->mockVentilation(), $this->mockWall(), $this->mockWallFactory());
-
-        $this->assertEquals(1, $building->getNumberOfHeatedFloors());
-        $this->assertTrue($building->isGroundFloorHeated());
-        $this->assertFalse($building->isAtticHeated());
-        $this->assertFalse($building->isBasementHeated());
-
-        // parterówka, płaski dach, - ogrzewany tylko parter
-        $instance = $this->makeInstance();
-        $instance->get()->getHouse()->setBuildingFloors(1);
-        $instance->get()->getHouse()->setBuildingHeatedFloors([1]);
-        $instance->get()->getHouse()->setHasBasement(false);
-        $instance->get()->getHouse()->setBuildingRoof('flat');
-
-        $building = new Building($instance, $this->mockVentilation(), $this->mockWall(), $this->mockWallFactory());
-
-        $this->assertEquals(1, $building->getNumberOfHeatedFloors());
-        $this->assertTrue($building->isGroundFloorHeated());
-        $this->assertTrue($building->isAtticHeated());
-        $this->assertFalse($building->isBasementHeated());
-
-        // 4 piętra, piwnica i skośny dach - ogrzewany parter i piętro
-        $instance = $this->makeInstance();
-        $instance->get()->getHouse()->setBuildingFloors(3);
-        $instance->get()->getHouse()->setBuildingHeatedFloors([1,2]);
-        $instance->get()->getHouse()->setHasBasement(true);
-        $instance->get()->getHouse()->setBuildingRoof('steep');
-
-        $building = new Building($instance, $this->mockVentilation(), $this->mockWall(), $this->mockWallFactory());
-
-        $this->assertEquals(2, $building->getNumberOfHeatedFloors());
-        $this->assertTrue($building->isGroundFloorHeated());
-        $this->assertFalse($building->isAtticHeated());
-        $this->assertFalse($building->isBasementHeated());
+        $this->assertEquals(9.40, $building->getFloorEnergyLossToUnheated());
     }
 
     public function testExternalWallEnergyLossFactor()
@@ -245,13 +161,13 @@ class BuildingTest extends \PHPUnit_Framework_TestCase
         $l2->setMaterial($m2);
         $l2->setSize(12);
 
-        $building = new Building($instance, $this->mockVentilation(), new WallService($instance), $this->mockWallFactory());
+        $building = $this->mockBuilding($instance);
 
-        $this->assertEquals(240.8, $building->getExternalWallEnergyLossFactor());
+        $this->assertEquals(300, $building->getExternalWallEnergyLossFactor());
 
         $instance->get()->getHouse()->setExternalIsolationLayer($l2);
 
-        $this->assertEquals(52.0128, $building->getExternalWallEnergyLossFactor());
+        $this->assertEquals(48, $building->getExternalWallEnergyLossFactor());
     }
 
     protected function mockVentilation()
@@ -265,7 +181,7 @@ class BuildingTest extends \PHPUnit_Framework_TestCase
     {
         $mock = Mockery::mock('Kraken\WarmBundle\Service\WallService');
         $mock->shouldReceive('getSize')->andReturn(0.4);
-        $mock->shouldReceive('getThermalConductance')->andReturn(0.25);
+        $mock->shouldReceive('getThermalConductance')->andReturn(0.25, 0.04);
 
         return $mock;
     }
@@ -289,5 +205,38 @@ class BuildingTest extends \PHPUnit_Framework_TestCase
         $mock = Mockery::mock('Doctrine\ORM\EntityManager');
 
         return $mock;
+    }
+
+    protected function mockDimensions()
+    {
+        $mock = Mockery::mock('Kraken\WarmBundle\Service\DimensionsService');
+        $mock->shouldReceive('getExternalBuildingLength')->andReturn(10);
+        $mock->shouldReceive('getExternalBuildingWidth')->andReturn(10);
+        $mock->shouldReceive('getTotalWallArea')->andReturn(1200);
+        $mock->shouldReceive('getBasementHeight')->andReturn(0.9*2.6);
+
+        return $mock;
+    }
+
+    protected function mockFloors()
+    {
+        $mock = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
+        $mock->shouldReceive('isGroundFloorHeated')->andReturn(true);
+        $mock->shouldReceive('isBasementHeated')->andReturn(true);
+
+        return $mock;
+    }
+
+    protected function mockBuilding($instance, $dimensions = null, $floors = null)
+    {
+        if (!$dimensions) {
+            $dimensions = $this->mockDimensions();
+        }
+
+        if (!$floors) {
+            $floors = $this->mockFloors();
+        }
+
+        return new Building($instance, $this->mockVentilation(), $this->mockWall(), $this->mockWallFactory(), $dimensions, $floors);
     }
 }

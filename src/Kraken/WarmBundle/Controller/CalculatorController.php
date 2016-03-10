@@ -257,7 +257,12 @@ class CalculatorController extends Controller
                 $form->get('bottom_isolation_layer')->setData($house->getBottomIsolationLayer());
             }
         } else {
-            $form = $this->createForm(new CalculationStepCeilingType(), $house);
+            $this->get('kraken_warm.instance')->setCustomCalculation($calc);
+            $floors = $this->get('kraken_warm.floors');
+            $form = $this->createForm(new CalculationStepCeilingType(), $house, [
+                'top_isolation_label' => $floors->getTopIsolationLabel(),
+                'bottom_isolation_label' => $floors->getBottomIsolationLabel()
+            ]);
         }
 
         $form->handleRequest($request);
@@ -508,7 +513,6 @@ class CalculatorController extends Controller
         $this->get('session')->set('calculation_id', $calc->getId());
 
         $calculator = $this->get('kraken_warm.energy_calculator');
-        $building = $this->get('kraken_warm.building');
         $dimensions = $this->get('kraken_warm.dimensions');
         $heatingSeason = $this->get('kraken_warm.heating_season');
         $pricing = $this->get('kraken_warm.energy_pricing');
@@ -528,7 +532,6 @@ class CalculatorController extends Controller
 
         return $this->render('KrakenWarmBundle:Default:result.html.twig', array(
             'calculator' => $calculator,
-            'building' => $building,
             'pricing' => $pricing,
             'heatingSeason' => $heatingSeason,
             'fuelService' => $fuelService,
@@ -539,6 +542,7 @@ class CalculatorController extends Controller
             'comparison' => $this->get('kraken_warm.comparison'),
             'climate' => $this->get('kraken_warm.climate'),
             'dimensions' => $this->get('kraken_warm.dimensions'),
+            'floors' => $this->get('kraken_warm.floors'),
             'calc' => $calc,
             'city' => $calc->getCity(),
             'isAuthor' => $this->userIsAuthor($slug, $request),

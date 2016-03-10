@@ -18,7 +18,7 @@
         <div class="row">
           <div class="col-md-6">
               <h1>{{ describer.headline|raw }}</h1>
-              <p class="lead">A.D. {{ calc.constructionPeriod }}, {{ dimensions.heatedHouseArea }}m<sup>2</sup> ogrzewane, {{ city.name }} i okolice</p>
+              <p class="lead" style="font-size:18px">A.D. {{ calc.constructionPeriod }}, {{ dimensions.heatedHouseArea }}m<sup>2</sup> ogrzewane, {{ city.name }} i&nbsp;okolice</p>
           </div>
           <div class="rank col-md-6">
               <span class="class-badge {{ classifier.classString }}-class">{{ classifier.class }}</span>
@@ -39,7 +39,7 @@
                     <tr><td class="col-md-4">Powierzchnia</td><td class="col-md-8">{{ describer.areaDetails|raw }}</td></tr>
                     <tr><td class="col-md-4">Ściany</td><td class="col-md-8">{{ describer.wallDetails}}</td></tr>
                     <tr><td class="col-md-4">Ogrzewane piętra</td><td class="col-md-8">{{ describer.heatedFloorsDetails }}</td></tr>
-                    {% if building.hasUnheatedFloors %}
+                    {% if floors.hasUnheatedFloors %}
                         <tr><td class="col-md-4">Nieogrzewane piętra</td><td class="col-md-8">{{ describer.unheatedFloorsDetails }}</td></tr>
                     {% endif %}
                     <tr><td class="col-md-4">Izolacja od góry</td><td class="col-md-8">{{ describer.roofDetails}}</td></tr>

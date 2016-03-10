@@ -14,9 +14,12 @@ class Building implements BuildingInterface
     protected $wall;
     protected $wall_factory;
     protected $dimensions;
+    protected $floors;
 
     protected $lossToOutside;
     protected $lossToUnheated;
+
+    const GROUND_LAMBDA = 1.8;
 
     protected $windows_u_factor = array(
         '' => 3.0,
@@ -37,13 +40,14 @@ class Building implements BuildingInterface
         'other' => 2.0,
     );
 
-    public function __construct(InstanceService $instance, VentilationService $ventilation, WallService $wall, WallFactory $wall_factory, DimensionsService $dimensions)
+    public function __construct(InstanceService $instance, VentilationService $ventilation, WallService $wall, WallFactory $wall_factory, DimensionsService $dimensions, FloorsService $floors)
     {
         $this->instance = $instance;
         $this->ventilation = $ventilation;
         $this->wall = $wall;
         $this->wall_factory = $wall_factory;
         $this->dimensions = $dimensions;
+        $this->floors = $floors;
     }
 
     public function getInstance()
@@ -65,16 +69,16 @@ class Building implements BuildingInterface
             return max(1, $number * 100);
         };
 
-        if ($this->getHouse()->getHasBasement() && !$this->isBasementHeated() && $this->isGroundFloorHeated()) {
+        if ($this->getHouse()->getHasBasement() && !$this->isBasementHeated() && $this->floors->isGroundFloorHeated()) {
             $groundLabel = 'Podłoga nad nieogrzewaną piwnicą';
-        } elseif (!$this->isGroundFloorHeated()) {
+        } elseif (!$this->floors->isGroundFloorHeated()) {
             $groundLabel = 'Strop nad nieogrzewanym parterem';
         } else {
             $groundLabel = 'Podłoga na gruncie';
         }
 
         $roofLabel = 'Dach';
-        if ($this->getHouse()->getBuildingRoof() != 'flat' && !$this->isAtticHeated()) {
+        if ($this->getHouse()->getBuildingRoof() != 'flat' && !$this->floors->isAtticHeated()) {
             $roofLabel = 'Strop poddasza';
         }
 
@@ -95,26 +99,6 @@ class Building implements BuildingInterface
     public function getHouse()
     {
         return $this->getInstance()->getHouse();
-    }
-
-    public function isBasementHeated()
-    {
-        return in_array(0, $this->getHouse()->getBuildingHeatedFloors());
-    }
-
-    public function isGroundFloorHeated()
-    {
-        return in_array(1, $this->getHouse()->getBuildingHeatedFloors());
-    }
-
-    public function isAtticHeated()
-    {
-        return in_array($this->getHouse()->getBuildingFloors(), $this->getHouse()->getBuildingHeatedFloors());
-    }
-
-    public function hasUnheatedFloors()
-    {
-        return count($this->getHouse()->getBuildingHeatedFloors()) <= $this->getHouse()->getBuildingFloors();
     }
 
     public function getEnergyLossToOutside()
@@ -183,7 +167,7 @@ class Building implements BuildingInterface
             return 1 / ($this->getInternalCeilingResistance() + $roofIsolationResistance);
         }
 
-        if ($this->isAtticHeated()) {
+        if ($this->floors->isAtticHeated()) {
             // assume construction material for non-flat roof
             $woodenCoverLambda = 0.18;
             $woodenCoverSize = 0.1;
@@ -223,7 +207,7 @@ class Building implements BuildingInterface
     {
         $house = $this->getHouse();
 
-        if ($house->getBuildingRoof() != 'flat' && !$this->isAtticHeated()) {
+        if ($house->getBuildingRoof() != 'flat' && !$this->floors->isAtticHeated()) {
             return $this->dimensions->getRoofArea() * $this->getHighestCeilingConductance();
         }
 
@@ -232,9 +216,9 @@ class Building implements BuildingInterface
 
     public function getGroundEnergyLossFactor()
     {
-        if ($this->isGroundFloorHeated()) {
+        if ($this->floors->isGroundFloorHeated()) {
             if ($this->getHouse()->getHasBasement()) {
-                if ($this->isBasementHeated()) {
+                if ($this->floors->isBasementHeated()) {
                     return $this->getEnergyLossToUnderground();
                 }
             } else {
@@ -254,7 +238,7 @@ class Building implements BuildingInterface
         $isolation = $house->getBottomIsolationLayer();
         $isolationResistance = $isolation ? ($isolation->getSize() / 100) / $isolation->getMaterial()->getLambda() : 0;
 
-        $groundLambda = $this->getGroundLambda();
+        $groundLambda = self::GROUND_LAMBDA;
         $floorLambda = $isolationResistance > 0
             ? 1 / $isolationResistance
             : 1;
@@ -285,7 +269,7 @@ class Building implements BuildingInterface
     {
         $house = $this->getHouse();
 
-        if (!($this->isGroundFloorHeated() && $house->getHasBasement() && $this->isBasementHeated())) {
+        if (!($this->floors->isGroundFloorHeated() && $house->getHasBasement() && $this->floors->isBasementHeated())) {
             return 0;
         }
 
@@ -297,9 +281,9 @@ class Building implements BuildingInterface
             ? ($isolation->getSize() / 100) / $isolation->getMaterial()->getLambda()
             : 0;
 
-        $basementHeight = $this->getBasementHeight();
+        $basementHeight = $this->dimensions->getBasementHeight();
 
-        $groundLambda = $this->getGroundLambda();
+        $groundLambda = self::GROUND_LAMBDA;
         $floorLambda = $isolationResistance > 0
             ? 1 / $isolationResistance
             : 1;
@@ -334,11 +318,6 @@ class Building implements BuildingInterface
         return round($l * $w * $this->getUndergroundConductance(), 2);
     }
 
-    public function getGroundLambda()
-    {
-        return 1.8;
-    }
-
     public function getInternalCeilingResistance()
     {
         $Rsi = 0.17;
@@ -352,19 +331,12 @@ class Building implements BuildingInterface
         return $Rsi + $woodenFloor + $concrete + $dz3 + $Rse;
     }
 
-    public function getInternalWallConductance()
-    {
-        $internalWall = $this->wall_factory->getInternalWall($this->instance->get());
-
-        return $this->wall->getThermalConductance($internalWall);
-    }
-
     public function getFloorEnergyLossToUnheated()
     {
         $house = $this->getHouse();
 
         //TODO wygląda na zbędny syf
-        if ($house->getHasBasement() && !$this->isBasementHeated()) {
+        if ($house->getHasBasement() && !$this->floors->isBasementHeated()) {
             $l = $this->dimensions->getExternalBuildingLength();
             $w = $this->dimensions->getExternalBuildingWidth();
 
@@ -375,7 +347,7 @@ class Building implements BuildingInterface
                 : 0;
 
             return round($l * $w * (1 / ($this->getInternalCeilingResistance() + $ceilingIsolationResistance)), 2);
-        } elseif (!$house->getHasBasement() && !$this->isGroundFloorHeated()) {
+        } elseif (!$house->getHasBasement() && !$this->floors->isGroundFloorHeated()) {
             $l = $this->dimensions->getExternalBuildingLength();
             $w = $this->dimensions->getExternalBuildingWidth();
 
@@ -404,40 +376,5 @@ class Building implements BuildingInterface
         $heatRecoveryEfficiency = 0.6;
 
         return 0.34 * (1 - $heatRecoveryEfficiency) * $airStream;
-    }
-
-    public function getFloors()
-    {
-        $totalFloors = $this->getHouse()->getBuildingFloors();
-        $heatedFloors = $this->getHouse()->getBuildingHeatedFloors();
-
-        $floors = array();
-        $i = 0;
-
-        if ($this->getHouse()->getHasBasement()) {
-            $floors[] = array(
-                'name' => 'basement',
-                'label' => 'Piwnica',
-                'heated' => $this->isBasementHeated(),
-            );
-            ++$i;
-        }
-
-        $floors[] = array(
-            'name' => 'ground_floor',
-            'label' => 'Parter',
-            'heated' => $this->isGroundFloorHeated(),
-        );
-        ++$i;
-
-        for ($j = 2; $j <= $totalFloors; $j++) {
-            $floors[] = array(
-                'name' => $j == $totalFloors ? 'attic' : 'regular_floor_'.($j-1),
-                'label' => $j == $totalFloors ? 'Poddasze' : ($j-1).'. piętro',
-                'heated' => in_array($j, $heatedFloors),
-            );
-        }
-
-        return $floors;
     }
 }

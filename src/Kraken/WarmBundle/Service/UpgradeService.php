@@ -11,12 +11,15 @@ class UpgradeService
     protected $instance;
     protected $building;
     protected $wall;
+    protected $floors;
+
     protected $presentStyrofoamLambda = 0.035;
 
-    public function __construct(InstanceService $instance, BuildingInterface $building)
+    public function __construct(InstanceService $instance, BuildingInterface $building, FloorsService $floors)
     {
         $this->instance = $instance;
         $this->building = $building;
+        $this->floors = $floors;
     }
 
     public function getVariants()
@@ -136,7 +139,7 @@ class UpgradeService
         $this->instance->setCustomCalculation($customCalculation);
         $house = $customCalculation->getHouse();
 
-        if ($this->building->isGroundFloorHeated()) {
+        if ($this->floors->isGroundFloorHeated()) {
             $groundFloorIsolation = $house->getGroundFloorIsolationLayer();
             $materialName = $groundFloorIsolation && $groundFloorIsolation->getMaterial() ? $groundFloorIsolation->getMaterial()->getName() : '';
 
@@ -166,7 +169,7 @@ class UpgradeService
         $this->instance->setCustomCalculation($customCalculation);
         $house = $customCalculation->getHouse();
 
-        if (!$this->building->isGroundFloorHeated()) {
+        if (!$this->floors->isGroundFloorHeated()) {
             $ceilingIsolation = $house->getLowestCeilingIsolationLayer();
 
             if (!$ceilingIsolation || $ceilingIsolation->getSize() <= 5) {
@@ -275,7 +278,7 @@ class UpgradeService
             $l->setMaterial($m);
             $l->setSize($isolationSize);
 
-            if ($flatRoof || !$this->building->isAtticHeated()) {
+            if ($flatRoof || !$this->floors->isAtticHeated()) {
                 $house->setHighestCeilingIsolationLayer($l);
             } else {
                 $house->setRoofIsolationLayer($l);
