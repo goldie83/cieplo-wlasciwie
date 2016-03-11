@@ -50,7 +50,10 @@
         "sonata-project/admin-bundle": "^2.4@dev",
         "sonata-project/doctrine-orm-admin-bundle": "^2.4@dev",
         "sonata-project/formatter-bundle": "^2.4@dev",
-        "sonata-project/media-bundle": "^2.3",
+        "sonata-project/media-bundle": "dev-master",
+        "sonata-project/block-bundle": "dev-master",
+        "nelmio/api-doc-bundle": "2.11.*@dev",
+        "friendsofsymfony/rest-bundle": "1.7.*@dev",
         "liip/imagine-bundle": "^1.3@dev",
         "beyerz/open-graph-protocol-bundle": "^1.0",
         "sonata-project/classification-bundle": "*"
