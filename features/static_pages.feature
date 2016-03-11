@@ -2,7 +2,7 @@ Feature: Static pages
   I want to see some static pages. Now.
 
   Scenario: Go to homepage
-    Given I am on homepage
+    Given I go to "/"
      Then I should see "Czym i za ile ogrzewać dom"
       And I should see "Sprawdź swój dom!"
 

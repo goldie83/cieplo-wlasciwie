@@ -41,6 +41,7 @@ class LoadWeatherData implements FixtureInterface
                 foreach ($monthData as $day => $value) {
                     $t = new Temperature();
                     $t->setMonth($month);
+                    $t->setType('average');
                     $t->setDay($day);
                     $t->setValue($value);
                     $t->setCity($city);

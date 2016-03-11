@@ -5,7 +5,7 @@ namespace Kraken\WarmBundle\Form;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\OptionsResolver\OptionsResolverInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CalculationStepCeilingType extends AbstractType
 {
@@ -27,7 +27,7 @@ class CalculationStepCeilingType extends AbstractType
         ;
     }
 
-    public function configureOptions(OptionsResolverInterface $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'Kraken\WarmBundle\Entity\House',

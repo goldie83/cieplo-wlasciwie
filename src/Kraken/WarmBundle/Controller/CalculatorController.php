@@ -511,7 +511,7 @@ class CalculatorController extends Controller
             ->getRepository('KrakenWarmBundle:Calculation')
             ->findOneBy(array('id' => intval($slug, 36)));
 
-        if (!$calc || !$calc->getHouse()) {
+        if (!$calc || !$calc->getHouse() || !$calc->getIndoorTemperature()) {
             throw $this->createNotFoundException('Jakiś zły masz ten link. Nic tu nie ma.');
         }
 
