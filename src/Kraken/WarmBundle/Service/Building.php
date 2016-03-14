@@ -57,7 +57,7 @@ class Building implements BuildingInterface
 
     public function getEnergyLossBreakdown()
     {
-        $w = $this->getWallsEnergyLossFactor();
+        $w = $this->getExternalWallEnergyLossFactor();
         $v = $this->getVentilationEnergyLossFactor();
         $g = $this->getGroundEnergyLossFactor() + $this->getFloorEnergyLossToUnheated();
         $r = $this->getRoofEnergyLossFactor() + $this->getRoofEnergyLossToUnheated();
@@ -131,7 +131,7 @@ class Building implements BuildingInterface
      */
     public function getWindowsEnergyLossFactor()
     {
-        return $this->windows_u_factor[$this->getHouse()->getWindowsType()] * $this->dimensions->getWindowsArea();
+        return $this->getWindowsConductance() * $this->dimensions->getWindowsArea();
     }
 
     public function getWindowsConductance()

@@ -155,13 +155,20 @@ class HouseDescriptionService
             $isolationDetails[] = sprintf('%s %scm', $house->getExternalIsolationLayer()->getMaterial()->getName(), $house->getExternalIsolationLayer()->getSize());
         }
 
+        if (empty($isolationDetails)) {
+            $isolationDetails[] = 'brak';
+        }
+
         return strtolower(sprintf('%scm, konstrukcja: %s, izolacja: %s', $house->getWallSize(), implode(' + ', $wallDetails), implode(' + ', $isolationDetails)));
     }
 
     public function getRoofDetails()
     {
         $house = $this->instance->get()->getHouse();
-        $roofInformation = [$this->roofTypes[$house->getBuildingRoof()]];
+
+        if (!$this->instance->get()->isApartment()) {
+            $roofInformation = [$this->roofTypes[$house->getBuildingRoof()]];
+        }
 
         if (($isolation = $house->getTopIsolationLayer()) != null) {
             $roofInformation[] = sprintf('%s %scm', $isolation->getMaterial()->getName(), $isolation->getSize());

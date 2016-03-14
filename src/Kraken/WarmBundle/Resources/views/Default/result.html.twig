@@ -42,21 +42,23 @@
                     {% if floors.hasUnheatedFloors %}
                         <tr><td class="col-md-4">Nieogrzewane piętra</td><td class="col-md-8">{{ describer.unheatedFloorsDetails }}</td></tr>
                     {% endif %}
+                {% endif %}
                     <tr><td class="col-md-4">Izolacja od góry</td><td class="col-md-8">{{ describer.roofDetails}}</td></tr>
                     <tr><td class="col-md-4">Izolacja od dołu</td><td class="col-md-8">{{ describer.groundDetails}}</td></tr>
-                {% endif %}
                     <tr><td class="col-md-4">Drzwi i okna</td><td class="col-md-8">{{ describer.doorsWindowsDetails|raw }}</td></tr>
                     <tr><td class="col-md-4">Wentylacja</td><td class="col-md-8">{{ describer.ventilationDetails}}</td></tr>
                 </tbody>
             </table>
 
-            <h3>Warunki klimatyczne</h3>
+            <h3>Warunki klimatyczne &mdash; {{ city.name }}</h3>
             {% set averageTemperature = heatingSeason.getAverageTemperature(calc) %}
             {% set lastYearAverageTemperature = heatingSeason.getLastYearAverageTemperature(calc) %}
             <p>{{ city.name }} leży w <strong>{{ climate.climateZone }}.</strong> <a href="http://www.hvacr.pl/public/styles/img_640/public/vademecum/mainPhoto/12/strefy_klimatyczne_polska.jpg" target="_blank">strefie klimatycznej</a>.
              Dlatego maksymalną moc grzewczą oblicza się tu dla średniej dobowej temperatury <strong>{{ climate.designOutdoorTemperature }}&deg;C</strong>.</p>
             <p>Przeciętny sezon grzewczy trwa u ciebie ok. <strong>{{ heatingSeason.getSeasonLength(calc) }} dni</strong>, ze średnią temperaturą <strong>{{ averageTemperature|number_format(2, ',', ' ') }}&deg;C</strong>.</p>
-            <p>Poprzedni sezon grzewczy trwał ok. <strong>{{ heatingSeason.getLastSeasonLength(calc) }} dni</strong>, ze średnią temperaturą <strong>{{ lastYearAverageTemperature|number_format(2, ',', ' ') }}&deg;C</strong>.</p>
+            {% if heatingSeason.getLastSeasonLength(calc) > 0 %}
+                <p>Poprzedni sezon grzewczy trwał ok. <strong>{{ heatingSeason.getLastSeasonLength(calc) }} dni</strong>, ze średnią temperaturą <strong>{{ lastYearAverageTemperature|number_format(2, ',', ' ') }}&deg;C</strong>.</p>
+            {% endif %}
           </div>
           <div class="col-md-6">
             <h3>Ile ciepła potrzebuje twój dom</h3>
@@ -66,14 +68,12 @@
             <p>Tyle będzie potrzebne w "najmroźniejszy" dzień, przy średniej dobowej <strong>{{ climate.designOutdoorTemperature }}&deg;C</strong></p>
             <h5><span class="label label-default">{{ (calculator.avgHeatingPower/1000)|number_format(1, ',', ' ') ~ 'kW' }}</span> średnia moc grzewcza</h5>
             <p>Tyle będzie potrzebne w przeciętny dzień zimy, przy średniej dobowej <strong>{{ heatingSeason.getAverageTemperature()|number_format(1, ',', ' ') }}&deg;C</strong></p>
+            <h5><span class="label label-default">{{ calculator.yearlyEnergyConsumption|number_format(0, ',', ' ') }}kWh</span> całkowite roczne zużycie energii na ogrzewanie</h5>
+            <p>Nieważne czym grzejesz, tyle ciepła musisz wyprodukować przez cały sezon grzewczy.</p>
             <h5><span class="label label-default">{{ calculator.maxHeatingPowerPerArea|number_format(0, ',', ' ') }}W/m<sup>2</sup></span> wskaźnik zapotrzebowania na moc</h5>
             {% if calculator.maxHeatingPowerPerArea < 85 %}
                 <p>Dlaczego więc producent/sprzedawca/instalator kotła startują od 100W/m<sup>2</sup> wzwyż?</p>
-            {% else %}
-                <p>&nbsp;</p>
             {% endif %}
-            <h5><span class="label label-default">{{ calculator.yearlyEnergyConsumption|number_format(0, ',', ' ') }}kWh</span> całkowite roczne zużycie energii na ogrzewanie</h5>
-            <p>Nieważne czym grzejesz, tyle ciepła musisz wyprodukować przez cały sezon grzewczy.</p>
             <h5><span class="label label-default">{{ calculator.yearlyEnergyConsumptionFactor|number_format(0, ',', ' ') }}kWh/m<sup>2</sup>*rok</span> wskaźnik zużycia energii</h5>
             <p>Tę wartość znajdziesz na świadectwie energetycznym budynku (nowsze takie mają). Na tej podstawie twój dom zalicza się do <a href="http://cieplowlasciwie.pl/jak-to-dziala#klasyfikacja" target="_blank">klasy energetycznej&nbsp;<strong>{{ classifier.class }}</strong></a></p>
 

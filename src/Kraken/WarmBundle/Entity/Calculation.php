@@ -267,6 +267,11 @@ class Calculation
         return $this->building_type;
     }
 
+    public function isApartment()
+    {
+        return $this->building_type == 'apartment';
+    }
+
     public function setIndoorTemperature($indoorTemperature)
     {
         $this->indoor_temperature = $indoorTemperature;

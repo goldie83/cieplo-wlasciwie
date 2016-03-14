@@ -8,8 +8,10 @@ class BuildingFactory
     {
         $calc = $instance->get();
 
-        $building = new Building($instance, $ventilation, $wall, $wall_factory, $dimensions, $floors);
+        if ($calc->getBuildingType() == 'apartment') {
+            return new Apartment($instance, $ventilation, $wall, $wall_factory, $dimensions, $floors);
+        }
 
-        return $building;
+        return new Building($instance, $ventilation, $wall, $wall_factory, $dimensions, $floors);
     }
 }

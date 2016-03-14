@@ -258,6 +258,10 @@ class UpgradeService
 
     protected function tryBetterRoofIsolation($originalCalculation, $actualEnergyLoss, array &$variants)
     {
+        if ($this->instance->get()->isApartment()) {
+            return;
+        }
+
         $customCalculation = clone unserialize(serialize($originalCalculation));
         $this->instance->setCustomCalculation($customCalculation);
         $house = $customCalculation->getHouse();

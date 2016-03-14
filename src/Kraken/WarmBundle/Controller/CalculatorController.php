@@ -102,27 +102,20 @@ class CalculatorController extends Controller
             ->getRepository('KrakenWarmBundle:Calculation')
             ->findOneBy(array('id' => intval($slug, 36)));
 
-        $em = $this->getDoctrine()->getManager();
-
         $form = $this->createForm(new CalculationStepLocationType(), $calc);
+        $form->handleRequest($request);
 
-        if ($request->isMethod('post')) {
-            $form->bind($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $obj = $form->getData();
 
-            if ($form->isValid()) {
-                $obj = $form->getData();
+            $this->getDoctrine()->getManager()->persist($obj);
+            $this->getDoctrine()->getManager()->flush();
 
-                $obj->setHeatedArea(null); // to reassign city & recalculate cached values
-                $em->persist($obj);
-                $em->flush();
+            $redirect = $this->generateUrl('dimensions', array(
+                'slug' => base_convert($obj->getId(), 10, 36),
+            ));
 
-                $calcSlug = base_convert($obj->getId(), 10, 36);
-                $redirect = $this->generateUrl('dimensions', array(
-                    'slug' => $calcSlug,
-                ));
-
-                return $this->redirect($redirect);
-            }
+            return $this->redirect($redirect);
         }
 
         return $this->render('KrakenWarmBundle:Calculator:location.html.twig', array(
@@ -202,6 +195,16 @@ class CalculatorController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $house = $form->getData();
+
+            if (!$form->get('has_isolation_inside')->getData() && $house->getInternalIsolationLayer()) {
+                $em->remove($house->getInternalIsolationLayer());
+                $house->setInternalIsolationLayer(null);
+            }
+
+            if (!$form->get('has_isolation_outside')->getData() && $house->getExternalIsolationLayer()) {
+                $em->remove($house->getExternalIsolationLayer());
+                $house->setExternalIsolationLayer(null);
+            }
 
             $em->persist($house);
             $calc->setHouse($house);

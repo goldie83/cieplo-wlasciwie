@@ -63,7 +63,7 @@ class DimensionsService
             --$walls;
         }
 
-        if ($this->getInstance()->getHouse()->getBuildingRoof() != 'flat') {
+        if (!$this->getInstance()->isApartment() && $this->getInstance()->getHouse()->getBuildingRoof() != 'flat') {
             $houseHeight -= 0.8 * $this->getInstance()->getHouse()->getFloorHeight();
         }
 
@@ -202,7 +202,7 @@ class DimensionsService
     {
         $numberFloors = $this->getNumberOfHeatedFloors();
 
-        if ($this->floors->isBasementHeated()) {
+        if (!$this->getInstance()->isApartment() && $this->floors->isBasementHeated()) {
             $numberFloors--;
         }
 
@@ -255,7 +255,7 @@ class DimensionsService
 
     public function getNumberOfWalls()
     {
-        if ($this->getInstance()->getBuildingType() == 'apartment') {
+        if ($this->getInstance()->isApartment()) {
             return $this->getInstance()->getHouse()->getApartment()->getNumberExternalWalls();
         } elseif ($this->getInstance()->getBuildingType() == 'row_house') {
             return $this->getInstance()->getHouse()->isRowHouseOnCorner() ? 3 : 2;
