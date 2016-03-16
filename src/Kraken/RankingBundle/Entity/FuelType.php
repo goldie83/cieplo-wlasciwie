@@ -4,7 +4,6 @@ namespace Kraken\RankingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -35,7 +34,6 @@ class FuelType
      */
     protected $boilerFuelTypes;
 
-
     public function __construct()
     {
         $this->boilerPowers = new \Doctrine\Common\Collections\ArrayCollection();
@@ -52,9 +50,10 @@ class FuelType
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
+     *
      * @return FuelType
      */
     public function setName($name)
@@ -65,7 +64,7 @@ class FuelType
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -75,9 +74,10 @@ class FuelType
     }
 
     /**
-     * Set slug
+     * Set slug.
      *
      * @param string $slug
+     *
      * @return FuelType
      */
     public function setSlug($slug)
@@ -88,7 +88,7 @@ class FuelType
     }
 
     /**
-     * Get slug
+     * Get slug.
      *
      * @return string
      */
@@ -98,9 +98,10 @@ class FuelType
     }
 
     /**
-     * Add boilerPowers
+     * Add boilerPowers.
      *
      * @param \Kraken\RankingBundle\Entity\BoilerPower $boilerPowers
+     *
      * @return FuelType
      */
     public function addBoilerPower(\Kraken\RankingBundle\Entity\BoilerPower $boilerPowers)
@@ -111,7 +112,7 @@ class FuelType
     }
 
     /**
-     * Remove boilerPowers
+     * Remove boilerPowers.
      *
      * @param \Kraken\RankingBundle\Entity\BoilerPower $boilerPowers
      */
@@ -121,7 +122,7 @@ class FuelType
     }
 
     /**
-     * Get boilerPowers
+     * Get boilerPowers.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -131,9 +132,10 @@ class FuelType
     }
 
     /**
-     * Add searches
+     * Add searches.
      *
      * @param \Kraken\RankingBundle\Entity\Search $searches
+     *
      * @return FuelType
      */
     public function addSearch(\Kraken\RankingBundle\Entity\Search $searches)
@@ -144,7 +146,7 @@ class FuelType
     }
 
     /**
-     * Remove searches
+     * Remove searches.
      *
      * @param \Kraken\RankingBundle\Entity\Search $searches
      */
@@ -154,7 +156,7 @@ class FuelType
     }
 
     /**
-     * Get searches
+     * Get searches.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -164,9 +166,10 @@ class FuelType
     }
 
     /**
-     * Add boilerFuelTypes
+     * Add boilerFuelTypes.
      *
      * @param \Kraken\RankingBundle\Entity\BoilerFuelType $boilerFuelTypes
+     *
      * @return FuelType
      */
     public function addBoilerFuelType(\Kraken\RankingBundle\Entity\BoilerFuelType $boilerFuelTypes)
@@ -177,7 +180,7 @@ class FuelType
     }
 
     /**
-     * Remove boilerFuelTypes
+     * Remove boilerFuelTypes.
      *
      * @param \Kraken\RankingBundle\Entity\BoilerFuelType $boilerFuelTypes
      */
@@ -187,9 +190,9 @@ class FuelType
     }
 
     /**
-     * Get boilerFuelTypes
+     * Get boilerFuelTypes.
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getBoilerFuelTypes()
     {

@@ -5,12 +5,9 @@ namespace Kraken\WarmBundle\Tests\Service;
 use Kraken\WarmBundle\Entity\Calculation;
 use Kraken\WarmBundle\Entity\House;
 use Kraken\WarmBundle\Entity\Layer;
-use Kraken\WarmBundle\Entity\Wall;
 use Kraken\WarmBundle\Entity\Material;
 use Kraken\WarmBundle\Service\InstanceService;
 use Kraken\WarmBundle\Service\Building;
-use Kraken\WarmBundle\Service\DoubleBuilding;
-use Kraken\WarmBundle\Service\WallService;
 use Mockery;
 
 class BuildingTest extends \PHPUnit_Framework_TestCase
@@ -63,7 +60,7 @@ class BuildingTest extends \PHPUnit_Framework_TestCase
         $instance = $this->makeInstance();
         $instance->get()->getHouse()->setHasBasement(true);
         $instance->get()->getHouse()->setBuildingFloors(2);
-        $instance->get()->getHouse()->setBuildingHeatedFloors([0,1,2]);
+        $instance->get()->getHouse()->setBuildingHeatedFloors([0, 1, 2]);
 
         $building = $this->mockBuilding($instance);
 
@@ -89,7 +86,7 @@ class BuildingTest extends \PHPUnit_Framework_TestCase
 
         $instance->get()->getHouse()->setHasBasement(true);
         $instance->get()->getHouse()->setNumberHeatedFloors(2);
-        $instance->get()->getHouse()->setBuildingHeatedFloors([1,2]);
+        $instance->get()->getHouse()->setBuildingHeatedFloors([1, 2]);
 
         $this->assertEquals(0, $building->getEnergyLossToUnderground());
     }
@@ -99,7 +96,7 @@ class BuildingTest extends \PHPUnit_Framework_TestCase
         $instance = $this->makeInstance();
         $instance->get()->getHouse()->setHasBasement(true);
         $instance->get()->getHouse()->setNumberHeatedFloors(2);
-        $instance->get()->getHouse()->setBuildingHeatedFloors([0,1,2]);
+        $instance->get()->getHouse()->setBuildingHeatedFloors([0, 1, 2]);
 
         $building = $this->mockBuilding($instance);
 
@@ -117,7 +114,6 @@ class BuildingTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(0, $building->getFloorEnergyLossToUnheated());
 
-
         $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
         $f->shouldReceive('isGroundFloorHeated')->andReturn(true);
         $f->shouldReceive('isBasementHeated')->andReturn(false);
@@ -126,7 +122,7 @@ class BuildingTest extends \PHPUnit_Framework_TestCase
 
         $instance->get()->getHouse()->setHasBasement(true);
         $instance->get()->getHouse()->setNumberHeatedFloors(2);
-        $instance->get()->getHouse()->setBuildingHeatedFloors([1,2]);
+        $instance->get()->getHouse()->setBuildingHeatedFloors([1, 2]);
 
         $this->assertEquals(9.40, $building->getFloorEnergyLossToUnheated());
     }
@@ -135,7 +131,7 @@ class BuildingTest extends \PHPUnit_Framework_TestCase
     {
         $instance = $this->makeInstance();
         $instance->get()->getHouse()->setBuildingFloors(2);
-        $instance->get()->getHouse()->setBuildingHeatedFloors([1,2]);
+        $instance->get()->getHouse()->setBuildingHeatedFloors([1, 2]);
         $instance->get()->getHouse()->setNumberDoors(2);
         $instance->get()->getHouse()->setNumberWindows(10);
         $instance->get()->getHouse()->setBuildingLength(9.5);
@@ -213,7 +209,7 @@ class BuildingTest extends \PHPUnit_Framework_TestCase
         $mock->shouldReceive('getExternalBuildingLength')->andReturn(10);
         $mock->shouldReceive('getExternalBuildingWidth')->andReturn(10);
         $mock->shouldReceive('getTotalWallArea')->andReturn(1200);
-        $mock->shouldReceive('getBasementHeight')->andReturn(0.9*2.6);
+        $mock->shouldReceive('getBasementHeight')->andReturn(0.9 * 2.6);
 
         return $mock;
     }

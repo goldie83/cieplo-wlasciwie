@@ -47,7 +47,7 @@ class Manufacturer
     protected $searches;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -60,9 +60,9 @@ class Manufacturer
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -70,9 +70,10 @@ class Manufacturer
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
+     *
      * @return Manufacturer
      */
     public function setName($name)
@@ -83,7 +84,7 @@ class Manufacturer
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -93,9 +94,10 @@ class Manufacturer
     }
 
     /**
-     * Set website
+     * Set website.
      *
      * @param string $website
+     *
      * @return Manufacturer
      */
     public function setWebsite($website)
@@ -106,7 +108,7 @@ class Manufacturer
     }
 
     /**
-     * Get website
+     * Get website.
      *
      * @return string
      */
@@ -116,9 +118,10 @@ class Manufacturer
     }
 
     /**
-     * Add boilers
+     * Add boilers.
      *
      * @param \Kraken\RankingBundle\Entity\Boiler $boilers
+     *
      * @return Manufacturer
      */
     public function addBoiler(\Kraken\RankingBundle\Entity\Boiler $boilers)
@@ -129,7 +132,7 @@ class Manufacturer
     }
 
     /**
-     * Remove boilers
+     * Remove boilers.
      *
      * @param \Kraken\RankingBundle\Entity\Boiler $boilers
      */
@@ -139,7 +142,7 @@ class Manufacturer
     }
 
     /**
-     * Get boilers
+     * Get boilers.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -149,9 +152,10 @@ class Manufacturer
     }
 
     /**
-     * Add searches
+     * Add searches.
      *
      * @param \Kraken\RankingBundle\Entity\Search $searches
+     *
      * @return Manufacturer
      */
     public function addSearch(\Kraken\RankingBundle\Entity\Search $searches)
@@ -162,7 +166,7 @@ class Manufacturer
     }
 
     /**
-     * Remove searches
+     * Remove searches.
      *
      * @param \Kraken\RankingBundle\Entity\Search $searches
      */
@@ -172,7 +176,7 @@ class Manufacturer
     }
 
     /**
-     * Get searches
+     * Get searches.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -182,9 +186,10 @@ class Manufacturer
     }
 
     /**
-     * Set slug
+     * Set slug.
      *
      * @param string $slug
+     *
      * @return Manufacturer
      */
     public function setSlug($slug)
@@ -195,9 +200,9 @@ class Manufacturer
     }
 
     /**
-     * Get slug
+     * Get slug.
      *
-     * @return string 
+     * @return string
      */
     public function getSlug()
     {

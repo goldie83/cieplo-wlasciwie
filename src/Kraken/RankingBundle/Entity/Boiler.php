@@ -196,7 +196,7 @@ class Boiler
      */
     protected $updated;
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -217,9 +217,10 @@ class Boiler
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
+     *
      * @return Boiler
      */
     public function setName($name)
@@ -230,7 +231,7 @@ class Boiler
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -240,9 +241,10 @@ class Boiler
     }
 
     /**
-     * Set slug
+     * Set slug.
      *
      * @param string $slug
+     *
      * @return Boiler
      */
     public function setSlug($slug)
@@ -253,7 +255,7 @@ class Boiler
     }
 
     /**
-     * Get slug
+     * Get slug.
      *
      * @return string
      */
@@ -301,9 +303,10 @@ class Boiler
     }
 
     /**
-     * Set image
+     * Set image.
      *
      * @param string $image
+     *
      * @return Boiler
      */
     public function setImage($image)
@@ -314,7 +317,7 @@ class Boiler
     }
 
     /**
-     * Get image
+     * Get image.
      *
      * @return string
      */
@@ -324,9 +327,10 @@ class Boiler
     }
 
     /**
-     * Set crossSection
+     * Set crossSection.
      *
      * @param string $crossSection
+     *
      * @return Boiler
      */
     public function setCrossSection($crossSection)
@@ -337,7 +341,7 @@ class Boiler
     }
 
     /**
-     * Get crossSection
+     * Get crossSection.
      *
      * @return string
      */
@@ -347,9 +351,10 @@ class Boiler
     }
 
     /**
-     * Set content
+     * Set content.
      *
      * @param string $content
+     *
      * @return Boiler
      */
     public function setContent($content)
@@ -360,7 +365,7 @@ class Boiler
     }
 
     /**
-     * Get content
+     * Get content.
      *
      * @return string
      */
@@ -370,9 +375,10 @@ class Boiler
     }
 
     /**
-     * Set rating
+     * Set rating.
      *
      * @param string $rating
+     *
      * @return Boiler
      */
     public function setRating($rating)
@@ -383,7 +389,7 @@ class Boiler
     }
 
     /**
-     * Get rating
+     * Get rating.
      *
      * @return string
      */
@@ -393,9 +399,10 @@ class Boiler
     }
 
     /**
-     * Set normClass
+     * Set normClass.
      *
      * @param string $normClass
+     *
      * @return Boiler
      */
     public function setNormClass($normClass)
@@ -406,7 +413,7 @@ class Boiler
     }
 
     /**
-     * Get normClass
+     * Get normClass.
      *
      * @return string
      */
@@ -416,9 +423,10 @@ class Boiler
     }
 
     /**
-     * Set typicalModelPower
+     * Set typicalModelPower.
      *
      * @param string $typicalModelPower
+     *
      * @return Boiler
      */
     public function setTypicalModelPower($typicalModelPower)
@@ -429,7 +437,7 @@ class Boiler
     }
 
     /**
-     * Get typicalModelPower
+     * Get typicalModelPower.
      *
      * @return string
      */
@@ -439,9 +447,10 @@ class Boiler
     }
 
     /**
-     * Set typicalModelExchanger
+     * Set typicalModelExchanger.
      *
      * @param string $typicalModelExchanger
+     *
      * @return Boiler
      */
     public function setTypicalModelExchanger($typicalModelExchanger)
@@ -452,7 +461,7 @@ class Boiler
     }
 
     /**
-     * Get typicalModelExchanger
+     * Get typicalModelExchanger.
      *
      * @return string
      */
@@ -462,9 +471,10 @@ class Boiler
     }
 
     /**
-     * Set typicalModelCapacity
+     * Set typicalModelCapacity.
      *
      * @param string $typicalModelCapacity
+     *
      * @return Boiler
      */
     public function setTypicalModelCapacity($typicalModelCapacity)
@@ -475,7 +485,7 @@ class Boiler
     }
 
     /**
-     * Get typicalModelCapacity
+     * Get typicalModelCapacity.
      *
      * @return string
      */
@@ -485,9 +495,10 @@ class Boiler
     }
 
     /**
-     * Set typicalModelPrice
+     * Set typicalModelPrice.
      *
-     * @param integer $typicalModelPrice
+     * @param int $typicalModelPrice
+     *
      * @return Boiler
      */
     public function setTypicalModelPrice($typicalModelPrice)
@@ -498,9 +509,9 @@ class Boiler
     }
 
     /**
-     * Get typicalModelPrice
+     * Get typicalModelPrice.
      *
-     * @return integer
+     * @return int
      */
     public function getTypicalModelPrice()
     {
@@ -508,9 +519,10 @@ class Boiler
     }
 
     /**
-     * Set warranty
+     * Set warranty.
      *
      * @param string $warranty
+     *
      * @return Boiler
      */
     public function setWarranty($warranty)
@@ -521,7 +533,7 @@ class Boiler
     }
 
     /**
-     * Get warranty
+     * Get warranty.
      *
      * @return string
      */
@@ -531,9 +543,10 @@ class Boiler
     }
 
     /**
-     * Set hasWarrantyCatches
+     * Set hasWarrantyCatches.
      *
-     * @param boolean $hasWarrantyCatches
+     * @param bool $hasWarrantyCatches
+     *
      * @return Boiler
      */
     public function setHasWarrantyCatches($hasWarrantyCatches)
@@ -544,9 +557,9 @@ class Boiler
     }
 
     /**
-     * Get hasWarrantyCatches
+     * Get hasWarrantyCatches.
      *
-     * @return boolean
+     * @return bool
      */
     public function getHasWarrantyCatches()
     {
@@ -554,9 +567,10 @@ class Boiler
     }
 
     /**
-     * Set created
+     * Set created.
      *
      * @param \DateTime $created
+     *
      * @return Boiler
      */
     public function setCreated($created)
@@ -567,7 +581,7 @@ class Boiler
     }
 
     /**
-     * Get created
+     * Get created.
      *
      * @return \DateTime
      */
@@ -577,9 +591,10 @@ class Boiler
     }
 
     /**
-     * Set updated
+     * Set updated.
      *
      * @param \DateTime $updated
+     *
      * @return Boiler
      */
     public function setUpdated($updated)
@@ -590,7 +605,7 @@ class Boiler
     }
 
     /**
-     * Get updated
+     * Get updated.
      *
      * @return \DateTime
      */
@@ -600,9 +615,10 @@ class Boiler
     }
 
     /**
-     * Set category
+     * Set category.
      *
      * @param \Kraken\RankingBundle\Entity\Category $category
+     *
      * @return Boiler
      */
     public function setCategory(\Kraken\RankingBundle\Entity\Category $category = null)
@@ -613,7 +629,7 @@ class Boiler
     }
 
     /**
-     * Get category
+     * Get category.
      *
      * @return \Kraken\RankingBundle\Entity\Category
      */
@@ -623,9 +639,10 @@ class Boiler
     }
 
     /**
-     * Set manufacturer
+     * Set manufacturer.
      *
      * @param \Kraken\RankingBundle\Entity\Manufacturer $manufacturer
+     *
      * @return Boiler
      */
     public function setManufacturer(\Kraken\RankingBundle\Entity\Manufacturer $manufacturer = null)
@@ -636,7 +653,7 @@ class Boiler
     }
 
     /**
-     * Get manufacturer
+     * Get manufacturer.
      *
      * @return \Kraken\RankingBundle\Entity\Manufacturer
      */
@@ -646,9 +663,10 @@ class Boiler
     }
 
     /**
-     * Add changes
+     * Add changes.
      *
      * @param \Kraken\RankingBundle\Entity\Change $changes
+     *
      * @return Boiler
      */
     public function addChange(\Kraken\RankingBundle\Entity\Change $changes)
@@ -659,7 +677,7 @@ class Boiler
     }
 
     /**
-     * Remove changes
+     * Remove changes.
      *
      * @param \Kraken\RankingBundle\Entity\Change $changes
      */
@@ -669,7 +687,7 @@ class Boiler
     }
 
     /**
-     * Get changes
+     * Get changes.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -679,9 +697,10 @@ class Boiler
     }
 
     /**
-     * Add notices
+     * Add notices.
      *
      * @param \Kraken\RankingBundle\Entity\BoilerProperty $notices
+     *
      * @return Boiler
      */
     public function addBoilerProperty(\Kraken\RankingBundle\Entity\BoilerProperty $notices)
@@ -692,7 +711,7 @@ class Boiler
     }
 
     /**
-     * Remove notices
+     * Remove notices.
      *
      * @param \Kraken\RankingBundle\Entity\BoilerProperty $notices
      */
@@ -702,7 +721,7 @@ class Boiler
     }
 
     /**
-     * Get notices
+     * Get notices.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -712,9 +731,10 @@ class Boiler
     }
 
     /**
-     * Add boilerPowers
+     * Add boilerPowers.
      *
      * @param \Kraken\RankingBundle\Entity\BoilerPower $boilerPowers
+     *
      * @return Boiler
      */
     public function addBoilerPower(\Kraken\RankingBundle\Entity\BoilerPower $boilerPowers)
@@ -725,7 +745,7 @@ class Boiler
     }
 
     /**
-     * Remove boilerPowers
+     * Remove boilerPowers.
      *
      * @param \Kraken\RankingBundle\Entity\BoilerPower $boilerPowers
      */
@@ -735,7 +755,7 @@ class Boiler
     }
 
     /**
-     * Get boilerPowers
+     * Get boilerPowers.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -745,9 +765,10 @@ class Boiler
     }
 
     /**
-     * Add acceptedFuelTypes
+     * Add acceptedFuelTypes.
      *
      * @param \Kraken\RankingBundle\Entity\FuelType $acceptedFuelTypes
+     *
      * @return Boiler
      */
     public function addAcceptedFuelType(\Kraken\RankingBundle\Entity\FuelType $acceptedFuelTypes)
@@ -758,7 +779,7 @@ class Boiler
     }
 
     /**
-     * Remove acceptedFuelTypes
+     * Remove acceptedFuelTypes.
      *
      * @param \Kraken\RankingBundle\Entity\FuelType $acceptedFuelTypes
      */
@@ -768,7 +789,7 @@ class Boiler
     }
 
     /**
-     * Get acceptedFuelTypes
+     * Get acceptedFuelTypes.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -778,9 +799,10 @@ class Boiler
     }
 
     /**
-     * Set lead
+     * Set lead.
      *
      * @param string $lead
+     *
      * @return Boiler
      */
     public function setLead($lead)
@@ -791,7 +813,7 @@ class Boiler
     }
 
     /**
-     * Get lead
+     * Get lead.
      *
      * @return string
      */
@@ -801,9 +823,10 @@ class Boiler
     }
 
     /**
-     * Set ratingExplanation
+     * Set ratingExplanation.
      *
      * @param string $ratingExplanation
+     *
      * @return Boiler
      */
     public function setRatingExplanation($ratingExplanation)
@@ -814,7 +837,7 @@ class Boiler
     }
 
     /**
-     * Get ratingExplanation
+     * Get ratingExplanation.
      *
      * @return string
      */
@@ -823,11 +846,11 @@ class Boiler
         return $this->ratingExplanation;
     }
 
-
     /**
-     * Set userManual
+     * Set userManual.
      *
      * @param string $userManual
+     *
      * @return Boiler
      */
     public function setUserManual($userManual)
@@ -838,7 +861,7 @@ class Boiler
     }
 
     /**
-     * Get userManual
+     * Get userManual.
      *
      * @return string
      */
@@ -848,9 +871,10 @@ class Boiler
     }
 
     /**
-     * Set forClosedSystem
+     * Set forClosedSystem.
      *
-     * @param boolean $forClosedSystem
+     * @param bool $forClosedSystem
+     *
      * @return Boiler
      */
     public function setForClosedSystem($forClosedSystem)
@@ -861,9 +885,9 @@ class Boiler
     }
 
     /**
-     * Get forClosedSystem
+     * Get forClosedSystem.
      *
-     * @return boolean
+     * @return bool
      */
     public function getForClosedSystem()
     {
@@ -903,7 +927,7 @@ class Boiler
             return 0;
         }
 
-        return ($this->typicalModelExchanger/$this->typicalModelPower)/0.125*100;
+        return ($this->typicalModelExchanger / $this->typicalModelPower) / 0.125 * 100;
     }
 
     public function getPositiveNotices()
@@ -946,9 +970,10 @@ class Boiler
     }
 
     /**
-     * Set material
+     * Set material.
      *
      * @param string $material
+     *
      * @return Boiler
      */
     public function setMaterial($material)
@@ -959,7 +984,7 @@ class Boiler
     }
 
     /**
-     * Get material
+     * Get material.
      *
      * @return string
      */
@@ -969,9 +994,10 @@ class Boiler
     }
 
     /**
-     * Add propertyValues
+     * Add propertyValues.
      *
      * @param \Kraken\RankingBundle\Entity\PropertyValue $propertyValues
+     *
      * @return Boiler
      */
     public function addPropertyValue(\Kraken\RankingBundle\Entity\PropertyValue $propertyValues)
@@ -982,7 +1008,7 @@ class Boiler
     }
 
     /**
-     * Remove propertyValues
+     * Remove propertyValues.
      *
      * @param \Kraken\RankingBundle\Entity\PropertyValue $propertyValues
      */
@@ -992,7 +1018,7 @@ class Boiler
     }
 
     /**
-     * Get propertyValues
+     * Get propertyValues.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -1002,9 +1028,10 @@ class Boiler
     }
 
     /**
-     * Add notices
+     * Add notices.
      *
      * @param \Kraken\RankingBundle\Entity\Notice $notices
+     *
      * @return Boiler
      */
     public function addNotice(\Kraken\RankingBundle\Entity\Notice $notices)
@@ -1015,7 +1042,7 @@ class Boiler
     }
 
     /**
-     * Remove notices
+     * Remove notices.
      *
      * @param \Kraken\RankingBundle\Entity\Notice $notices
      */
@@ -1025,9 +1052,10 @@ class Boiler
     }
 
     /**
-     * Add boilerFuelTypes
+     * Add boilerFuelTypes.
      *
      * @param \Kraken\RankingBundle\Entity\BoilerFuelType $boilerFuelTypes
+     *
      * @return Boiler
      */
     public function addBoilerFuelType(\Kraken\RankingBundle\Entity\BoilerFuelType $boilerFuelTypes)
@@ -1038,7 +1066,7 @@ class Boiler
     }
 
     /**
-     * Remove boilerFuelTypes
+     * Remove boilerFuelTypes.
      *
      * @param \Kraken\RankingBundle\Entity\BoilerFuelType $boilerFuelTypes
      */
@@ -1048,7 +1076,7 @@ class Boiler
     }
 
     /**
-     * Get boilerFuelTypes
+     * Get boilerFuelTypes.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -1068,9 +1096,10 @@ class Boiler
     }
 
     /**
-     * Set rejected
+     * Set rejected.
      *
-     * @param boolean $rejected
+     * @param bool $rejected
+     *
      * @return Boiler
      */
     public function setRejected($rejected)
@@ -1086,9 +1115,10 @@ class Boiler
     }
 
     /**
-     * Set manufacturerSite
+     * Set manufacturerSite.
      *
      * @param string $manufacturerSite
+     *
      * @return Boiler
      */
     public function setManufacturerSite($manufacturerSite)
@@ -1099,7 +1129,7 @@ class Boiler
     }
 
     /**
-     * Get manufacturerSite
+     * Get manufacturerSite.
      *
      * @return string
      */
@@ -1109,9 +1139,9 @@ class Boiler
     }
 
     /**
-     * Get rejected
+     * Get rejected.
      *
-     * @return boolean
+     * @return bool
      */
     public function getRejected()
     {
@@ -1119,9 +1149,10 @@ class Boiler
     }
 
     /**
-     * Set needsFixing
+     * Set needsFixing.
      *
-     * @param boolean $needsFixing
+     * @param bool $needsFixing
+     *
      * @return Boiler
      */
     public function setNeedsFixing($needsFixing)
@@ -1132,9 +1163,9 @@ class Boiler
     }
 
     /**
-     * Get needsFixing
+     * Get needsFixing.
      *
-     * @return boolean
+     * @return bool
      */
     public function getNeedsFixing()
     {

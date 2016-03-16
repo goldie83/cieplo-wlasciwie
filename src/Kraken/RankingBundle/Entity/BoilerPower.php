@@ -3,7 +3,6 @@
 namespace Kraken\RankingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -30,9 +29,9 @@ class BoilerPower
     protected $power;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -40,9 +39,10 @@ class BoilerPower
     }
 
     /**
-     * Set power
+     * Set power.
      *
      * @param string $power
+     *
      * @return BoilerPower
      */
     public function setPower($power)
@@ -53,9 +53,9 @@ class BoilerPower
     }
 
     /**
-     * Get power
+     * Get power.
      *
-     * @return string 
+     * @return string
      */
     public function getPower()
     {
@@ -63,9 +63,10 @@ class BoilerPower
     }
 
     /**
-     * Set boiler
+     * Set boiler.
      *
      * @param \Kraken\RankingBundle\Entity\Boiler $boiler
+     *
      * @return BoilerPower
      */
     public function setBoiler(\Kraken\RankingBundle\Entity\Boiler $boiler)
@@ -76,9 +77,9 @@ class BoilerPower
     }
 
     /**
-     * Get boiler
+     * Get boiler.
      *
-     * @return \Kraken\RankingBundle\Entity\Boiler 
+     * @return \Kraken\RankingBundle\Entity\Boiler
      */
     public function getBoiler()
     {

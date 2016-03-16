@@ -3,7 +3,6 @@
 namespace Kraken\RankingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -36,9 +35,9 @@ class BoilerFuelType
     protected $primary;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -46,9 +45,10 @@ class BoilerFuelType
     }
 
     /**
-     * Set primary
+     * Set primary.
      *
-     * @param boolean $primary
+     * @param bool $primary
+     *
      * @return BoilerFuelType
      */
     public function setPrimary($primary)
@@ -59,9 +59,9 @@ class BoilerFuelType
     }
 
     /**
-     * Get primary
+     * Get primary.
      *
-     * @return boolean
+     * @return bool
      */
     public function getPrimary()
     {
@@ -69,9 +69,10 @@ class BoilerFuelType
     }
 
     /**
-     * Set boiler
+     * Set boiler.
      *
      * @param \Kraken\RankingBundle\Entity\Boiler $boiler
+     *
      * @return BoilerFuelType
      */
     public function setBoiler(\Kraken\RankingBundle\Entity\Boiler $boiler)
@@ -82,7 +83,7 @@ class BoilerFuelType
     }
 
     /**
-     * Get boiler
+     * Get boiler.
      *
      * @return \Kraken\RankingBundle\Entity\Boiler
      */
@@ -92,9 +93,10 @@ class BoilerFuelType
     }
 
     /**
-     * Set fuelType
+     * Set fuelType.
      *
      * @param \Kraken\RankingBundle\Entity\FuelType $fuelType
+     *
      * @return BoilerFuelType
      */
     public function setFuelType(\Kraken\RankingBundle\Entity\FuelType $fuelType)
@@ -105,7 +107,7 @@ class BoilerFuelType
     }
 
     /**
-     * Get fuelType
+     * Get fuelType.
      *
      * @return \Kraken\RankingBundle\Entity\FuelType
      */

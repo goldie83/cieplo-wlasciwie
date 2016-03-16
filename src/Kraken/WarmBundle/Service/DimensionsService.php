@@ -2,8 +2,6 @@
 
 namespace Kraken\WarmBundle\Service;
 
-use Kraken\WarmBundle\Entity\Wall;
-
 class DimensionsService
 {
     private $instance;
@@ -122,12 +120,12 @@ class DimensionsService
 
     public function getInternalBuildingLength()
     {
-        return $this->getExternalBuildingLength() - 2 * ($this->getInstance()->getHouse()->getWallSize()/100);
+        return $this->getExternalBuildingLength() - 2 * ($this->getInstance()->getHouse()->getWallSize() / 100);
     }
 
     public function getInternalBuildingWidth()
     {
-        return $this->getExternalBuildingWidth() - 2 * ($this->getInstance()->getHouse()->getWallSize()/100);
+        return $this->getExternalBuildingWidth() - 2 * ($this->getInstance()->getHouse()->getWallSize() / 100);
     }
 
     public function getFloorArea()
@@ -154,7 +152,7 @@ class DimensionsService
         $floorsNumber = $house->getBuildingFloors();
 
         if ($house->getBuildingRoof() != 'flat') {
-            $floorsNumber++;
+            ++$floorsNumber;
         }
 
         return $floorsNumber;
@@ -203,7 +201,7 @@ class DimensionsService
         $numberFloors = $this->getNumberOfHeatedFloors();
 
         if (!$this->getInstance()->isApartment() && $this->floors->isBasementHeated()) {
-            $numberFloors--;
+            --$numberFloors;
         }
 
         return $numberFloors *  $this->getInstance()->getHouse()->getFloorHeight() + $numberFloors * self::CEILING_THICKNESS;
@@ -216,7 +214,7 @@ class DimensionsService
 
     public function getStandardDoorArea()
     {
-        $doorHeight =  $this->getInstance()->getHouse()->getFloorHeight() * 0.8;
+        $doorHeight = $this->getInstance()->getHouse()->getFloorHeight() * 0.8;
         $doorWidth = 1;
 
         return $doorHeight * $doorWidth;
@@ -245,7 +243,7 @@ class DimensionsService
         $w = $this->getExternalBuildingWidth();
 
         if ($this->getInstance()->getHouse()->getBuildingRoof() != 'flat') {
-            $w = sqrt(pow($this->getExternalBuildingWidth()/2, 2) + pow(2.6, 2));
+            $w = sqrt(pow($this->getExternalBuildingWidth() / 2, 2) + pow(2.6, 2));
 
             return round(2 * $w * $l, 2);
         }

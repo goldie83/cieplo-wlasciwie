@@ -2,8 +2,6 @@
 
 namespace Kraken\WarmBundle\Service;
 
-use Kraken\WarmBundle\Entity\Wall;
-
 class FloorsService
 {
     private $instance;
@@ -22,7 +20,6 @@ class FloorsService
     {
         return $this->getInstance()->getHouse();
     }
-
 
     public function isBasementHeated()
     {
@@ -56,7 +53,7 @@ class FloorsService
 
     public function getTopIsolationLabel()
     {
-//TODO apartment!
+        //TODO apartment!
 
         if (!$this->isAtticHeated()) {
             return 'Izolacja stropu między poddaszem a piętrem niżej';
@@ -67,7 +64,7 @@ class FloorsService
 
     public function getBottomLabel()
     {
-//TODO apartment!
+        //TODO apartment!
         if ($this->isBasementHeated()) {
             return 'Piwnica';
         }
@@ -81,7 +78,7 @@ class FloorsService
 
     public function getBottomIsolationLabel()
     {
-//TODO apartment!
+        //TODO apartment!
         if ($this->isBasementHeated()) {
             return 'Izolacja podłogi piwnicy';
         }

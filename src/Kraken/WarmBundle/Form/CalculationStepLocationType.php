@@ -2,7 +2,6 @@
 
 namespace Kraken\WarmBundle\Form;
 
-use Doctrine\ORM\EntityRepository;
 use Kraken\WarmBundle\Entity\Calculation;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;

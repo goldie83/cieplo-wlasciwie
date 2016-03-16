@@ -2,15 +2,10 @@
 
 namespace Kraken\WarmBundle\Tests\Service;
 
-use Kraken\WarmBundle\Calculator\EnergyPricing;
 use Kraken\WarmBundle\Entity\Calculation;
-use Kraken\WarmBundle\Entity\Fuel;
-use Kraken\WarmBundle\Entity\HeatingDevice;
-use Kraken\WarmBundle\Entity\HeatingVariant;
 use Kraken\WarmBundle\Entity\House;
 use Kraken\WarmBundle\Entity\Layer;
 use Kraken\WarmBundle\Entity\Material;
-use Kraken\WarmBundle\Entity\Wall;
 use Kraken\WarmBundle\Service\HouseDescriptionService;
 use Kraken\WarmBundle\Service\InstanceService;
 use Mockery;
@@ -100,15 +95,15 @@ class HouseDescriptionServiceTest extends \PHPUnit_Framework_TestCase
         $house->setBuildingLength(10);
         $house->setBuildingWidth(12);
 
-        $m1 = new Material;
+        $m1 = new Material();
         $m1->setName('cegła pełna');
-        $m2 = new Material;
+        $m2 = new Material();
         $m2->setName('pustak żużlobetonowy');
-        $m3 = new Material;
+        $m3 = new Material();
         $m3->setName('styropian');
 
         #1
-        $l1 = new Layer;
+        $l1 = new Layer();
         $l1->setMaterial($m3);
         $l1->setSize(15);
         $house->setExternalIsolationLayer($l1);
@@ -131,7 +126,7 @@ class HouseDescriptionServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('30cm, konstrukcja: szkielet drewniany (dom kanadyjski), izolacja: styropian 15cm', $desc->getWallDetails());
 
         #2
-        $l3 = new Layer;
+        $l3 = new Layer();
         $l3->setMaterial($m3);
         $l3->setSize(15);
 
@@ -165,9 +160,9 @@ class HouseDescriptionServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bez izolacji', $desc->getGroundDetails());
 
         #2
-        $m1 = new Material;
+        $m1 = new Material();
         $m1->setName('styropian');
-        $l1 = new Layer;
+        $l1 = new Layer();
         $l1->setMaterial($m1);
         $l1->setSize(15);
         $house->setBottomIsolationLayer($l1);
@@ -221,5 +216,4 @@ class HouseDescriptionServiceTest extends \PHPUnit_Framework_TestCase
 
         return $mock;
     }
-
 }

@@ -2,7 +2,6 @@
 
 namespace Kraken\WarmBundle\Controller;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,20 +10,15 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Kraken\WarmBundle\Form\CalculationApartmentStepDimensionsType;
 use Kraken\WarmBundle\Form\CalculationApartmentStepCeilingType;
-use Kraken\WarmBundle\Form\CalculationFormType;
 use Kraken\WarmBundle\Form\CalculationStepCeilingType;
 use Kraken\WarmBundle\Form\CalculationStepDimensionsType;
 use Kraken\WarmBundle\Form\CalculationStepHeatingType;
 use Kraken\WarmBundle\Form\CalculationStepLocationType;
 use Kraken\WarmBundle\Form\CalculationStepWallsType;
 use Kraken\WarmBundle\Form\CalculationStepOneType;
-use Kraken\WarmBundle\Form\HouseApartmentType;
-use Kraken\WarmBundle\Form\HouseType;
 use Kraken\WarmBundle\Entity\Apartment;
 use Kraken\WarmBundle\Entity\Calculation;
 use Kraken\WarmBundle\Entity\House;
-use Kraken\WarmBundle\Entity\Layer;
-use Kraken\WarmBundle\Entity\Wall;
 
 class CalculatorController extends Controller
 {
@@ -51,7 +45,6 @@ class CalculatorController extends Controller
         $form = $this->createForm(new CalculationStepOneType(), $calc);
 
         if ($request->isMethod('post')) {
-
             $form->bind($request);
 
             if ($form->isValid()) {
@@ -264,7 +257,7 @@ class CalculatorController extends Controller
             $floors = $this->get('kraken_warm.floors');
             $form = $this->createForm(new CalculationStepCeilingType(), $house, [
                 'top_isolation_label' => $floors->getTopIsolationLabel(),
-                'bottom_isolation_label' => $floors->getBottomIsolationLabel()
+                'bottom_isolation_label' => $floors->getBottomIsolationLabel(),
             ]);
         }
 
@@ -606,7 +599,7 @@ class CalculatorController extends Controller
 
         return $this->render('KrakenWarmBundle:Calculator:myResults.html.twig', [
             'results' => $results,
-            'dimensions' => $this->get('kraken_warm.dimensions')
+            'dimensions' => $this->get('kraken_warm.dimensions'),
         ]);
     }
 }

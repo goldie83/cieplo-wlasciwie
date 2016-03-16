@@ -4,7 +4,6 @@ namespace Kraken\RankingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -85,7 +84,7 @@ class Search
     protected $rejected;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -93,9 +92,9 @@ class Search
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -108,9 +107,10 @@ class Search
     }
 
     /**
-     * Set created
+     * Set created.
      *
      * @param \DateTime $created
+     *
      * @return Search
      */
     public function setCreated($created)
@@ -121,7 +121,7 @@ class Search
     }
 
     /**
-     * Get created
+     * Get created.
      *
      * @return \DateTime
      */
@@ -131,9 +131,10 @@ class Search
     }
 
     /**
-     * Set modelName
+     * Set modelName.
      *
      * @param string $modelName
+     *
      * @return Search
      */
     public function setModelName($modelName)
@@ -144,7 +145,7 @@ class Search
     }
 
     /**
-     * Get modelName
+     * Get modelName.
      *
      * @return string
      */
@@ -154,9 +155,10 @@ class Search
     }
 
     /**
-     * Set power
+     * Set power.
      *
      * @param string $power
+     *
      * @return Search
      */
     public function setPower($power)
@@ -167,7 +169,7 @@ class Search
     }
 
     /**
-     * Get power
+     * Get power.
      *
      * @return string
      */
@@ -177,9 +179,10 @@ class Search
     }
 
     /**
-     * Set normClass
+     * Set normClass.
      *
      * @param string $normClass
+     *
      * @return Search
      */
     public function setNormClass($normClass)
@@ -190,7 +193,7 @@ class Search
     }
 
     /**
-     * Get normClass
+     * Get normClass.
      *
      * @return string
      */
@@ -200,9 +203,10 @@ class Search
     }
 
     /**
-     * Set rating
+     * Set rating.
      *
      * @param string $rating
+     *
      * @return Search
      */
     public function setRating($rating)
@@ -213,7 +217,7 @@ class Search
     }
 
     /**
-     * Get rating
+     * Get rating.
      *
      * @return string
      */
@@ -223,9 +227,10 @@ class Search
     }
 
     /**
-     * Add fuelType
+     * Add fuelType.
      *
      * @param \Kraken\RankingBundle\Entity\FuelType $fuelType
+     *
      * @return Search
      */
     public function addFuelType(\Kraken\RankingBundle\Entity\FuelType $fuelType)
@@ -236,7 +241,7 @@ class Search
     }
 
     /**
-     * Remove fuelType
+     * Remove fuelType.
      *
      * @param \Kraken\RankingBundle\Entity\FuelType $fuelType
      */
@@ -246,7 +251,7 @@ class Search
     }
 
     /**
-     * Get fuelType
+     * Get fuelType.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -256,9 +261,10 @@ class Search
     }
 
     /**
-     * Set category
+     * Set category.
      *
      * @param \Kraken\RankingBundle\Entity\Category $category
+     *
      * @return Search
      */
     public function setCategory(\Kraken\RankingBundle\Entity\Category $category = null)
@@ -269,7 +275,7 @@ class Search
     }
 
     /**
-     * Get category
+     * Get category.
      *
      * @return \Kraken\RankingBundle\Entity\Category
      */
@@ -279,9 +285,10 @@ class Search
     }
 
     /**
-     * Set forClosedSystem
+     * Set forClosedSystem.
      *
-     * @param boolean $forClosedSystem
+     * @param bool $forClosedSystem
+     *
      * @return Search
      */
     public function setForClosedSystem($forClosedSystem)
@@ -292,9 +299,9 @@ class Search
     }
 
     /**
-     * Get forClosedSystem
+     * Get forClosedSystem.
      *
-     * @return boolean
+     * @return bool
      */
     public function isForClosedSystem()
     {
@@ -344,9 +351,9 @@ class Search
     }
 
     /**
-     * Get forClosedSystem
+     * Get forClosedSystem.
      *
-     * @return boolean
+     * @return bool
      */
     public function getForClosedSystem()
     {
@@ -354,9 +361,10 @@ class Search
     }
 
     /**
-     * Set manufacturer
+     * Set manufacturer.
      *
      * @param \Kraken\RankingBundle\Entity\Manufacturer $manufacturer
+     *
      * @return Search
      */
     public function setManufacturer(\Kraken\RankingBundle\Entity\Manufacturer $manufacturer = null)
@@ -367,7 +375,7 @@ class Search
     }
 
     /**
-     * Get manufacturer
+     * Get manufacturer.
      *
      * @return \Kraken\RankingBundle\Entity\Manufacturer
      */
@@ -377,9 +385,10 @@ class Search
     }
 
     /**
-     * Set material
+     * Set material.
      *
      * @param string $material
+     *
      * @return Search
      */
     public function setMaterial($material)
@@ -390,7 +399,7 @@ class Search
     }
 
     /**
-     * Get material
+     * Get material.
      *
      * @return string
      */
@@ -400,9 +409,10 @@ class Search
     }
 
     /**
-     * Set needsFixing
+     * Set needsFixing.
      *
-     * @param boolean $needsFixing
+     * @param bool $needsFixing
+     *
      * @return Search
      */
     public function setNeedsFixing($needsFixing)
@@ -413,9 +423,9 @@ class Search
     }
 
     /**
-     * Get needsFixing
+     * Get needsFixing.
      *
-     * @return boolean
+     * @return bool
      */
     public function needsFixing()
     {
@@ -423,9 +433,10 @@ class Search
     }
 
     /**
-     * Set rejected
+     * Set rejected.
      *
-     * @param boolean $rejected
+     * @param bool $rejected
+     *
      * @return Search
      */
     public function setRejected($rejected)
@@ -436,9 +447,9 @@ class Search
     }
 
     /**
-     * Get rejected
+     * Get rejected.
      *
-     * @return boolean
+     * @return bool
      */
     public function isRejected()
     {
@@ -446,9 +457,9 @@ class Search
     }
 
     /**
-     * Get rejected
+     * Get rejected.
      *
-     * @return boolean
+     * @return bool
      */
     public function getRejected()
     {

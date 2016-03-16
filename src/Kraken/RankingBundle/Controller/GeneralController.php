@@ -4,12 +4,8 @@ namespace Kraken\RankingBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller as BaseController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-
 use Kraken\RankingBundle\Entity\Boiler;
 use Kraken\RankingBundle\Entity\Category;
 use Kraken\RankingBundle\Entity\Manufacturer;
@@ -17,7 +13,6 @@ use Kraken\RankingBundle\Entity\Search;
 use Kraken\RankingBundle\Form\FileProposalForm;
 use Kraken\RankingBundle\Form\SearchForm;
 use Kraken\RankingBundle\Form\SearchRejectedForm;
-
 
 class GeneralController extends BaseController
 {
@@ -88,7 +83,7 @@ class GeneralController extends BaseController
         $em = $this->getDoctrine()->getManager();
 
         if ($request->isMethod('post')) {
-            $search = new Search;
+            $search = new Search();
             $search->setRejected(true);
 
             $form = $this->createForm(new SearchRejectedForm(), $search);
@@ -109,7 +104,7 @@ class GeneralController extends BaseController
                 ->getRepository('KrakenRankingBundle:Search')
                 ->findOneBy(['id' => intval($uid, 36)]);
         } else {
-            $searchRecord = new Search;
+            $searchRecord = new Search();
             $searchRecord->setRejected(true);
         }
 
@@ -298,7 +293,7 @@ class GeneralController extends BaseController
      */
     public function manufacturerAction(Manufacturer $manufacturer, $sort)
     {
-        $search = new Search;
+        $search = new Search();
         $search->setManufacturer($manufacturer);
 
         $form = $this->createForm(new SearchForm(), $search);
@@ -333,7 +328,7 @@ class GeneralController extends BaseController
      */
     public function categoryAction(Category $category, $sort)
     {
-        $search = new Search;
+        $search = new Search();
         $search->setCategory($category);
 
         $form = $this->createForm(new SearchForm(), $search);

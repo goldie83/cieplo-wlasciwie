@@ -54,7 +54,7 @@ class SearchForm extends AbstractType
             ->add('normClass', 'choice', [
                 'choices' => [3, 4, 5],
                 'label' => 'Klasa',
-                'help_block'  => 'wg normy PN-EN 303-5:2012',
+                'help_block' => 'wg normy PN-EN 303-5:2012',
                 'attr' => array(
                     'help_text' => 'wg normy PN-EN 303-5:2012',
                 ),

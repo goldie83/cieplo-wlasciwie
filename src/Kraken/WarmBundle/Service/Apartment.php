@@ -204,5 +204,4 @@ class Apartment extends Building implements BuildingInterface
 //
 //         return 0;
 //     }
-
 }

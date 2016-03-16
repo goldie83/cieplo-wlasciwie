@@ -2,9 +2,6 @@
 
 namespace Kraken\WarmBundle\Service;
 
-use Kraken\WarmBundle\Entity\Calculation;
-use Kraken\WarmBundle\Entity\Fuel;
-
 class HouseDescriptionService
 {
     protected $instance;
@@ -231,7 +228,7 @@ class HouseDescriptionService
         $result = [
             $externalWalls,
             $unheatedWalls,
-            $overUnder
+            $overUnder,
         ];
 
         return implode('<br />', $result);
@@ -261,10 +258,10 @@ class HouseDescriptionService
         );
         ++$i;
 
-        for ($j = 2; $j <= $totalFloors; $j++) {
+        for ($j = 2; $j <= $totalFloors; ++$j) {
             $floors[] = array(
-                'name' => $j == $totalFloors ? 'attic' : 'regular_floor_'.($j-1),
-                'label' => $j == $totalFloors ? 'Poddasze' : ($j-1).'. piętro',
+                'name' => $j == $totalFloors ? 'attic' : 'regular_floor_'.($j - 1),
+                'label' => $j == $totalFloors ? 'Poddasze' : ($j - 1).'. piętro',
                 'heated' => in_array($j, $heatedFloors),
             );
         }

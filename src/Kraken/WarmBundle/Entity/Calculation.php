@@ -469,9 +469,10 @@ class Calculation
     }
 
     /**
-     * Set include_hot_water
+     * Set include_hot_water.
      *
-     * @param boolean $includeHotWater
+     * @param bool $includeHotWater
+     *
      * @return Calculation
      */
     public function setIncludeHotWater($includeHotWater)
@@ -482,9 +483,9 @@ class Calculation
     }
 
     /**
-     * Get include_hot_water
+     * Get include_hot_water.
      *
-     * @return boolean
+     * @return bool
      */
     public function getIncludeHotWater()
     {
@@ -492,9 +493,10 @@ class Calculation
     }
 
     /**
-     * Set hot_water_persons
+     * Set hot_water_persons.
      *
-     * @param integer $hotWaterPersons
+     * @param int $hotWaterPersons
+     *
      * @return Calculation
      */
     public function setHotWaterPersons($hotWaterPersons)
@@ -505,9 +507,9 @@ class Calculation
     }
 
     /**
-     * Get hot_water_persons
+     * Get hot_water_persons.
      *
-     * @return integer
+     * @return int
      */
     public function getHotWaterPersons()
     {
@@ -515,9 +517,10 @@ class Calculation
     }
 
     /**
-     * Set hot_water_use
+     * Set hot_water_use.
      *
-     * @param integer $hotWaterUse
+     * @param int $hotWaterUse
+     *
      * @return Calculation
      */
     public function setHotWaterUse($hotWaterUse)
@@ -528,9 +531,9 @@ class Calculation
     }
 
     /**
-     * Get hot_water_use
+     * Get hot_water_use.
      *
-     * @return integer
+     * @return int
      */
     public function getHotWaterUse()
     {

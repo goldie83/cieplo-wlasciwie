@@ -212,9 +212,9 @@ class EnergyCalculator
         ];
 
         $hourlyDemand = $day == 'max' ? $this->getMaxHeatingPower() : $this->getAvgHeatingPower();
-        $dailyDemand = ($hourlyDemand*24)/1000;
+        $dailyDemand = ($hourlyDemand * 24) / 1000;
 
-        return ceil($dailyDemand/$energy[$fuel]);
+        return ceil($dailyDemand / $energy[$fuel]);
     }
 
     public function getYearlyFuelConsumption($fuel)
@@ -225,12 +225,12 @@ class EnergyCalculator
             'natural_gas' => 10.5 * 0.9,
         ];
 
-        $amount = ceil($this->getYearlyEnergyConsumption()/$energy[$fuel]);
+        $amount = ceil($this->getYearlyEnergyConsumption() / $energy[$fuel]);
 
         if ($fuel == 'coal') {
             $amount /= 1000;
         } elseif ($fuel == 'wood') {
-            $amount = ceil($amount/500);
+            $amount = ceil($amount / 500);
         }
 
         return $amount;

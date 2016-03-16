@@ -19,11 +19,11 @@ class BoilerPowerAdmin extends Admin
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-//         $datagridMapper->add('name');
+        //         $datagridMapper->add('name');
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
-//         $listMapper->addIdentifier('name');
+        //         $listMapper->addIdentifier('name');
     }
 }

@@ -3,7 +3,6 @@
 namespace Kraken\RankingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -34,9 +33,9 @@ class Notice
     protected $content;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer 
+     * @return int
      */
     public function getId()
     {
@@ -44,9 +43,10 @@ class Notice
     }
 
     /**
-     * Set type
+     * Set type.
      *
      * @param string $type
+     *
      * @return Notice
      */
     public function setType($type)
@@ -57,9 +57,9 @@ class Notice
     }
 
     /**
-     * Get type
+     * Get type.
      *
-     * @return string 
+     * @return string
      */
     public function getType()
     {
@@ -67,9 +67,10 @@ class Notice
     }
 
     /**
-     * Set label
+     * Set label.
      *
      * @param string $label
+     *
      * @return Notice
      */
     public function setLabel($label)
@@ -80,9 +81,9 @@ class Notice
     }
 
     /**
-     * Get label
+     * Get label.
      *
-     * @return string 
+     * @return string
      */
     public function getLabel()
     {
@@ -90,9 +91,10 @@ class Notice
     }
 
     /**
-     * Set content
+     * Set content.
      *
      * @param string $content
+     *
      * @return Notice
      */
     public function setContent($content)
@@ -103,9 +105,9 @@ class Notice
     }
 
     /**
-     * Get content
+     * Get content.
      *
-     * @return string 
+     * @return string
      */
     public function getContent()
     {

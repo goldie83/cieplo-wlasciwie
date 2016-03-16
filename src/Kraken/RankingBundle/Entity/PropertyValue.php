@@ -3,7 +3,6 @@
 namespace Kraken\RankingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -46,13 +45,13 @@ class PropertyValue
 
     public function __toString()
     {
-        return $this->property->getLabel() . ': '.$this->name;
+        return $this->property->getLabel().': '.$this->name;
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -60,9 +59,10 @@ class PropertyValue
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
+     *
      * @return PropertyValue
      */
     public function setName($name)
@@ -73,7 +73,7 @@ class PropertyValue
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -83,9 +83,10 @@ class PropertyValue
     }
 
     /**
-     * Set value
+     * Set value.
      *
-     * @param integer $value
+     * @param int $value
+     *
      * @return PropertyValue
      */
     public function setValue($value)
@@ -96,9 +97,9 @@ class PropertyValue
     }
 
     /**
-     * Get value
+     * Get value.
      *
-     * @return integer
+     * @return int
      */
     public function getValue()
     {
@@ -106,9 +107,10 @@ class PropertyValue
     }
 
     /**
-     * Set property
+     * Set property.
      *
      * @param \Kraken\RankingBundle\Entity\Property $property
+     *
      * @return PropertyValue
      */
     public function setProperty(\Kraken\RankingBundle\Entity\Property $property)
@@ -119,7 +121,7 @@ class PropertyValue
     }
 
     /**
-     * Get property
+     * Get property.
      *
      * @return \Kraken\RankingBundle\Entity\Property
      */
@@ -129,9 +131,10 @@ class PropertyValue
     }
 
     /**
-     * Add boilerProperties
+     * Add boilerProperties.
      *
      * @param \Kraken\RankingBundle\Entity\BoilerProperty $boilerProperties
+     *
      * @return PropertyValue
      */
     public function addBoilerProperty(\Kraken\RankingBundle\Entity\BoilerProperty $boilerProperties)
@@ -142,7 +145,7 @@ class PropertyValue
     }
 
     /**
-     * Remove boilerProperties
+     * Remove boilerProperties.
      *
      * @param \Kraken\RankingBundle\Entity\BoilerProperty $boilerProperties
      */
@@ -152,7 +155,7 @@ class PropertyValue
     }
 
     /**
-     * Get boilerProperties
+     * Get boilerProperties.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -162,9 +165,10 @@ class PropertyValue
     }
 
     /**
-     * Set type
+     * Set type.
      *
      * @param string $type
+     *
      * @return PropertyValue
      */
     public function setType($type)
@@ -175,7 +179,7 @@ class PropertyValue
     }
 
     /**
-     * Get type
+     * Get type.
      *
      * @return string
      */

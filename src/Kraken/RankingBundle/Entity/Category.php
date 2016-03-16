@@ -4,7 +4,6 @@ namespace Kraken\RankingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -66,7 +65,7 @@ class Category
     protected $searches;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public function __construct()
     {
@@ -79,9 +78,9 @@ class Category
     }
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -89,9 +88,10 @@ class Category
     }
 
     /**
-     * Set name
+     * Set name.
      *
      * @param string $name
+     *
      * @return Category
      */
     public function setName($name)
@@ -102,7 +102,7 @@ class Category
     }
 
     /**
-     * Get name
+     * Get name.
      *
      * @return string
      */
@@ -112,9 +112,10 @@ class Category
     }
 
     /**
-     * Set slug
+     * Set slug.
      *
      * @param string $slug
+     *
      * @return Category
      */
     public function setSlug($slug)
@@ -125,7 +126,7 @@ class Category
     }
 
     /**
-     * Get slug
+     * Get slug.
      *
      * @return string
      */
@@ -135,9 +136,10 @@ class Category
     }
 
     /**
-     * Set description
+     * Set description.
      *
      * @param string $description
+     *
      * @return Category
      */
     public function setDescription($description)
@@ -148,7 +150,7 @@ class Category
     }
 
     /**
-     * Get description
+     * Get description.
      *
      * @return string
      */
@@ -158,9 +160,10 @@ class Category
     }
 
     /**
-     * Set sort
+     * Set sort.
      *
-     * @param integer $sort
+     * @param int $sort
+     *
      * @return Category
      */
     public function setSort($sort)
@@ -171,9 +174,9 @@ class Category
     }
 
     /**
-     * Get sort
+     * Get sort.
      *
-     * @return integer
+     * @return int
      */
     public function getSort()
     {
@@ -181,9 +184,10 @@ class Category
     }
 
     /**
-     * Add boilers
+     * Add boilers.
      *
      * @param \Kraken\RankingBundle\Entity\Boiler $boilers
+     *
      * @return Category
      */
     public function addBoiler(\Kraken\RankingBundle\Entity\Boiler $boilers)
@@ -194,7 +198,7 @@ class Category
     }
 
     /**
-     * Remove boilers
+     * Remove boilers.
      *
      * @param \Kraken\RankingBundle\Entity\Boiler $boilers
      */
@@ -204,7 +208,7 @@ class Category
     }
 
     /**
-     * Get boilers
+     * Get boilers.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -214,9 +218,10 @@ class Category
     }
 
     /**
-     * Set singularName
+     * Set singularName.
      *
      * @param string $singularName
+     *
      * @return Category
      */
     public function setSingularName($singularName)
@@ -227,7 +232,7 @@ class Category
     }
 
     /**
-     * Get singularName
+     * Get singularName.
      *
      * @return string
      */
@@ -237,9 +242,10 @@ class Category
     }
 
     /**
-     * Add searches
+     * Add searches.
      *
      * @param \Kraken\RankingBundle\Entity\Boiler $searches
+     *
      * @return Category
      */
     public function addSearch(\Kraken\RankingBundle\Entity\Boiler $searches)
@@ -250,7 +256,7 @@ class Category
     }
 
     /**
-     * Remove searches
+     * Remove searches.
      *
      * @param \Kraken\RankingBundle\Entity\Boiler $searches
      */
@@ -260,7 +266,7 @@ class Category
     }
 
     /**
-     * Get searches
+     * Get searches.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -270,9 +276,10 @@ class Category
     }
 
     /**
-     * Set parent
+     * Set parent.
      *
      * @param \Kraken\RankingBundle\Entity\Category $parent
+     *
      * @return Category
      */
     public function setParent(\Kraken\RankingBundle\Entity\Category $parent = null)
@@ -283,7 +290,7 @@ class Category
     }
 
     /**
-     * Get parent
+     * Get parent.
      *
      * @return \Kraken\RankingBundle\Entity\Category
      */
@@ -293,9 +300,10 @@ class Category
     }
 
     /**
-     * Add children
+     * Add children.
      *
      * @param \Kraken\RankingBundle\Entity\Category $children
+     *
      * @return Category
      */
     public function addChild(\Kraken\RankingBundle\Entity\Category $children)
@@ -306,7 +314,7 @@ class Category
     }
 
     /**
-     * Remove children
+     * Remove children.
      *
      * @param \Kraken\RankingBundle\Entity\Category $children
      */
@@ -316,7 +324,7 @@ class Category
     }
 
     /**
-     * Get children
+     * Get children.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -338,6 +346,6 @@ class Category
 
     public function getIndentedName()
     {
-        return count($this->children) == 0 ? '-> ' . $this->name : $this->name;
+        return count($this->children) == 0 ? '-> '.$this->name : $this->name;
     }
 }

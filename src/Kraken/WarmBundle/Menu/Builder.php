@@ -10,11 +10,10 @@ class Builder extends ContainerAware
     public function navbar(FactoryInterface $factory, array $options)
     {
         $menu = $factory->createItem('root', array(
-            'childrenAttributes'    => array(
-                'class'             => 'nav navbar-nav',
+            'childrenAttributes' => array(
+                'class' => 'nav navbar-nav',
             ),
         ));
-
 
         $menu->addChild('Start', array('route' => 'start'));
         $menu->addChild('Co to jest', array('route' => 'what'));

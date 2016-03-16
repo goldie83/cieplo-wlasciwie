@@ -42,9 +42,9 @@ class Proposal
     protected $content;
 
     /**
-     * Get id
+     * Get id.
      *
-     * @return integer
+     * @return int
      */
     public function getId()
     {
@@ -52,9 +52,10 @@ class Proposal
     }
 
     /**
-     * Set url
+     * Set url.
      *
      * @param string $url
+     *
      * @return Proposal
      */
     public function setUrl($url)
@@ -65,7 +66,7 @@ class Proposal
     }
 
     /**
-     * Get url
+     * Get url.
      *
      * @return string
      */
@@ -75,9 +76,10 @@ class Proposal
     }
 
     /**
-     * Set content
+     * Set content.
      *
      * @param string $content
+     *
      * @return Proposal
      */
     public function setContent($content)
@@ -88,7 +90,7 @@ class Proposal
     }
 
     /**
-     * Get content
+     * Get content.
      *
      * @return string
      */
@@ -98,9 +100,10 @@ class Proposal
     }
 
     /**
-     * Set email
+     * Set email.
      *
      * @param string $email
+     *
      * @return Proposal
      */
     public function setEmail($email)
@@ -111,7 +114,7 @@ class Proposal
     }
 
     /**
-     * Get email
+     * Get email.
      *
      * @return string
      */

@@ -5,7 +5,6 @@ namespace Kraken\RankingBundle\DataFixtures\ORM;
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 use Kraken\RankingBundle\Entity\Boiler;
-use Kraken\RankingBundle\Entity\BoilerProperty;
 use Kraken\RankingBundle\Entity\Category;
 use Kraken\RankingBundle\Entity\Manufacturer;
 use Kraken\RankingBundle\Entity\Property;
@@ -54,22 +53,20 @@ class LoadRankingData implements FixtureInterface
         $c->setParent($c2);
         $manager->persist($c);
 
-
-        $p1 = new Property;
+        $p1 = new Property();
         $p1->setLabel('Sterownik adaptacyjny');
         $p1->setContent('Sam dobiera parametry pracy, bez konieczności ręcznych nastaw');
         $manager->persist($p1);
 
-        $p2 = new Property;
+        $p2 = new Property();
         $p2->setLabel('Palnik II generacji');
         $p2->setContent('Jest w stanie spalać gorsze, spiekające węgle oraz miał');
         $manager->persist($p2);
 
-        $p3 = new Property;
+        $p3 = new Property();
         $p3->setLabel('Dopuszczenie do układu zamkniętego');
         $p3->setContent('Kocioł posiada potwierdzone pisemnie zezwolenie na montaż w układzie zamkniętym');
         $manager->persist($p3);
-
 
         $m = new Manufacturer();
         $m->setName('Ogniwo');
@@ -80,7 +77,6 @@ class LoadRankingData implements FixtureInterface
         $b->setName('Ogniwo Eko Plus');
         $b->setCategory($c2);
         $b->setManufacturer($m);
-
 
         $manager->persist($b);
         $manager->flush();

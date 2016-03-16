@@ -4,13 +4,9 @@ namespace Kraken\WarmBundle\Tests\Service;
 
 use Kraken\WarmBundle\Entity\Calculation;
 use Kraken\WarmBundle\Entity\House;
-use Kraken\WarmBundle\Entity\Layer;
-use Kraken\WarmBundle\Entity\Wall;
 use Kraken\WarmBundle\Entity\Material;
 use Kraken\WarmBundle\Service\InstanceService;
 use Kraken\WarmBundle\Service\DimensionsService;
-use Kraken\WarmBundle\Service\DoubleBuilding;
-use Kraken\WarmBundle\Service\WallService;
 use Mockery;
 
 class DimensionsServiceTest extends \PHPUnit_Framework_TestCase
@@ -26,7 +22,7 @@ class DimensionsServiceTest extends \PHPUnit_Framework_TestCase
         $house->setBuildingLength(10);
         $house->setBuildingFloors(3);
         $house->setBuildingRoof('flat');
-        $house->setBuildingHeatedFloors([1,2]);
+        $house->setBuildingHeatedFloors([1, 2]);
         $house->setVentilationType('natural');
         $house->setPrimaryWallMaterial($m);
         $house->setWallSize(50);
@@ -73,7 +69,7 @@ class DimensionsServiceTest extends \PHPUnit_Framework_TestCase
 
         $instance->get()->getHouse()->setBuildingFloors(3);
         $instance->get()->getHouse()->setBuildingRoof('flat');
-        $instance->get()->getHouse()->setBuildingHeatedFloors([0,1,2,3]);
+        $instance->get()->getHouse()->setBuildingHeatedFloors([0, 1, 2, 3]);
 
         $this->assertEquals(354, $d->getTotalWallArea());
     }
@@ -89,7 +85,7 @@ class DimensionsServiceTest extends \PHPUnit_Framework_TestCase
 
         $instance->get()->getHouse()->setBuildingFloors(3);
         $instance->get()->getHouse()->setBuildingRoof('steep');
-        $instance->get()->getHouse()->setBuildingHeatedFloors([1,2,3]);
+        $instance->get()->getHouse()->setBuildingHeatedFloors([1, 2, 3]);
 
         $this->assertEquals(270.8, $d->getTotalWallArea());
     }
@@ -102,7 +98,7 @@ class DimensionsServiceTest extends \PHPUnit_Framework_TestCase
 
         $instance->get()->getHouse()->setBuildingFloors(3);
         $instance->get()->getHouse()->setBuildingRoof('flat');
-        $instance->get()->getHouse()->setBuildingHeatedFloors([1,2,3]);
+        $instance->get()->getHouse()->setBuildingHeatedFloors([1, 2, 3]);
 
         $this->assertEquals(3, $d->getNumberOfHeatedFloors());
     }
@@ -232,7 +228,7 @@ class DimensionsServiceTest extends \PHPUnit_Framework_TestCase
         $d = new DimensionsService($instance, $f);
 
         $instance->get()->getHouse()->setBuildingFloors(1);
-        $instance->get()->getHouse()->setBuildingHeatedFloors([1,2]);
+        $instance->get()->getHouse()->setBuildingHeatedFloors([1, 2]);
         $instance->get()->getHouse()->setBuildingRoof('steep');
 
         $this->assertEquals(2, $d->getHeatedFloorsNumber());
@@ -261,7 +257,7 @@ class DimensionsServiceTest extends \PHPUnit_Framework_TestCase
         $d = new DimensionsService($instance, $f);
 
         $instance->get()->getHouse()->setBuildingFloors(1);
-        $instance->get()->getHouse()->setBuildingHeatedFloors([1,2]);
+        $instance->get()->getHouse()->setBuildingHeatedFloors([1, 2]);
         $instance->get()->getHouse()->setBuildingRoof('steep');
         $instance->get()->getHouse()->setWallSize(50);
         $instance->get()->getHouse()->setBuildingWidth(10);
@@ -294,7 +290,7 @@ class DimensionsServiceTest extends \PHPUnit_Framework_TestCase
         $d = new DimensionsService($instance, $f);
 
         $instance->get()->getHouse()->setBuildingFloors(1);
-        $instance->get()->getHouse()->setBuildingHeatedFloors([1,2]);
+        $instance->get()->getHouse()->setBuildingHeatedFloors([1, 2]);
         $instance->get()->getHouse()->setBuildingRoof('steep');
         $instance->get()->getHouse()->setWallSize(50);
         $instance->get()->getHouse()->setBuildingWidth(10);
@@ -323,7 +319,7 @@ class DimensionsServiceTest extends \PHPUnit_Framework_TestCase
         $d = new DimensionsService($instance, $f);
 
         $instance->get()->getHouse()->setBuildingFloors(1);
-        $instance->get()->getHouse()->setBuildingHeatedFloors([1,2]);
+        $instance->get()->getHouse()->setBuildingHeatedFloors([1, 2]);
         $instance->get()->getHouse()->setBuildingRoof('steep');
         $instance->get()->getHouse()->setWallSize(50);
         $instance->get()->getHouse()->setBuildingWidth(10);

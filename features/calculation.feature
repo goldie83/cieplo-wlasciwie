@@ -88,7 +88,6 @@ Feature: Energy balance calculation
      Then I should see "Jaką temperaturę podać?"
      When I fill in "calculation[indoor_temperature]" with "21"
       And I press "Wynik"
-      And show last response
      Then I should see "A.D. gdzieś przed II wojną, 40m2 ogrzewane, Otwock i okolice"
       And I should see "40cm, konstrukcja: cegła pełna, izolacja: brak"
       And I should see "Ściany zewnętrzne: 2"

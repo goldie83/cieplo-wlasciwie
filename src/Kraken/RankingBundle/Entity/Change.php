@@ -61,9 +61,10 @@ class Change
     }
 
     /**
-     * Set date
+     * Set date.
      *
      * @param \DateTime $date
+     *
      * @return Change
      */
     public function setDate($date)
@@ -74,7 +75,7 @@ class Change
     }
 
     /**
-     * Get date
+     * Get date.
      *
      * @return \DateTime
      */
@@ -84,9 +85,10 @@ class Change
     }
 
     /**
-     * Set oldRating
+     * Set oldRating.
      *
      * @param string $oldRating
+     *
      * @return Change
      */
     public function setOldRating($oldRating)
@@ -97,7 +99,7 @@ class Change
     }
 
     /**
-     * Get oldRating
+     * Get oldRating.
      *
      * @return string
      */
@@ -107,9 +109,10 @@ class Change
     }
 
     /**
-     * Set newRating
+     * Set newRating.
      *
      * @param string $newRating
+     *
      * @return Change
      */
     public function setNewRating($newRating)
@@ -120,7 +123,7 @@ class Change
     }
 
     /**
-     * Get newRating
+     * Get newRating.
      *
      * @return string
      */
@@ -130,9 +133,10 @@ class Change
     }
 
     /**
-     * Set content
+     * Set content.
      *
      * @param string $content
+     *
      * @return Change
      */
     public function setContent($content)
@@ -143,7 +147,7 @@ class Change
     }
 
     /**
-     * Get content
+     * Get content.
      *
      * @return string
      */
@@ -153,9 +157,10 @@ class Change
     }
 
     /**
-     * Set boiler
+     * Set boiler.
      *
      * @param \Kraken\RankingBundle\Entity\Boiler $boiler
+     *
      * @return Change
      */
     public function setBoiler(\Kraken\RankingBundle\Entity\Boiler $boiler = null)
@@ -166,7 +171,7 @@ class Change
     }
 
     /**
-     * Get boiler
+     * Get boiler.
      *
      * @return \Kraken\RankingBundle\Entity\Boiler
      */

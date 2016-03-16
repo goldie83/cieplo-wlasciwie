@@ -3,7 +3,6 @@
 namespace Kraken\RankingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -38,7 +37,6 @@ class Property
      */
     protected $propertyValues;
 
-
     public function __construct()
     {
     }
@@ -54,9 +52,10 @@ class Property
     }
 
     /**
-     * Set label
+     * Set label.
      *
      * @param string $label
+     *
      * @return Property
      */
     public function setLabel($label)
@@ -67,7 +66,7 @@ class Property
     }
 
     /**
-     * Get label
+     * Get label.
      *
      * @return string
      */
@@ -77,9 +76,10 @@ class Property
     }
 
     /**
-     * Set content
+     * Set content.
      *
      * @param string $content
+     *
      * @return Property
      */
     public function setContent($content)
@@ -90,7 +90,7 @@ class Property
     }
 
     /**
-     * Get content
+     * Get content.
      *
      * @return string
      */
@@ -100,9 +100,10 @@ class Property
     }
 
     /**
-     * Add propertyValues
+     * Add propertyValues.
      *
      * @param \Kraken\RankingBundle\Entity\PropertyValue $propertyValues
+     *
      * @return Property
      */
     public function addPropertyValue(\Kraken\RankingBundle\Entity\PropertyValue $propertyValues)
@@ -113,7 +114,7 @@ class Property
     }
 
     /**
-     * Remove propertyValues
+     * Remove propertyValues.
      *
      * @param \Kraken\RankingBundle\Entity\PropertyValue $propertyValues
      */
@@ -123,7 +124,7 @@ class Property
     }
 
     /**
-     * Get propertyValues
+     * Get propertyValues.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -133,9 +134,10 @@ class Property
     }
 
     /**
-     * Set type
+     * Set type.
      *
      * @param string $type
+     *
      * @return Property
      */
     public function setType($type)
@@ -146,7 +148,7 @@ class Property
     }
 
     /**
-     * Get type
+     * Get type.
      *
      * @return string
      */

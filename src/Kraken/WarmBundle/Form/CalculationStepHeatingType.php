@@ -69,7 +69,7 @@ class CalculationStepHeatingType extends AbstractType
                     'mechanical_recovery' => 'Mechaniczna z odzyskiem ciepła',
                 ),
                 'label' => 'Rodzaj wentylacji',
-                'mapped' => false
+                'mapped' => false,
             ))
             ->add('include_hot_water', null, [
                 'label' => 'Dolicz grzanie wody kranowej (CWU)',

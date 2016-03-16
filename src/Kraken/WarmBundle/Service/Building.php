@@ -229,7 +229,7 @@ class Building implements BuildingInterface
         $floorLambda = $isolationResistance > 0
             ? 1 / $isolationResistance
             : 1;
-        $wallSize = $house->getWallSize()/100;
+        $wallSize = $house->getWallSize() / 100;
 
         $proportion = ($l * $w) / (0.5 * ($l + $w));
         $equivalentSize = $wallSize + $groundLambda / $floorLambda;
@@ -274,7 +274,7 @@ class Building implements BuildingInterface
         $floorLambda = $isolationResistance > 0
             ? 1 / $isolationResistance
             : 1;
-        $wallSize = $house->getWallSize()/100;
+        $wallSize = $house->getWallSize() / 100;
         $floorArea = $l * $w;
         $floorPerimeter = 2 * ($l + $w);
 
