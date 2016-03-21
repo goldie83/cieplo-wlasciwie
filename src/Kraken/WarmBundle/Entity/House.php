@@ -432,6 +432,23 @@ class House
         return $this->doors_type;
     }
 
+    public function setRoofType($roofType)
+    {
+        $this->roof_type = $roofType;
+
+        return $this;
+    }
+
+    /**
+     * Get roof_type.
+     *
+     * @return string
+     */
+    public function getRoofType()
+    {
+        return $this->roof_type;
+    }
+
     /**
      * Set number_windows.
      *
@@ -481,30 +498,6 @@ class House
     }
 
     /**
-     * Set roof_type.
-     *
-     * @param string $roofType
-     *
-     * @return House
-     */
-    public function setRoofType($roofType)
-    {
-        $this->roof_type = $roofType;
-
-        return $this;
-    }
-
-    /**
-     * Get roof_type.
-     *
-     * @return string
-     */
-    public function getRoofType()
-    {
-        return $this->roof_type;
-    }
-
-    /**
      * Set has_basement.
      *
      * @param bool $hasBasement
@@ -523,7 +516,7 @@ class House
      *
      * @return bool
      */
-    public function getHasBasement()
+    public function hasBasement()
     {
         return $this->has_basement;
     }

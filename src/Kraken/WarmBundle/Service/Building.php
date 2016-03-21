@@ -204,7 +204,7 @@ class Building implements BuildingInterface
     public function getGroundEnergyLossFactor()
     {
         if ($this->floors->isGroundFloorHeated()) {
-            if ($this->getHouse()->getHasBasement()) {
+            if ($this->getHouse()->hasBasement()) {
                 if ($this->floors->isBasementHeated()) {
                     return $this->getEnergyLossToUnderground();
                 }
@@ -256,7 +256,7 @@ class Building implements BuildingInterface
     {
         $house = $this->getHouse();
 
-        if (!($this->floors->isGroundFloorHeated() && $house->getHasBasement() && $this->floors->isBasementHeated())) {
+        if (!($this->floors->isGroundFloorHeated() && $house->hasBasement() && $this->floors->isBasementHeated())) {
             return 0;
         }
 
@@ -322,7 +322,7 @@ class Building implements BuildingInterface
     {
         $house = $this->getHouse();
 
-        if ($house->getHasBasement() && !$this->floors->isBasementHeated()) {
+        if ($house->hasBasement() && !$this->floors->isBasementHeated()) {
             $l = $this->dimensions->getExternalBuildingLength();
             $w = $this->dimensions->getExternalBuildingWidth();
 
@@ -333,7 +333,7 @@ class Building implements BuildingInterface
                 : 0;
 
             return round($l * $w * (1 / ($this->getInternalCeilingResistance() + $ceilingIsolationResistance)), 2);
-        } elseif (!$house->getHasBasement() && !$this->floors->isGroundFloorHeated()) {
+        } elseif (!$house->hasBasement() && !$this->floors->isGroundFloorHeated()) {
             $l = $this->dimensions->getExternalBuildingLength();
             $w = $this->dimensions->getExternalBuildingWidth();
 

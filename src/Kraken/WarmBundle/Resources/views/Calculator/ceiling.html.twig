@@ -24,9 +24,19 @@
                     </div>
                     {{ form_errors(form) }}
                 {% endif %}
+                {{ form_row(form.has_top_isolation) }}
+                <div id="top_isolation" style="display:none">
+                    {{ form_row(form.top_isolation_layer) }}
+                </div>
+                {{ form_row(form.has_bottom_isolation) }}
+                <div id="bottom_isolation" style="display:none">
+                    {{ form_row(form.bottom_isolation_layer) }}
+                </div>
                 {{ form_rest(form) }}
             </div>
             <div class="col-md-6">
+                <p>Podaj czy i jak izolowane są pomieszczenia ogrzewane od góry i od dołu budynku.</p>
+                <p>Izolacja to nie tylko styropian i wełna mineralna! Liczy się także np. trzcina, słoma, trociny czy żużel (na płaskim dachu).</p>
             </div>
             <div class="clearfix"></div>
         </div>
@@ -43,5 +53,10 @@
     </div>
 </div>
 
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('bundles/krakenwarm/js/ceiling.js') }}"></script>
 {% endblock %}
 

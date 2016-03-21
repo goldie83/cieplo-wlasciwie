@@ -80,7 +80,7 @@ class HouseDescriptionService
 
             $floor = isset($floors[$nbFloors]) ? $floors[$nbFloors] : $nbFloors.'-piętrowy';
 
-            if ($house->getHasBasement()) {
+            if ($house->hasBasement()) {
                 $floor .= ' podpiwniczony';
             }
         }
@@ -242,7 +242,7 @@ class HouseDescriptionService
         $floors = [];
         $i = 0;
 
-        if ($this->instance->get()->getHouse()->getHasBasement()) {
+        if ($this->instance->get()->getHouse()->hasBasement()) {
             $floors[] = array(
                 'name' => 'basement',
                 'label' => 'Piwnica',

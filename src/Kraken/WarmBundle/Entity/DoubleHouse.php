@@ -398,7 +398,7 @@ class DoubleHouse
      *
      * @return bool
      */
-    public function getHasBasement()
+    public function hasBasement()
     {
         return $this->has_basement;
     }

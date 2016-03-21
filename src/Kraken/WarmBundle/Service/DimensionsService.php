@@ -151,7 +151,7 @@ class DimensionsService
         $house = $this->getInstance()->getHouse();
         $floorsNumber = $house->getBuildingFloors();
 
-        if ($house->getBuildingRoof() != 'flat') {
+        if (!$this->getInstance()->isApartment() && $house->getBuildingRoof() != 'flat') {
             ++$floorsNumber;
         }
 
@@ -168,7 +168,7 @@ class DimensionsService
         $house = $this->getInstance()->getHouse();
         $area = $this->getFloorArea() * $this->getTotalFloorsNumber();
 
-        if ($house->getBuildingRoof() != 'flat') {
+        if (!$this->getInstance()->isApartment() && $house->getBuildingRoof() != 'flat') {
             $area -= 0.3 * $this->getFloorArea();
         }
 
@@ -185,11 +185,11 @@ class DimensionsService
         $house = $this->getInstance()->getHouse();
         $area = $this->getFloorArea() * $this->getHeatedFloorsNumber();
 
-        if ($house->getBuildingRoof() != 'flat' && $this->floors->isAtticHeated()) {
+        if (!$this->getInstance()->isApartment() && $house->getBuildingRoof() != 'flat' && $this->floors->isAtticHeated()) {
             $area -= 0.3 * $this->getFloorArea();
         }
 
-        if ($house->hasGarage()) {
+        if ($house->hasGarage() && $this->floors->isGroundFloorHeated()) {
             $area -= 20;
         }
 

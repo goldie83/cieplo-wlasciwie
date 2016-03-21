@@ -13,11 +13,31 @@ class CalculationStepCeilingType extends AbstractType
         parent::buildForm($builder, $options);
 
         $builder
+            ->add('has_top_isolation', 'choice', [
+                'choices' => [
+                    'yes' => 'Tak, jest jakaś izolacja',
+                    'no' => 'Nie, nie ma żadnej izolacji',
+                ],
+                'expanded' => true,
+                'required' => true,
+                'mapped' => false,
+                'label' => 'Czy jest jakakolwiek '.strtolower($options['top_isolation_label']).'?',
+            ])
             ->add('top_isolation_layer', new LayerType(), array(
                 'label' => $options['top_isolation_label'],
                 'material_type' => 'for_ceiling',
                 'required' => false,
             ))
+            ->add('has_bottom_isolation', 'choice', [
+                'choices' => [
+                    'yes' => 'Tak, jest jakaś izolacja',
+                    'no' => 'Nie, nie ma żadnej izolacji',
+                ],
+                'expanded' => true,
+                'required' => true,
+                'mapped' => false,
+                'label' => 'Czy jest jakakolwiek '.strtolower($options['bottom_isolation_label']).'?',
+            ])
             ->add('bottom_isolation_layer', new LayerType(), array(
                 'label' => $options['bottom_isolation_label'],
                 'material_type' => ['for_floor', 'for_ceiling'],

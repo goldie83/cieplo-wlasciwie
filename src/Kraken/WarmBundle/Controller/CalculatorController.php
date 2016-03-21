@@ -249,6 +249,7 @@ class CalculatorController extends Controller
             if ($house->getTopIsolationLayer()) {
                 $form->get('top_isolation_layer')->setData($house->getTopIsolationLayer());
             }
+
             if ($house->getBottomIsolationLayer()) {
                 $form->get('bottom_isolation_layer')->setData($house->getBottomIsolationLayer());
             }
@@ -266,24 +267,21 @@ class CalculatorController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $object = $form->getData();
 
-            if ($object instanceof Apartment) {
-                if ($form->get('top_isolation_layer')->get('size')->getData() > 0) {
-                    $house->setTopIsolationLayer($form->get('top_isolation_layer')->getData());
-                } elseif ($form->get('top_isolation_layer')->getData() != null) {
-                    $em->remove($form->get('top_isolation_layer')->getData());
-                    $calc->getHouse()->setTopIsolationLayer(null);
-                }
-
-                if ($form->get('bottom_isolation_layer')->get('size')->getData() > 0) {
-                    $house->setBottomIsolationLayer($form->get('bottom_isolation_layer')->getData());
-                } elseif ($form->get('bottom_isolation_layer')->getData() != null) {
-                    $em->remove($form->get('bottom_isolation_layer')->getData());
-                    $calc->getHouse()->setBottomIsolationLayer(null);
-                }
-            } elseif ($object instanceof House) {
-                $calc->setHouse($object);
+            if ($form->get('top_isolation_layer')->get('size')->getData() > 0) {
+                $object->setTopIsolationLayer($form->get('top_isolation_layer')->getData());
+            } elseif ($form->get('top_isolation_layer')->getData() != null) {
+                $em->remove($form->get('top_isolation_layer')->getData());
+                $calc->getHouse()->setTopIsolationLayer(null);
             }
 
+            if ($form->get('bottom_isolation_layer')->get('size')->getData() > 0) {
+                $object->setBottomIsolationLayer($form->get('bottom_isolation_layer')->getData());
+            } elseif ($form->get('bottom_isolation_layer')->getData() != null) {
+                $em->remove($form->get('bottom_isolation_layer')->getData());
+                $calc->getHouse()->setBottomIsolationLayer(null);
+            }
+
+            $calc->setHouse($object);
             $em->persist($object);
             $em->persist($calc);
             $em->flush();
