@@ -33,7 +33,13 @@ class FloorsService
 
     public function isAtticHeated()
     {
-        return in_array($this->getHouse()->getBuildingFloors(), $this->getHouse()->getBuildingHeatedFloors());
+        $atticFloor = $this->getHouse()->getBuildingFloors();
+
+        if ($this->getHouse()->getBuildingRoof() != 'flat') {
+            $atticFloor++;
+        }
+
+        return in_array($atticFloor, $this->getHouse()->getBuildingHeatedFloors());
     }
 
     public function hasUnheatedFloors()

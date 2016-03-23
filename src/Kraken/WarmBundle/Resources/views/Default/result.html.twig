@@ -36,7 +36,8 @@
                     <tr><td class="col-md-4">Ściany</td><td class="col-md-8">{{ describer.wallDetails}}</td></tr>
                     <tr><td class="col-md-4">Usytuowanie</td><td class="col-md-8">{{ describer.apartmentSituationDetails|raw }}</td></tr>
                 {% else %}
-                    <tr><td class="col-md-4">Powierzchnia</td><td class="col-md-8">{{ describer.areaDetails|raw }}</td></tr>
+                    <tr><td class="col-md-4">Powierzchnia zabudowy</td><td class="col-md-8">{{ dimensions.floorArea|round(0, 'ceil')|number_format }}m<sup>2</sup></td></tr>
+                    <tr><td class="col-md-4">Powierzchnia budynku</td><td class="col-md-8">{{ describer.areaDetails|raw }}</td></tr>
                     <tr><td class="col-md-4">Ściany</td><td class="col-md-8">{{ describer.wallDetails}}</td></tr>
                     <tr><td class="col-md-4">Ogrzewane piętra</td><td class="col-md-8">{{ describer.heatedFloorsDetails }}</td></tr>
                     {% if floors.hasUnheatedFloors %}
@@ -144,11 +145,11 @@
           </div>
           <div class="col-md-6">
               <h3>Jakiej mocy kotła potrzebujesz</h3>
-              <h4><span class="label label-warning">{{ powerNeeded|number_format(0, ',', ' ') ~ 'kW' }}</span> to potrzebna moc grzewcza {% if hotWater.included %}(C.O. + CWU){% else %}(C.O. bez CWU){% endif %}</h4>
+              <h4><span class="label label-warning">{{ calculator.necessaryHeatingPower|number_format(0, ',', ' ') ~ 'kW' }}</span> to potrzebna moc grzewcza {% if hotWater.included %}(C.O. + CWU){% else %}(C.O. bez CWU){% endif %}</h4>
               <p>Ta moc uwzględnia w pełni zapotrzebowanie budynku na ciepło do ogrzewania{% if hotWater.included %}, moc na potrzeby przygotowania ciepłej wody (CWU){% endif %} oraz rozsądny zapas przewidziany normami.</p>
               <p>Nie znaczy to, że masz wstawić kocioł idealnie o takiej mocy, ale <strong>nie kupuj dwa-trzy razy większego</strong> nawet jeśli sprzedawca, instalator, szwagier i sąsiad zgodnie twierdzą inaczej. <a href="http://czysteogrzewanie.pl/zakupy/mocy-przybywaj-dobor-mocy-kotla-weglowego/#Czym_grozi_zbyt_dua_moc_kota" target="_blank">To ty zapłacisz za jego nadmierny apetyt na opał</a>, a fachowcy i <em>doradcy społeczni</em> umyją ręce.</p>
               <h4>Sugerowane moce kotłów zależnie od rodzaju</h4>
-              <h5>Kocioł zasypowy: <span class="label label-warning">{{ (1.1*powerNeeded)|number_format(0, ',', ' ') ~ '-' ~ (1.25*powerNeeded)|number_format(0, ',', ' ') ~ 'kW' }}</span></h5>
+              <h5>Kocioł zasypowy: <span class="label label-warning">{{ (1.1*powerNeeded)|number_format(0, ',', ' ') ~ '-' ~ (1.3*powerNeeded)|number_format(0, ',', ' ') ~ 'kW' }}</span></h5>
               <div class="alert alert-info">
                   <h4>Zwracaj uwagę na paliwo podstawowe kotła</h4>
                   Moc nominalna kotłów zasypowych obowiązuje dla paliwa podstawowego &mdash; przeważnie jest to węgiel kamienny. Jeśli zamierzasz zawsze palić czymś mniej kalorycznym, weź pod uwagę, że <strong>moc kotła będzie niższa</strong>, np. dla drewna o&nbsp;ok.&nbsp;30%.
@@ -158,7 +159,7 @@
               {% set automaticStovePower = calculator.suggestedAutomaticStovePower %}
               <h5>Kocioł podajnikowy: <span class="label label-warning">{{ automaticStovePower ~ 'kW' }}</span></h5>
               <p>Kotły podajnikowe (zwłaszcza te najmniejsze) miewają min. kilka kilowatów zapasu ponad moc nominalną, więc często nie ma potrzeby kupowania wyższego wariantu mocy, gdy potrzeby domu są na styk z wariantem niższym. Ale to nie reguła! By się upewnić, <strong>sprawdzaj w DTR kotła lub pytaj producenta!</strong></p>
-              <h5>Kocioł gazowy: <span class="label label-warning">{{ (1.2*powerNeeded)|number_format(0, ',', ' ') ~ 'kW' }}</span></h5>
+              <h5>Kocioł gazowy: <span class="label label-warning">> {{ (1.2*powerNeeded)|number_format(0, ',', ' ') ~ 'kW' }}</span></h5>
               <p>Kotły gazowe pracują z dobrą sprawnością nawet na niskich mocach, dlatego przy wyborze kieruj się zaleceniami producenta (również w doborze mocy na potrzeby CWU).<br />
                   Instalując kocioł kondensacyjny pamiętaj o takim zaprojektowaniu instalacji, <a href="http://czysteogrzewanie.pl/zakupy/mocy-przybywaj-dobor-mocy-kotla-weglowego/#Koty_gazowe" target="_blank">aby temperatura wody nie musiała przekraczać 60&deg;C</a> - inaczej nici z kondensacji i rachunki wzrosną.</p>
           </div>

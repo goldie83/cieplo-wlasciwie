@@ -83,7 +83,7 @@ class Apartment extends Building implements BuildingInterface
             ? ($lowestCeilingIsolation->getSize() / 100) / $lowestCeilingIsolation->getMaterial()->getLambda()
             : 0;
 
-        return $house->getExternalBuildingLength() * $house->getExternalBuildingWidth() * 1 / ($this->getInternalCeilingResistance() + $ceilingIsolationResistance);
+        return $this->dimensions->getExternalBuildingLength() * $this->dimensions->getExternalBuildingWidth() * 1 / ($this->getInternalCeilingResistance() + $ceilingIsolationResistance);
     }
 
     public function getCeilingEnergyLossToUnheated()
@@ -101,7 +101,7 @@ class Apartment extends Building implements BuildingInterface
             ? ($highestCeilingIsolation->getSize() / 100) / $highestCeilingIsolation->getMaterial()->getLambda()
             : 0;
 
-        return $house->getExternalBuildingLength() * $house->getExternalBuildingWidth() * 1 / ($this->getInternalCeilingResistance() + $ceilingIsolationResistance);
+        return $this->dimensions->getExternalBuildingLength() * $this->dimensions->getExternalBuildingWidth() * 1 / ($this->getInternalCeilingResistance() + $ceilingIsolationResistance);
     }
 
     public function getWallsEnergyLossToUnheated($addIsolation = false)

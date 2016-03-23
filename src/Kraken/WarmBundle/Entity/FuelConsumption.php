@@ -19,7 +19,7 @@ class FuelConsumption
 
     /**
      * @ORM\ManyToOne(targetEntity="Calculation", inversedBy="fuel_consumptions", cascade={"persist"})
-     * @ORM\JoinColumn(name="calculation_id", referencedColumnName="id", nullable=true)
+     * @ORM\JoinColumn(name="calculation_id", referencedColumnName="id", nullable=true, onDelete="CASCADE")
      */
     protected $calculation;
 

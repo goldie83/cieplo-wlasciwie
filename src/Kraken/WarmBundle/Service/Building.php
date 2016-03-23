@@ -287,7 +287,8 @@ class Building implements BuildingInterface
             $equivalentFloorLambda = $groundLambda / (0.457 * $proportion + $equivalentSize);
         }
 
-        $equivalentWallSize = $groundLambda / $this->wall->getThermalConductance();
+        $wallConductance = $this->wall->getThermalConductance();
+        $equivalentWallSize = $wallConductance > 0 ?  $groundLambda / $wallConductance : 0;
         $basementWallsLambda = ((2 * $groundLambda) / (3.14 * $basementHeight)) * (1 + (0.5 * $equivalentSize) / ($equivalentSize + $basementHeight)) * log($basementHeight / $equivalentWallSize + 1);
 
         $totalLambda = ($floorArea * $equivalentFloorLambda + $basementHeight * $floorPerimeter * $basementWallsLambda) / ($floorArea + $basementHeight * $floorPerimeter);

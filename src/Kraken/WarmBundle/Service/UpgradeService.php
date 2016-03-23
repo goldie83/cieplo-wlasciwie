@@ -111,7 +111,7 @@ class UpgradeService
         $house = $customCalculation->getHouse();
 
         if ($apartment->getWhatsUnder() != 'heated_room') {
-            $ceilingIsolation = $house->getLowestCeilingIsolationLayer();
+            $ceilingIsolation = $house->getBottomIsolationLayer();
 
             if (!$ceilingIsolation || $ceilingIsolation->getSize() <= 5) {
                 $m = new Material();
@@ -121,7 +121,7 @@ class UpgradeService
                 $l->setMaterial($m);
                 $l->setSize(10);
 
-                $house->setLowestCeilingIsolationLayer($l);
+                $house->setBottomIsolationLayer($l);
 
                 $newEnergyLoss = $this->building->getEnergyLossToOutside() + $this->building->getEnergyLossToUnheated();
 
@@ -140,7 +140,7 @@ class UpgradeService
         $house = $customCalculation->getHouse();
 
         if ($this->floors->isGroundFloorHeated()) {
-            $groundFloorIsolation = $house->getGroundFloorIsolationLayer();
+            $groundFloorIsolation = $house->getBottomIsolationLayer();
             $materialName = $groundFloorIsolation && $groundFloorIsolation->getMaterial() ? $groundFloorIsolation->getMaterial()->getName() : '';
 
             if (!$groundFloorIsolation || $groundFloorIsolation->getSize() <= 10 || (!stristr($materialName, 'styropian') && !stristr($materialName, 'wełna'))) {
@@ -151,7 +151,7 @@ class UpgradeService
                 $l->setMaterial($m);
                 $l->setSize(20);
 
-                $house->setGroundFloorIsolationLayer($l);
+                $house->setBottomIsolationLayer($l);
 
                 $newEnergyLoss = $this->building->getEnergyLossToOutside() + $this->building->getEnergyLossToUnheated();
 
@@ -170,7 +170,7 @@ class UpgradeService
         $house = $customCalculation->getHouse();
 
         if (!$this->floors->isGroundFloorHeated()) {
-            $ceilingIsolation = $house->getLowestCeilingIsolationLayer();
+            $ceilingIsolation = $house->getBottomIsolationLayer();
 
             if (!$ceilingIsolation || $ceilingIsolation->getSize() <= 5) {
                 $m = new Material();
@@ -180,7 +180,7 @@ class UpgradeService
                 $l->setMaterial($m);
                 $l->setSize(10);
 
-                $house->setLowestCeilingIsolationLayer($l);
+                $house->setBottomIsolationLayer($l);
 
                 $newEnergyLoss = $this->building->getEnergyLossToOutside() + $this->building->getEnergyLossToUnheated();
 
@@ -269,7 +269,7 @@ class UpgradeService
 
         $flatRoof = $roofType == 'flat' || $roofType == false;
 
-        $roofIsolation = $flatRoof ? $house->getHighestCeilingIsolationLayer() : $house->getRoofIsolationLayer();
+        $roofIsolation = $house->getTopIsolationLayer();
         $materialName = $roofIsolation && $roofIsolation->getMaterial() ? $roofIsolation->getMaterial()->getName() : '';
 
         if (!$roofIsolation || $roofIsolation->getSize() < 20 || (!stristr($materialName, 'styropian') && !stristr($materialName, 'wełna'))) {
@@ -282,11 +282,7 @@ class UpgradeService
             $l->setMaterial($m);
             $l->setSize($isolationSize);
 
-            if ($flatRoof || !$this->floors->isAtticHeated()) {
-                $house->setHighestCeilingIsolationLayer($l);
-            } else {
-                $house->setRoofIsolationLayer($l);
-            }
+            $house->setTopIsolationLayer($l);
 
             $newEnergyLoss = $this->building->getEnergyLossToOutside() + $this->building->getEnergyLossToUnheated();
 

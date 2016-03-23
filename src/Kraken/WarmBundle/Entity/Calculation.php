@@ -53,7 +53,7 @@ class Calculation
     protected $heating_device;
 
     /**
-     * @ORM\OneToMany(targetEntity="FuelConsumption", mappedBy="calculation", cascade={"all"})
+     * @ORM\OneToMany(targetEntity="FuelConsumption", mappedBy="calculation")
      */
     protected $fuel_consumptions;
 

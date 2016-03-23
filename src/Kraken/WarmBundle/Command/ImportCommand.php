@@ -2,6 +2,9 @@
 
 namespace Kraken\WarmBundle\Command;
 
+use Kraken\WarmBundle\Entity\Apartment;
+use Kraken\WarmBundle\Entity\House;
+use Kraken\WarmBundle\Entity\Wall;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -20,9 +23,13 @@ class ImportCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
+
+        $conn = $this->getContainer()->get('doctrine.dbal.default_connection');
+        $conn->executeUpdate('update house set number_heated_floors = ? where number_heated_floors < ? or number_heated_floors IS NULL', [1, 1]);
+
         $batchSize = 20;
         $i = 0;
-        $q = $em->createQuery('select c from KrakenWarmBundle:Calculation c');
+        $q = $em->createQuery('select c from KrakenWarmBundle:Calculation c where c.id > 18000');
         $iterableResult = $q->iterate();
 
         $session = new Session();
@@ -30,6 +37,21 @@ class ImportCommand extends ContainerAwareCommand
 
         foreach ($iterableResult as $row) {
             $calc = $row[0];
+
+            if (!$calc->getHouse() instanceof House) {
+//                 $em->remove($calc);
+                continue;
+            }
+
+            if ($calc->getBuildingType() == 'apartment' && !$calc->getHouse()->getApartment() instanceof Apartment) {
+//                 $em->remove($calc);
+                continue;
+            }
+
+            $output->writeln(sprintf(
+                    '<info>kraken:import</info> %s #%s lecim!',
+                    $calc->getId(), base_convert($calc->getId(), 10, 36)
+            ));
 
             $constructionYears = [
                 1914 => 'gdzieś przed I wojną',
@@ -48,6 +70,8 @@ class ImportCommand extends ContainerAwareCommand
                 $calc->setConstructionYear(1914);
             } elseif ($calc->getConstructionYear() <= 1939) {
                 $calc->setConstructionYear(1939);
+            } elseif ($calc->getConstructionYear() > 2011) {
+                $calc->setConstructionYear(2011);
             } else {
                 $i = 0;
                 foreach ($constructionYears as $year => $label) {
@@ -60,7 +84,6 @@ class ImportCommand extends ContainerAwareCommand
                 }
             }
 
-            //RRRWAAAA
             if ($calc->getHouse()->getConstructionType() != 'canadian') {
                 $calc->getHouse()->setConstructionType('traditional');
             }
@@ -75,7 +98,7 @@ class ImportCommand extends ContainerAwareCommand
                 $totalFloors--;
             }
 
-            if (!$calc->isApartment() && $calc->getHouse()->getRoofType() != 'flat') {
+            if (!$calc->isApartment() && in_array($calc->getHouse()->getRoofType(), ['oblique', 'steep'])) {
                 $totalFloors--;
             }
 
@@ -83,25 +106,38 @@ class ImportCommand extends ContainerAwareCommand
 
 
             $heatedFloors = [];
-            for ($i = 0; $i < $floorsNumber; $i++) {
-                $heatedFloors[] = $calc->getHouse()->hasBasement() ? $i : $i+1;
-            }
 
-            if ($floorsNumber - $heatedFloorsNumber == 1) {
-                if ($whatsUnheated == 'basement') {
-                    unset($heatedFloors[0]);
-                } elseif ($whatsUnheated == 'attic') {
-                    unset($heatedFloors[count($heatedFloors)-1]);
-                } elseif ($whatsUnheated == 'floor' || $whatsUnheated == 'ground_floor') {
-                    unset($heatedFloors[$calc->getHouse()->hasBasement() ? 1 : 0]);
-                }
-            } elseif ($floorsNumber - $heatedFloorsNumber == 2) {
-                unset($heatedFloors[0]);
-                unset($heatedFloors[count($heatedFloors)-1]);
+            if ($calc->getHouse()->getNumberHeatedFloors() == 1 && $calc->getHouse()->getNumberFloors() == $calc->getHouse()->getNumberHeatedFloors()) {
+                $calc->getHouse()->setBuildingFloors(1);
+                $heatedFloors[] = 1;
+                $calc->getHouse()->setHasBasement(false);
             } else {
-                $heatedFloors = [1];
+                if ($calc->getHouse()->hasBasement() && $whatsUnheated != 'basement' && $whatsUnheated != '') {
+                    $heatedFloors[] = 0;
+                }
+
+                $currentFloor = 1;
+                while ($currentFloor <= min($calc->getHouse()->getNumberHeatedFloors(), $totalFloors)) {
+                    if ($currentFloor == 1 && $whatsUnheated == 'ground_floor') {
+                        $currentFloor++;
+                        continue;
+                    }
+                    if ($currentFloor > 1 && $whatsUnheated == 'floor') {
+                        $currentFloor++;
+                        continue;
+                    }
+
+                    $heatedFloors[] = $currentFloor;
+
+                    $currentFloor++;
+                }
+
+                if (!$calc->isApartment() && in_array($calc->getHouse()->getRoofType(), ['oblique', 'steep']) && $whatsUnheated != 'attic' && $calc->getHouse()->getNumberHeatedFloors() > count($heatedFloors)) {
+                    $heatedFloors[] = $currentFloor;
+                }
             }
 
+// if ($calc->getId() == 160) { print_R($heatedFloors);die; }
             $calc->getHouse()->setBuildingHeatedFloors($heatedFloors);
 
             $calc->getHouse()->setBuildingRoof($calc->getHouse()->getRoofType() == 'flat' ? 'flat' : 'steep');
@@ -110,6 +146,12 @@ class ImportCommand extends ContainerAwareCommand
 
             $wall = $calc->getHouse()->getWalls()->first();
             $wallSize = 0;
+
+            if (!$wall instanceof Wall) {
+//                 $em->remove($calc);
+
+                continue;
+            }
 
             if ($wall->getConstructionLayer()) {
                 $calc->getHouse()->setPrimaryWallMaterial($wall->getConstructionLayer()->getMaterial());
@@ -129,6 +171,14 @@ class ImportCommand extends ContainerAwareCommand
             if ($wall->getExtraIsolationLayer()) {
                 $calc->getHouse()->setExternalIsolationLayer($wall->getExtraIsolationLayer());
                 $wallSize += $wall->getExtraIsolationLayer()->getSize();
+            }
+
+            if ($wallSize == 0) {
+                $output->writeln(sprintf(
+                    "<error>kraken:import</error> #%s ŚCIANA U CYGANA",
+                    base_convert($calc->getId(), 10, 36)
+                ));
+                continue;
             }
 
             $calc->getHouse()->setWallSize($wallSize);
@@ -155,20 +205,31 @@ class ImportCommand extends ContainerAwareCommand
             $calculator = $this->getContainer()->get('kraken_warm.energy_calculator');
             $dimensions = $this->getContainer()->get('kraken_warm.dimensions');
 
-            if (abs($dimensions->getHeatedHouseArea() - $calc->getHeatedArea()) > 0.2 * $calc->getHeatedArea()) {
+            if (!$calc->getHouse()->hasGarage() && abs($dimensions->getHeatedHouseArea() - $calc->getHeatedArea()) > 0.2 * $calc->getHeatedArea()) {
                 $em->flush();
-                throw new \Exception(sprintf("#%d Metraż się sypnął: było %dmkw. a jest %dmkw.", $calc->getId(), $calc->getHeatedArea(), $dimensions->getHeatedHouseArea()));
+                $output->writeln(sprintf(
+                        '<error>kraken:import</error> #%s Metraż się sypnął: było %dmkw. a jest %dmkw.',
+                        base_convert($calc->getId(), 10, 36), $calc->getHeatedArea(), $dimensions->getHeatedHouseArea()
+                ));
             }
 
-            if (abs($calculator->getMaxHeatingPower() - $calc->getHeatingPower()) > 0.2 * $calc->getHeatingPower()) {
+            if (!$calc->getHouse()->hasGarage() && abs($calculator->getMaxHeatingPower() - $calc->getHeatingPower()) > 0.3 * $calc->getHeatingPower()) {
                 $em->flush();
-                throw new \Exception(sprintf("#%d Moc się sypnęła: było %dkW a jest %dkW", $calc->getId(), $calc->getHeatingPower(), $calculator->getMaxHeatingPower()));
+                $output->writeln(sprintf(
+                    "<error>kraken:import</error> #%s Moc się sypnęła: było %dkW a jest %dkW",
+                    base_convert($calc->getId(), 10, 36), $calc->getHeatingPower(), $calculator->getMaxHeatingPower()
+                ));
             }
 
-            if (($i % $batchSize) === 0) {
+            $output->writeln(sprintf(
+                    '<info>kraken:import</info> %s #%s zrobione!',
+                    $calc->getId(), base_convert($calc->getId(), 10, 36)
+            ));
+
+//             if (($i % $batchSize) === 0) {
                 $em->flush(); // Executes all updates.
                 $em->clear(); // Detaches all objects from Doctrine!
-            }
+//             }
             ++$i;
         }
         $em->flush();
