@@ -4,19 +4,6 @@
     "autoload": {
         "psr-0": { "": "src/", "Context": "features/", "DataFixtures": "features/" }
     },
-    "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "jquery/jquery",
-                "version": "1.10.2",
-                "dist": {
-                    "url": "https://code.jquery.com/jquery-1.10.2.js",
-                    "type": "file"
-                }
-            }
-        }
-    ],
     "require": {
         "php": ">=5.3.3",
         "symfony/symfony": "2.7.*",
@@ -35,7 +22,7 @@
         "jms/di-extra-bundle": "1.4.*",
         "vich/geographical-bundle": "dev-master",
         "twbs/bootstrap": "3.1.*",
-        "jquery/jquery": "1.10.*",
+        "components/jquery": "^2.2",
         "knplabs/knp-menu-bundle": "dev-master",
         "doctrine/data-fixtures": "1.0.*@dev",
         "stof/doctrine-extensions-bundle": "1.2.*",
