@@ -74,8 +74,9 @@ class CalculationStepDimensionsType extends AbstractType
             ])
             ->add('building_roof', 'choice', [
                 'choices' => [
-                    'steep' => 'Skośny',
                     'flat' => 'Płaski',
+                    'oblique' => 'Skośny bez poddasza',
+                    'steep' => 'Skośny z poddaszem',
                 ],
                 'required' => true,
                 'label' => 'Dach jest',

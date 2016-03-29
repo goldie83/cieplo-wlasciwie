@@ -14,11 +14,13 @@ class FileProposalForm extends AbstractType
             ->add('url', null, [
                 'label' => 'Adres strony producenta / z informacjami o kotle',
                 'required' => true,
+                'horizontal_label_class' => '',
             ])
             ->add('content', null, [
-                'label' => 'Tu pisz pytania, wyjaśnienia, szczególne życzenia odnośnie propozycji',
+                'label' => 'Tu pisz pytania, wyjaśnienia, szczególne życzenia odnośnie propozycji (jeśli jakieś masz)',
                 'attr' => ['rows' => '10'],
                 'required' => false,
+                'horizontal_label_class' => '',
             ])
             ->add('email', null, [
                 'label' => 'Twój adres e-mail (opcjonalnie)',
@@ -26,6 +28,7 @@ class FileProposalForm extends AbstractType
                     'help_text' => 'Jeśli chcesz otrzymać informację gdy tylko kocioł zostanie dodany do rankingu, zostaw tutaj swój e-mail. Adres będzie użyty wyłącznie do tego celu i nie zostanie nigdzie udostępniony.',
                 ),
                 'required' => false,
+                'horizontal_label_class' => '',
             ])
         ;
     }

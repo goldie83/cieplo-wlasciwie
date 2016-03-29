@@ -17,14 +17,14 @@ class CalculationApartmentStepDimensionsType extends AbstractType
                 'widget_addon_append' => [
                     'text' => 'mkw.',
                 ],
-                'required' => false,
+                'required' => true,
                 'label' => 'Wymiary mieszkania',
             ])
             ->add('floor_height', 'choice', array(
                 'choices' => array(
-                    2.3 => 'Niskie (poniżej 2,5m)',
-                    2.6 => 'Standardowe (ok. 2,6m)',
-                    3.0 => 'Wysokie (3m i więcej)',
+                    '2.3' => 'Niskie (poniżej 2,5m)',
+                    '2.6' => 'Standardowe (ok. 2,6m)',
+                    '3.0' => 'Wysokie (3m i więcej)',
                 ),
                 'label' => 'Wysokość piętra',
                 'required' => true,

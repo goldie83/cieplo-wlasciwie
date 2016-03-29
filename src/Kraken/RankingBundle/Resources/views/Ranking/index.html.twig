@@ -4,9 +4,8 @@
     <div class="col-sm-8">
         <div class="jumbo">
             <div class="wrap">
-                <h1>Najlepsze kotły na węgiel i drewno. Czyli jakie?</h1>
-                <p>Ranking kotłów to niezależny, niekomercyjny przegląd rynku.
-                Znajdziesz tu kotły bez poważnych wad konstrukcyjnych, w których da się palić nie kopcąc.</p><br/><br/>
+                <h1>Przegląd kotłów na węgiel i drewno</h1>
+                <p>Oto niezależny, niekomercyjny przegląd rynku, który &mdash; na drodze analizy danych technicznych i&nbsp;doświadczeń użytkowników &mdash; wyszukuje kotły najbardziej efektywne i&nbsp;najczystsze a&nbsp;niekoniecznie najdroższe.</p><br/><br/>
                 <a class="btn btn-raised btn-success btn-large" href="{{ path('ranking_about') }}">Więcej o rankingu</a>
             </div>
         </div>
@@ -16,15 +15,8 @@
                 <div class="col-sm-12">
                       <fieldset>
                           <legend>Szukam konkretnej sztuki</legend>
-                              <div class="col-sm-4">
-                                  {{ form_label(searchForm.modelName) }}
-                              </div>
-                              <div class="col-sm-6">
-                                  {{ form_widget(searchForm.modelName) }}
-                              </div>
-                              <div class="col-sm-2">
-                                  <button type="submit" class="btn btn-raised btn-primary">Szukaj</button>
-                              </div>
+                              {{ form_row(searchForm.modelName) }}
+                              <button type="submit" class="btn btn-raised btn-primary pull-right">Szukaj</button>
                       </fieldset>
                 </div>
             </div>
@@ -32,20 +24,15 @@
             <div class="row">
                 <div class="col-sm-12">
                       <fieldset>
-                          <legend>Szukam kotła o wybranych parametrach</legend>
+                          <legend>Szukam kotła o konkretnych parametrach</legend>
                           {{ form_row(searchForm.manufacturer) }}
                           {{ form_row(searchForm.category) }}
+                          {{ form_row(searchForm.normClass) }}
                           {{ form_row(searchForm.fuelType) }}
-                          <div class="form-group">
-                              {{ form_widget(searchForm.forClosedSystem) }}
-                          </div>
-                          <div class="form-group">
-                              {{ form_widget(searchForm.needsFixing) }}
-                              <p><small>{{ form_help(searchForm.needsFixing) }}</small></p>
-                          </div>
+                          {{ form_row(searchForm.forClosedSystem) }}
+                          {{ form_row(searchForm.needsFixing) }}
                           {{ form_row(searchForm.power) }}
                           {{ form_row(searchForm.material) }}
-                          {{ form_row(searchForm.normClass) }}
                           {{ form_row(searchForm.rating) }}
                           {{ form_rest(searchForm) }}
                           <button type="submit" class="btn btn-raised btn-primary pull-right" style="margin-right:15px">Szukaj</button>

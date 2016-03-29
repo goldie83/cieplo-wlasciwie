@@ -18,7 +18,7 @@ Feature: Energy balance calculation
      When I select "yes" from "calculation[has_area]"
       And I fill in "calculation[area]" with "100"
       And I select "Parterowy" from "calculation[building_floors]"
-      And I select "Skośny" from "calculation[building_roof]"
+      And I select "steep" from "calculation[building_roof]"
       And I select "1" from "calculation_building_heated_floors_1"
       And I select "2" from "calculation_building_heated_floors_2"
       And I press "Dalej"
@@ -45,7 +45,7 @@ Feature: Energy balance calculation
       And I press "Wynik"
      Then I should see "A.D. lata 80-te, 170m2 ogrzewane, Otwock i okolice"
       And I should see "50cm, konstrukcja: cegła pełna, izolacja: styropian 15cm"
-      And I should see "dach skośny, Wełna mineralna 30cm"
+      And I should see "dach skośny z poddaszem, Wełna mineralna 30cm"
       And I should see "7kW to potrzebna moc grzewcza (C.O. bez CWU)"
 
   Scenario: Energy calculation for apartment
@@ -91,4 +91,4 @@ Feature: Energy balance calculation
      Then I should see "A.D. gdzieś przed II wojną, 40m2 ogrzewane, Otwock i okolice"
       And I should see "40cm, konstrukcja: cegła pełna, izolacja: brak"
       And I should see "Ściany zewnętrzne: 2"
-      And I should see "6kW to potrzebna moc grzewcza (C.O. bez CWU)"
+      And I should see "8kW to potrzebna moc grzewcza (C.O. bez CWU)"

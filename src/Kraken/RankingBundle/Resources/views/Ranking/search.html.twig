@@ -1,10 +1,8 @@
-{% extends 'KrakenRankingBundle::base.html.twig' %}
-
-{% form_theme form 'KrakenWarmBundle:Form:form_div_layout.html.twig' %}
+{% extends '::base_ranking.html.twig' %}
 
 {% block headline %}Wyszukiwanie{% endblock headline %}
 
-{% block content_row %}
+{% block body %}
 <div class="row">
     <div class="col-sm-4">
         <form method="POST" action="{{ url('ranking_search')}}">
@@ -16,4 +14,4 @@
         {% include('KrakenRankingBundle:Ranking:boilerList.html.twig') with {boilers: boilers, search: search} %}
     </div>
 </div>
-{% endblock content_row %}
+{% endblock body %}

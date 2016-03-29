@@ -265,7 +265,7 @@ class CalculatorController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $object = $form->getData();
+            $object = $form->getData() instanceof House ? $form->getData() : $calc->getHouse();
 
             if ($form->get('top_isolation_layer')->get('size')->getData() > 0) {
                 $object->setTopIsolationLayer($form->get('top_isolation_layer')->getData());

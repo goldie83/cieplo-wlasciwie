@@ -61,7 +61,7 @@ class DimensionsService
             --$walls;
         }
 
-        if (!$this->getInstance()->isApartment() && $this->getInstance()->getHouse()->getBuildingRoof() != 'flat') {
+        if (!$this->getInstance()->isApartment() && $this->getInstance()->getHouse()->getBuildingRoof() == 'steep') {
             $houseHeight -= 0.8 * $this->getInstance()->getHouse()->getFloorHeight();
         }
 
@@ -149,9 +149,9 @@ class DimensionsService
     public function getTotalFloorsNumber()
     {
         $house = $this->getInstance()->getHouse();
-        $floorsNumber = $house->getBuildingFloors();
+        $floorsNumber = max(1, $house->getBuildingFloors());
 
-        if (!$this->getInstance()->isApartment() && $house->getBuildingRoof() != 'flat') {
+        if (!$this->getInstance()->isApartment() && $house->getBuildingRoof() == 'steep') {
             ++$floorsNumber;
         }
 
@@ -168,7 +168,7 @@ class DimensionsService
         $house = $this->getInstance()->getHouse();
         $area = $this->getFloorArea() * $this->getTotalFloorsNumber();
 
-        if (!$this->getInstance()->isApartment() && $house->getBuildingRoof() != 'flat') {
+        if (!$this->getInstance()->isApartment() && $house->getBuildingRoof() == 'steep') {
             $area -= 0.3 * $this->getFloorArea();
         }
 
@@ -185,7 +185,7 @@ class DimensionsService
         $house = $this->getInstance()->getHouse();
         $area = $this->getFloorArea() * $this->getHeatedFloorsNumber();
 
-        if (!$this->getInstance()->isApartment() && $house->getBuildingRoof() != 'flat' && $this->floors->isAtticHeated()) {
+        if (!$this->getInstance()->isApartment() && $house->getBuildingRoof() == 'steep' && $this->floors->isAtticHeated()) {
             $area -= 0.3 * $this->getFloorArea();
         }
 
@@ -229,7 +229,7 @@ class DimensionsService
         for ($i = 0; $i < $numberFloors; ++$i) {
             $floorCubature = $this->getFloorArea() *  $this->getInstance()->getHouse()->getFloorHeight();
 
-            $cubature += $i == 0 && $this->getInstance()->getHouse()->getBuildingRoof() != 'flat'
+            $cubature += $i == 0 && !$this->getInstance()->isApartment() && $this->getInstance()->getHouse()->getBuildingRoof() == 'steep'
                 ? $floorCubature * 0.6
                 : $floorCubature;
         }
@@ -242,7 +242,7 @@ class DimensionsService
         $l = $this->getExternalBuildingLength();
         $w = $this->getExternalBuildingWidth();
 
-        if ($this->getInstance()->getHouse()->getBuildingRoof() != 'flat') {
+        if ($this->getInstance()->getHouse()->getBuildingRoof() == 'steep') {
             $w = sqrt(pow($this->getExternalBuildingWidth() / 2, 2) + pow(2.6, 2));
 
             return round(2 * $w * $l, 2);

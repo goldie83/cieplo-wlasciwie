@@ -286,6 +286,7 @@ class DimensionsServiceTest extends \PHPUnit_Framework_TestCase
     {
         $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
         $f->shouldReceive('isAtticHeated')->andReturn(true);
+        $f->shouldReceive('isGroundFloorHeated')->andReturn(true);
         $instance = $this->makeInstance();
         $d = new DimensionsService($instance, $f);
 

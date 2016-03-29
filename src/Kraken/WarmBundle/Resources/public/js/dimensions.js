@@ -177,6 +177,14 @@
             roofLabel.attr({"font-size": 14, "font-weight": 'bold'});
             var roofLabel2 = paper.text(center, verticalMargin+0.5*floorHeight+10, heatedText).attr({fill: '#000'});
             roofLabel2.attr({"font-size": 12});
+        } else if (roofType == 'oblique') {
+            var roof = paper.path(
+                "M " + center + " " + (verticalMargin+0.5*floorHeight) +
+                " L " + (center-horizontalSpace*0.4) + " " + (verticalMargin+floorHeight) +
+                " L " + (center+horizontalSpace*0.4) + " " + (verticalMargin+floorHeight) +
+                " L " + center + " " + (verticalMargin+0.5*floorHeight)
+            );
+            roof.attr("fill", "#ff0000");
         } else {
              var flatRoof = paper.rect(center-horizontalSpace*0.4, verticalMargin+0.9*floorHeight, 0.8*horizontalSpace, floorHeight*0.1, 0).attr({fill: "#777", stroke: "none"});
              var flatRoof2 = paper.rect(center-horizontalSpace*0.35, verticalMargin+0.8*floorHeight, 0.7*horizontalSpace, floorHeight*0.15, 0).attr({fill: "#222", stroke: "none"});

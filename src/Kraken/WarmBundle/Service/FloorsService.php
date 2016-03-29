@@ -35,7 +35,7 @@ class FloorsService
     {
         $atticFloor = $this->getHouse()->getBuildingFloors();
 
-        if ($this->getHouse()->getBuildingRoof() != 'flat') {
+        if ($this->getHouse()->getBuildingRoof() == 'steep') {
             $atticFloor++;
         }
 
@@ -49,7 +49,6 @@ class FloorsService
 
     public function getTopLabel()
     {
-        //TODO apartment!
         if (!$this->isAtticHeated()) {
             return 'Strop';
         }
@@ -59,8 +58,6 @@ class FloorsService
 
     public function getTopIsolationLabel()
     {
-        //TODO apartment!
-
         if (!$this->isAtticHeated()) {
             return 'Izolacja stropu między poddaszem a piętrem niżej';
         }
@@ -70,7 +67,10 @@ class FloorsService
 
     public function getBottomLabel()
     {
-        //TODO apartment!
+        if ($this->getInstance()->isApartment()) {
+            return 'Podłoga';
+        }
+
         if ($this->isBasementHeated()) {
             return 'Piwnica';
         }
@@ -84,7 +84,6 @@ class FloorsService
 
     public function getBottomIsolationLabel()
     {
-        //TODO apartment!
         if ($this->isBasementHeated()) {
             return 'Izolacja podłogi piwnicy';
         }

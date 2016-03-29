@@ -31,35 +31,61 @@
             <h3>W skrócie o budynku</h3>
             <table class="table table-condensed">
                 <tbody>
-                {% if calc.buildingType == 'apartment' %}
-                    <tr><td class="col-md-4">Powierzchnia</td><td class="col-md-8">{{ describer.areaDetails|raw }}</td></tr>
-                    <tr><td class="col-md-4">Ściany</td><td class="col-md-8">{{ describer.wallDetails}}</td></tr>
-                    <tr><td class="col-md-4">Usytuowanie</td><td class="col-md-8">{{ describer.apartmentSituationDetails|raw }}</td></tr>
-                {% else %}
-                    <tr><td class="col-md-4">Powierzchnia zabudowy</td><td class="col-md-8">{{ dimensions.floorArea|round(0, 'ceil')|number_format }}m<sup>2</sup></td></tr>
-                    <tr><td class="col-md-4">Powierzchnia budynku</td><td class="col-md-8">{{ describer.areaDetails|raw }}</td></tr>
-                    <tr><td class="col-md-4">Ściany</td><td class="col-md-8">{{ describer.wallDetails}}</td></tr>
-                    <tr><td class="col-md-4">Ogrzewane piętra</td><td class="col-md-8">{{ describer.heatedFloorsDetails }}</td></tr>
-                    {% if floors.hasUnheatedFloors %}
-                        <tr><td class="col-md-4">Nieogrzewane piętra</td><td class="col-md-8">{{ describer.unheatedFloorsDetails }}</td></tr>
-                    {% endif %}
-                {% endif %}
-                    <tr><td class="col-md-4">Izolacja od góry</td><td class="col-md-8">{{ describer.roofDetails}}</td></tr>
-                    <tr><td class="col-md-4">Izolacja od dołu</td><td class="col-md-8">{{ describer.groundDetails}}</td></tr>
-                    <tr><td class="col-md-4">Drzwi i okna</td><td class="col-md-8">{{ describer.doorsWindowsDetails|raw }}</td></tr>
-                    <tr><td class="col-md-4">Wentylacja</td><td class="col-md-8">{{ describer.ventilationDetails}}</td></tr>
+                    <tr><td class="col-md-4">Powierzchnia ogrzewana</td><td class="col-md-8">{{ describer.heatedAreaDescription|raw }}</td></tr>
+                    <tr><td class="col-md-4">Jakość izolacji</td><td class="col-md-8">{{ describer.isolationQualityDescription|raw }}</td></tr>
                 </tbody>
             </table>
+            <p><a href="#full_house_details" data-toggle="modal" class="btn btn-default btn-raised">Zobacz pełne informacje o budynku</a></p>
+
+            <div id="full_house_details" class="modal fade" role="dialog" aria-labelledby="pelneDetaleBudynku" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <a class="close" data-dismiss="modal">&times;</a>
+                    <h3>Pełne informacje o budynku</h3>
+                  </div>
+                  <div class="modal-body">
+                    <table class="table table-condensed">
+                        <tbody>
+                            <tr><td class="col-md-4">Powierzchnia zabudowy (obrys piętra)</td><td class="col-md-8">{{ dimensions.floorArea|round(0, 'ceil')|number_format }}m<sup>2</sup></td></tr>
+                            <tr><td class="col-md-4">Powierzchnia całkowita budynku</td><td class="col-md-8">{{ dimensions.totalHouseArea|round(0, 'ceil') }}m<sup>2</sup></td></tr>
+                            <tr><td class="col-md-4">Powierzchnia ogrzewana</td><td class="col-md-8">{{ dimensions.heatedHouseArea|round(0, 'ceil') }}m<sup>2</sup></td></tr>
+                            <tr><td class="col-md-4">Kubatura przestrzeni ogrzewanej</td><td class="col-md-8">{{ dimensions.houseCubature|round(0, 'ceil') }}m<sup>3</sup></td></tr>
+                            <tr><td class="col-md-4">Wysokość piętra</td><td class="col-md-8">{{ calc.house.floorHeight|number_format(1, ',') }}m</td></tr>
+                        {% if calc.buildingType == 'apartment' %}
+                            <tr><td class="col-md-4">Usytuowanie</td><td class="col-md-8">{{ describer.apartmentSituationDetails|raw }}</td></tr>
+                        {% else %}
+                            <tr><td class="col-md-4">Ogrzewane piętra</td><td class="col-md-8">{{ describer.heatedFloorsDetails }}</td></tr>
+                            {% if floors.hasUnheatedFloors %}
+                                <tr><td class="col-md-4">Nieogrzewane piętra</td><td class="col-md-8">{{ describer.unheatedFloorsDetails }}</td></tr>
+                            {% endif %}
+                        {% endif %}
+                            <tr><td class="col-md-4">Ściany</td><td class="col-md-8">{{ describer.wallDetails}}</td></tr>
+                            <tr><td class="col-md-4">Izolacja od góry</td><td class="col-md-8">{{ describer.roofDetails}}</td></tr>
+                            <tr><td class="col-md-4">Izolacja od dołu</td><td class="col-md-8">{{ describer.groundDetails}}</td></tr>
+                            <tr><td class="col-md-4">Drzwi i okna</td><td class="col-md-8">{{ describer.doorsWindowsDetails|raw }}</td></tr>
+                            <tr><td class="col-md-4">Wentylacja</td><td class="col-md-8">{{ describer.ventilationDetails}}</td></tr>
+                            <tr><td class="col-md-4">Temperatura w części ogrzewanej</td><td class="col-md-8">{{ calc.indoorTemperature|number_format(1, ',', ' ') }}&deg;C</td></tr>
+                        </tbody>
+                    </table>
+                  </div>
+                  <div class="modal-footer">
+                    <a href="#" class="btn" data-dismiss="modal">Zamknij</a>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <h3>Warunki klimatyczne &mdash; {{ city.name }}</h3>
             {% set averageTemperature = heatingSeason.getAverageTemperature(calc) %}
             {% set lastYearAverageTemperature = heatingSeason.getLastYearAverageTemperature(calc) %}
             <p>{{ city.name }} leży w <strong>{{ climate.climateZone }}.</strong> <a href="http://www.hvacr.pl/public/styles/img_640/public/vademecum/mainPhoto/12/strefy_klimatyczne_polska.jpg" target="_blank">strefie klimatycznej</a>.
-             Dlatego maksymalną moc grzewczą oblicza się tu dla średniej dobowej temperatury <strong>{{ climate.designOutdoorTemperature }}&deg;C</strong>.</p>
+            Dlatego maksymalną moc grzewczą oblicza się tu dla średniej dobowej temperatury <strong>{{ climate.designOutdoorTemperature }}&deg;C</strong>.</p>
             <p>Przeciętny sezon grzewczy trwa u ciebie ok. <strong>{{ heatingSeason.getSeasonLength(calc) }} dni</strong>, ze średnią temperaturą <strong>{{ averageTemperature|number_format(2, ',', ' ') }}&deg;C</strong>.</p>
             {% if heatingSeason.getLastSeasonLength(calc) > 0 %}
                 <p>Poprzedni sezon grzewczy trwał ok. <strong>{{ heatingSeason.getLastSeasonLength(calc) }} dni</strong>, ze średnią temperaturą <strong>{{ lastYearAverageTemperature|number_format(2, ',', ' ') }}&deg;C</strong>.</p>
             {% endif %}
+
           </div>
           <div class="col-md-6">
             <h3>Ile ciepła potrzebuje twój dom</h3>
@@ -67,14 +93,12 @@
 
             <h4><span class="label label-warning">{{ (calculator.maxHeatingPower/1000)|number_format(1, ',', ' ') ~ 'kW' }}</span> maksymalna moc grzewcza</h4>
             <p>Tyle będzie potrzebne w "najmroźniejszy" dzień, przy średniej dobowej <strong>{{ climate.designOutdoorTemperature }}&deg;C</strong></p>
-            <h5><span class="label label-default">{{ (calculator.avgHeatingPower/1000)|number_format(1, ',', ' ') ~ 'kW' }}</span> średnia moc grzewcza</h5>
+            <h5><span class="label label-default">{{ (calculator.avgHeatingPower/1000)|number_format(1, ',', ' ') ~ 'kW' }}</span> przeciętna moc grzewcza</h5>
             <p>Tyle będzie potrzebne w przeciętny dzień zimy, przy średniej dobowej <strong>{{ heatingSeason.getAverageTemperature()|number_format(1, ',', ' ') }}&deg;C</strong></p>
-            <h5><span class="label label-default">{{ calculator.yearlyEnergyConsumption|number_format(0, ',', ' ') }}kWh</span> całkowite roczne zużycie energii na ogrzewanie</h5>
-            <p>Nieważne czym grzejesz, tyle ciepła musisz wyprodukować przez cały sezon grzewczy.</p>
             <h5><span class="label label-default">{{ calculator.maxHeatingPowerPerArea|number_format(0, ',', ' ') }}W/m<sup>2</sup></span> wskaźnik zapotrzebowania na moc</h5>
-            {% if calculator.maxHeatingPowerPerArea < 85 %}
-                <p>Dlaczego więc producent/sprzedawca/instalator kotła startują od 100W/m<sup>2</sup> wzwyż?</p>
-            {% endif %}
+            <p>Tę wartość znajdziesz w tabeli orientacyjnego doboru mocy kotła od jego producenta. {% if calculator.maxHeatingPowerPerArea < 85 %}Tyle że tam zaczyna się od 100W/m<sup>2</sup> wzwyż. Ciekawe, prawda?{% endif %}</p>
+            <h5><span class="label label-default">{{ calculator.yearlyEnergyConsumption|number_format(0, ',', ' ') }}kWh = {{ (calculator.yearlyEnergyConsumption/277)|number_format(0, ',', ' ') }}GJ</span> całkowite roczne zużycie energii na ogrzewanie</h5>
+            <p>Tyle ciepła <em>netto</em> potrzebuje twój dom na cały sezon grzewczy. Zależnie od tego, czym i&nbsp;z jaką sprawnością będziesz grzać, ilość ciepła <em>brutto</em>, jaką musisz kupić w opale, będzie odpowiednio wyższa.</p>
             <h5><span class="label label-default">{{ calculator.yearlyEnergyConsumptionFactor|number_format(0, ',', ' ') }}kWh/m<sup>2</sup>*rok</span> wskaźnik zużycia energii</h5>
             <p>Tę wartość znajdziesz na świadectwie energetycznym budynku (nowsze takie mają). Na tej podstawie twój dom zalicza się do <a href="http://cieplowlasciwie.pl/jak-to-dziala#klasyfikacja" target="_blank">klasy energetycznej&nbsp;<strong>{{ classifier.class }}</strong></a></p>
 

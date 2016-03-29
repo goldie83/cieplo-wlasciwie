@@ -36,8 +36,8 @@ class HouseDescriptionService
 
     protected $roofTypes = [
         'flat' => 'dach płaski',
-        'oblique' => 'dach skośny',
-        'steep' => 'dach skośny',
+        'oblique' => 'dach skośny bez poddasza',
+        'steep' => 'dach skośny z poddaszem',
     ];
 
     protected $ventilationTypes = [
@@ -68,7 +68,7 @@ class HouseDescriptionService
         $nbFloors = $house->getBuildingFloors();
 
         if ($type == 'apartment') {
-            $floor = $nbFloors.'-poziomowe';
+            $floor = $nbFloors > 1 ? $nbFloors.'-poziomowe' : '';
         } else {
             $floors = [
                 1 => 'parterowy',
@@ -86,6 +86,59 @@ class HouseDescriptionService
         }
 
         return $this->houseTypes[$type].' '.$floor;
+    }
+
+    public function getHeatedAreaDescription()
+    {
+        $text = sprintf('%dm<sup>2</sup>', ceil($this->dimensions->getHeatedHouseArea()));
+
+        $floorsDetails = $this->getHeatedFloorsDetails();
+
+        if ($floorsDetails) {
+            $text .= sprintf(' (%s)', $floorsDetails);
+        }
+
+        return $text;
+    }
+
+    public function getIsolationQualityDescription()
+    {
+        $house = $this->instance->get()->getHouse();
+        $wallInternalIsolationSize = $house->getInternalIsolationLayer() && !stristr($house->getInternalIsolationLayer()->getMaterial()->getName(), 'pustka')
+            ? $house->getInternalIsolationLayer()->getSize()
+            : 0;
+        $wallExternalIsolationSize = $house->getExternalIsolationLayer() ? $house->getExternalIsolationLayer()->getSize() : 0;
+        $topIsolationSize = $house->getTopIsolationLayer() ? $house->getTopIsolationLayer()->getSize() : 0;
+        $bottomIsolationSize = $house->getBottomIsolationLayer() ? $house->getBottomIsolationLayer()->getSize() : 0;
+        $wallIsolationSize = $wallInternalIsolationSize + $wallExternalIsolationSize;
+
+        $quality = 'przeciętna';
+
+        if ($wallIsolationSize == 0 && $topIsolationSize == 0 && $bottomIsolationSize == 0) {
+            $quality = 'fatalna';
+        }
+        if ($wallIsolationSize == 0) {
+            $quality = 'kiepska';
+        }
+        if ($wallIsolationSize < 10) {
+            $quality = 'przeciętna';
+        }
+        if ($wallIsolationSize >= 10 && $topIsolationSize > 0 && $bottomIsolationSize > 0) {
+            $quality = 'bardzo dobra';
+        }
+        if ($wallIsolationSize >= 15 && $topIsolationSize >= 30 && $bottomIsolationSize >= 10) {
+            $quality = 'znakomita';
+        }
+
+        $description = sprintf('ściany (%s), %s (%s), %s (%s)',
+            $wallIsolationSize ? sprintf('%dcm', $wallIsolationSize) : '<strong>brak</strong>',
+            strtolower($this->floors->getTopLabel()),
+            $topIsolationSize ? sprintf('%dcm', $topIsolationSize) : '<strong>brak</strong>',
+            strtolower($this->floors->getBottomLabel()),
+            $bottomIsolationSize ? sprintf('%dcm', $bottomIsolationSize) : '<strong>brak</strong>'
+        );
+
+        return sprintf('<strong>%s</strong> &mdash; %s', $quality, $description);
     }
 
     public function getAreaDetails()
@@ -194,11 +247,11 @@ class HouseDescriptionService
         $house = $this->instance->get()->getHouse();
 
         return sprintf(
-            'Okna: %s (%s&nbsp;szt.), Drzwi: %s (%s&nbsp;szt.)',
-            strtolower($this->windowsTypes[$house->getWindowsType()]),
+            'Okna: %dszt. (%s)<br/>Drzwi: %dszt. (%s)',
             $house->getNumberWindows(),
-            strtolower($this->doorsTypes[$house->getDoorsType()]),
-            $house->getNumberDoors()
+            strtolower($this->windowsTypes[$house->getWindowsType()]),
+            $house->getNumberDoors(),
+            strtolower($this->doorsTypes[$house->getDoorsType()])
         );
     }
 

@@ -17,7 +17,7 @@
             <tbody>
                 {% for result in results %}
                 <tr>
-                    <td><a href="{{ path('result', {'slug': result.slug}) }}">A.D. {{ result.constructionPeriod }}, {{ result.city.name }}</a></td>
+                    <td><a href="{{ path('result', {'slug': result.slug}) }}">A.D. {{ result.constructionPeriod }}, {{ result.city ? result.city.name : '' }}</a></td>
                     <th>{{ result.created|date('d.m.Y') }}</th>
                 </tr>
                 {% endfor %}

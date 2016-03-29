@@ -15,7 +15,6 @@ class SearchForm extends AbstractType
             ->add('modelName', null, [
                 'label' => 'Nazwa producenta lub modelu',
                 'required' => false,
-                'horizontal_label_class' => '',
             ])
             ->add('manufacturer', null, [
                 'label' => 'Producent',
