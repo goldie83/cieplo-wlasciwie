@@ -167,22 +167,22 @@ class Boiler
     /**
      * @ORM\Column(type="string", nullable=false)
      */
-    protected $material;
+    protected $material = 'steel';
 
     /**
      * @ORM\Column(type="boolean", name="is_for_closed_system")
      */
-    protected $forClosedSystem;
+    protected $forClosedSystem = false;
 
     /**
      * @ORM\Column(type="boolean", name="needs_fixing")
      */
-    protected $needsFixing;
+    protected $needsFixing = false;
 
     /**
      * @ORM\Column(type="boolean", name="is_rejected")
      */
-    protected $rejected;
+    protected $rejected = false;
 
     /**
      * @Gedmo\Timestampable(on="create")

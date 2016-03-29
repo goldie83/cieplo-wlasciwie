@@ -78,6 +78,7 @@ class LoadRankingData implements FixtureInterface
 
         $b = new Boiler();
         $b->setName('Ogniwo Eko Plus');
+        $b->setMaterial('steel');
         $b->setCategory($c2);
         $b->setManufacturer($m);
 
