@@ -19,7 +19,7 @@
         "symfony/assetic-bundle": "2.3.*",
         "sensio/generator-bundle": "2.3.*",
         "jms/security-extra-bundle": "1.5.*",
-        "jms/di-extra-bundle": "1.4.*",
+        "jms/di-extra-bundle": "^1.7",
         "vich/geographical-bundle": "dev-master",
         "twbs/bootstrap": "3.1.*",
         "components/jquery": "^2.2",
