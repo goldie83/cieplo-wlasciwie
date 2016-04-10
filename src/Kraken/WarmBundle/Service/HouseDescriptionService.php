@@ -123,7 +123,10 @@ class HouseDescriptionService
         if ($wallIsolationSize < 10) {
             $quality = 'przeciętna';
         }
-        if ($wallIsolationSize >= 10 && $topIsolationSize > 0 && $bottomIsolationSize > 0) {
+        if ($wallIsolationSize >= 10 && $topIsolationSize > 0) {
+            $quality = 'dobra';
+        }
+        if ($wallIsolationSize >= 10 && $topIsolationSize >= 10 && $bottomIsolationSize > 0) {
             $quality = 'bardzo dobra';
         }
         if ($wallIsolationSize >= 15 && $topIsolationSize >= 30 && $bottomIsolationSize >= 10) {

@@ -1,0 +1,32 @@
+{% extends '::base.html.twig' %}
+
+{% block body %}
+
+<div class="container">
+    <div class="well bs-component">
+        <div id="meanwhile" style="font-size: 16px">
+            <h1>Dobór mocy kotła z gwarancją sukcesu</h1>
+            <p>Boli cię głowa na myśl o zakupie kotła na węgiel/drewno? Nie wiesz, czy słuchać <em>fachowca z długoletnim doświadczeniem</em>, który do dobrze ocieplonego domu zaleca minimum 25kW,
+            czy internetów, gdzie piszą, że potrzebujesz tylko 7kW? Kto ma rację, komu ufać?</p>
+            <p>Rozwiążemy twój problem jak należy &mdash; damy gwarancję, że ani nie zamarzniesz, ani nie przepłacisz na opale.</p>
+
+            <h2>Dlaczego jest z tym taki problem</h2>
+            <p>Wybór mocy kotła na węgiel czy drewno przeważnie dokonywany jest mocno orientacyjnie, bo tak jest najłatwiej. To dlatego producent, sprzedawca czy instalator stara się przede wszystkim, aby mu klient nie zamarzł, bo o to na pewno będzie miał pretensje.
+            Kończy się to przeważnie kupnem o wiele za wielkiego kotła, który kopci i&nbsp;marnuje co roku po parę ton opału. Ale to jest uważane za <em>normalne</em> i o to mało kto ma pretensje.</p>
+
+            <h2>Jak możemy ci pomóc</h2>
+            <p>Dobierzemy prawidłową moc kotła dla twojego domu, tak że ani nie zamarzniesz, ani nie spalisz więcej niż zagwarantujemy. A jeśli w rażący sposób się pomylimy, pokrywamy koszt naprawy sytuacji.</p>
+
+            <h2>Ile to będzie kosztować</h2>
+            <p>Cena takiej usługi powinna mieścić się w granicach <strong>paruset złotych</strong>. Wydatek zwróci się już w momencie zakupu kotła (zazwyczaj mniejszego i tańszego niż polecali fachmani) a najdalej w ciągu pierwszego sezonu grzewczego, kiedy zużyjesz mniej opału niż miałoby to miejsce z kotłem mocno przewymiarowanym.</p>
+
+            <div class="alert alert-warning">
+                <h4>Na razie to jest pomysł. Interesowałaby cię taka usługa?</h4>
+                <p>Daj nam znać! Im większe zainteresowanie, tym szybciej wprowadzimy to w życie.</p>
+                <p><a href="{{ path('guarantee') }}" class="btn btn-default btn-raised">Korzystałbym!</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -75,6 +75,10 @@ rules:
     path:  /zasady
     defaults: { _controller: KrakenWarmBundle:Static:rules }
 
+guarantee:
+    path:  /gwarantowany-dobor-mocy
+    defaults: { _controller: KrakenWarmBundle:Static:guarantee }
+
 my_results:
     path:  /moje-wyniki
     defaults: { _controller: KrakenWarmBundle:Calculator:myResults }
