@@ -11,5 +11,9 @@
   ],
   "dependencies": {
     "bootstrap-material-design": "~0.5.5"
+  },
+  "resolutions": {
+    "jquery": ">=1.7",
+    "bootstrap": "~3.3.6"
   }
 }
