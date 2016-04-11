@@ -2,13 +2,13 @@ parameters:
     database_driver:    pdo_mysql
     database_host:      localhost
     database_port:      ~
-    database_name:      ~
-    test_database_name: ~
-    database_user:      ~
+    database_name:      warm
+    test_database_name: warm_test
+    database_user:      travis
     database_password:  ~
 
-    mailer_transport:   gmail
-    mailer_host:        ~
+    mailer_transport:   smtp
+    mailer_host:        127.0.0.1
     mailer_encryption:  ~
     mailer_auth_mode:   ~
     mailer_user:        ~
