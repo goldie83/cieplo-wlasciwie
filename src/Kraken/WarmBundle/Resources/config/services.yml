@@ -74,9 +74,6 @@ services:
         class: Kraken\WarmBundle\Service\ComparisonService
         arguments: [@kraken_warm.instance, @doctrine.orm.entity_manager, @kraken_warm.fuel]
 
-    kraken_warm.wall.factory:
-        class: Kraken\WarmBundle\Service\WallFactory
-
     kraken_warm.ventilation:
         class: Kraken\WarmBundle\Service\VentilationService
         arguments: [@kraken_warm.instance, @kraken_warm.dimensions]
@@ -91,6 +88,5 @@ services:
             - "@kraken_warm.instance"
             - "@kraken_warm.ventilation"
             - "@kraken_warm.wall"
-            - "@kraken_warm.wall.factory"
             - "@kraken_warm.dimensions"
             - "@kraken_warm.floors"

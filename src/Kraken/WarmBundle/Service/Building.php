@@ -12,7 +12,6 @@ class Building implements BuildingInterface
     protected $house_service;
     protected $ventilation;
     protected $wall;
-    protected $wall_factory;
     protected $dimensions;
     protected $floors;
 
@@ -40,12 +39,11 @@ class Building implements BuildingInterface
         'other' => 2.0,
     );
 
-    public function __construct(InstanceService $instance, VentilationService $ventilation, WallService $wall, WallFactory $wall_factory, DimensionsService $dimensions, FloorsService $floors)
+    public function __construct(InstanceService $instance, VentilationService $ventilation, WallService $wall, DimensionsService $dimensions, FloorsService $floors)
     {
         $this->instance = $instance;
         $this->ventilation = $ventilation;
         $this->wall = $wall;
-        $this->wall_factory = $wall_factory;
         $this->dimensions = $dimensions;
         $this->floors = $floors;
     }
@@ -182,7 +180,7 @@ class Building implements BuildingInterface
         $house = $this->getHouse();
 
         $isolation = $house
-            ->getHighestCeilingIsolationLayer();
+            ->getTopIsolationLayer();
         $isolationResistance = $isolation
             ? ($isolation->getSize() / 100) / $isolation->getMaterial()->getLambda()
             : 0;

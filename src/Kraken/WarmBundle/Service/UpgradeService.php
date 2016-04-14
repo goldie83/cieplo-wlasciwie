@@ -82,7 +82,7 @@ class UpgradeService
         $house = $customCalculation->getHouse();
 
         if ($apartment->getWhatsOver() != 'heated_room') {
-            $ceilingIsolation = $house->getHighestCeilingIsolationLayer();
+            $ceilingIsolation = $house->getTopIsolationLayer();
 
             if (!$ceilingIsolation || $ceilingIsolation->getSize() <= 5) {
                 $m = new Material();
@@ -92,7 +92,7 @@ class UpgradeService
                 $l->setMaterial($m);
                 $l->setSize(10);
 
-                $house->setHighestCeilingIsolationLayer($l);
+                $house->setTopIsolationLayer($l);
 
                 $newEnergyLoss = $this->building->getEnergyLossToOutside() + $this->building->getEnergyLossToUnheated();
 

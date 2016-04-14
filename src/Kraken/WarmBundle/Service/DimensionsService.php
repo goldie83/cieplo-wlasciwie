@@ -23,6 +23,11 @@ class DimensionsService
         return $this->instance->get();
     }
 
+    public function getStandardWindowArea()
+    {
+        return self::STANDARD_WINDOW_AREA;
+    }
+
     public function getWindowsArea()
     {
         $house = $this->getInstance()->getHouse();

@@ -49,17 +49,17 @@ app.controller('WarmCtrl', function($scope) {
 
     $scope.power = 0;
     $scope.heater_not_required = false;
-    
+
     $scope.realFloors = function()
     {
         var floors = [];
-        
+
         $scope.floors.forEach(function(floor) {
               if (floor.name != 'other') {
                   floors.push(floor);
               }
         });
-        
+
         return floors;
     }
 
@@ -68,7 +68,7 @@ app.controller('WarmCtrl', function($scope) {
         if ($scope.room_external_walls == 0) {
             return 0;
         }
-        
+
         var windowsArea = $scope.room_windows * $scope.standard_window_area;
 
         if ($scope.room_has_balcony_door) {
@@ -83,14 +83,14 @@ app.controller('WarmCtrl', function($scope) {
         if ($scope.room_external_walls == 0) {
             return 0;
         }
-        
+
         return Math.max(0, $scope.room_doors * $scope.standard_door_area);
     }
 
     $scope.getExternalWallArea = function()
     {
         var externalWallLength = 0;
-        
+
         if ($scope.room_external_walls == "short") {
             externalWallLength = Math.min($scope.room_width, $scope.room_length);
         } else if ($scope.room_external_walls == "long") {
@@ -102,7 +102,7 @@ app.controller('WarmCtrl', function($scope) {
         } else if ($scope.room_external_walls == 4) {
             externalWallLength = 2 * $scope.room_width + 2 * $scope.room_length;
         }
-        
+
         return Math.max(0, $scope.floor_height * externalWallLength - $scope.getWindowsArea() - $scope.getDoorsArea());
     }
 
@@ -187,16 +187,16 @@ app.controller('WarmCtrl', function($scope) {
         // close enough
         return $scope.room_length * $scope.room_width;
     }
-    
+
     $scope.getCeilingHeatLoss = function()
     {
         var aboveFloorName = $scope.getAboveFloorName();
         var isAboveFloorHeated = $scope.isAboveFloorHeated();
-        
+
         if (aboveFloorName == false) {
             return $scope.getCeilingArea() * buildingRoofConductance * ($scope.room_temperature - $scope.outdoor_temperature);
         }
-        
+
         if (aboveFloorName == 'attic' && !isAboveFloorHeated) {
             return 0.5 * $scope.getCeilingArea() * buildingHighestCeilingConductance * ($scope.room_temperature - $scope.outdoor_temperature);
         }
@@ -204,7 +204,7 @@ app.controller('WarmCtrl', function($scope) {
         if (!isAboveFloorHeated && aboveFloorName != false) {
             return 0.5 * $scope.getCeilingArea() * buildingInternalCeilingConductance * ($scope.room_temperature - $scope.outdoor_temperature);
         }
-        
+
         return 0;
     }
 
@@ -212,11 +212,11 @@ app.controller('WarmCtrl', function($scope) {
     {
         var belowFloorName = $scope.getBelowFloorName();
         var isBelowFloorHeated = $scope.isBelowFloorHeated();
-        
+
         if (belowFloorName == false) {
             return $scope.getCeilingArea() * buildingGroundFloorConductance * ($scope.room_temperature - $scope.outdoor_temperature);
         }
-        
+
         if ($scope.room_floor == "basement") {
             return $scope.getCeilingArea() * buildingUndergroundConductance * ($scope.room_temperature - $scope.outdoor_temperature);
         }
@@ -227,56 +227,63 @@ app.controller('WarmCtrl', function($scope) {
 
         return 0;
     }
-    
+
     $scope.getVentilationEnergyLoss = function()
     {
         var roomCubature = $scope.room_width * $scope.room_length * $scope.floor_height;
-        
+
         var fraction = roomCubature/buildingCubature;
-        
+
         if ($scope.room_doors > 0 || $scope.room_windows > 0) {
             fraction *= 1.025;
         } else {
             fraction -= 0.025;
         }
-        
+
         return fraction * buildingVentilationEnergyLossFactor * ($scope.room_temperature - $scope.outdoor_temperature);
     }
-    
+
     $scope.calculatePower = function()
     {
         var temperatureDiff = $scope.room_temperature - $scope.outdoor_temperature;
         var power = 0;
-        
-        if ($scope.room_floor != 'basement') {
-            power = $scope.getExternalWallArea() * buildingExternalWallConductance * temperatureDiff;
 
-            if ($scope.room_has_balcony_door == true) {
-                power *= 1.15;
-            }
+        power = $scope.getExternalWallArea() * buildingExternalWallConductance * temperatureDiff;
+
+        if ($scope.room_has_balcony_door == true) {
+            power *= 1.15;
+        } else if ($scope.room_floor == 'basement') {
+            power *= 0.8;
         }
-        
+
         power += $scope.getVentilationEnergyLoss();
         power += $scope.getWindowsArea() * buildingWindowsConductance * temperatureDiff;
         power += $scope.getDoorsArea() * buildingDoorsConductance * temperatureDiff;
         power += $scope.getUnheatedWallArea() * buildingInternalWallConductance * temperatureDiff * 0.5;
         power += $scope.getCeilingHeatLoss();
         power += $scope.getFloorHeatLoss();
- 
+
         power *= 1.05;
-        
+
         console.log("ceiling: " +  $scope.getCeilingHeatLoss());
         console.log("floor: " +  $scope.getFloorHeatLoss());
         console.log("ventilation: " +  $scope.getVentilationEnergyLoss());
         console.log("unheated: " +  ($scope.getUnheatedWallArea() * buildingInternalWallConductance * temperatureDiff * 0.5));
         console.log("outdoor: " +  ($scope.getExternalWallArea() * buildingExternalWallConductance * temperatureDiff));
-        
+
         if (power > 0) {
             $scope.power = 50 * Math.ceil(Math.round(power) / 50);
         }
-        
+
         $scope.heater_not_required = $scope.power > 0 && $scope.power <= 200;
 
         return $scope.power;
+    }
+
+    $scope.calculatePowerPerSquareMeter = function()
+    {
+        var area = $scope.room_length * $scope.room_width;
+
+        return area > 0 ? Math.round($scope.power / area) : '--';
     }
 });

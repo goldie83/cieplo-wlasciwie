@@ -47,4 +47,24 @@ class WallService
             ? round(1 / $thermalResistance, 2)
             : 0;
     }
+
+    public function getInternalWallThermalConductance()
+    {
+        $year = $this->instance->get()->getConstructionYear();
+
+        if ($year < 1975) {
+            $lambda = 0.6;
+            $size = 0.3;
+        } elseif ($year < 1995) {
+            $lambda = 0.4;
+            $size = 0.25;
+        } else {
+            $lambda = 0.2;
+            $size = 0.2;
+        }
+
+        $wallResistance = $size / $lambda;
+
+        return 1/$wallResistance;
+    }
 }

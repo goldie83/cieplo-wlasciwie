@@ -63,6 +63,11 @@ class HeatingDevice
      */
     protected $heatingVariants;
 
+    /**
+     * @ORM\OneToMany(targetEntity="Calculation", mappedBy="heating_device")
+     */
+    protected $calculations;
+
     public function __toString()
     {
         return $this->name;

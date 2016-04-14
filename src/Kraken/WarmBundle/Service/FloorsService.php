@@ -50,7 +50,7 @@ class FloorsService
     public function getTopLabel()
     {
         if (!$this->isAtticHeated()) {
-            return 'Strop';
+            return 'Strop - podłoga poddasza';
         }
 
         return 'Dach';

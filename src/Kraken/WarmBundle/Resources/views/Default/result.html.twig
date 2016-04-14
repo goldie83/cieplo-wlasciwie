@@ -2,7 +2,7 @@
 
 {% block edit_button %}
     {% if isAuthor %}
-        <a class="btn btn-info btn-raised pull-right" href="{{ path('start', {slug: calc.slug}) }}">Edytuj informacje o budynku</a>
+        <a class="btn btn-info btn-raised pull-right" href="{{ path('start', {slug: calc.slug}) }}">Wróć do formularza danych budynku</a>
     {% endif %}
 {% endblock %}
 
@@ -28,10 +28,10 @@
 
         <div class="row" id="info">
           <div class="col-md-6">
-      <div class="alert alert-success">
-          {% set resultUrl = url('result', {'slug': app.request.get('slug') }) %}
-          Link do tego wyniku: <strong><a href="{{ resultUrl }}">{{ resultUrl }}</a></strong>
-      </div>
+            <div class="alert alert-success">
+                {% set resultUrl = url('result', {'slug': app.request.get('slug') }) %}
+                Link do tego wyniku: <strong><a href="{{ resultUrl }}">{{ resultUrl }}</a></strong>
+            </div>
             <h3>W skrócie o budynku</h3>
             <table class="table table-condensed">
                 <tbody>
@@ -83,15 +83,23 @@
             <h3>Warunki klimatyczne &mdash; {{ city.name }}</h3>
             {% set averageTemperature = heatingSeason.getAverageTemperature(calc) %}
             {% set lastYearAverageTemperature = heatingSeason.getLastYearAverageTemperature(calc) %}
-            <p>{{ city.name }} leży w <strong>{{ climate.climateZone }}.</strong> <a href="http://www.hvacr.pl/public/styles/img_640/public/vademecum/mainPhoto/12/strefy_klimatyczne_polska.jpg" target="_blank">strefie klimatycznej</a>.
+            <p>Miejscowość {{ city.name }} leży w <strong>{{ climate.climateZone }}.</strong> <a href="http://www.hvacr.pl/public/styles/img_640/public/vademecum/mainPhoto/12/strefy_klimatyczne_polska.jpg" target="_blank">strefie klimatycznej</a>.
             Dlatego maksymalną moc grzewczą oblicza się tu dla średniej dobowej temperatury <strong>{{ climate.designOutdoorTemperature }}&deg;C</strong>.</p>
-            <p>Przeciętny sezon grzewczy trwa u ciebie ok. <strong>{{ heatingSeason.getSeasonLength(calc) }} dni</strong>, ze średnią temperaturą <strong>{{ averageTemperature|number_format(2, ',', ' ') }}&deg;C</strong>.</p>
+            <p>Przeciętny sezon grzewczy w tym miejscu trwa ok. <strong>{{ heatingSeason.getSeasonLength(calc) }} dni</strong>, ze średnią temperaturą <strong>{{ averageTemperature|number_format(2, ',', ' ') }}&deg;C</strong>.</p>
             {% if heatingSeason.getLastSeasonLength(calc) > 0 %}
                 <p>Poprzedni sezon grzewczy trwał ok. <strong>{{ heatingSeason.getLastSeasonLength(calc) }} dni</strong>, ze średnią temperaturą <strong>{{ lastYearAverageTemperature|number_format(2, ',', ' ') }}&deg;C</strong>.</p>
             {% endif %}
 
           </div>
           <div class="col-md-6">
+            <ul class="nav nav-pills">
+              <li class="active"><a href="{{ url('result', {'slug': calc.slug}) }}">Bilans cieplny</a></li>
+              <li><a href="{{ url('heaters', {'slug': calc.slug}) }}">Dobór grzejników</a></li>
+            {% if isAuthor %}
+              <li><a href="{{ url('start', {'slug': calc.slug}) }}">Wróć do formularza danych budynku</a></li>
+            {% endif %}
+            </ul>
+
             <h3>Ile ciepła potrzebuje twój dom</h3>
             <p>Poniższe wyliczenia zakładają utrzymanie w domu przez całą zimę średniej dobowej temperatury <strong>{{ calc.indoorTemperature|number_format(1, ',', ' ') }}&deg;C</strong>.</p>
 
@@ -189,7 +197,7 @@
               <h5>Kocioł miałowy: <span class="label label-warning">{{ sandCoalPowerNeeded|number_format(0, ',', ' ') ~ '-' ~  (1.2*sandCoalPowerNeeded)|number_format(0, ',', ' ') ~ 'kW' }}</span></h5>
               <dd><a href="http://czysteogrzewanie.pl/zakupy/mocy-przybywaj-dobor-mocy-kotla-weglowego/#Wyjtek_dla_kotw_miaowych" target="_blank">Kocioł miałowy dobiera się nieco inaczej</a>. Taka moc ma pojemność zasypu wystarczającą do bezobsługowej pracy przez jedną dobę, jeśli będzie rozpalany od góry (a to jedyny wygodny sposób palenia miałem).</dd>
               {% set automaticStovePower = calculator.suggestedAutomaticStovePower %}
-              <h5>Kocioł podajnikowy: <span class="label label-warning">{{ automaticStovePower ~ 'kW' }}</span></h5>
+              <h5>Kocioł podajnikowy: <span class="label label-warning">{{ automaticStovePower|number_format(0, ',', ' ') ~ 'kW' }}</span></h5>
               <p>Kotły podajnikowe (zwłaszcza te najmniejsze) miewają min. kilka kilowatów zapasu ponad moc nominalną, więc często nie ma potrzeby kupowania wyższego wariantu mocy, gdy potrzeby domu są na styk z wariantem niższym. Ale to nie reguła! By się upewnić, <strong>sprawdzaj w DTR kotła lub pytaj producenta!</strong></p>
               <h5>Kocioł gazowy: <span class="label label-warning">> {{ (1.2*powerNeeded)|number_format(0, ',', ' ') ~ 'kW' }}</span></h5>
               <p>Kotły gazowe pracują z dobrą sprawnością nawet na niskich mocach, dlatego przy wyborze kieruj się zaleceniami producenta (również w doborze mocy na potrzeby CWU).<br />

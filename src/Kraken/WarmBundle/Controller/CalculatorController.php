@@ -567,6 +567,10 @@ class CalculatorController extends Controller
             'calculator' => $calculationulator,
             'building' => $building,
             'climate' => $this->get('kraken_warm.climate'),
+            'floors' => $this->get('kraken_warm.floors'),
+            'dimensions' => $this->get('kraken_warm.dimensions'),
+            'wall' => $this->get('kraken_warm.wall'),
+            'house_description' => $this->get('kraken_warm.house_description'),
             'calc' => $calculation,
         ));
     }

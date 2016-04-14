@@ -220,7 +220,7 @@ class HouseDescriptionService
         $house = $this->instance->get()->getHouse();
 
         if (!$this->instance->get()->isApartment()) {
-            $roofInformation = [$this->roofTypes[$house->getBuildingRoof()]];
+            $roofInformation = [$this->floors->getTopLabel()];
         }
 
         if (($isolation = $house->getTopIsolationLayer()) != null) {

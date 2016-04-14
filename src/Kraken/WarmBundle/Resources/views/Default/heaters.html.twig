@@ -4,11 +4,11 @@
 
 <script>
   var outdoorTemperature = {{ climate.designOutdoorTemperature }};
-  var floorHeight = {{ building.floorHeight }};
-  var standardWindowArea = {{ building.standardWindowArea }};
-  var standardDoorArea = {{ building.standardDoorArea }};
-  var buildingExternalWallConductance = {{ building.externalWallConductance }};
-  var buildingInternalWallConductance = {{ building.internalWallConductance }};
+  var floorHeight = {{ calc.house.floorHeight }};
+  var standardWindowArea = {{ dimensions.standardWindowArea }};
+  var standardDoorArea = {{ dimensions.standardDoorArea }};
+  var buildingExternalWallConductance = {{ wall.thermalConductance }};
+  var buildingInternalWallConductance = {{ wall.internalWallThermalConductance }};
   var buildingRoofConductance = {{ building.roofConductance }};
   var buildingHighestCeilingConductance = {{ building.highestCeilingConductance }};
   var buildingGroundFloorConductance = {{ building.groundFloorConductance }};
@@ -16,171 +16,164 @@
   var buildingDoorsConductance = {{ building.doorsConductance }};
   var buildingWindowsConductance = {{ building.windowsConductance }};
   var buildingInternalCeilingConductance = 1/{{ building.internalCeilingResistance }};
-  var buildingWidth = {{ building.internalBuildingWidth }};
-  var buildingLength = {{ building.internalBuildingLength }};
+  var buildingWidth = {{ dimensions.internalBuildingWidth }};
+  var buildingLength = {{ dimensions.internalBuildingLength }};
   var buildingVentilationEnergyLossFactor = {{ building.ventilationEnergyLossFactor }};
-  var buildingCubature = {{ building.houseCubature }};
-  var buildingFloors = JSON.parse('{{ building.floors|json_encode|raw }}');
+  var buildingCubature = {{ dimensions.houseCubature }};
+  var buildingFloors = JSON.parse('{{ house_description.floors|json_encode|raw }}');
 </script>
 
-<header class="jumbotron subhead" id="overview">
-  <div class="container">
-    <h1>{{ punch.phrases.house }}</h1>
-    <p class="lead">{{ punch.phrases.heating }}</p>
-  </div>
-</header>
-
 <div class="container">
-  <ul class="nav nav-pills">
-    <li><a href="{{ url('result', {'slug': calc.slug}) }}">Bilans cieplny</a></li>
-    <li class="active"><a href="{{ url('heaters', {'slug': calc.slug}) }}">Dobór grzejników</a></li>
-  </ul>
+    <div class="well bs-component">
+        <ul class="nav nav-pills">
+          <li><a href="{{ url('result', {'slug': calc.slug}) }}">Bilans cieplny</a></li>
+          <li class="active"><a href="{{ url('heaters', {'slug': calc.slug}) }}">Dobór grzejników</a></li>
+        </ul>
 
-  <div class="page-header">
-    <h2>Moc grzejnika</h2>
-    <p>Tu możesz sprawdzić, jakiej mocy grzejnika będziesz potrzebować do poszczególnych pomieszczeń w twoim domu.</p>
-  </div>
+        <div class="page-header">
+          <h2>Dobór mocy grzewczej do pomieszczeń</h2>
+          <p>Tu możesz sprawdzić, jakiej mocy grzewczej będziesz potrzebować do poszczególnych pomieszczeń w twoim domu.</p>
+          <p>Moc grzewcza potrzebna w danym pomieszczeniu jest taka sama niezależnie od tego, czy ogrzewane będzie grzejnikami, ogrzewaniem podłogowym, gorącym powietrzem itp.</p>
+        </div>
 
-  <div class="row" id="info">
-    <div class="col-md-6">
-      <h3>Informacje o pomieszczeniu</h3>
-      <form class="form-horizontal">
-        <div class="form-group">
-          <label class="control-label col-lg-4" for="room_type">Rodzaj pomieszczenia</label>
-          <div class="col-lg-8">
-            <select id="room_type" name="room_type" ng-model="room_type" class="form-control" ng-change="setDefaultIndoorTemperature()">
-              <option value="standard">Pokój dzienny / sypialnia / kuchnia</option>
-              <option value="bathroom">Łazienka</option>
-              <option value="workshop">Pomieszczenie gospodarcze</option>
-              <option value="garage">Garaż</option>
-            </select>
+        <div class="row" id="info">
+          <div class="col-md-6">
+            <h3>Informacje o pomieszczeniu</h3>
+            <form class="form-horizontal">
+              <div class="form-group">
+                <label class="control-label col-lg-4" for="room_type">Rodzaj pomieszczenia</label>
+                <div class="col-lg-8">
+                  <select id="room_type" name="room_type" ng-model="room_type" class="form-control" ng-change="setDefaultIndoorTemperature()">
+                    <option value="standard">Pokój dzienny / sypialnia / kuchnia</option>
+                    <option value="bathroom">Łazienka</option>
+                    <option value="workshop">Pomieszczenie gospodarcze</option>
+                    <option value="garage">Garaż</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-lg-4" for="room_temperature">Temperatura wewnątrz</label>
+                <div class="col-lg-8">
+                  <div class="input-group">
+                    <input id="room_temperature" name="room_temperature" ng-model="room_temperature" required="required" class="form-control" value="20" smart-float />
+                    <span class="input-group-addon">&deg;C</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group" ng-show="realFloors().length > 1">
+                <label class="control-label col-lg-4" for="room_floor">Piętro</label>
+                <div class="col-lg-8">
+                  <select id="room_floor" name="room_floor" ng-model="room_floor" class="form-control">
+                    <option ng-repeat="floor in floors" ng-if="floor.heated == true && floor.name != 'other'" value="{[{ floor.name }]}">{[{ floor.label }]}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-lg-4" for="room_length">Długość pomieszczenia</label>
+                <div class="col-lg-8">
+                  <div class="input-group">
+                    <input id="room_length" name="room_length" ng-model="room_length" required="required" class="form-control" value="{{ (calc.house.buildingLength/2)|round }}" smart-float />
+                    <span class="input-group-addon">m</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-lg-4" for="room_width">Szerokość pomieszczenia</label>
+                <div class="col-lg-8">
+                  <div class="input-group">
+                    <input id="room_width" name="room_width" required="required" ng-model="room_width" class="form-control" value="{{ (calc.house.buildingWidth/2)|round }}" smart-float />
+                    <span class="input-group-addon">m</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-lg-4" for="room_external_walls">Liczba ścian zewnętrznych</label>
+                <div class="col-lg-8">
+                  <select id="room_external_walls" name="room_external_walls" ng-model="room_external_walls" class="form-control">
+                    <option value="0">Brak</option>
+                    <option value="short" ng-if="room_unheated_walls!='4'">Jedna, ta krótsza</option>
+                    <option value="long" ng-if="room_unheated_walls!='4'">Jedna, ta dłuższa</option>
+                    <option value="2" ng-if="room_unheated_walls!=3 && room_unheated_walls!=4">Dwie</option>
+                    <option value="3" ng-if="room_unheated_walls==0 || room_unheated_walls=='short' || room_unheated_walls=='long'">Trzy</option>
+                    <option value="4" ng-if="room_unheated_walls==0">Cztery</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-lg-4" for="room_unheated_walls">Liczba ścian sąsiadujących z pomieszczeniami nieogrzewanymi</label>
+                <div class="col-lg-8">
+                  <select id="room_unheated_walls" name="room_unheated_walls" ng-model="room_unheated_walls" class="form-control">
+                    <option value="0">Brak</option>
+                    <option value="short" ng-if="room_external_walls!='4'">Jedna, ta krótsza</option>
+                    <option value="long" ng-if="room_external_walls!='4'">Jedna, ta dłuższa</option>
+                    <option value="2" ng-if="room_external_walls!=3 && room_external_walls!=4">Dwie</option>
+                    <option value="3" ng-if="room_external_walls==0 || room_external_walls=='short' || room_external_walls=='long'">Trzy</option>
+                    <option value="4" ng-if="room_external_walls==0">Cztery</option>
+                  </select>
+                </div>
+              </div>
+              <div class="form-group" ng-show="room_external_walls!=0">
+                <label class="control-label col-lg-4" for="room_windows">Liczba okien</label>
+                <div class="col-lg-8">
+                  <div class="input-group">
+                    <input type="number" id="room_windows" name="room_windows" ng-model="room_windows" required="required" maxlength="2" pattern=".{1,}" class="form-control">
+                    <span class="input-group-addon">szt.</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group" ng-show="room_external_walls!=0">
+                <label class="control-label col-lg-4" for="room_doors">Liczba drzwi zewnętrznych</label>
+                <div class="col-lg-8">
+                  <div class="input-group">
+                    <input type="number" id="room_doors" name="room_doors" ng-model="room_doors" required="required" maxlength="2" pattern=".{1,}" class="form-control">
+                    <span class="input-group-addon">szt.</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-group" ng-show="room_external_walls!=0">
+                <div class="checkbox">
+                  <label for="room_has_balcony_door">
+                  <input type="checkbox" id="room_has_balcony_door" ng-model="room_has_balcony_door" name="room_has_balcony_door" />
+                  W pokoju jest wyjście na balkon
+                  </label>
+                </div>
+              </div>
+            </form>
           </div>
-        </div>
-        <div class="form-group">
-          <label class="control-label col-lg-4" for="room_temperature">Temperatura wewnątrz</label>
-          <div class="col-lg-8">
-            <div class="input-group">
-              <input id="room_temperature" name="room_temperature" ng-model="room_temperature" required="required" class="form-control" value="20" smart-float />
-              <span class="input-group-addon">&deg;C</span>
+          <div class="col-md-6">
+            <h3>Wynik</h3>
+            <h5 style="line-height:170%"><span class="label label-warning" style="font-size:120%;line-height:120%">{[{ calculatePower() | number }]}W</span> takiej mocy grzejnik jest potrzebny (<a href="http://czysteogrzewanie.pl/warsztat/instalacja-grzewcza-jak-to-sie-robi/#Umiejscowienie_grzejnikw" target="_blank">przy montażu zgodnie z zasadami</a>).</h5>
+            <p>czyli <span class="label label-default">{[{ calculatePowerPerSquareMeter() | number }]}W/m<sup>2</sup></span> pomieszczenia</p>
+            <div class="alert alert-warning" ng-show="heater_not_required && room_type != 'bathroom'">
+                <h4>Grzejnik nie jest konieczny</h4>
+                Straty ciepła są tak małe, że zrównoważą je zyski z innych pokoi. Wystarczy, że kupisz nieco większy grzejnik do sąsiadującego pomieszczenia.
             </div>
-          </div>
-        </div>
-        <div class="form-group" ng-show="realFloors().length > 1">
-          <label class="control-label col-lg-4" for="room_floor">Piętro</label>
-          <div class="col-lg-8">
-            <select id="room_floor" name="room_floor" ng-model="room_floor" class="form-control">
-              <option ng-repeat="floor in floors" ng-if="floor.heated == true && floor.name != 'other'" value="{[{ floor.name }]}">{[{ floor.label }]}</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="control-label col-lg-4" for="room_length">Długość pomieszczenia</label>
-          <div class="col-lg-8">
-            <div class="input-group">
-              <input id="room_length" name="room_length" ng-model="room_length" required="required" class="form-control" value="{{ (calc.house.buildingLength/2)|round }}" smart-float />
-              <span class="input-group-addon">m</span>
+            <div class="alert alert-warning" ng-show="heater_not_required && room_type == 'bathroom'">
+                <h4>W łazience moc grzejnika nie jest decydująca</h4>
+                Zapotrzebowanie na ciepło w małej łazience będzie zwykle mniejsze niż dostępne moce grzejników. Mimo to możesz bez obaw wziąć grzejnik o nieco większej mocy, by spełniał też inne funkcje (typu suszenie ręczników).
             </div>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="control-label col-lg-4" for="room_width">Szerokość pomieszczenia</label>
-          <div class="col-lg-8">
-            <div class="input-group">
-              <input id="room_width" name="room_width" required="required" ng-model="room_width" class="form-control" value="{{ (calc.house.buildingWidth/2)|round }}" smart-float />
-              <span class="input-group-addon">m</span>
+            <div class="alert alert-info">
+                <h4>Co z tym dalej zrobić</h4>
+                <ul>
+                    <li>zdecyduj, czym i jak będziesz ogrzewał dom</li>
+                    <li>na tej podstawie ustal temperatury pracy instalacji grzewczej</li>
+                    <li>dobierz wymiary grzejnika do miejsca montażu oraz układ i rozmiary przyłączy</li>
+                    <li>znajdź grzejnik, który dla wymaganych temperatur pracy instalacji, temperatury w pomieszczeniu i wymiarów, osiąga wyliczoną tutaj moc</li>
+                    <li>na końcu dopasuj materiał, wygląd, kolor i cenę do upodobań</li>
+                </ul>
+                <br />
+                Dokładniejszy opis tych spraw znajdziesz w <a href="http://czysteogrzewanie.pl/warsztat/instalacja-grzewcza-jak-to-sie-robi/" target="_blank"><strong>artykule o projektowaniu instalacji grzewczej</strong></a>.
             </div>
-          </div>
         </div>
-        <div class="form-group">
-          <label class="control-label col-lg-4" for="room_external_walls">Liczba ścian zewnętrznych</label>
-          <div class="col-lg-8">
-            <select id="room_external_walls" name="room_external_walls" ng-model="room_external_walls" class="form-control">
-              <option value="0">Brak</option>
-              <option value="short" ng-if="room_unheated_walls!='4'">Jedna, ta krótsza</option>
-              <option value="long" ng-if="room_unheated_walls!='4'">Jedna, ta dłuższa</option>
-              <option value="2" ng-if="room_unheated_walls!=3 && room_unheated_walls!=4">Dwie</option>
-              <option value="3" ng-if="room_unheated_walls==0 || room_unheated_walls=='short' || room_unheated_walls=='long'">Trzy</option>
-              <option value="4" ng-if="room_unheated_walls==0">Cztery</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group">
-          <label class="control-label col-lg-4" for="room_unheated_walls">Liczba ścian sąsiadujących z pomieszczeniami nieogrzewanymi</label>
-          <div class="col-lg-8">
-            <select id="room_unheated_walls" name="room_unheated_walls" ng-model="room_unheated_walls" class="form-control">
-              <option value="0">Brak</option>
-              <option value="short" ng-if="room_external_walls!='4'">Jedna, ta krótsza</option>
-              <option value="long" ng-if="room_external_walls!='4'">Jedna, ta dłuższa</option>
-              <option value="2" ng-if="room_external_walls!=3 && room_external_walls!=4">Dwie</option>
-              <option value="3" ng-if="room_external_walls==0 || room_external_walls=='short' || room_external_walls=='long'">Trzy</option>
-              <option value="4" ng-if="room_external_walls==0">Cztery</option>
-            </select>
-          </div>
-        </div>
-        <div class="form-group" ng-show="room_external_walls!=0">
-          <label class="control-label col-lg-4" for="room_windows">Liczba okien</label>
-          <div class="col-lg-8">
-            <div class="input-group">
-              <input type="number" id="room_windows" name="room_windows" ng-model="room_windows" required="required" maxlength="2" pattern=".{1,}" class="form-control">
-              <span class="input-group-addon">szt.</span>
-            </div>
-          </div>
-        </div>
-        <div class="form-group" ng-show="room_external_walls!=0">
-          <label class="control-label col-lg-4" for="room_doors">Liczba drzwi zewnętrznych</label>
-          <div class="col-lg-8">
-            <div class="input-group">
-              <input type="number" id="room_doors" name="room_doors" ng-model="room_doors" required="required" maxlength="2" pattern=".{1,}" class="form-control">
-              <span class="input-group-addon">szt.</span>
-            </div>
-          </div>
-        </div>
-        <div class="form-group" ng-show="room_external_walls!=0">
-          <div class="checkbox">
-            <label for="room_has_balcony_door">
-            <input type="checkbox" id="room_has_balcony_door" ng-model="room_has_balcony_door" name="room_has_balcony_door" />
-            W pokoju jest wyjście na balkon
-            </label>
-          </div>
-        </div>
-      </form>
     </div>
-    <div class="col-md-6">
-      <h3>Wynik</h3>
-      <h5 style="line-height:170%"><span class="label label-warning" style="font-size:120%;line-height:120%">{[{ calculatePower() | number }]}W</span> takiej mocy grzejnik jest potrzebny (<a href="http://czysteogrzewanie.pl/warsztat/instalacja-grzewcza-jak-to-sie-robi/#Umiejscowienie_grzejnikw" target="_blank">przy montażu zgodnie z zasadami</a>).</h5>
-      <p>&nbsp;</p>
-      <div class="alert alert-warning" ng-show="heater_not_required && room_type != 'bathroom'">
-          <h4>Grzejnik nie jest konieczny</h4>
-          Straty ciepła są tak małe, że zrównoważą je zyski z innych pokoi. Wystarczy, że kupisz nieco większy grzejnik do sąsiadującego pomieszczenia.
-      </div>
-      <div class="alert alert-warning" ng-show="heater_not_required && room_type == 'bathroom'">
-          <h4>W łazience moc grzejnika nie jest decydująca</h4>
-          Zapotrzebowanie na ciepło w małej łazience będzie zwykle mniejsze niż dostępne moce grzejników. Mimo to możesz bez obaw wziąć grzejnik o nieco większej mocy, by spełniał też inne funkcje (typu suszenie ręczników).
-      </div>
-      <div class="alert alert-info">
-          <h4>Co z tym dalej zrobić</h4>
-          <ul>
-              <li>zdecyduj, czym i jak będziesz ogrzewał dom</li>
-              <li>na tej podstawie ustal temperatury pracy instalacji grzewczej</li>
-              <li>dobierz wymiary grzejnika do miejsca montażu oraz układ i rozmiary przyłączy</li>
-              <li>znajdź grzejnik, który dla wymaganych temperatur pracy instalacji, temperatury w pomieszczeniu i wymiarów, osiąga wyliczoną tutaj moc</li>
-              <li>na końcu dopasuj materiał, wygląd, kolor i cenę do upodobań</li>
-          </ul>
-          <br />
-          Dokładniejszy opis tych spraw znajdziesz w <a href="http://czysteogrzewanie.pl/warsztat/instalacja-grzewcza-jak-to-sie-robi/" target="_blank"><strong>artykule o projektowaniu instalacji grzewczej</strong></a>.
-      </div>
-  </div>
-
 </div>
 
 {% endblock %}
 
 {% block javascripts %}
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.10/angular.min.js"></script>
-  <script src="https://code.angularjs.org/1.3.0-beta.10/i18n/angular-locale_pl.js"></script>
-{% endblock %}
-
-{% block bottom_javascripts %}
-  <script src="{{ asset('bundles/krakenwarm/js/heaters.js') }}"></script>
+    {{ parent() }}
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-beta.10/angular.min.js"></script>
+    <script src="https://code.angularjs.org/1.3.0-beta.10/i18n/angular-locale_pl.js"></script>
+    <script src="{{ asset('bundles/krakenwarm/js/heaters.js') }}"></script>
 {% endblock %}
 

@@ -697,30 +697,6 @@ class Boiler
     }
 
     /**
-     * Add notices.
-     *
-     * @param \Kraken\RankingBundle\Entity\BoilerProperty $notices
-     *
-     * @return Boiler
-     */
-    public function addBoilerProperty(\Kraken\RankingBundle\Entity\BoilerProperty $notices)
-    {
-        $this->notices[] = $notices;
-
-        return $this;
-    }
-
-    /**
-     * Remove notices.
-     *
-     * @param \Kraken\RankingBundle\Entity\BoilerProperty $notices
-     */
-    public function removeBoilerProperty(\Kraken\RankingBundle\Entity\BoilerProperty $notices)
-    {
-        $this->notices->removeElement($notices);
-    }
-
-    /**
      * Get notices.
      *
      * @return \Doctrine\Common\Collections\Collection
