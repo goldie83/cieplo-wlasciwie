@@ -45,7 +45,7 @@ Feature: Energy balance calculation
       And I press "Wynik"
      Then I should see "A.D. lata 80-te, 170m2 ogrzewane, Otwock i okolice"
       And I should see "50cm, konstrukcja: cegła pełna, izolacja: styropian 15cm"
-      And I should see "dach skośny z poddaszem, Wełna mineralna 30cm"
+      And I should see "Dach, Wełna mineralna 30cm"
       And I should see "7kW to potrzebna moc grzewcza (C.O. bez CWU)"
 
   Scenario: Energy calculation for apartment
@@ -91,4 +91,4 @@ Feature: Energy balance calculation
      Then I should see "A.D. gdzieś przed II wojną, 40m2 ogrzewane, Otwock i okolice"
       And I should see "40cm, konstrukcja: cegła pełna, izolacja: brak"
       And I should see "Ściany zewnętrzne: 2"
-      And I should see "8kW to potrzebna moc grzewcza (C.O. bez CWU)"
+      And I should see "9kW to potrzebna moc grzewcza (C.O. bez CWU)"

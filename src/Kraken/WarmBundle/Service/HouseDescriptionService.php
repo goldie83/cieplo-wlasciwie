@@ -232,6 +232,13 @@ class HouseDescriptionService
         return implode(', ', $roofInformation);
     }
 
+    public function getRoofType()
+    {
+        $house = $this->instance->get()->getHouse();
+
+        return $this->roofTypes[$house->getBuildingRoof()];
+    }
+
     public function getGroundDetails()
     {
         $house = $this->instance->get()->getHouse();

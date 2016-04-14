@@ -106,9 +106,7 @@ class Apartment extends Building implements BuildingInterface
 
     public function getWallsEnergyLossToUnheated($addIsolation = false)
     {
-        $internalWall = $this->wall_factory->getInternalWall($this->getInstance(), $addIsolation);
-
-        return $this->wall->getThermalConductance() * $this->getInternalWallArea();
+        return $this->wall->getInternalWallThermalConductance() * $this->getInternalWallArea();
     }
 
     public function getInternalWallArea()

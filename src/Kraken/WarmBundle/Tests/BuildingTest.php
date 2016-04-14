@@ -182,13 +182,6 @@ class BuildingTest extends \PHPUnit_Framework_TestCase
         return $mock;
     }
 
-    protected function mockWallFactory()
-    {
-        $mock = Mockery::mock('Kraken\WarmBundle\Service\WallFactory');
-
-        return $mock;
-    }
-
     protected function mockSession()
     {
         $mock = Mockery::mock('Symfony\Component\HttpFoundation\Session\SessionInterface');
@@ -233,6 +226,6 @@ class BuildingTest extends \PHPUnit_Framework_TestCase
             $floors = $this->mockFloors();
         }
 
-        return new Building($instance, $this->mockVentilation(), $this->mockWall(), $this->mockWallFactory(), $dimensions, $floors);
+        return new Building($instance, $this->mockVentilation(), $this->mockWall(), $dimensions, $floors);
     }
 }
