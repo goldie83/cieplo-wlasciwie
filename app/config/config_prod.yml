@@ -27,13 +27,13 @@ monolog:
             type:         group
             members:      [sentry, nested, swift]
         nested:
-            type:  stream
-            path:  %kernel.logs_dir%/%kernel.environment%.log
-            level: debug
+            type:         stream
+            path:         %kernel.logs_dir%/%kernel.environment%.log
+            level:        debug
         sentry:
-            type:  raven
-            dsn:   'http://2ed638979ff84a58a28e7585649eeaac:1b4875d9c82e48fb920d189ff0d2f17a@sentry.treter.pl/3'
-            level: notice
+            type:         raven
+            dsn:          'http://69c2560effad4229a98d9abdbebee1c4:2c94b39c787147d9bfa1f2d290c2998b@sentry.treter.pl/2'
+            level:        notice
         swift:
             type:       swift_mailer
             from_email: juzefwt@gmail.com
