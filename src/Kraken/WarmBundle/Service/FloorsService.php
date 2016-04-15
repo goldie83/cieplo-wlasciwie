@@ -71,6 +71,14 @@ class FloorsService
 
     public function getTopLabel()
     {
+        if ($this->getInstance()->isApartment()) {
+            return 'Strop';
+        }
+
+        if (!$this->isAtticHeated() && !$this->isGroundFloorHeated()) {
+            return 'Strop';
+        }
+
         if (!$this->isAtticHeated()) {
             return 'Strop - podłoga poddasza';
         }
@@ -80,6 +88,14 @@ class FloorsService
 
     public function getTopIsolationLabel()
     {
+        if ($this->getInstance()->isApartment()) {
+            return 'Izolacja stropu';
+        }
+
+        if (!$this->isAtticHeated() && !$this->isGroundFloorHeated()) {
+            return 'Izolacja stropu';
+        }
+
         if (!$this->isAtticHeated()) {
             return 'Izolacja stropu między poddaszem a piętrem niżej';
         }
@@ -101,11 +117,23 @@ class FloorsService
             return 'Podłoga parteru';
         }
 
-        return 'Strop nad parterem';
+        if (!$this->isGroundFloorHeated() && !$this->isAtticHeated()) {
+            return 'Podłoga';
+        }
+
+        if (!$this->isGroundFloorHeated()) {
+            return 'Strop nad parterem';
+        }
+
+        return 'Podłoga';
     }
 
     public function getBottomIsolationLabel()
     {
+        if ($this->getInstance()->isApartment()) {
+            return 'Izolacja podłogi';
+        }
+
         if ($this->isBasementHeated()) {
             return 'Izolacja podłogi piwnicy';
         }
@@ -114,6 +142,14 @@ class FloorsService
             return 'Izolacja podłogi parteru';
         }
 
-        return 'Izolacja stropu nad parterem';
+        if (!$this->isGroundFloorHeated() && !$this->isAtticHeated()) {
+            return 'Izolacja podłogi';
+        }
+
+        if (!$this->isGroundFloorHeated()) {
+            return 'Izolacja stropu nad parterem';
+        }
+
+        return 'Izolacja podłogi';
     }
 }
