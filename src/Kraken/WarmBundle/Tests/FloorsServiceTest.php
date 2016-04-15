@@ -296,8 +296,8 @@ class FloorsServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(false, $fs->isAtticHeated());
         $this->assertEquals(true, $fs->isGroundFloorHeated());
         $this->assertEquals(true, $fs->hasUnheatedFloors());
-        $this->assertEquals('Strop - podłoga poddasza', $fs->getTopLabel());
-        $this->assertEquals('Izolacja stropu między poddaszem a piętrem niżej', $fs->getTopIsolationLabel());
+        $this->assertEquals('Strop', $fs->getTopLabel());
+        $this->assertEquals('Izolacja stropu', $fs->getTopIsolationLabel());
         $this->assertEquals('Podłoga parteru', $fs->getBottomLabel());
         $this->assertEquals('Izolacja podłogi parteru', $fs->getBottomIsolationLabel());
     }
@@ -306,7 +306,7 @@ class FloorsServiceTest extends \PHPUnit_Framework_TestCase
     {
         $house = new House();
         $house->setBuildingFloors(2);
-        $house->setBuildingHeatedFloors([3]);
+        $house->setBuildingHeatedFloors([2,3]);
         $house->setBuildingRoof('steep');
         $house->setHasBasement(false);
 
@@ -314,7 +314,7 @@ class FloorsServiceTest extends \PHPUnit_Framework_TestCase
         $fs = new FloorsService($instance);
 
         $this->assertEquals(3, $fs->getTotalFloorsNumber());
-        $this->assertEquals(1, $fs->getHeatedFloorsNumber());
+        $this->assertEquals(2, $fs->getHeatedFloorsNumber());
         $this->assertEquals(false, $fs->isBasementHeated());
         $this->assertEquals(true, $fs->isAtticHeated());
         $this->assertEquals(false, $fs->isGroundFloorHeated());
@@ -352,22 +352,22 @@ class FloorsServiceTest extends \PHPUnit_Framework_TestCase
     public function testThreeFloorsWithBasementFlatRoofOneHeated()
     {
         $house = new House();
-        $house->setBuildingFloors(3);
-        $house->setBuildingHeatedFloors([2]);
+        $house->setBuildingFloors(4);
+        $house->setBuildingHeatedFloors([3]);
         $house->setBuildingRoof('flat');
         $house->setHasBasement(true);
 
         $instance = $this->makeInstance($house);
         $fs = new FloorsService($instance);
 
-        $this->assertEquals(4, $fs->getTotalFloorsNumber());
+        $this->assertEquals(5, $fs->getTotalFloorsNumber());
         $this->assertEquals(1, $fs->getHeatedFloorsNumber());
         $this->assertEquals(false, $fs->isBasementHeated());
         $this->assertEquals(false, $fs->isAtticHeated());
         $this->assertEquals(false, $fs->isGroundFloorHeated());
         $this->assertEquals(true, $fs->hasUnheatedFloors());
-        $this->assertEquals('Strop', $fs->getTopLabel());
-        $this->assertEquals('Izolacja stropu', $fs->getTopIsolationLabel());
+        $this->assertEquals('Strop - podłoga poddasza', $fs->getTopLabel());
+        $this->assertEquals('Izolacja stropu między poddaszem a piętrem niżej', $fs->getTopIsolationLabel());
         $this->assertEquals('Podłoga', $fs->getBottomLabel());
         $this->assertEquals('Izolacja podłogi', $fs->getBottomIsolationLabel());
     }

@@ -45,18 +45,7 @@ class FloorsService
 
     public function getTotalFloorsNumber()
     {
-        $house = $this->getHouse();
-        $floorsNumber = max(1, $house->getBuildingFloors());
-
-        if (!$this->getInstance()->isApartment() && $house->getBuildingRoof() == 'steep') {
-            ++$floorsNumber;
-        }
-
-        if ($house->hasBasement()) {
-            $floorsNumber++;
-        }
-
-        return $floorsNumber;
+        return count($this->getAllFloors());
     }
 
     public function getHeatedFloorsNumber()
@@ -69,21 +58,74 @@ class FloorsService
         return $this->getHeatedFloorsNumber() < $this->getTotalFloorsNumber();
     }
 
+    public function getAllFloors()
+    {
+        $house = $this->getHouse();
+        $floorsNumber = max(1, $house->getBuildingFloors());
+        $allFloors = [];
+
+        if ($house->hasBasement()) {
+            $allFloors[] = 0;
+        }
+
+        $i = 1;
+        for (; $i <= $floorsNumber; $i++) {
+            $allFloors[] = $i;
+        }
+
+        if (!$this->getInstance()->isApartment() && $house->getBuildingRoof() == 'steep') {
+            $allFloors[] = $i;
+        }
+
+        return $allFloors;
+    }
+
+    public function getFirstFloorIndex()
+    {
+        $allFloors = $this->getAllFloors();
+
+        return reset($allFloors);
+    }
+
+    public function getLastFloorIndex()
+    {
+        $allFloors = $this->getAllFloors();
+
+        return end($allFloors);
+    }
+
+    public function getFirstHeatedFloorIndex()
+    {
+        $heatedFloors = $this->getInstance()->getHouse()->getBuildingHeatedFloors();
+
+        return reset($heatedFloors);
+    }
+
+    public function getLastHeatedFloorIndex()
+    {
+        $heatedFloors = $this->getInstance()->getHouse()->getBuildingHeatedFloors();
+
+        return end($heatedFloors);
+    }
+
     public function getTopLabel()
     {
         if ($this->getInstance()->isApartment()) {
             return 'Strop';
         }
 
-        if (!$this->isAtticHeated() && !$this->isGroundFloorHeated()) {
-            return 'Strop';
+        $lastFloor = $this->getLastFloorIndex();
+        $lastHeatedFloor = $this->getLastHeatedFloorIndex();
+
+        if ($lastHeatedFloor == $lastFloor) {
+            return 'Dach';
         }
 
-        if (!$this->isAtticHeated()) {
+        if ($lastHeatedFloor == $lastFloor - 1) {
             return 'Strop - podłoga poddasza';
         }
 
-        return 'Dach';
+        return 'Strop';
     }
 
     public function getTopIsolationLabel()
@@ -92,15 +134,18 @@ class FloorsService
             return 'Izolacja stropu';
         }
 
-        if (!$this->isAtticHeated() && !$this->isGroundFloorHeated()) {
-            return 'Izolacja stropu';
+        $lastFloor = $this->getLastFloorIndex();
+        $lastHeatedFloor = $this->getLastHeatedFloorIndex();
+
+        if ($lastHeatedFloor == $lastFloor) {
+            return 'Izolacja dachu';
         }
 
-        if (!$this->isAtticHeated()) {
+        if ($lastHeatedFloor == $lastFloor - 1) {
             return 'Izolacja stropu między poddaszem a piętrem niżej';
         }
 
-        return 'Izolacja dachu';
+        return 'Izolacja stropu';
     }
 
     public function getBottomLabel()
@@ -109,19 +154,17 @@ class FloorsService
             return 'Podłoga';
         }
 
-        if ($this->isBasementHeated()) {
+        $firstHeatedFloor = $this->getFirstHeatedFloorIndex();
+
+        if ($firstHeatedFloor == 0) {
             return 'Piwnica';
         }
 
-        if ($this->isGroundFloorHeated()) {
+        if ($firstHeatedFloor == 1) {
             return 'Podłoga parteru';
         }
 
-        if (!$this->isGroundFloorHeated() && !$this->isAtticHeated()) {
-            return 'Podłoga';
-        }
-
-        if (!$this->isGroundFloorHeated()) {
+        if ($firstHeatedFloor == 2) {
             return 'Strop nad parterem';
         }
 
@@ -134,19 +177,17 @@ class FloorsService
             return 'Izolacja podłogi';
         }
 
-        if ($this->isBasementHeated()) {
+        $firstHeatedFloor = $this->getFirstHeatedFloorIndex();
+
+        if ($firstHeatedFloor == 0) {
             return 'Izolacja podłogi piwnicy';
         }
 
-        if ($this->isGroundFloorHeated()) {
+        if ($firstHeatedFloor == 1) {
             return 'Izolacja podłogi parteru';
         }
 
-        if (!$this->isGroundFloorHeated() && !$this->isAtticHeated()) {
-            return 'Izolacja podłogi';
-        }
-
-        if (!$this->isGroundFloorHeated()) {
+        if ($firstHeatedFloor == 2) {
             return 'Izolacja stropu nad parterem';
         }
 

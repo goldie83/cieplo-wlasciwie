@@ -8,7 +8,12 @@
 
 {% block body %}
 <script>
+    window.buildingType = '{{ calc.buildingType }}';
     window.calculationId = {{ calc.id }};
+    window.totalFloors = {{ floors.totalFloorsNumber }};
+    window.roofType = '{{ calc.house.buildingRoof }}';
+    window.hasBasement = {{ calc.house.hasBasement ? 1 : 0 }};
+    window.heatedFloors = JSON.parse('{{ calc.house.buildingHeatedFloors|json_encode|raw }}');
 </script>
 {% set powerNeeded = calculator.necessaryStovePower %}
 {% set sandCoalPowerNeeded = calculator.necessaryStovePower('sand_coal') %}
@@ -18,7 +23,7 @@
         <div class="row">
           <div class="col-md-6">
               <h1>{{ describer.headline|raw }}</h1>
-              {% if app.environment == 'dev' %}<h2>c{{ calc.id }}, h{{ calc.house.id }}</h2>{% endif %}
+              {% if app.environment == 'dev' %}<p>c{{ calc.id }}, h{{ calc.house.id }}</p>{% endif %}
               <p class="lead" style="font-size:18px">A.D. {{ calc.constructionPeriod }}, {{ dimensions.heatedHouseArea|round(0, 'ceil') }}m<sup>2</sup> ogrzewane, {{ city.name }} i&nbsp;okolice</p>
           </div>
           <div class="rank col-md-6">
@@ -29,10 +34,9 @@
 
         <div class="row" id="info">
           <div class="col-md-6">
-            <div class="alert alert-success">
-                {% set resultUrl = url('result', {'slug': app.request.get('slug') }) %}
-                Link do tego wyniku: <strong><a href="{{ resultUrl }}">{{ resultUrl }}</a></strong>
-            </div>
+          {% if calc.buildingType != 'apartment' %}
+            <div id="house_preview"></div>
+          {% endif %}
             <h3>W skrócie o budynku</h3>
             <table class="table table-condensed">
                 <tbody>
@@ -94,6 +98,11 @@
 
           </div>
           <div class="col-md-6">
+            <div class="alert alert-success">
+                {% set resultUrl = url('result', {'slug': app.request.get('slug') }) %}
+                Link do tego wyniku: <strong><a href="{{ resultUrl }}">{{ resultUrl }}</a></strong>
+            </div>
+
             <ul class="nav nav-pills">
               <li class="active"><a href="{{ url('result', {'slug': calc.slug}) }}">Bilans cieplny</a></li>
               <li><a href="{{ url('heaters', {'slug': calc.slug}) }}">Dobór grzejników</a></li>
@@ -360,4 +369,7 @@
   <script src="https://code.angularjs.org/1.3.0-beta.10/i18n/angular-locale_pl.js"></script>
   <script src="{{ asset('bundles/krakenwarm/js/vendor/highcharts.js') }}"></script>
   <script src="{{ asset('bundles/krakenwarm/js/result.js') }}"></script>
+  {% if calc.buildingType != 'apartment' %}
+      <script src="{{ asset('bundles/krakenwarm/js/house_preview.js') }}"></script>
+  {% endif %}
 {% endblock %}

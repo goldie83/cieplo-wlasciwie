@@ -55,7 +55,7 @@ class ComparisonService
         $comment = '';
 
         if (count($resume) > 2) {
-            $comment = sprintf('Średni koszt ogrzewania %d domów z twojej okolicy to %dzł', count($resume), array_sum($resume) / count($resume));
+            $comment = sprintf('Średni koszt ogrzewania %d innych domów z twojej okolicy to ~%dzł', count($resume), 100*round((array_sum($resume) / count($resume))/100));
         }
 
         return $comment;

@@ -31,7 +31,7 @@ class HouseDescriptionServiceTest extends \PHPUnit_Framework_TestCase
 
         $desc = new HouseDescriptionService($instance, $this->mockDimensions(), $this->mockFloors());
 
-        $this->assertEquals('Budynek jednorodzinny trzypiętrowy', $desc->getHeadline());
+        $this->assertEquals('Dom jednorodzinny trzypiętrowy', $desc->getHeadline());
     }
 
     public function testAreaDetails()
@@ -55,7 +55,9 @@ class HouseDescriptionServiceTest extends \PHPUnit_Framework_TestCase
     public function testHeatedFloorsDetails()
     {
         $house = new House();
-        $house->setNumberFloors(3);
+        $house->setBuildingFloors(2);
+        $house->setHasBasement(true);
+        $house->setBuildingHeatedFloors([1, 2]);
         $house->setBuildingLength(10);
         $house->setBuildingWidth(12);
         $house->setBuildingRoof('steep');
@@ -70,18 +72,13 @@ class HouseDescriptionServiceTest extends \PHPUnit_Framework_TestCase
         $instance = new InstanceService($this->mockSession(), $this->mockEM());
         $instance->setCustomCalculation($calc);
 
-        $floors = [
-            ['label' => 'Piwnica', 'heated' => false],
-            ['label' => 'Parter', 'heated' => true],
-            ['label' => 'Piętro', 'heated' => true],
-            ['label' => 'Poddasze', 'heated' => false],
-        ];
-
         $dimensions = Mockery::mock('Kraken\WarmBundle\Service\DimensionsService');
 
         $floors = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
         $floors->shouldReceive('isGroundFloorHeated')->andReturn(true);
         $floors->shouldReceive('getTotalFloorsNumber')->andReturn(3);
+        $floors->shouldReceive('getAllFloors')->andReturn([0, 1, 2, 3]);
+        $floors->shouldReceive('getLastFloorIndex')->andReturn(2);
 
         $desc = new HouseDescriptionService($instance, $dimensions, $floors);
 

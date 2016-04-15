@@ -9,9 +9,9 @@ class HouseDescriptionService
     protected $floors;
 
     protected $houseTypes = [
-        'single_house' => 'Budynek jednorodzinny',
+        'single_house' => 'Dom jednorodzinny',
         'double_house' => 'Bliźniak',
-        'row_house' => 'Zabudowa szeregowa',
+        'row_house' => 'Dom szeregowy',
         'apartment' => 'Mieszkanie',
     ];
 
@@ -301,34 +301,31 @@ class HouseDescriptionService
 
     public function getFloors()
     {
-        $totalFloors = $this->floors->getTotalFloorsNumber();
+        $allFloors = $this->floors->getAllFloors();
         $heatedFloors = $this->instance->get()->getHouse()->getBuildingHeatedFloors();
 
         $floors = [];
-        $i = 0;
 
-        if ($this->instance->get()->getHouse()->hasBasement()) {
-            $floors[] = array(
-                'name' => 'basement',
-                'label' => 'Piwnica',
-                'heated' => $this->floors->isBasementHeated(),
-            );
-        }
-        ++$i;
+        foreach ($allFloors as $floorIndex) {
+            if ($floorIndex == 0) {
+                $name = 'basement';
+                $label = 'Piwnica';
+            } elseif ($floorIndex == 1) {
+                $name = 'ground_floor';
+                $label = 'Parter';
+            } elseif ($floorIndex == $this->floors->getLastFloorIndex() && $this->instance->get()->getHouse()->getBuildingRoof() == 'steep') {
+                $name = 'attic';
+                $label = 'Poddasze';
+            } else {
+                $name = 'regular_floor_'.($floorIndex-1);
+                $label = ($floorIndex-1).'. piętro';
+            }
 
-        $floors[] = array(
-            'name' => 'ground_floor',
-            'label' => 'Parter',
-            'heated' => $this->floors->isGroundFloorHeated(),
-        );
-        ++$i;
-
-        for ($j = $i; $j <= $totalFloors-1; ++$j) {
-            $floors[] = array(
-                'name' => $j == $totalFloors-1 ? 'attic' : 'regular_floor_'.($j - 1),
-                'label' => $j == $totalFloors-1 ? 'Poddasze' : ($j - 1).'. piętro',
-                'heated' => in_array($j, $heatedFloors),
-            );
+            $floors[] = [
+                'name' => $name,
+                'label' => $label,
+                'heated' => in_array($floorIndex, $heatedFloors),
+            ];
         }
 
         return $floors;

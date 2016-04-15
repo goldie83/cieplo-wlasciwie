@@ -29,7 +29,7 @@ class ImportCommand extends ContainerAwareCommand
 
         $batchSize = 20;
         $i = 0;
-        $q = $em->createQuery('select c from KrakenWarmBundle:Calculation c where c.id > 18000');
+        $q = $em->createQuery('select c from KrakenWarmBundle:Calculation c');
         $iterableResult = $q->iterate();
 
         $session = new Session();
@@ -66,22 +66,27 @@ class ImportCommand extends ContainerAwareCommand
                 2011 => 'lata 2011 – 2016',
             ];
 
-            if ($calc->getConstructionYear() <= 1914) {
+            $y = $calc->getConstructionYear();
+            if ($y <= 1914) {
                 $calc->setConstructionYear(1914);
-            } elseif ($calc->getConstructionYear() <= 1939) {
+            } elseif ($y <= 1939) {
                 $calc->setConstructionYear(1939);
-            } elseif ($calc->getConstructionYear() > 2011) {
-                $calc->setConstructionYear(2011);
+            } elseif ($y >= 1940 && $y < 1950) {
+                $calc->setConstructionYear(1940);
+            } elseif ($y >= 1950 && $y < 1960) {
+                $calc->setConstructionYear(1950);
+            } elseif ($y >= 1960 && $y < 1970) {
+                $calc->setConstructionYear(1960);
+            } elseif ($y >= 1970 && $y < 1980) {
+                $calc->setConstructionYear(1970);
+            } elseif ($y >= 1980 && $y < 1990) {
+                $calc->setConstructionYear(1980);
+            } elseif ($y >= 1990 && $y < 2000) {
+                $calc->setConstructionYear(1990);
+            } elseif ($y >= 2000 && $y <= 2010) {
+                $calc->setConstructionYear(2000);
             } else {
-                $i = 0;
-                foreach ($constructionYears as $year => $label) {
-                    if ($calc->getConstructionYear() <= $year) {
-                        $years = array_keys($constructionYears);
-                        $calc->setConstructionYear($years[max(0, $i-1)]);
-                        break;
-                    }
-                    $i++;
-                }
+                $calc->setConstructionYear(2011);
             }
 
             if ($calc->getHouse()->getConstructionType() != 'canadian') {
@@ -116,8 +121,9 @@ class ImportCommand extends ContainerAwareCommand
                     $heatedFloors[] = 0;
                 }
 
+                $floorsAboveGround = $calc->getHouse()->hasBasement() ? $totalFloors-1 : $totalFloors;
                 $currentFloor = 1;
-                while ($currentFloor <= min($calc->getHouse()->getNumberHeatedFloors(), $totalFloors)) {
+                while ($currentFloor <= $floorsAboveGround) {
                     if ($currentFloor == 1 && $whatsUnheated == 'ground_floor') {
                         $currentFloor++;
                         continue;
@@ -137,7 +143,6 @@ class ImportCommand extends ContainerAwareCommand
                 }
             }
 
-// if ($calc->getId() == 160) { print_R($heatedFloors);die; }
             $calc->getHouse()->setBuildingHeatedFloors($heatedFloors);
 
             $calc->getHouse()->setBuildingRoof($calc->getHouse()->getRoofType() == 'flat' ? 'flat' : 'steep');
@@ -226,10 +231,10 @@ class ImportCommand extends ContainerAwareCommand
                     $calc->getId(), base_convert($calc->getId(), 10, 36)
             ));
 
-//             if (($i % $batchSize) === 0) {
+            if (($i % $batchSize) === 0) {
                 $em->flush(); // Executes all updates.
                 $em->clear(); // Detaches all objects from Doctrine!
-//             }
+            }
             ++$i;
         }
         $em->flush();
