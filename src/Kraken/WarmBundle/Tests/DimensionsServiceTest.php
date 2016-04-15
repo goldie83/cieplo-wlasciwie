@@ -183,7 +183,7 @@ class DimensionsServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(81, $d->getFloorArea());
     }
-
+/*
     public function testTotalFloorsNumber()
     {
         $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
@@ -233,10 +233,12 @@ class DimensionsServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(2, $d->getHeatedFloorsNumber());
     }
-
+*/
     public function testTotalHouseArea()
     {
         $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
+        $f->shouldReceive('getTotalFloorsNumber')->andReturn(1);
+
         $instance = $this->makeInstance();
         $d = new DimensionsService($instance, $f);
 
@@ -253,6 +255,8 @@ class DimensionsServiceTest extends \PHPUnit_Framework_TestCase
     public function testTotalHouseAreaWithSteepRoof()
     {
         $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
+        $f->shouldReceive('getTotalFloorsNumber')->andReturn(2);
+
         $instance = $this->makeInstance();
         $d = new DimensionsService($instance, $f);
 
@@ -269,6 +273,8 @@ class DimensionsServiceTest extends \PHPUnit_Framework_TestCase
     public function testHeatedHouseArea()
     {
         $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
+        $f->shouldReceive('getHeatedFloorsNumber')->andReturn(1);
+
         $instance = $this->makeInstance();
         $d = new DimensionsService($instance, $f);
 
@@ -287,6 +293,8 @@ class DimensionsServiceTest extends \PHPUnit_Framework_TestCase
         $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
         $f->shouldReceive('isAtticHeated')->andReturn(true);
         $f->shouldReceive('isGroundFloorHeated')->andReturn(true);
+        $f->shouldReceive('getHeatedFloorsNumber')->andReturn(2);
+
         $instance = $this->makeInstance();
         $d = new DimensionsService($instance, $f);
 

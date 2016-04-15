@@ -35,16 +35,38 @@ class FloorsService
     {
         $atticFloor = $this->getHouse()->getBuildingFloors();
 
-        if ($this->getHouse()->getBuildingRoof() == 'steep') {
+        // attic under steep roof is not a regular floor actually
+        if (!$this->getInstance()->isApartment() && $this->getHouse()->getBuildingRoof() == 'steep') {
             $atticFloor++;
         }
 
         return in_array($atticFloor, $this->getHouse()->getBuildingHeatedFloors());
     }
 
+    public function getTotalFloorsNumber()
+    {
+        $house = $this->getHouse();
+        $floorsNumber = max(1, $house->getBuildingFloors());
+
+        if (!$this->getInstance()->isApartment() && $house->getBuildingRoof() == 'steep') {
+            ++$floorsNumber;
+        }
+
+        if ($house->hasBasement()) {
+            $floorsNumber++;
+        }
+
+        return $floorsNumber;
+    }
+
+    public function getHeatedFloorsNumber()
+    {
+        return count($this->getInstance()->getHouse()->getBuildingHeatedFloors());
+    }
+
     public function hasUnheatedFloors()
     {
-        return count($this->getHouse()->getBuildingHeatedFloors()) <= $this->getHouse()->getBuildingFloors();
+        return $this->getHeatedFloorsNumber() < $this->getTotalFloorsNumber();
     }
 
     public function getTopLabel()

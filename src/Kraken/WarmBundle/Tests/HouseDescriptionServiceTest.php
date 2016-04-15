@@ -58,6 +58,7 @@ class HouseDescriptionServiceTest extends \PHPUnit_Framework_TestCase
         $house->setNumberFloors(3);
         $house->setBuildingLength(10);
         $house->setBuildingWidth(12);
+        $house->setBuildingRoof('steep');
 
         $calc = new Calculation();
         $calc->setBuildingType('single_house');
@@ -77,14 +78,14 @@ class HouseDescriptionServiceTest extends \PHPUnit_Framework_TestCase
         ];
 
         $dimensions = Mockery::mock('Kraken\WarmBundle\Service\DimensionsService');
-        $dimensions->shouldReceive('getTotalFloorsNumber')->andReturn(3);
 
         $floors = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
         $floors->shouldReceive('isGroundFloorHeated')->andReturn(true);
+        $floors->shouldReceive('getTotalFloorsNumber')->andReturn(3);
 
         $desc = new HouseDescriptionService($instance, $dimensions, $floors);
 
-        $this->assertEquals('parter, 1. piętro', $desc->getHeatedFloorsDetails());
+        $this->assertEquals('parter, poddasze', $desc->getHeatedFloorsDetails());
     }
 
     public function testWallDetails()
@@ -157,7 +158,7 @@ class HouseDescriptionServiceTest extends \PHPUnit_Framework_TestCase
 
         $desc = new HouseDescriptionService($instance, $this->mockDimensions(), $this->mockFloors());
 
-        $this->assertEquals('bez izolacji', $desc->getGroundDetails());
+        $this->assertEquals('Podłoga, bez izolacji', $desc->getGroundDetails());
 
         #2
         $m1 = new Material();
@@ -166,7 +167,7 @@ class HouseDescriptionServiceTest extends \PHPUnit_Framework_TestCase
         $l1->setMaterial($m1);
         $l1->setSize(15);
         $house->setBottomIsolationLayer($l1);
-        $this->assertEquals('styropian 15cm', $desc->getGroundDetails());
+        $this->assertEquals('Podłoga, styropian 15cm', $desc->getGroundDetails());
 
         #3
         $building = Mockery::mock('Kraken\WarmBundle\Service\Building');
@@ -176,7 +177,7 @@ class HouseDescriptionServiceTest extends \PHPUnit_Framework_TestCase
         $desc = new HouseDescriptionService($instance, $this->mockDimensions(), $this->mockFloors());
 
         $house->setBottomIsolationLayer($l1);
-        $this->assertEquals('styropian 15cm', $desc->getGroundDetails());
+        $this->assertEquals('Podłoga, styropian 15cm', $desc->getGroundDetails());
 
         #4
         $building = Mockery::mock('Kraken\WarmBundle\Service\Building');
@@ -186,7 +187,7 @@ class HouseDescriptionServiceTest extends \PHPUnit_Framework_TestCase
         $desc = new HouseDescriptionService($instance, $this->mockDimensions(), $this->mockFloors());
 
         $house->setBottomIsolationLayer($l1);
-        $this->assertEquals('styropian 15cm', $desc->getGroundDetails());
+        $this->assertEquals('Podłoga, styropian 15cm', $desc->getGroundDetails());
     }
 
     protected function mockSession()
@@ -213,6 +214,7 @@ class HouseDescriptionServiceTest extends \PHPUnit_Framework_TestCase
     protected function mockFloors()
     {
         $mock = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
+        $mock->shouldReceive('getBottomLabel')->andReturn('Podłoga');
 
         return $mock;
     }

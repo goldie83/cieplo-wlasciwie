@@ -18,6 +18,7 @@
         <div class="row">
           <div class="col-md-6">
               <h1>{{ describer.headline|raw }}</h1>
+              {% if app.environment == 'dev' %}<h2>c{{ calc.id }}, h{{ calc.house.id }}</h2>{% endif %}
               <p class="lead" style="font-size:18px">A.D. {{ calc.constructionPeriod }}, {{ dimensions.heatedHouseArea|round(0, 'ceil') }}m<sup>2</sup> ogrzewane, {{ city.name }} i&nbsp;okolice</p>
           </div>
           <div class="rank col-md-6">
@@ -66,8 +67,8 @@
                         {% endif %}
                             <tr><td class="col-md-4">Dach</td><td class="col-md-8">{{ describer.roofType }}</td></tr>
                             <tr><td class="col-md-4">Ściany</td><td class="col-md-8">{{ describer.wallDetails}}</td></tr>
-                            <tr><td class="col-md-4">Izolacja od góry</td><td class="col-md-8">{{ describer.roofDetails}}</td></tr>
-                            <tr><td class="col-md-4">Izolacja od dołu</td><td class="col-md-8">{{ describer.groundDetails}}</td></tr>
+                            <tr><td class="col-md-4">Izolacja od góry</td><td class="col-md-8">{{ describer.roofDetails }}</td></tr>
+                            <tr><td class="col-md-4">Izolacja od dołu</td><td class="col-md-8">{{ describer.groundDetails }}</td></tr>
                             <tr><td class="col-md-4">Drzwi i okna</td><td class="col-md-8">{{ describer.doorsWindowsDetails|raw }}</td></tr>
                             <tr><td class="col-md-4">Wentylacja</td><td class="col-md-8">{{ describer.ventilationDetails}}</td></tr>
                             <tr><td class="col-md-4">Temperatura w części ogrzewanej</td><td class="col-md-8">{{ calc.indoorTemperature|number_format(1, ',', ' ') }}&deg;C</td></tr>

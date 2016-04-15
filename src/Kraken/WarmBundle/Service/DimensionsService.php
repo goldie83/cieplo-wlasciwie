@@ -151,27 +151,10 @@ class DimensionsService
         }
     }
 
-    public function getTotalFloorsNumber()
-    {
-        $house = $this->getInstance()->getHouse();
-        $floorsNumber = max(1, $house->getBuildingFloors());
-
-        if (!$this->getInstance()->isApartment() && $house->getBuildingRoof() == 'steep') {
-            ++$floorsNumber;
-        }
-
-        return $floorsNumber;
-    }
-
-    public function getHeatedFloorsNumber()
-    {
-        return count($this->getInstance()->getHouse()->getBuildingHeatedFloors());
-    }
-
     public function getTotalHouseArea()
     {
         $house = $this->getInstance()->getHouse();
-        $area = $this->getFloorArea() * $this->getTotalFloorsNumber();
+        $area = $this->getFloorArea() * $this->floors->getTotalFloorsNumber();
 
         if (!$this->getInstance()->isApartment() && $house->getBuildingRoof() == 'steep') {
             $area -= 0.3 * $this->getFloorArea();
@@ -188,7 +171,7 @@ class DimensionsService
     public function getHeatedHouseArea()
     {
         $house = $this->getInstance()->getHouse();
-        $area = $this->getFloorArea() * $this->getHeatedFloorsNumber();
+        $area = $this->getFloorArea() * $this->floors->getHeatedFloorsNumber();
 
         if (!$this->getInstance()->isApartment() && $house->getBuildingRoof() == 'steep' && $this->floors->isAtticHeated()) {
             $area -= 0.3 * $this->getFloorArea();

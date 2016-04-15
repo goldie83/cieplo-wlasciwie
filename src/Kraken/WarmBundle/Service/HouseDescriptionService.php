@@ -243,13 +243,15 @@ class HouseDescriptionService
     {
         $house = $this->instance->get()->getHouse();
 
+        $groundInformation = [$this->floors->getBottomLabel()];
+
         if (($isolation = $house->getBottomIsolationLayer()) != null) {
-            $roofInformation[] = sprintf('%s %scm', $isolation->getMaterial()->getName(), $isolation->getSize());
+            $groundInformation[] = sprintf('%s %scm', $isolation->getMaterial()->getName(), $isolation->getSize());
         } else {
-            $roofInformation[] = 'bez izolacji';
+            $groundInformation[] = 'bez izolacji';
         }
 
-        return implode(', ', $roofInformation);
+        return implode(', ', $groundInformation);
     }
 
     public function getDoorsWindowsDetails()
@@ -299,7 +301,7 @@ class HouseDescriptionService
 
     public function getFloors()
     {
-        $totalFloors = $this->dimensions->getTotalFloorsNumber();
+        $totalFloors = $this->floors->getTotalFloorsNumber();
         $heatedFloors = $this->instance->get()->getHouse()->getBuildingHeatedFloors();
 
         $floors = [];
@@ -311,8 +313,8 @@ class HouseDescriptionService
                 'label' => 'Piwnica',
                 'heated' => $this->floors->isBasementHeated(),
             );
-            ++$i;
         }
+        ++$i;
 
         $floors[] = array(
             'name' => 'ground_floor',
@@ -321,10 +323,10 @@ class HouseDescriptionService
         );
         ++$i;
 
-        for ($j = 2; $j <= $totalFloors; ++$j) {
+        for ($j = $i; $j <= $totalFloors-1; ++$j) {
             $floors[] = array(
-                'name' => $j == $totalFloors ? 'attic' : 'regular_floor_'.($j - 1),
-                'label' => $j == $totalFloors ? 'Poddasze' : ($j - 1).'. piętro',
+                'name' => $j == $totalFloors-1 ? 'attic' : 'regular_floor_'.($j - 1),
+                'label' => $j == $totalFloors-1 ? 'Poddasze' : ($j - 1).'. piętro',
                 'heated' => in_array($j, $heatedFloors),
             );
         }
