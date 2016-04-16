@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b973e23a09d85e03839de214b6418952",
-    "content-hash": "50b6b2d7d1e8497aeeb50c30e707aa77",
+    "hash": "b8ff01a3e7ac9ab62ba92a0bf98104f9",
+    "content-hash": "185193a545dcc4c0a1684b74083506f1",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -769,12 +769,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineMigrationsBundle.git",
-                "reference": "c0a2f5d069e56e2ac7a42719dfda63fd996a39ed"
+                "reference": "b21d0af23d4511701cd34d56b96442bc814ed072"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineMigrationsBundle/zipball/c0a2f5d069e56e2ac7a42719dfda63fd996a39ed",
-                "reference": "c0a2f5d069e56e2ac7a42719dfda63fd996a39ed",
+                "url": "https://api.github.com/repos/doctrine/DoctrineMigrationsBundle/zipball/b21d0af23d4511701cd34d56b96442bc814ed072",
+                "reference": "b21d0af23d4511701cd34d56b96442bc814ed072",
                 "shasum": ""
             },
             "require": {
@@ -822,7 +822,7 @@
                 "migrations",
                 "schema"
             ],
-            "time": "2016-03-09 15:29:46"
+            "time": "2016-04-11 14:46:13"
         },
         {
             "name": "doctrine/inflector",
@@ -1264,12 +1264,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSJsRoutingBundle.git",
-                "reference": "25d0117093a845dee96d1dc439656cbf3714ea09"
+                "reference": "9be3747c10dd4ffafc86c5c0ade035c7fe1efce4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSJsRoutingBundle/zipball/25d0117093a845dee96d1dc439656cbf3714ea09",
-                "reference": "25d0117093a845dee96d1dc439656cbf3714ea09",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSJsRoutingBundle/zipball/9be3747c10dd4ffafc86c5c0ade035c7fe1efce4",
+                "reference": "9be3747c10dd4ffafc86c5c0ade035c7fe1efce4",
                 "shasum": ""
             },
             "require": {
@@ -1315,7 +1315,7 @@
                 "javascript",
                 "routing"
             ],
-            "time": "2016-02-06 17:33:24"
+            "time": "2016-04-13 09:40:48"
         },
         {
             "name": "friendsofsymfony/rest-bundle",
@@ -1548,6 +1548,50 @@
                 "uploadable"
             ],
             "time": "2016-02-18 15:33:43"
+        },
+        {
+            "name": "hannesvdvreken/pip",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/hannesvdvreken/pip.git",
+                "reference": "ece30681a45518d6ac0433bf8845f04f748ecb39"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/hannesvdvreken/pip/zipball/ece30681a45518d6ac0433bf8845f04f748ecb39",
+                "reference": "ece30681a45518d6ac0433bf8845f04f748ecb39",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Geometry": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Hannes Van De Vreken",
+                    "email": "vandevreken.hannes@gmail.com"
+                }
+            ],
+            "description": "The Polygon class",
+            "keywords": [
+                "Point-in-polygon",
+                "Polygon",
+                "geo",
+                "geojson",
+                "geometry",
+                "pip"
+            ],
+            "time": "2015-02-06 21:29:33"
         },
         {
             "name": "imagine/imagine",
@@ -2654,16 +2698,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "1.18.2",
+            "version": "1.19.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "064b38c16790249488e7a8b987acf1c9d7383c09"
+                "reference": "5f56ed5212dc509c8dc8caeba2715732abb32dbf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/064b38c16790249488e7a8b987acf1c9d7383c09",
-                "reference": "064b38c16790249488e7a8b987acf1c9d7383c09",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/5f56ed5212dc509c8dc8caeba2715732abb32dbf",
+                "reference": "5f56ed5212dc509c8dc8caeba2715732abb32dbf",
                 "shasum": ""
             },
             "require": {
@@ -2728,7 +2772,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2016-04-02 13:12:58"
+            "time": "2016-04-12 18:29:35"
         },
         {
             "name": "mopa/bootstrap-bundle",
@@ -3521,12 +3565,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataAdminBundle.git",
-                "reference": "2d74c3cc2e24440be884f8fe62ac192a771341c8"
+                "reference": "c17bf26914dcc7de05d98c3e15859e164e1f708c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/2d74c3cc2e24440be884f8fe62ac192a771341c8",
-                "reference": "2d74c3cc2e24440be884f8fe62ac192a771341c8",
+                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/c17bf26914dcc7de05d98c3e15859e164e1f708c",
+                "reference": "c17bf26914dcc7de05d98c3e15859e164e1f708c",
                 "shasum": ""
             },
             "require": {
@@ -3604,7 +3648,7 @@
                 "bootstrap",
                 "sonata"
             ],
-            "time": "2016-04-10 17:27:46"
+            "time": "2016-04-15 13:32:13"
         },
         {
             "name": "sonata-project/block-bundle",
@@ -3742,12 +3786,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataClassificationBundle.git",
-                "reference": "37fd5134aae9b633e542e11e4b0b5796c8344a85"
+                "reference": "0ce9e7be63a3c2ff827fc4a34254ebd23070c3ef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataClassificationBundle/zipball/37fd5134aae9b633e542e11e4b0b5796c8344a85",
-                "reference": "37fd5134aae9b633e542e11e4b0b5796c8344a85",
+                "url": "https://api.github.com/repos/sonata-project/SonataClassificationBundle/zipball/0ce9e7be63a3c2ff827fc4a34254ebd23070c3ef",
+                "reference": "0ce9e7be63a3c2ff827fc4a34254ebd23070c3ef",
                 "shasum": ""
             },
             "require": {
@@ -3802,7 +3846,7 @@
                 "tag",
                 "taxonomy"
             ],
-            "time": "2016-04-08 16:21:41"
+            "time": "2016-04-12 12:26:00"
         },
         {
             "name": "sonata-project/core-bundle",
@@ -4309,12 +4353,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataMediaBundle.git",
-                "reference": "efdf77321924df153828fc340ff327aa9a53aa79"
+                "reference": "b676113a4e464aefa4a7760b8561881f074b1194"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataMediaBundle/zipball/efdf77321924df153828fc340ff327aa9a53aa79",
-                "reference": "efdf77321924df153828fc340ff327aa9a53aa79",
+                "url": "https://api.github.com/repos/sonata-project/SonataMediaBundle/zipball/b676113a4e464aefa4a7760b8561881f074b1194",
+                "reference": "b676113a4e464aefa4a7760b8561881f074b1194",
                 "shasum": ""
             },
             "require": {
@@ -4394,7 +4438,7 @@
                 "vimeo",
                 "youtube"
             ],
-            "time": "2016-04-08 16:20:39"
+            "time": "2016-04-13 17:59:46"
         },
         {
             "name": "sonata-project/notification-bundle",
@@ -4590,20 +4634,20 @@
         },
         {
             "name": "symfony/monolog-bundle",
-            "version": "v2.10.0",
+            "version": "2.11.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/monolog-bundle.git",
-                "reference": "82fd8f36e2cccbe94faf237403c48052d4d4b77e"
+                "reference": "e7caf4936c7be82bc6d68df87f1d23a0d5bf6e00"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/monolog-bundle/zipball/82fd8f36e2cccbe94faf237403c48052d4d4b77e",
-                "reference": "82fd8f36e2cccbe94faf237403c48052d4d4b77e",
+                "url": "https://api.github.com/repos/symfony/monolog-bundle/zipball/e7caf4936c7be82bc6d68df87f1d23a0d5bf6e00",
+                "reference": "e7caf4936c7be82bc6d68df87f1d23a0d5bf6e00",
                 "shasum": ""
             },
             "require": {
-                "monolog/monolog": "~1.12",
+                "monolog/monolog": "~1.18",
                 "php": ">=5.3.2",
                 "symfony/config": "~2.3|~3.0",
                 "symfony/dependency-injection": "~2.3|~3.0",
@@ -4618,7 +4662,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.9.x-dev"
+                    "dev-master": "2.x-dev"
                 }
             },
             "autoload": {
@@ -4646,7 +4690,7 @@
                 "log",
                 "logging"
             ],
-            "time": "2016-03-13 15:55:56"
+            "time": "2016-04-13 16:21:01"
         },
         {
             "name": "symfony/polyfill-apcu",
@@ -6482,12 +6526,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/padraic/mockery.git",
-                "reference": "50c55201c8b649aa65f96748964ff72f3e7fdcf0"
+                "reference": "60dcf1a0fe131a5c14350af07f7bc4ace02efbef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/padraic/mockery/zipball/50c55201c8b649aa65f96748964ff72f3e7fdcf0",
-                "reference": "50c55201c8b649aa65f96748964ff72f3e7fdcf0",
+                "url": "https://api.github.com/repos/padraic/mockery/zipball/60dcf1a0fe131a5c14350af07f7bc4ace02efbef",
+                "reference": "60dcf1a0fe131a5c14350af07f7bc4ace02efbef",
                 "shasum": ""
             },
             "require": {
@@ -6539,7 +6583,7 @@
                 "test double",
                 "testing"
             ],
-            "time": "2016-04-08 08:59:10"
+            "time": "2016-04-15 13:15:13"
         },
         {
             "name": "vipsoft/doctrine-data-fixtures-extension",
@@ -6623,6 +6667,7 @@
         "nelmio/api-doc-bundle": 20,
         "friendsofsymfony/rest-bundle": 20,
         "liip/imagine-bundle": 20,
+        "hannesvdvreken/pip": 20,
         "behat/behat": 20,
         "mockery/mockery": 20
     },

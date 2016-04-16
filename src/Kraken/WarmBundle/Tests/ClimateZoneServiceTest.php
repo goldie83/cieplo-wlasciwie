@@ -25,27 +25,28 @@ class ClimateZoneServiceTest extends \PHPUnit_Framework_TestCase
 
         $c = new ClimateZoneService($instance);
 
+        // Wroclaw
         $this->assertEquals(2, $c->getClimateZone());
 
-        // Wroclaw
+        // Szczecin
         $calc->setLatitude(53.44);
         $calc->setLongitude(14.41);
         $this->assertEquals(1, $c->getClimateZone());
 
-        // Szczecin
-        $calc->setLatitude(54.41);
-        $calc->setLongitude(16.42);
+        // Koszalin
+        $calc->setLatitude(54.1945);
+        $calc->setLongitude(16.17);
         $this->assertEquals(1, $c->getClimateZone());
 
         // Elbląg
         $calc->setLatitude(54.15);
         $calc->setLongitude(19.40);
-        $this->assertEquals(1, $c->getClimateZone());
+        $this->assertEquals(2, $c->getClimateZone());
 
         // Brodnica
         $calc->setLatitude(53.25);
         $calc->setLongitude(19.38);
-        $this->assertEquals(1, $c->getClimateZone());
+        $this->assertEquals(3, $c->getClimateZone());
 
         // Augustów
         $calc->setLatitude(53.84);
@@ -76,6 +77,26 @@ class ClimateZoneServiceTest extends \PHPUnit_Framework_TestCase
         $calc->setLatitude(49.29);
         $calc->setLongitude(19.95);
         $this->assertEquals(5, $c->getClimateZone());
+
+        // Sejny
+        $calc->setLatitude(54.107723);
+        $calc->setLongitude(23.340454);
+        $this->assertEquals(5, $c->getClimateZone());
+
+        // Krynica
+        $calc->setLatitude(49.414547);
+        $calc->setLongitude(20.961914);
+        $this->assertEquals(4, $c->getClimateZone());
+
+        // Karpacz
+        $calc->setLatitude(50.771208);
+        $calc->setLongitude(15.754395);
+        $this->assertEquals(3, $c->getClimateZone());
+
+        // Zgorzelec
+        $calc->setLatitude(51.14);
+        $calc->setLongitude(15.00);
+        $this->assertEquals(3, $c->getClimateZone());
     }
 
     protected function mockHeating()
