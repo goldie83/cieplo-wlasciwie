@@ -74,6 +74,7 @@
                             <tr><td class="col-md-4">Izolacja od góry</td><td class="col-md-8">{{ describer.roofDetails }}</td></tr>
                             <tr><td class="col-md-4">Izolacja od dołu</td><td class="col-md-8">{{ describer.groundDetails }}</td></tr>
                             <tr><td class="col-md-4">Drzwi i okna</td><td class="col-md-8">{{ describer.doorsWindowsDetails|raw }}</td></tr>
+                            <tr><td class="col-md-4">Garaż</td><td class="col-md-8">{{ calc.house.hasGarage ? 'jest' : 'brak' }}</td></tr>
                             <tr><td class="col-md-4">Wentylacja</td><td class="col-md-8">{{ describer.ventilationDetails}}</td></tr>
                             <tr><td class="col-md-4">Temperatura w części ogrzewanej</td><td class="col-md-8">{{ calc.indoorTemperature|number_format(1, ',', ' ') }}&deg;C</td></tr>
                         </tbody>

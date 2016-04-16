@@ -23,24 +23,27 @@
 
         //parameters
         var buildingType = window.buildingType;
-        var totalFloors = window.hasBasement && window.roofType == 'steep' ? window.totalFloors-1 : window.totalFloors;
+        var totalFloors = window.totalFloors;
         var roofType = window.roofType;
         var hasBasement = window.hasBasement;
         var heatedFloors = window.heatedFloors;
+        var floorsAboveGround = hasBasement ? totalFloors-1 : totalFloors;
         var center = paperWidth/2;
 
         console.log("Total floors: " + totalFloors);
+        console.log("Floors above ground: " + floorsAboveGround);
 
         paper.rect(0, 0, paperWidth, skyHeight, 0).attr({fill: "#5ECAF1", stroke: "none"});
         paper.rect(0, skyHeight, paperWidth, groundHeight, 0).attr({fill: "#BE5052", stroke: "none"});
 
         var verticalMargin = totalFloors > 3 ? 0.05*skyHeight : 0.2*skyHeight;
-        var floorHeight = (skyHeight-verticalMargin)/totalFloors;
+        var floorHeight = (skyHeight-verticalMargin)/floorsAboveGround;
         var floorWidth = 2*(center-(center-horizontalSpace*0.33));
 
         //roof
         if (roofType == 'steep') {
-            isFloorHeated = heatedFloors.indexOf(totalFloors) != -1;
+            var atticIndex = hasBasement ? totalFloors-1 : totalFloors;
+            isFloorHeated = heatedFloors.indexOf(atticIndex) != -1;
             heatedText = isFloorHeated ? "ogrzewane" : "nieogrzewane";
             floorFill = isFloorHeated ? heatedColor : notHeatedColor;
 
@@ -87,8 +90,8 @@
         ];
 
         //floors
-        for (floorIndex = roofType == 'flat' ? 0 : 1; floorIndex < totalFloors; floorIndex++) {
-            reversedFloorIndex = totalFloors - floorIndex;
+        for (floorIndex = roofType == 'flat' ? 0 : 1; floorIndex < floorsAboveGround; floorIndex++) {
+            reversedFloorIndex = floorsAboveGround - floorIndex;
             isFloorHeated = heatedFloors.indexOf(reversedFloorIndex) != -1;
             floorName = floors[reversedFloorIndex];
 

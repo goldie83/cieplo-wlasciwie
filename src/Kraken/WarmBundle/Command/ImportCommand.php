@@ -107,6 +107,8 @@ class ImportCommand extends ContainerAwareCommand
                 $totalFloors--;
             }
 
+            $totalFloors = max(1, $totalFloors);
+
             $calc->getHouse()->setBuildingFloors($totalFloors);
 
 
@@ -117,11 +119,12 @@ class ImportCommand extends ContainerAwareCommand
                 $heatedFloors[] = 1;
                 $calc->getHouse()->setHasBasement(false);
             } else {
-                if ($calc->getHouse()->hasBasement() && $whatsUnheated != 'basement' && $whatsUnheated != '') {
+                if ($calc->getHouse()->hasBasement() && ($whatsUnheated != 'basement' || $heatedFloorsNumber == $floorsNumber)) {
                     $heatedFloors[] = 0;
                 }
 
-                $floorsAboveGround = $calc->getHouse()->hasBasement() ? $totalFloors-1 : $totalFloors;
+                $floorsAboveGround = /*$calc->getHouse()->hasBasement() ? $totalFloors-1 : */$totalFloors;
+
                 $currentFloor = 1;
                 while ($currentFloor <= $floorsAboveGround) {
                     if ($currentFloor == 1 && $whatsUnheated == 'ground_floor') {
@@ -138,9 +141,17 @@ class ImportCommand extends ContainerAwareCommand
                     $currentFloor++;
                 }
 
-                if (!$calc->isApartment() && in_array($calc->getHouse()->getRoofType(), ['oblique', 'steep']) && $whatsUnheated != 'attic' && $calc->getHouse()->getNumberHeatedFloors() > count($heatedFloors)) {
+                if (!$calc->isApartment() && in_array($calc->getHouse()->getRoofType(), ['oblique', 'steep']) && ($whatsUnheated != 'attic' || $floorsNumber == $heatedFloorsNumber) && $calc->getHouse()->getNumberHeatedFloors() > count($heatedFloors)) {
                     $heatedFloors[] = $currentFloor;
                 }
+            }
+
+            if ($heatedFloors == [0]) {
+                $heatedFloors = [1];
+            }
+
+            while (count($heatedFloors) > $calc->getHouse()->getNumberHeatedFloors()) {
+                unset($heatedFloors[count($heatedFloors)-1]);
             }
 
             $calc->getHouse()->setBuildingHeatedFloors($heatedFloors);
