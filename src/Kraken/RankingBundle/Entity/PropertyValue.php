@@ -131,30 +131,6 @@ class PropertyValue
     }
 
     /**
-     * Add boilerProperties.
-     *
-     * @param \Kraken\RankingBundle\Entity\BoilerProperty $boilerProperties
-     *
-     * @return PropertyValue
-     */
-    public function addBoilerProperty(\Kraken\RankingBundle\Entity\BoilerProperty $boilerProperties)
-    {
-        $this->boilerProperties[] = $boilerProperties;
-
-        return $this;
-    }
-
-    /**
-     * Remove boilerProperties.
-     *
-     * @param \Kraken\RankingBundle\Entity\BoilerProperty $boilerProperties
-     */
-    public function removeBoilerProperty(\Kraken\RankingBundle\Entity\BoilerProperty $boilerProperties)
-    {
-        $this->boilerProperties->removeElement($boilerProperties);
-    }
-
-    /**
      * Get boilerProperties.
      *
      * @return \Doctrine\Common\Collections\Collection
