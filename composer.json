@@ -43,6 +43,7 @@
         "beyerz/open-graph-protocol-bundle": "^1.0",
         "sonata-project/classification-bundle": "*",
         "incenteev/composer-parameter-handler": "^2.0",
+        "doctrine/doctrine-fixtures-bundle": "2.2.*",
         "hannesvdvreken/pip": "dev-master"
     },
     "require-dev": {
@@ -53,7 +54,6 @@
         "behat/mink-extension": "*",
         "behat/mink-browserkit-driver": "*",
         "mockery/mockery": "dev-master",
-        "doctrine/doctrine-fixtures-bundle": "2.2.*",
         "vipsoft/doctrine-data-fixtures-extension": "*"
     },
     "scripts": {
