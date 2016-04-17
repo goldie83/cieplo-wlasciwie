@@ -975,7 +975,7 @@ class House
      */
     public function setBuildingHeatedFloors($buildingHeatedFloors)
     {
-        $this->building_heated_floors = $buildingHeatedFloors;
+        $this->building_heated_floors = (array) $buildingHeatedFloors;
 
         return $this;
     }
@@ -987,7 +987,8 @@ class House
      */
     public function getBuildingHeatedFloors()
     {
-        return $this->building_heated_floors;
+        // sometimes it's stored in db as associative array while we need plain array
+        return array_values($this->building_heated_floors);
     }
 
     /**
@@ -1235,9 +1236,9 @@ class House
         return $this->is_row_house_on_corner;
     }
 
-    public function setRowHouseOnCorner($onCorner)
+    public function setIsRowHouseOnCorner($onCorner)
     {
-        $this->setRowHouseOnCorner($onCorner);
+        $this->is_row_house_on_corner = $onCorner;
 
         return $this;
     }

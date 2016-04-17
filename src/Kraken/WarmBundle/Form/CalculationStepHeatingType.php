@@ -32,7 +32,7 @@ class CalculationStepHeatingType extends AbstractType
                 'help_block' => 'Pomiń to pole jeśli nie znasz mocy urządzenia',
             ))
             ->add('fuel_consumptions', 'collection', [
-                'label' => 'Dotychczasowe zużycie paliw na ogrzewanie',
+                'label' => ' ',
                 'required' => false,
                 'type' => new FuelConsumptionType(),
                 'allow_add' => true,

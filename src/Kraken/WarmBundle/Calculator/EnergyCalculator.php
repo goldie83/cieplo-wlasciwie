@@ -60,7 +60,13 @@ class EnergyCalculator
 
     public function getNecessaryHeatingPower()
     {
-        return 1.1 * ($this->getMaxHeatingPower() / 1000);
+        $power = 1.1 * ($this->getMaxHeatingPower() / 1000);
+
+        if ($this->hotWater->isIncluded()) {
+            $power += $this->hotWater->getPower();
+        }
+
+        return $power;
     }
 
     public function getNecessaryStovePower($fuel = 'coal')
@@ -69,10 +75,6 @@ class EnergyCalculator
 
         if ($fuel == 'sand_coal') {
             $power *= 2;
-        }
-
-        if ($this->hotWater->isIncluded()) {
-            $power += $this->hotWater->getPower();
         }
 
         return $power;

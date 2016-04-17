@@ -90,6 +90,24 @@ class DimensionsServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(270.8, $d->getTotalWallArea());
     }
 
+    public function testTotalWallAreaIrregularShape()
+    {
+        $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
+        $f->shouldReceive('isGroundFloorHeated')->andReturn(true);
+        $f->shouldReceive('isBasementHeated')->andReturn(false);
+
+        $instance = $this->makeInstance();
+
+        $instance->get()->getHouse()->setBuildingShape('irregular');
+        $instance->get()->getHouse()->setBuildingContourFreeArea(10);
+        $instance->get()->getHouse()->setBuildingLength(15);
+        $instance->get()->getHouse()->setBuildingWidth(10);
+
+        $d = new DimensionsService($instance, $f);
+
+        $this->assertEquals(330.4, $d->getTotalWallArea());
+    }
+
     public function testNumberOfHeatedFloors()
     {
         $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
@@ -139,8 +157,8 @@ class DimensionsServiceTest extends \PHPUnit_Framework_TestCase
         $instance->get()->getHouse()->setBuildingLength(15);
         $instance->get()->getHouse()->setBuildingWidth(8);
 
-        $this->assertEquals(18, $d->getExternalBuildingLength());
-        $this->assertEquals(11, $d->getExternalBuildingWidth());
+        $this->assertEquals(15, $d->getExternalBuildingLength());
+        $this->assertEquals(8, $d->getExternalBuildingWidth());
     }
 
     public function testInternalBuildingLength()
@@ -155,8 +173,8 @@ class DimensionsServiceTest extends \PHPUnit_Framework_TestCase
         $instance->get()->getHouse()->setBuildingLength(15);
         $instance->get()->getHouse()->setBuildingWidth(8);
 
-        $this->assertEquals(17, $d->getInternalBuildingLength());
-        $this->assertEquals(10, $d->getInternalBuildingWidth());
+        $this->assertEquals(14, $d->getInternalBuildingLength());
+        $this->assertEquals(7, $d->getInternalBuildingWidth());
     }
 
     public function testFloorArea()
@@ -183,57 +201,7 @@ class DimensionsServiceTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(81, $d->getFloorArea());
     }
-/*
-    public function testTotalFloorsNumber()
-    {
-        $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
-        $instance = $this->makeInstance();
-        $d = new DimensionsService($instance, $f);
 
-        $instance->get()->getHouse()->setBuildingFloors(1);
-        $instance->get()->getHouse()->setBuildingRoof('flat');
-
-        $this->assertEquals(1, $d->getTotalFloorsNumber());
-    }
-
-    public function testTotalFloorsNumberWithSteepRoof()
-    {
-        $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
-        $instance = $this->makeInstance();
-        $d = new DimensionsService($instance, $f);
-
-        $instance->get()->getHouse()->setBuildingFloors(1);
-        $instance->get()->getHouse()->setBuildingRoof('steep');
-
-        $this->assertEquals(2, $d->getTotalFloorsNumber());
-    }
-
-    public function testHeatedFloorsNumber()
-    {
-        $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
-        $instance = $this->makeInstance();
-        $d = new DimensionsService($instance, $f);
-
-        $instance->get()->getHouse()->setBuildingFloors(1);
-        $instance->get()->getHouse()->setBuildingHeatedFloors([1]);
-        $instance->get()->getHouse()->setBuildingRoof('flat');
-
-        $this->assertEquals(1, $d->getHeatedFloorsNumber());
-    }
-
-    public function testHeatedFloorsNumberWithSteepRoof()
-    {
-        $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');
-        $instance = $this->makeInstance();
-        $d = new DimensionsService($instance, $f);
-
-        $instance->get()->getHouse()->setBuildingFloors(1);
-        $instance->get()->getHouse()->setBuildingHeatedFloors([1, 2]);
-        $instance->get()->getHouse()->setBuildingRoof('steep');
-
-        $this->assertEquals(2, $d->getHeatedFloorsNumber());
-    }
-*/
     public function testTotalHouseArea()
     {
         $f = Mockery::mock('Kraken\WarmBundle\Service\FloorsService');

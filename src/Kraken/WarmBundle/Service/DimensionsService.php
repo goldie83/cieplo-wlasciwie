@@ -43,6 +43,12 @@ class DimensionsService
         $l = $this->getExternalBuildingLength();
         $w = $this->getExternalBuildingWidth();
 
+        if ($this->getInstance()->getHouse()->getBuildingShape() == 'irregular') {
+            $addon = 0.5*floor(sqrt($this->getInstance()->getHouse()->getBuildingContourFreeArea()));
+            $l += $addon;
+            $w += $addon;
+        }
+
         $walls = $this->getNumberOfWalls();
         $sum = 0;
 
@@ -101,10 +107,6 @@ class DimensionsService
             return ceil(sqrt($house->getArea()));
         }
 
-        if ($house->getBuildingShape() == 'irregular') {
-            return $house->getBuildingLength() + floor(sqrt($house->getBuildingContourFreeArea()));
-        }
-
         return $house->getBuildingLength();
     }
 
@@ -114,10 +116,6 @@ class DimensionsService
 
         if ($house->getArea() > 0) {
             return ceil(sqrt($house->getArea()));
-        }
-
-        if ($house->getBuildingShape() == 'irregular') {
-            return $house->getBuildingWidth() + floor(sqrt($house->getBuildingContourFreeArea()));
         }
 
         return $house->getBuildingWidth();

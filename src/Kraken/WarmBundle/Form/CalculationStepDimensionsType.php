@@ -122,8 +122,8 @@ class CalculationStepDimensionsType extends AbstractType
                 ->add('is_row_house_on_corner', 'choice', [
                     'label' => 'Pozycja w zabudowie szeregowej',
                     'choices' => [
-                        'Dom w środku szeregu (dwóch bezpośrednich sąsiadów)',
-                        'Dom narożny (jeden bezpośredni sąsiad)',
+                        0 => 'Dom w środku szeregu (dwóch bezpośrednich sąsiadów)',
+                        1 => 'Dom narożny (jeden bezpośredni sąsiad)',
                     ],
                     'expanded' => true,
                 ])

@@ -48,7 +48,11 @@
                 <h3>Obecny sposób ogrzewania</h3>
                 {{ form_row(form.heating_device) }}
                 {{ form_row(form.stove_power) }}
-                {{ form_row(form.fuel_consumptions) }}
+                <div class="form-group" style="padding-left:15px">
+                    <h4>Sezonowe zużycie paliw na ogrzewanie</h4>
+                    <p>Podaj ile i jakich paliw zużywasz w ciągu sezonu grzewczego.</p>
+                    {{ form_row(form.fuel_consumptions) }}
+                </div>
                 <h3>Wysłać link do obliczeń na maila?</h3>
                 <p>Spokojnie, nie dostaniesz od nas spamu. Nie przechowujemy twojego adresu, jest użyty jednorazowo do wysłania wiadomości z linkiem do wyniku.</p>
                 {{ form_row(form.email) }}

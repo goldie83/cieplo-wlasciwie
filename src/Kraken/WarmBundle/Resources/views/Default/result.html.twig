@@ -2,7 +2,7 @@
 
 {% block edit_button %}
     {% if isAuthor %}
-        <a class="btn btn-info btn-raised pull-right" href="{{ path('start', {slug: calc.slug}) }}">Wróć do formularza danych budynku</a>
+        <a class="btn btn-warning btn-raised pull-right" href="{{ path('location', {slug: calc.slug}) }}">Wróć do formularza danych budynku</a>
     {% endif %}
 {% endblock %}
 
@@ -132,7 +132,8 @@
                 <h4><span class="label label-warning">{{ (hotWater.power)|number_format(0, ',', ' ') ~ 'kW' }}</span> dodatkowa moc potrzebna do grzania CWU</h4>
                 <p>To wystarczy. Po to stawia się duży zasobnik, aby można było grzać go powoli, niedużą mocą. Dla odmiany grzanie przepływowe wymaga mocy ponad 30kW.</p>
                 <h5><span class="label label-default">~{{ (hotWater.tankCapacity)|number_format(0, ',', ' ') ~ 'l' }}</span> odpowiednia do potrzeb pojemność bojlera</h5>
-                <p>W najgorszym razie nagrzanie całego zasobnika od temperatury kranowej do <strong>60&deg;C</strong> potrwa 2 godziny.</p>
+                <p>W najgorszym razie<sup>*</sup> nagrzanie całego zasobnika od temperatury kranowej do <strong>60&deg;C</strong> potrwa 2 godziny.</p>
+                <p><em><sup>*</sup>Tj. gdy na zewnątrz będzie bite {{ climate.designOutdoorTemperature }}&deg;C a cały zasobnik będzie wystudzony do temperatury kranowej.</em></p>
              {% endif %}
           </div>
         </div>
