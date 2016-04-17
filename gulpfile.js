@@ -59,7 +59,7 @@ gulp.task('vendor:ranking_css', [], function(){
 gulp.task('vendor:js', ['clean:js'], function(){
   return gulp.src([
     './bower/jquery/dist/jquery.js',
-    './bower/raphael/raphael-min.js',
+    './bower/raphael/raphael.min.js',
     './bower/bootstrap/dist/js/bootstrap.js',
     './bower/bootstrap-material-design/dist/js/material.js',
     './bower/bootstrap-material-design/dist/js/ripples.js',
