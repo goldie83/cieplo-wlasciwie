@@ -99,18 +99,19 @@
 
           </div>
           <div class="col-md-6">
+
+            <ul class="nav nav-pills" style="margin-bottom:20px">
+              <li class="active"><a href="{{ url('result', {'slug': calc.slug}) }}">Bilans cieplny</a></li>
+              <li><a href="{{ url('heaters', {'slug': calc.slug}) }}">Dobór grzejników</a></li>
+            {% if isAuthor %}
+              <li><a href="{{ url('location', {'slug': calc.slug}) }}">Wróć do formularza danych budynku</a></li>
+            {% endif %}
+            </ul>
+
             <div class="alert alert-success">
                 {% set resultUrl = url('result', {'slug': app.request.get('slug') }) %}
                 Link do tego wyniku: <strong><a href="{{ resultUrl }}">{{ resultUrl }}</a></strong>
             </div>
-
-            <ul class="nav nav-pills">
-              <li class="active"><a href="{{ url('result', {'slug': calc.slug}) }}">Bilans cieplny</a></li>
-              <li><a href="{{ url('heaters', {'slug': calc.slug}) }}">Dobór grzejników</a></li>
-            {% if isAuthor %}
-              <li><a href="{{ url('start', {'slug': calc.slug}) }}">Wróć do formularza danych budynku</a></li>
-            {% endif %}
-            </ul>
 
             <h3>Ile ciepła potrzebuje twój dom</h3>
             <p>Poniższe wyliczenia zakładają utrzymanie w domu przez całą zimę średniej dobowej temperatury <strong>{{ calc.indoorTemperature|number_format(1, ',', ' ') }}&deg;C</strong>.</p>

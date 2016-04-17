@@ -46,7 +46,7 @@
   {% set comparables = comparison.comparables %}
   {% if comparables %}
     <div class="alert alert-success">
-        {{ comparables }}
+        {{ comparables|raw }}
     </div>
   {% else %}
     <div class="alert alert-info">
