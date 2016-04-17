@@ -16,8 +16,13 @@
 
         var heatedColor = "#FFAC4D";
         var notHeatedColor = "#E8FFA7";
-        var skyHeight = 0.75*paperHeight;
-        var groundHeight = 0.25*paperHeight;
+        if (window.hasBasement) {
+            var skyHeight = 0.75*paperHeight;
+            var groundHeight = 0.25*paperHeight;
+        } else {
+            var skyHeight = 0.85*paperHeight;
+            var groundHeight = 0.15*paperHeight;
+        }
         var verticalSpace = 0.9*skyHeight;
         var horizontalSpace = 1.2*verticalSpace;
 
@@ -36,7 +41,10 @@
         paper.rect(0, 0, paperWidth, skyHeight, 0).attr({fill: "#5ECAF1", stroke: "none"});
         paper.rect(0, skyHeight, paperWidth, groundHeight, 0).attr({fill: "#BE5052", stroke: "none"});
 
-        var verticalMargin = totalFloors > 3 ? 0.05*skyHeight : 0.2*skyHeight;
+        var verticalMargin = totalFloors > 3 ? 0.1*skyHeight : 0.2*skyHeight;
+        if (floorsAboveGround < 2) {
+            verticalMargin = 0.45*skyHeight;
+        }
         var floorHeight = (skyHeight-verticalMargin)/floorsAboveGround;
         var floorWidth = 2*(center-(center-horizontalSpace*0.33));
 
