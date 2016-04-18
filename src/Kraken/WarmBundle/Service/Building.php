@@ -304,6 +304,11 @@ class Building implements BuildingInterface
         return round($l * $w * $this->getUndergroundConductance(), 2);
     }
 
+    public function getGroundLambda()
+    {
+        return 1.8;
+    }
+
     public function getInternalCeilingResistance()
     {
         $Rsi = 0.17;
