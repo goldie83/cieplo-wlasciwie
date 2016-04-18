@@ -270,15 +270,17 @@ class CalculatorController extends Controller
             if ($form->get('top_isolation_layer')->get('size')->getData() > 0) {
                 $object->setTopIsolationLayer($form->get('top_isolation_layer')->getData());
             } elseif ($form->get('top_isolation_layer')->getData() != null) {
-                $em->remove($form->get('top_isolation_layer')->getData());
-                $calc->getHouse()->setTopIsolationLayer(null);
+                $em->refresh($object->getTopIsolationLayer());
+                $em->remove($object->getTopIsolationLayer());
+                $em->flush();
             }
 
             if ($form->get('bottom_isolation_layer')->get('size')->getData() > 0) {
                 $object->setBottomIsolationLayer($form->get('bottom_isolation_layer')->getData());
             } elseif ($form->get('bottom_isolation_layer')->getData() != null) {
-                $em->remove($form->get('bottom_isolation_layer')->getData());
-                $calc->getHouse()->setBottomIsolationLayer(null);
+                $em->refresh($object->getBottomIsolationLayer());
+                $em->remove($object->getBottomIsolationLayer());
+                $em->flush();
             }
 
             $calc->setHouse($object);

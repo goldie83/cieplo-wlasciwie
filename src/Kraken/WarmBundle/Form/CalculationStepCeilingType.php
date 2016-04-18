@@ -52,6 +52,7 @@ class CalculationStepCeilingType extends AbstractType
             'data_class' => 'Kraken\WarmBundle\Entity\House',
             'top_isolation_label' => 'Izolacja dachu',
             'bottom_isolation_label' => 'Izolacja podłogi parteru',
+            'cascade_validation' => true,
         ));
     }
 
