@@ -1,6 +1,6 @@
 (function(window, $){
-    $('#calculation_has_isolation_inside').prop('checked', $('#calculation_internal_isolation_layer_size').val());
-    $('#calculation_has_isolation_outside').prop('checked', $('#calculation_external_isolation_layer_size').val());
+    $('#calculation_has_isolation_inside').prop('checked', $('#calculation_internal_isolation_layer_size').val() || $('#calculation_internal_isolation_layer_material').val());
+    $('#calculation_has_isolation_outside').prop('checked', $('#calculation_external_isolation_layer_size').val() || $('#calculation_external_isolation_layer_material').val());
 
     $('#wall_isolation_layer').toggle($('#calculation_has_isolation_inside').is(':checked'));
     $('#wall_extra_isolation_layer').toggle($('#calculation_has_isolation_outside').is(':checked'));
@@ -11,8 +11,8 @@
         $('#wall_isolation_layer').toggle(newVal);
 
         if (!newVal) {
-            $('#calculation_isolation_layer_material').val('');
-            $('#calculation_isolation_layer_size').val('');
+            $('#calculation_internal_isolation_layer_material').val('');
+            $('#calculation_internal_isolation_layer_size').val('');
         }
     });
 
@@ -22,8 +22,8 @@
         $('#wall_extra_isolation_layer').toggle(newVal);
 
         if (!newVal) {
-            $('#calculation_extra_isolation_layer_material').val('');
-            $('#calculation_extra_isolation_layer_size').val('');
+            $('#calculation_external_isolation_layer_material').val('');
+            $('#calculation_external_isolation_layer_size').val('');
         }
     });
 

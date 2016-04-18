@@ -125,6 +125,7 @@ class CalculationStepWallsType extends AbstractType
     {
         $resolver->setDefaults(array(
             'data_class' => 'Kraken\WarmBundle\Entity\House',
+            'cascade_validation' => true,
         ));
     }
 

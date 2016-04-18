@@ -26,7 +26,7 @@ monolog:
             handler:      grouped
         grouped:
             type:         group
-            members:      [sentry, nested, swift]
+            members:      [sentry, nested]
         nested:
             type:         stream
             path:         %kernel.logs_dir%/%kernel.environment%.log
@@ -35,9 +35,3 @@ monolog:
             type:         raven
             dsn:          'http://69c2560effad4229a98d9abdbebee1c4:2c94b39c787147d9bfa1f2d290c2998b@sentry.treter.pl/2'
             level:        notice
-        swift:
-            type:       swift_mailer
-            from_email: juzefwt@gmail.com
-            to_email:   juzefwt@gmail.com
-            subject:    Shit happend!
-            level:      critical

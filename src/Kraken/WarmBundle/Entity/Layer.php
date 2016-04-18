@@ -4,6 +4,7 @@ namespace Kraken\WarmBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 /**
  * @ORM\Entity
@@ -30,28 +31,34 @@ class Layer
      */
     protected $material;
 
+    /**
+     * @Assert\Callback
+     */
+    public function isLayerValid(ExecutionContextInterface $context)
+    {
+        if ($this->material && !$this->size) {
+            $context->buildViolation('Podaj grubość warstwy')
+                ->atPath('size')
+                ->addViolation();
+        }
+
+        if (!$this->material && $this->size) {
+            $context->buildViolation('Wybierz materiał')
+                ->atPath('material')
+                ->addViolation();
+        }
+    }
+
     public function __toString()
     {
         return (string) $this->getSize();
     }
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * Set size.
-     *
-     * @param float $size
-     *
-     * @return Layer
-     */
     public function setSize($size)
     {
         $this->size = $size;
@@ -59,35 +66,18 @@ class Layer
         return $this;
     }
 
-    /**
-     * Get layer size in meters.
-     *
-     * @return float
-     */
     public function getSize()
     {
         return $this->size;
     }
 
-    /**
-     * Set material.
-     *
-     * @param \Kraken\WarmBundle\Entity\Material $material
-     *
-     * @return Layer
-     */
-    public function setMaterial(\Kraken\WarmBundle\Entity\Material $material = null)
+    public function setMaterial(Material $material = null)
     {
         $this->material = $material;
 
         return $this;
     }
 
-    /**
-     * Get material.
-     *
-     * @return \Kraken\WarmBundle\Entity\Material
-     */
     public function getMaterial()
     {
         return $this->material;
