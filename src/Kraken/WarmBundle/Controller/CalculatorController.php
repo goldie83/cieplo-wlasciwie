@@ -272,7 +272,10 @@ class CalculatorController extends Controller
             } elseif ($form->get('top_isolation_layer')->getData() != null) {
                 $em->refresh($object->getTopIsolationLayer());
                 $em->remove($object->getTopIsolationLayer());
-                $em->flush();
+
+                if ($form->get('bottom_isolation_layer')->getData() == null) {
+                    $em->flush();
+                }
             }
 
             if ($form->get('bottom_isolation_layer')->get('size')->getData() > 0) {
