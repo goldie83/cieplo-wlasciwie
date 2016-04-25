@@ -76,10 +76,10 @@
             roofLabel2.attr({"font-size": 12});
         } else if (roofType == 'oblique') {
             var roof = paper.path(
-                "M " + center + " " + (verticalMargin+0.5*floorHeight) +
-                " L " + (center-horizontalSpace*0.4) + " " + (verticalMargin+floorHeight) +
-                " L " + (center+horizontalSpace*0.4) + " " + (verticalMargin+floorHeight) +
-                " L " + center + " " + (verticalMargin+0.5*floorHeight)
+                "M " + center + " " + (0.7*verticalMargin) +
+                " L " + (center-horizontalSpace*0.4) + " " + verticalMargin +
+                " L " + (center+horizontalSpace*0.4) + " " + verticalMargin +
+                " L " + center + " " + (0.7*verticalMargin)
             );
             roof.attr("fill", "#ff0000");
         } else {
@@ -98,7 +98,7 @@
         ];
 
         //floors
-        for (floorIndex = roofType == 'flat' ? 0 : 1; floorIndex < floorsAboveGround; floorIndex++) {
+        for (floorIndex = roofType != 'steep' ? 0 : 1; floorIndex < floorsAboveGround; floorIndex++) {
             reversedFloorIndex = floorsAboveGround - floorIndex;
             isFloorHeated = heatedFloors.indexOf(reversedFloorIndex) != -1;
             floorName = floors[reversedFloorIndex];
