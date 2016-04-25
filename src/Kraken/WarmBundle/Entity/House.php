@@ -259,7 +259,7 @@ class House
 
     public function areWallsValid(ExecutionContext $context)
     {
-        if ($this->construction_type == 'traditional' && $this->primary_wall_material == null) {
+        if ($this->construction_type == 'traditional' && $this->primary_wall_material == null && $this->wall_size > 0) {
             $context->addViolationAt('primary_wall_material', 'Wybierz podstawowy materiał konstrukcyjny ścian zewnętrznych', [], null);
         }
 
