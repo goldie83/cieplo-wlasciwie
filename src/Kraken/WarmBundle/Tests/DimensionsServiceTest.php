@@ -29,6 +29,7 @@ class DimensionsServiceTest extends \PHPUnit_Framework_TestCase
         $house->setNumberWindows(10);
 
         $calc = new Calculation();
+        $calc->setBuildingType('single_house');
         $calc->setHouse($house);
         $calc->setIndoorTemperature(20);
 
@@ -72,6 +73,10 @@ class DimensionsServiceTest extends \PHPUnit_Framework_TestCase
         $instance->get()->getHouse()->setBuildingHeatedFloors([0, 1, 2, 3]);
 
         $this->assertEquals(354, $d->getTotalWallArea());
+
+        $instance->get()->setBuildingType('double_house');
+
+        $this->assertEquals(265.5, $d->getTotalWallArea());
     }
 
     public function testTotalWallAreaWithSteepRoof()
