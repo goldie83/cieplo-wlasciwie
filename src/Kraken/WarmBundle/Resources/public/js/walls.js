@@ -5,6 +5,8 @@
     $('#wall_isolation_layer').toggle($('#calculation_has_isolation_inside').is(':checked'));
     $('#wall_extra_isolation_layer').toggle($('#calculation_has_isolation_outside').is(':checked'));
 
+    $('#traditional_materials').toggle($('#calculation_construction_type_0').is(':checked'));
+
     $('#calculation_has_isolation_inside').change(function () {
         var newVal = $('#calculation_has_isolation_inside').is(':checked');
 

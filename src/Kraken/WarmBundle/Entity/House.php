@@ -259,11 +259,11 @@ class House
 
     public function areWallsValid(ExecutionContext $context)
     {
-        if ($this->construction_type == 'traditional' && $this->primary_wall_material == null && $this->wall_size > 0) {
+        if ($this->construction_type == 'traditional' && $this->primary_wall_material == null) {
             $context->addViolationAt('primary_wall_material', 'Wybierz podstawowy materiał konstrukcyjny ścian zewnętrznych', [], null);
         }
 
-        if ($this->construction_type == 'canadian' && !$this->internal_isolation_layer/* && !$this->internal_isolation_layer->getMaterial()*/) {
+        if ($this->construction_type == 'canadian' && !$this->internal_isolation_layer) {
             $context->addViolationAt('internal_isolation_layer', 'Dla domu szkieletowego musisz podać jaki materiał izolacyjny wypełnia ściany', [], null);
         }
     }
