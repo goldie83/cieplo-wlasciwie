@@ -3,7 +3,7 @@ Feature: Energy balance calculation
   as a human being
   I want to be able to come here, fill out the form and get that data in my face
 
-  Scenario: Energy calculation for single house
+  Scenario: Energy calculation for single house with changes in isolation layers
     Given I am on domain "cieplo.dev"
     Given I go to "/"
      When I follow "Sprawdź swój dom!"
@@ -47,6 +47,16 @@ Feature: Energy balance calculation
       And I should see "50cm, konstrukcja: cegła pełna, izolacja: styropian 15cm"
       And I should see "Dach, Wełna mineralna 30cm"
       And I should see "7kW to potrzebna moc grzewcza (C.O. bez CWU)"
+     When I follow "Wróć do formularza danych budynku"
+      And I press "Dalej"
+      And I press "Dalej"
+     Then I should see "Ściany zewnętrzne"
+      And I uncheck "calculation[has_isolation_outside]"
+      And I press "Dalej"
+      And I press "Dalej"
+      And I press "Wynik"
+     Then I should see "A.D. lata 80-te, 170m2 ogrzewane, Otwock i okolice"
+      And I should see "16kW to potrzebna moc grzewcza (C.O. bez CWU)"
 
   Scenario: Energy calculation for apartment
     Given I am on domain "cieplo.dev"

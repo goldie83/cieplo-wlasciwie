@@ -190,13 +190,18 @@ class CalculatorController extends Controller
             $house = $form->getData();
 
             if (!$form->get('has_isolation_inside')->getData() && $house->getInternalIsolationLayer()) {
+                $em->refresh($house->getInternalIsolationLayer());
                 $em->remove($house->getInternalIsolationLayer());
-                $house->setInternalIsolationLayer(null);
+
+                if ($form->get('external_isolation_layer')->getData() == null) {
+                    $em->flush();
+                }
             }
 
             if (!$form->get('has_isolation_outside')->getData() && $house->getExternalIsolationLayer()) {
+                $em->refresh($house->getExternalIsolationLayer());
                 $em->remove($house->getExternalIsolationLayer());
-                $house->setExternalIsolationLayer(null);
+                $em->flush();
             }
 
             $em->persist($house);
@@ -528,10 +533,6 @@ class CalculatorController extends Controller
 
         $calculator = $this->get('kraken_warm.energy_calculator');
         $dimensions = $this->get('kraken_warm.dimensions');
-        $heatingSeason = $this->get('kraken_warm.heating_season');
-        $pricing = $this->get('kraken_warm.energy_pricing');
-        $fuelService = $this->get('kraken_warm.fuel');
-        $hotWater = $this->get('kraken_warm.hot_water');
 
         if ($calc->getHeatedArea() == false) {
             $nearestCity = $this->get('kraken_warm.city_locator')->findNearestCity();
@@ -545,11 +546,13 @@ class CalculatorController extends Controller
         }
 
         return $this->render('KrakenWarmBundle:Default:result.html.twig', array(
+            'calc' => $calc,
+            'city' => $calc->getCity(),
             'calculator' => $calculator,
-            'pricing' => $pricing,
-            'heatingSeason' => $heatingSeason,
-            'fuelService' => $fuelService,
-            'hotWater' => $hotWater,
+            'pricing' => $this->get('kraken_warm.energy_pricing'),
+            'heatingSeason' => $this->get('kraken_warm.heating_season'),
+            'fuelService' => $this->get('kraken_warm.fuel'),
+            'hotWater' => $this->get('kraken_warm.hot_water'),
             'classifier' => $this->get('kraken_warm.building_classifier'),
             'describer' => $this->get('kraken_warm.house_description'),
             'upgrade' => $this->get('kraken_warm.upgrade'),
@@ -557,8 +560,6 @@ class CalculatorController extends Controller
             'climate' => $this->get('kraken_warm.climate'),
             'dimensions' => $dimensions,
             'floors' => $this->get('kraken_warm.floors'),
-            'calc' => $calc,
-            'city' => $calc->getCity(),
             'isAuthor' => $this->userIsAuthor($slug, $request),
         ));
     }
@@ -575,18 +576,15 @@ class CalculatorController extends Controller
 
         $this->get('kraken_warm.instance')->setCustomCalculation($calculation);
 
-        $calculationulator = $this->get('kraken_warm.energy_calculator');
-        $building = $this->get('kraken_warm.building');
-
         return $this->render('KrakenWarmBundle:Default:heaters.html.twig', array(
-            'calculator' => $calculationulator,
-            'building' => $building,
+            'calc' => $calculation,
+            'calculator' => $this->get('kraken_warm.energy_calculator'),
+            'building' => $this->get('kraken_warm.building'),
             'climate' => $this->get('kraken_warm.climate'),
             'floors' => $this->get('kraken_warm.floors'),
             'dimensions' => $this->get('kraken_warm.dimensions'),
             'wall' => $this->get('kraken_warm.wall'),
             'house_description' => $this->get('kraken_warm.house_description'),
-            'calc' => $calculation,
         ));
     }
 
