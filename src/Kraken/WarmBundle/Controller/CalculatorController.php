@@ -510,8 +510,18 @@ class CalculatorController extends Controller
             ->getRepository('KrakenWarmBundle:Calculation')
             ->findOneBy(array('id' => intval($slug, 36)));
 
-        if (!$calc || !$calc->getHouse() || !$calc->getIndoorTemperature()) {
-            throw $this->createNotFoundException('Jakiś zły masz ten link. Nic tu nie ma.');
+        if (!$calc) {
+            return $this->redirectToRoute('homepage');
+        }
+
+        if (!$calc->getHouse() || !$calc->getIndoorTemperature() || ($calc->getHouse() && !$calc->getHouse()->getPrimaryWallMaterial())) {
+            if ($this->userIsAuthor($slug, $request)) {
+                $this->addFlash('warning', 'Wynik nie jest gotowy, brakuje kluczowych informacji o budynku. Przejrzyj wszystkie części formularza i uzupełnij wymagane pola.');
+
+                return $this->redirectToRoute('start', ['slug' => $slug]);
+            } else {
+                return $this->redirectToRoute('homepage');
+            }
         }
 
         $this->get('session')->set('calculation_id', $calc->getId());
