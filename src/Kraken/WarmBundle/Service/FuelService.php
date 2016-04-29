@@ -62,6 +62,10 @@ class FuelService
         $labels = [];
 
         foreach ($calc->getFuelConsumptions() as $fc) {
+            if (!$fc->getFuel() || !$fc->getConsumption()) {
+                continue;
+            }
+
             $amount = round($fc->getConsumption(), 1);
             $number = sprintf($numbers[$fc->getFuel()->getType()], $amount);
             $number = str_replace('.', ',', $number);
