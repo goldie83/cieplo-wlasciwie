@@ -1,3 +1,15 @@
+body > .navbar .brand {
+  padding-right: 0;
+  padding-left: 40px;
+  float: left;
+  color: #fff;
+  text-shadow: 0 1px 0 rgba(255,255,255,.1), 0 0 30px rgba(255,255,255,.125);
+  -webkit-transition: all .2s linear;
+     -moz-transition: all .2s linear;
+          transition: all .2s linear;
+  background: none;
+}
+
 .boiler-power {
     font-size: 90%;
 }
@@ -77,27 +89,24 @@ footer {
     background-color: #ccc;
     padding: 20px;
     height:350px;
-    background:url('http://czysteogrzewanie.pl/wp-content/themes/twentytwelve/img/lead.jpg') 50% 20%;
+    background:url('http://czysteogrzewanie.pl/wp-content/themes/twentytwelve/img/master.jpg') 50% 20%;
     position:relative;
+    background-size: cover;
 }
 
 .jumbo .wrap {
-    position:absolute;
-    bottom:20px;
-    left:10px;
 }
 
 .jumbo h1 {
-    background:rgba(0,0,0,0.5);
     color:#fff;
     display:inline-block;
     padding:10px;
     font-size: 36px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+    margin-top: 0;
 }
 
 .jumbo p {
-    background:rgba(0,0,0,0.5);
     color:#fff;
     display:inline-block;
     margin:0 10px 0 0;

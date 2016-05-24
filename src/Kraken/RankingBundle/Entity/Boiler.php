@@ -185,6 +185,11 @@ class Boiler
     protected $rejected = false;
 
     /**
+     * @ORM\Column(type="boolean", name="is_published")
+     */
+    protected $published = false;
+
+    /**
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(name="created", type="datetime")
      */
@@ -1088,6 +1093,18 @@ class Boiler
     public function isRejected()
     {
         return $this->rejected;
+    }
+
+    public function setPublished($published)
+    {
+        $this->published = $published;
+
+        return $this;
+    }
+
+    public function isPublished()
+    {
+        return $this->published;
     }
 
     /**

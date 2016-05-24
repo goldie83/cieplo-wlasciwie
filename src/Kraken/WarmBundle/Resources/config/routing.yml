@@ -56,7 +56,7 @@ result:
     defaults: { _controller: KrakenWarmBundle:Calculator:result }
 
 heaters:
-    path:  /wynik/{slug}/grzejniki
+    path:  /wynik/{slug}/grzejniki/
     defaults: { _controller: KrakenWarmBundle:Calculator:heaters }
 
 old_result:

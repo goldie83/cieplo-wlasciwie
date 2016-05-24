@@ -1,13 +1,125 @@
 {% extends '::base_ranking.html.twig' %}
 
-{% block title %}Dodaj opinię o swoim kotle - ranking kotłów węglowych{% endblock title %}
+{% block title %}Dodaj opinię o swoim kotle. Ranking kotłów węglowych{% endblock title %}
 
-{% block page_title %}Dodaj opinię o swoim kotle{% endblock page_title %}
+{% block page_title %}
+{% if selectedBoiler %}
+    Dodajesz opinię o kotle {{ selectedBoiler.name }}
+{% else %}
+    Dodaj opinię o swoim kotle
+{% endif %}
+{% endblock page_title %}
 
 {% block body %}
 <div class="row">
-    <div class="col-sm-12">
-        <p>C'mon</p>
+    <div class="col-sm-7">
+        <p>&nbsp;</p>
+        {% if selectedBoiler %}
+            <div class="thumbnail" style="width:40%;margin:0 auto">
+                <img src="{{ vich_uploader_asset(selectedBoiler, 'imageFile') }}" />
+            </div>
+        {% endif %}
+        <form method="POST" action="{{ url('ranking_review')}}" role="form" class="form-horizontal">
+        {% if selectedBoiler %}
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <h3>Doświadczenia innych użytkowników</h3>
+                        <p>Na początek zobacz, co zauważyli inni użytkownicy tego kotła i zaznacz przy każdej z obserwacji, czy również miałeś podobne doświadczenie.</p>
+                        <table class="table table-striped">
+                        {% for exp in experiences %}
+                            <tr>
+                                <td class="col-sm-8">
+                                    <h4>{{ exp.title }}</h4>
+                                    <p>{{ exp.content }}</p>
+                                </td>
+                                <td class="col-sm-4">
+                                    {{ form_widget(form.reviewExperiences[loop.index0].confirmed) }}
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr><td>
+                                <p><em>Dla tego kotła nie dodano jeszcze żadnych obserwacji.</em></p>
+                            </td></tr>
+                        {% endfor %}
+                        </table>
+                    </div>
+                    <div class="form-group">
+                        <h3>Twoje doświadczenia</h3>
+                        <p>Tutaj możesz dodać to, czego nie znajdujesz na powyższej liście lub rozwinąć obserwacje poprzedników.</p>
+                        {{ form_row(form.ownExperiences) }}
+                    </div>
+                    <div class="form-group">
+                        <h3>Twój staż</h3>
+                        {{ form_row(form.practice) }}
+                        {{ form_row(form.boiler_practice) }}
+                    </div>
+                    <div class="form-group">
+                        <h3>Wykonanie i trwałość</h3>
+                        <p>Lipsum.</p>
+                        {{ form_row(form.quality_rating) }}
+                        {{ form_row(form.quality_comment) }}
+                        {{ form_row(form.warranty) }}
+                        {{ form_row(form.warranty_rating) }}
+                    </div>
+                    <div class="form-group">
+                        <h3>Obsługa</h3>
+                        <p>Lipsum.</p>
+                        {{ form_row(form.controller_rating) }}
+                    </div>
+                    <div class="form-group">
+                        <h3>Paliwa</h3>
+                        <p>Lipsum.</p>
+                        {{ form_row(form.boiler_power) }}
+                        {{ form_row(form.fuels_practice) }}
+                    </div>
+                    <div class="form-group">
+                        <h3>Budynek</h3>
+                        {{ form_row(form.house_area) }}
+                        {{ form_row(form.house_standard) }}
+                    </div>
+                    <div class="form-group">
+                        <h3>Podsumowanie</h3>
+                        {{ form_row(form.rating) }}
+                        {{ form_row(form.comment) }}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-actions">
+                      {{ form_rest(form) }}
+                      <button type="submit" class="btn btn-raised btn-primary">Wyślij</button>
+                    </div>
+                </div>
+            </div>
+
+        {% else %}
+            {{ form_rest(form) }}
+            <p>&nbsp;</p>
+            <button type="submit" class="btn btn-raised btn-primary">{{ selectedBoiler ? 'Wyślij' : 'Dalej' }}</button>
+        {% endif %}
+        </form>
+    </div>
+    <div class="col-sm-5">
+        <h4>Jak to działa</h4>
+        <p>Fajnie jakbyś podrzucił doświadczenia z użytkowania swojego kotła.</p>
+        <ul>
+            <li>wybierasz kocioł, z którym miałeś do czynienia</li>
+            <li>oceniasz na ile potwierdzają się u ciebie obserwacje innych użytkowników</li>
+            <li>dorzucasz swoje pięć groszy</li>
+        </ul>
+        <p>Twoje doświadczenia będą</p>
+
+        {% if not selectedBoiler %}
+            <div class="alert alert-info">
+                <h4>Na co nam twój e-mail?</h4>
+                <ul>
+                    <li>Żeby przesłać ci.</li>
+                    <li>Dla kontaktu, gdyby zaszła potrzeba doprecyzowania o co ci chodziło.</li>
+                </ul>
+            </div>
+        {% endif %}
     </div>
 </div>
 {% endblock body %}

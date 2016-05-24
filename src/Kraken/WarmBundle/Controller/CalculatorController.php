@@ -270,29 +270,35 @@ class CalculatorController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $object = $form->getData() instanceof House ? $form->getData() : $calc->getHouse();
+            $house = $form->getData() instanceof House ? $form->getData() : $calc->getHouse();
 
-            if ($form->get('top_isolation_layer')->get('size')->getData() > 0) {
-                $object->setTopIsolationLayer($form->get('top_isolation_layer')->getData());
-            } elseif ($form->get('top_isolation_layer')->getData() != null) {
-                $em->refresh($object->getTopIsolationLayer());
-                $em->remove($object->getTopIsolationLayer());
+            $topIsolationData = $form->get('top_isolation_layer')->getData();
+            $bottomIsolationData = $form->get('bottom_isolation_layer')->getData();
 
-                if ($form->get('bottom_isolation_layer')->getData() == null) {
+            if ($form->getData() instanceof Apartment) {
+                $house->setTopIsolationLayer($topIsolationData);
+                $house->setBottomIsolationLayer($bottomIsolationData);
+            }
+
+            $shouldHaveTopIsolation = $form->get('has_top_isolation')->getData() == 'yes' || $form->get('has_top_isolation')->getData() === true;
+            $shouldHaveBottomIsolation = $form->get('has_bottom_isolation')->getData() == 'yes' || $form->get('has_bottom_isolation')->getData() === true;
+
+            if ($topIsolationData != null && $topIsolationData->getId() != null && !$shouldHaveTopIsolation) {
+                $em->refresh($topIsolationData);
+                $em->remove($topIsolationData);
+
+                if (!$shouldHaveBottomIsolation) {
                     $em->flush();
                 }
             }
 
-            if ($form->get('bottom_isolation_layer')->get('size')->getData() > 0) {
-                $object->setBottomIsolationLayer($form->get('bottom_isolation_layer')->getData());
-            } elseif ($form->get('bottom_isolation_layer')->getData() != null) {
-                $em->refresh($object->getBottomIsolationLayer());
-                $em->remove($object->getBottomIsolationLayer());
+            if ($bottomIsolationData != null && $bottomIsolationData->getId() != null && !$shouldHaveBottomIsolation) {
+                $em->refresh($bottomIsolationData);
+                $em->remove($bottomIsolationData);
                 $em->flush();
             }
 
-            $calc->setHouse($object);
-            $em->persist($object);
+            $em->persist($house);
             $em->persist($calc);
             $em->flush();
 

@@ -43,12 +43,13 @@ class CalculationStepHeatingType extends AbstractType
                     'label' => 'Dodaj paliwo',
                 ],
                 'show_legend' => true,
+                'horizontal_label_class' => ' ',
+                'horizontal_input_wrapper_class' => 'col-sm-12',
                 'options' => [
                     'label_render' => false,
                     'widget_addon_prepend' => [
                         'text' => '@',
                     ],
-                    'horizontal_input_wrapper_class' => 'col-sm-9',
                 ],
             ])
             ->add('email', null, array(

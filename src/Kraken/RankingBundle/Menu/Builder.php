@@ -18,7 +18,7 @@ class Builder
         $menu->addChild('Kotły zasypowe', ['route' => 'ranking_boiler_category', 'routeParameters' => ['category' => 'kotly-zasypowe']]);
         $menu->addChild('Kotły podajnikowe', ['route' => 'ranking_boiler_category', 'routeParameters' => ['category' => 'kotly-podajnikowe']]);
         $menu->addChild('Salon odrzuconych', ['route' => 'ranking_rejected']);
-        $menu->addChild('Propozycje', ['route' => 'ranking_proposal']);
+        $menu->addChild('Prześlij propozycję', ['route' => 'ranking_proposal']);
         $menu->addChild('Dodaj opinię', ['route' => 'ranking_review']);
 
         return $menu;

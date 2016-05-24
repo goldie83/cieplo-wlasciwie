@@ -28,11 +28,11 @@ class BoilerPower
      */
     protected $power;
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
+    public function __toString()
+    {
+        return ((int)$this->power) . 'kW';
+    }
+
     public function getId()
     {
         return $this->id;

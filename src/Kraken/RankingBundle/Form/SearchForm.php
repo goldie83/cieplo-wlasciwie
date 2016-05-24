@@ -54,9 +54,6 @@ class SearchForm extends AbstractType
                 'choices' => [3, 4, 5],
                 'label' => 'Klasa',
                 'help_block' => 'wg normy PN-EN 303-5:2012',
-                'attr' => array(
-                    'help_text' => 'wg normy PN-EN 303-5:2012',
-                ),
                 'placeholder' => 'dowolna',
                 'required' => false,
             ])
@@ -67,12 +64,7 @@ class SearchForm extends AbstractType
                 'required' => false,
             ])
             ->add('forClosedSystem', null, [
-                'label' => 'Dopuszczony do układu zamkniętego',
-                'required' => false,
-            ])
-            ->add('needsFixing', null, [
-                'label' => 'Nie wymaga poprawek aby palić czysto',
-                'help_block' => 'Pokazuje tylko te kotły, w których nie trzeba niczego poprawiać po fabryce, aby palić bez dymu i nadmiernego grzania komina.',
+                'label' => 'Dopuszczenie do układu zamkniętego',
                 'required' => false,
             ])
         ;

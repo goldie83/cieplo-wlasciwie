@@ -2,6 +2,7 @@
 
 namespace Kraken\RankingBundle\Controller;
 
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller as BaseController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -9,8 +10,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Kraken\RankingBundle\Entity\Boiler;
 use Kraken\RankingBundle\Entity\Category;
 use Kraken\RankingBundle\Entity\Manufacturer;
+use Kraken\RankingBundle\Entity\Experience;
+use Kraken\RankingBundle\Entity\Review;
+use Kraken\RankingBundle\Entity\ReviewExperience;
 use Kraken\RankingBundle\Entity\Search;
 use Kraken\RankingBundle\Form\FileProposalForm;
+use Kraken\RankingBundle\Form\ReviewForm;
 use Kraken\RankingBundle\Form\SearchForm;
 use Kraken\RankingBundle\Form\SearchRejectedForm;
 
@@ -151,9 +156,86 @@ class GeneralController extends BaseController
     /**
      * @Route("/dodaj-opinie-o-kotle", name="ranking_review")
      */
-    public function reviewAction()
+    public function reviewAction(Request $request)
     {
-        return $this->render('KrakenRankingBundle:Ranking:review.html.twig');
+        $em = $this->getDoctrine()->getManager();
+
+        if (!$this->get('session')->has('review_id')) {
+            $review = new Review();
+
+            $form = $this->createFormBuilder($review)
+                ->add('boiler', 'entity', [
+                    'class' => 'KrakenRankingBundle:Boiler',
+                    'label' => 'Wybierz kocioł',
+                    'placeholder' => '--- wybierz ---',
+                    'query_builder' => function (EntityRepository $er) {
+                        return $er->createQueryBuilder('b')
+                            ->where('b.rejected = false')
+                            ->andWhere('b.published = true')
+                            ->orderBy('b.name', 'ASC');
+                    },
+                ])
+                ->add('email', 'text', [
+                    'label' => 'Twój adres e-mail',
+                ])
+                ->getForm();
+            $form->handleRequest($request);
+
+            if ($form->isValid()) {
+                $em->persist($review);
+                $em->flush();
+
+                $this->get('session')->set('review_id', $review->getId());
+
+                return $this->redirectToRoute('ranking_review');
+            }
+
+            return $this->render('KrakenRankingBundle:Ranking:review.html.twig', [
+                'form' => $form->createView(),
+                'selectedBoiler' => false
+            ]);
+        } else {
+            $review = $em->getRepository('KrakenRankingBundle:Review')->find($this->get('session')->get('review_id'));
+            $experiences = $em->getRepository('KrakenRankingBundle:Experience')->findByBoiler($review->getBoiler()->getId());
+
+            foreach ($experiences as $e) {
+                $re = new ReviewExperience();
+                $re->setReview($review);
+                $re->setExperience($e);
+
+                $review->addReviewExperience($re);
+            }
+
+            $form = $this->createForm(new ReviewForm(), $review, ['boiler_id' => $review->getBoiler()->getId()]);
+
+            $form->handleRequest($request);
+
+            if ($form->isValid()) {
+                foreach ($form->get('ownExperiences')->getData() as $ownExp) {
+                    $ownExp->setBoiler($review->getBoiler());
+                    $ownExp->setParentReview($review);
+                    $em->persist($ownExp);
+                }
+
+                $em->persist($review);
+                $em->flush();
+
+                $this->get('session')->remove('review_id');
+
+                $this->addFlash(
+                    'success',
+                    'OK. Twoja opinia została przesłana do poczekalni. Dostaniesz wiadomość jak tylko zostanie dodana do zestawienia.'
+                );
+
+                return $this->redirectToRoute('ranking_review');
+            }
+
+            return $this->render('KrakenRankingBundle:Ranking:review.html.twig', [
+                'form' => $form->createView(),
+                'selectedBoiler' => $review->getBoiler(),
+                'experiences' => $experiences,
+            ]);
+        }
     }
 
     /**
