@@ -525,7 +525,7 @@ class CalculatorController extends Controller
             return $this->redirectToRoute('homepage');
         }
 
-        if (!$calc->getHouse() || !$calc->getIndoorTemperature() || ($calc->getHouse() && !$calc->getHouse()->getPrimaryWallMaterial())) {
+        if (!$calc->getHouse() || !$calc->getIndoorTemperature() || ($calc->getHouse() && $calc->getHouse()->getConstructionType() == 'traditional' && !$calc->getHouse()->getPrimaryWallMaterial())) {
             if ($this->userIsAuthor($slug, $request)) {
                 $this->addFlash('warning', 'Wynik nie jest gotowy, brakuje kluczowych informacji o budynku. Przejrzyj wszystkie części formularza i uzupełnij wymagane pola.');
 
