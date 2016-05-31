@@ -59,19 +59,19 @@
                         <p>Lipsum.</p>
                         {{ form_row(form.quality_rating) }}
                         {{ form_row(form.quality_comment) }}
-                        {{ form_row(form.warranty) }}
                         {{ form_row(form.warranty_rating) }}
+                        {{ form_row(form.warranty_comment) }}
                     </div>
                     <div class="form-group">
                         <h3>Obsługa</h3>
-                        <p>Lipsum.</p>
+                        <p>Czy nie ma problemów z czyszczeniem?</p>
                         {{ form_row(form.controller_rating) }}
                     </div>
                     <div class="form-group">
                         <h3>Paliwa</h3>
                         <p>Lipsum.</p>
                         {{ form_row(form.boiler_power) }}
-                        {{ form_row(form.fuels_practice) }}
+                        {{ form_row(form.fuels_comment) }}
                     </div>
                     <div class="form-group">
                         <h3>Budynek</h3>
@@ -103,23 +103,24 @@
     </div>
     <div class="col-sm-5">
         <h4>Jak to działa</h4>
-        <p>Fajnie jakbyś podrzucił doświadczenia z użytkowania swojego kotła.</p>
+        <p>Dodawanie opinii o kotle działa nieco inaczej niż typowe recenzje produktów w internecie. Wszystko po to, aby wychwycić najważniejsze cechy użytkowe kotła minimalizując możliwości lania wody.</p>
+        <p>Po kolei:</p>
         <ul>
-            <li>wybierasz kocioł, z którym miałeś do czynienia</li>
-            <li>oceniasz na ile potwierdzają się u ciebie obserwacje innych użytkowników</li>
-            <li>dorzucasz swoje pięć groszy</li>
+            <li>Wybierasz kocioł, z którym miałeś do czynienia.</li>
+            <li>Podajesz swój adres e-mail &mdash; posłuży on jako twój identyfikator oraz ewentualnie droga kontaktu w sprawie treści opinii.</li>
+            <li>Przeglądasz to, co zauważyli inni użytkownicy kotła i potwierdzasz ich obserwacje lub nie oraz możesz dodać własne.</li>
+            <li>Oceniasz ogólne działanie kotła pod najważniejszymi względami.</li>
         </ul>
-        <p>Twoje doświadczenia będą</p>
-
-        {% if not selectedBoiler %}
-            <div class="alert alert-info">
-                <h4>Na co nam twój e-mail?</h4>
-                <ul>
-                    <li>Żeby przesłać ci.</li>
-                    <li>Dla kontaktu, gdyby zaszła potrzeba doprecyzowania o co ci chodziło.</li>
-                </ul>
-            </div>
-        {% endif %}
+        <p>Twoja opinia <strong>nigdy nie będzie widoczna publicznie</strong>, lecz posłuży do przygotowania zbiorczej statystyki i podsumowania cech kotła, które potwierdziła największa część użytkowników. To dla czytelności, ale też abyś mógł sobie pozwolić na szczerość.</p>
+        <h4>Nadzór i kontrola</h4>
+        <p>Skąd wiadomo, że opinie dodają faktyczni użytkownicy kotłów a nie np. handlarze? Spokojnie, wszystko jest pod kontrolą, m.in.:</p>
+        <ul>
+            <li>Jeden kocioł możesz ocenić tylko <strong>raz</strong>. Z jednego adresu e-mail możesz ocenić góra <strong>dwa</strong> różne kotły - wszystko po to, aby zebrane doświadczenia były świeże, a nie dotyczyły kotła sprzed dziesięciu lat.</li>
+            <li>Każda opinia jest ręcznie weryfikowana przed uwzględnieniem jej w publicznym podsumowaniu.</li>
+            <li>W razie wątpliwości co do autentyczności opinii (np. jest skrajnie pochlebna/negatywna lub wygląda na spam) skontaktujemy się z autorem w celu wyjaśnienia sprawy.</li>
+            <li>Jeśli nie uda się rzeczy satysfakcjonująco wyjaśnić, podejrzana opinia zostanie usunięta.</li>
+        </ul>
+        <p>Swoją opinię możesz też zawsze usunąć samodzielnie. Po dodaniu opinii otrzymasz na podany adres wiadomość, w której znajdzie się m.in. link do tego celu służący.</p>
     </div>
 </div>
 {% endblock body %}

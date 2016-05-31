@@ -15,11 +15,13 @@ class SearchForm extends AbstractType
             ->add('modelName', null, [
                 'label' => 'Nazwa producenta lub modelu',
                 'required' => false,
+                'horizontal_label_class' => $options['vertical'] ? ' ' : 'col-sm-4',
             ])
             ->add('manufacturer', null, [
                 'label' => 'Producent',
                 'placeholder' => 'dowolny',
                 'required' => false,
+                'horizontal_label_class' => $options['vertical'] ? ' ' : 'col-sm-4',
             ])
             ->add('category', null, [
                 'choice_label' => 'indentedName',
@@ -30,6 +32,7 @@ class SearchForm extends AbstractType
                     return $er->createQueryBuilder('c')
                         ->orderBy('c.sort');
                 },
+                'horizontal_label_class' => $options['vertical'] ? ' ' : 'col-sm-4',
             ])
             ->add('fuelType', null, [
                 'label' => 'Paliwa',
@@ -37,18 +40,21 @@ class SearchForm extends AbstractType
                 'expanded' => true,
                 'multiple' => true,
                 'required' => false,
+                'horizontal_label_class' => $options['vertical'] ? ' ' : 'col-sm-4',
             ])
             ->add('power', 'choice', [
                 'placeholder' => 'dowolna',
                 'choices' => ['10' => 'do 10kW', '15' => '10‒15kW', '20' => '15‒20kW', '25' => '20‒25kW', '25+' => 'ponad 25kW'],
                 'label' => 'Moc',
                 'required' => false,
+                'horizontal_label_class' => $options['vertical'] ? ' ' : 'col-sm-4',
             ])
             ->add('material', 'choice', [
                 'placeholder' => 'dowolny',
                 'choices' => ['steel' => 'stal', 'cast_iron' => 'żeliwo'],
                 'label' => 'Materiał',
                 'required' => false,
+                'horizontal_label_class' => $options['vertical'] ? ' ' : 'col-sm-4',
             ])
             ->add('normClass', 'choice', [
                 'choices' => [3, 4, 5],
@@ -56,16 +62,19 @@ class SearchForm extends AbstractType
                 'help_block' => 'wg normy PN-EN 303-5:2012',
                 'placeholder' => 'dowolna',
                 'required' => false,
+                'horizontal_label_class' => $options['vertical'] ? ' ' : 'col-sm-4',
             ])
             ->add('rating', 'choice', [
                 'choices' => ['A', 'B', 'C', 'D', 'E'],
                 'label' => 'Ocena w rankingu',
                 'placeholder' => 'dowolna',
                 'required' => false,
+                'horizontal_label_class' => $options['vertical'] ? ' ' : 'col-sm-4',
             ])
             ->add('forClosedSystem', null, [
                 'label' => 'Dopuszczenie do układu zamkniętego',
                 'required' => false,
+                'horizontal_label_class' => $options['vertical'] ? ' ' : 'col-sm-4',
             ])
         ;
     }
@@ -74,6 +83,7 @@ class SearchForm extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => 'Kraken\RankingBundle\Entity\Search',
+            'vertical' => false
         ]);
     }
 

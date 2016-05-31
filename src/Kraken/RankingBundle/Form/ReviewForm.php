@@ -62,6 +62,54 @@ class ReviewForm extends AbstractType
                 'mapped' => false,
                 'expanded' => true,
             ])
+            ->add('quality_rating', 'choice', [
+                'label' => 'Jak oceniasz jakość wykonania?',
+                'choices' => [
+                    5 => '5 - nie mam zastrzeżeń',
+                    4 => '4 - drobne niedociągnięcia co najwyżej estetyczne',
+                    3 => '3 - są upierdliwe niedoróbki',
+                    2 => '2 - wat?',
+                    1 => '1 - dopłacę byle to ode mnie zabrali',
+                ],
+                'mapped' => false,
+                'expanded' => true,
+            ])
+            ->add('quality_comment', 'textarea', [
+                'label' => 'Szczegóły',
+                'attr' => ['rows' => 8],
+                'mapped' => false,
+            ])
+            ->add('warranty_rating', 'choice', [
+                'label' => 'Jak oceniasz serwis gwarancyjny?',
+                'choices' => [
+                    0 => 'Nie było okazji skorzystać',
+                    5 => '5 - nie mam zastrzeżeń',
+                    4 => '4 - drobne niedociągnięcia co najwyżej estetyczne',
+                    3 => '3 - są upierdliwe niedoróbki',
+                    2 => '2 - wat?',
+                    1 => '1 - dopłacę byle to ode mnie zabrali',
+                ],
+                'mapped' => false,
+                'expanded' => true,
+            ])
+            ->add('warranty_comment', 'textarea', [
+                'label' => 'Szczegóły',
+                'attr' => ['rows' => 8],
+                'mapped' => false,
+            ])
+            ->add('controller_rating', 'choice', [
+                'label' => 'Jak oceniasz łatwość obsługi sterownika?',
+                'choices' => [
+                    5 => '5 - nie mam zastrzeżeń',
+                    4 => '4 - drobne niedociągnięcia co najwyżej estetyczne',
+                    3 => '3 - są upierdliwe niedoróbki',
+                    2 => '2 - wat?',
+                    1 => '1 - dopłacę byle to ode mnie zabrali',
+                ],
+                'data' => 0,
+                'mapped' => false,
+                'expanded' => true,
+            ])
             ->add('boiler_power', 'entity', [
                 'class' => 'KrakenRankingBundle:BoilerPower',
                 'label' => 'Której mocy kocioł masz u siebie?',
@@ -73,7 +121,7 @@ class ReviewForm extends AbstractType
                 },
                 'mapped' => false,
             ])
-            ->add('fuels_practice', 'textarea', [
+            ->add('fuels_comment', 'textarea', [
                 'label' => 'Doświadczenia z paliwami',
                 'attr' => ['rows' => 8],
                 'mapped' => false,

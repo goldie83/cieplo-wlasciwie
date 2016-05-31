@@ -4,11 +4,13 @@ namespace Kraken\RankingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Kraken\RankingBundle\Repository\ReviewRepository")
  * @ORM\Table(name="reviews")
+ * @UniqueEntity(fields={"boiler", "email"}, message="Z tego adresu została już dodana opinia o tym kotle.", errorPath="email")
  */
 class Review
 {
@@ -20,7 +22,7 @@ class Review
     protected $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Boiler", inversedBy="changes")
+     * @ORM\ManyToOne(targetEntity="Boiler", inversedBy="reviews")
      * @ORM\JoinColumn(name="boiler_id", referencedColumnName="id", nullable=false)
      */
     protected $boiler;
@@ -124,6 +126,18 @@ class Review
     public function setEmail($email)
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    public function getCreated()
+    {
+        return $this->created;
+    }
+
+    public function setCreated($created)
+    {
+        $this->created = $created;
 
         return $this;
     }

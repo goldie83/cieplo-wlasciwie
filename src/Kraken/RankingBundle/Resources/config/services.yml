@@ -13,22 +13,17 @@ services:
         class: Kraken\RankingBundle\Admin\ChangeAdmin
         arguments: [~, Kraken\RankingBundle\Entity\Change, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: Log zmian }
-    admin.property_value:
-        class: Kraken\RankingBundle\Admin\PropertyValueAdmin
-        arguments: [~, Kraken\RankingBundle\Entity\PropertyValue, ~]
-        tags:
-            - { name: sonata.admin, manager_type: orm, label: Cecha kotła }
+            - { name: sonata.admin, manager_type: orm, label: Log zmian, show_in_dashboard: false }
     admin.boiler_power:
         class: Kraken\RankingBundle\Admin\BoilerPowerAdmin
         arguments: [~, Kraken\RankingBundle\Entity\BoilerPower, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: Moc kotła }
+            - { name: sonata.admin, manager_type: orm, label: Moc kotła, show_in_dashboard: false }
     admin.boiler_fuel_type:
         class: Kraken\RankingBundle\Admin\BoilerFuelTypeAdmin
         arguments: [~, Kraken\RankingBundle\Entity\BoilerFuelType, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: Obsługiwane paliwa }
+            - { name: sonata.admin, manager_type: orm, label: Obsługiwane paliwa, show_in_dashboard: false }
     admin.fuel_type:
         class: Kraken\RankingBundle\Admin\FuelTypeAdmin
         arguments: [~, Kraken\RankingBundle\Entity\FuelType, ~]
@@ -38,9 +33,24 @@ services:
         class: Kraken\RankingBundle\Admin\NoticeAdmin
         arguments: [~, Kraken\RankingBundle\Entity\Notice, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: Wady/zalety }
+            - { name: sonata.admin, manager_type: orm, label: Wady/zalety, show_in_dashboard: false }
+    admin.notice_prototype:
+        class: Kraken\RankingBundle\Admin\NoticePrototypeAdmin
+        arguments: [~, Kraken\RankingBundle\Entity\NoticePrototype, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Prototyp, show_in_dashboard: false }
     admin.manufacturer:
         class: Kraken\RankingBundle\Admin\ManufacturerAdmin
         arguments: [~, Kraken\RankingBundle\Entity\Manufacturer, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, label: Producenci }
+    admin.review:
+        class: Kraken\RankingBundle\Admin\ReviewAdmin
+        arguments: [~, Kraken\RankingBundle\Entity\Review, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Opinie }
+    admin.experience:
+        class: Kraken\RankingBundle\Admin\ExperienceAdmin
+        arguments: [~, Kraken\RankingBundle\Entity\Experience, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Doświadczenia }

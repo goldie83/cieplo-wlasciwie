@@ -12,7 +12,6 @@ class BoilerFuelTypeAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('boiler', null, ['label' => 'Kocioł'])
             ->add('fuelType', null, ['label' => 'Paliwo'])
             ->add('primary', null, ['label' => 'Paliwo podstawowe'])
         ;

@@ -7,20 +7,30 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 
-class BoilerPowerAdmin extends Admin
+class ReviewAdmin extends Admin
 {
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('power', 'number', ['label' => 'Moc'])
+            ->add('boiler', null, ['label' => 'Kocioł'])
+            ->add('email', null, ['label' => 'E-mail'])
         ;
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
+        $datagridMapper
+            ->add('boiler')
+        ;
     }
 
     protected function configureListFields(ListMapper $listMapper)
     {
+        $listMapper
+            ->addIdentifier('id')
+            ->add('boiler')
+            ->add('email')
+            ->add('created')
+        ;
     }
 }

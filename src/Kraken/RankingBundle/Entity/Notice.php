@@ -18,9 +18,26 @@ class Notice
     protected $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="Boiler", inversedBy="notices")
+     * @ORM\JoinColumn(name="boiler_id", referencedColumnName="id")
+     */
+    protected $boiler;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="NoticePrototype", inversedBy="notices", cascade={"all"})
+     * @ORM\JoinColumn(name="prototype_id", referencedColumnName="id", nullable=false)
+     */
+    protected $noticePrototype;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $importance = 0;
+
+    /**
      * @ORM\Column(type="string")
      */
-    protected $type;
+    protected $valuation;
 
     /**
      * @ORM\Column(type="string")
@@ -32,47 +49,65 @@ class Notice
      */
     protected $content;
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
+
+    public function __toString()
+    {
+        return $this->noticePrototype->getLabel();
+    }
+
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * Set type.
-     *
-     * @param string $type
-     *
-     * @return Notice
-     */
-    public function setType($type)
+    public function setBoiler(Boiler $boiler)
     {
-        $this->type = $type;
+        $this->boiler = $boiler;
 
         return $this;
     }
 
-    /**
-     * Get type.
-     *
-     * @return string
-     */
-    public function getType()
+    public function getBoiler()
     {
-        return $this->type;
+        return $this->boiler;
     }
 
-    /**
-     * Set label.
-     *
-     * @param string $label
-     *
-     * @return Notice
-     */
+    public function setNoticePrototype($prototype)
+    {
+        $this->noticePrototype = $prototype;
+
+        return $this;
+    }
+
+    public function getNoticePrototype()
+    {
+        return $this->noticePrototype;
+    }
+
+    public function setImportance($importance)
+    {
+        $this->importance = $importance;
+
+        return $this;
+    }
+
+    public function getImportance()
+    {
+        return $this->importance;
+    }
+
+    public function setValuation($valuation)
+    {
+        $this->valuation = $valuation;
+
+        return $this;
+    }
+
+    public function getValuation()
+    {
+        return $this->valuation;
+    }
+
     public function setLabel($label)
     {
         $this->label = $label;
@@ -80,23 +115,11 @@ class Notice
         return $this;
     }
 
-    /**
-     * Get label.
-     *
-     * @return string
-     */
     public function getLabel()
     {
         return $this->label;
     }
 
-    /**
-     * Set content.
-     *
-     * @param string $content
-     *
-     * @return Notice
-     */
     public function setContent($content)
     {
         $this->content = $content;
@@ -104,11 +127,6 @@ class Notice
         return $this;
     }
 
-    /**
-     * Get content.
-     *
-     * @return string
-     */
     public function getContent()
     {
         return $this->content;

@@ -28,9 +28,11 @@ class BoilerPower
      */
     protected $power;
 
+
     public function __toString()
     {
-        return ((int)$this->power) . 'kW';
+        $power = (double) $this->power == (int) $this->power ? number_format($this->power) : number_format($this->power, 1);
+        return $power . 'kW';
     }
 
     public function getId()

@@ -26,7 +26,7 @@ class Experience
     protected $boiler;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Review", inversedBy="experiences")
+     * @ORM\ManyToOne(targetEntity="Review", inversedBy="ownExperiences")
      * @ORM\JoinColumn(name="parent_review_id", referencedColumnName="id", nullable=true)
      */
     protected $parentReview;
@@ -40,6 +40,11 @@ class Experience
      * @ORM\Column(type="text", nullable=true)
      */
     protected $content;
+
+    /**
+     * @ORM\Column(type="boolean", name="is_accepted")
+     */
+    protected $accepted = false;
 
     /**
      * @ORM\OneToMany(targetEntity="ReviewExperience", mappedBy="experience", cascade={"all"}, orphanRemoval=true)
@@ -99,4 +104,21 @@ class Experience
         return $this;
     }
 
+    public function countConfirmations()
+    {
+        $count = 0;
+
+        foreach ($this->reviewExperiences as $re) {
+            if ($re->isConfirmed() == true) {
+                $count++;
+            }
+        }
+
+        return $count;
+    }
+
+    public function countNegations()
+    {
+        return count($this->reviewExperiences) - $this->countConfirmations();
+    }
 }

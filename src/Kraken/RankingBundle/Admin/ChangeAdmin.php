@@ -12,7 +12,6 @@ class ChangeAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('boiler', null, ['label' => 'Kocioł'])
             ->add('date', 'date', ['label' => 'Data zmiany'])
             ->add('content', null, ['label' => 'Opis zmiany'])
             ->add('oldRating', null, ['label' => 'Poprzednia ocena'])

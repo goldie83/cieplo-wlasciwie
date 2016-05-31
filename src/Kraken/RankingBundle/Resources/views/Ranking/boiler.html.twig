@@ -7,7 +7,9 @@
 {% block body %}
 
 <ul class="pager">
-  <li class="previous"><a href="javascript:void(0)">← Powrót do listy kotłów</a></li>
+  {# TODO #}
+  {% set back = backLink is defined ? backLink : path('ranking_boiler_category', {'category': boiler.category.slug }) %}
+  <li class="previous"><a href="{{ back }}">← Powrót do listy kotłów</a></li>
 </ul>
 
 <div class="row">
@@ -19,7 +21,7 @@
           <tbody>
             <tr>
               <th scope="row">Ocena w rankingu</th>
-              <td><span class="label label-primary boiler-class {{ boiler.rating|lower }}-class">{{ boiler.rating }}</span></td>
+              <td><span class="label boiler-class {{ boiler.rating|lower }}-class">{{ boiler.rating }}</span></td>
             </tr>
             <tr>
               <th scope="row">Producent</th>
@@ -32,17 +34,17 @@
             {% if boiler.exchangerNormPercent > 0 %}
             <tr>
               <th scope="row">Powierzchnia wymiennika</th>
-              <td><strong>{{ boiler.exchangerNormPercent }}%</strong> współczesnego standardu</td>
+              <td><strong>{{ boiler.exchangerNormPercent|round }}%</strong> współczesnego standardu</td>
             </tr>
             {% endif %}
             <tr>
               <th scope="row">{{ boiler.handFueled ? 'Pojemność zasypowa' : 'Pojemność zasobnika' }}</th>
-              <td>{{ boiler.typicalModelCapacity }}kg</td>
+              <td>~{{ boiler.typicalModelCapacityInKilograms|round }}kg</td>
             </tr>
         {% if boiler.isHandFueled %}
             <tr>
               <th scope="row">Przeciętna stałopalność</th>
-              <td>{{ boiler.typicalModelWorkTime }}h</td>
+              <td>{{ boiler.typicalModelWorkTime }}h<sup>1</sup></td>
             </tr>
         {% endif %}
             <tr>
@@ -63,7 +65,7 @@
               <th scope="row">Dostępne moce</th>
               <td>
                   {% for power in boiler.boilerPowers %}
-                      <span class="label label-primary boiler-power">{{ power.power|number_format }}kW</span>
+                      <span class="label boiler-power">{{ power.power|number_format }}kW</span>
                   {% endfor %}
               </td>
             </tr>
@@ -84,18 +86,25 @@
             </tr>
             <tr>
               <th scope="row">Instrukcja obsługi</th>
-              <td>{% if boiler.userManual %}<a href="{{ boiler.userManual }}" target="_blank">dostępna</a>{% else %}<i>niedostępna</i>{% endif %}</td>
+              <td>{% if boiler.userManual %}<a href="{{ boiler.userManual }}" target="_blank" rel="nofollow">dostępna</a>{% else %}<i>niedostępna</i>{% endif %}</td>
             </tr>
             <tr>
               <th scope="row">Strona producenta</th>
-              <td><a href="{{ boiler.manufacturerSite }}" target="_blank">przejdź do strony producenta</a></td>
+              <td><a href="{{ boiler.manufacturerSite }}" target="_blank" rel="nofollow">przejdź do strony producenta</a></td>
             </tr>
             <tr>
               <th scope="row">Orientacyjna cena</th>
-              <td>od {{ boiler.typicalModelPrice|number_format(0, ',', ' ') }}zł ({{ boiler.typicalModelPower|number_format }}kW)</td>
+              <td>
+                  {% if boiler.typicalModelPrice %}
+                      od {{ boiler.typicalModelPrice|number_format(0, ',', ' ') }}zł ({{ boiler.typicalModelPower|number_format(1, ',', ' ') }}kW)
+                  {% else %}
+                      <em>nieznana</em>
+                  {% endif %}
+              </td>
             </tr>
           </tbody>
         </table>
+        <p><sup>1</sup> - orientacyjny czas pracy na pełnym załadunku przy 60%&nbsp;mocy nominalnej</p>
         <p>Ostatnia aktualizacja: {{ boiler.updated|date('d.m.Y') }}</p>
     </div>
     <div class="col-sm-8">
@@ -107,6 +116,7 @@
         </ul>
         <div id="boilerTabsContent" class="tab-content">
           <div role="tabpanel" class="tab-pane fade active in" id="overview" aria-labelledby="overview-tab">
+              <div class="row">
               {{ boiler.lead|raw }}
               <hr/>
               {% set hasUnknownNotices = boiler.unknownNotices|length > 0 %}
@@ -115,8 +125,8 @@
                   <ul class="list-group">
                   {% for bp in boiler.positiveNotices %}
                     <li class="list-group-item list-group-item-success">
-                        <h5><strong>{{ bp.property.label }}</strong></h5>
-                        <p>{{ bp.property.content }}</p>
+                        <h5><strong>{{ bp.label }}</strong></h5>
+                        <p>{{ bp.content }}</p>
                     </li>
                   {% endfor %}
                   </ul>
@@ -127,8 +137,8 @@
                   <ul class="list-group">
                   {% for bp in boiler.unknownNotices %}
                     <li class="list-group-item">
-                        <h5><strong>{{ bp.property.label }}</strong></h5>
-                        <p>{{ bp.property.content }}</p>
+                        <h5><strong>{{ bp.label }}</strong></h5>
+                        <p>{{ bp.content }}</p>
                     </li>
                   {% endfor %}
                   </ul>
@@ -139,11 +149,18 @@
                   <ul class="list-group">
                   {% for bp in boiler.negativeNotices %}
                     <li class="list-group-item list-group-item-danger">
-                        <h5><strong>{{ bp.property.label }}</strong></h5>
-                        <p>{{ bp.property.content }}</p>
+                        <h5><strong>{{ bp.label }}</strong></h5>
+                        <p>{{ bp.content }}</p>
                     </li>
+                  {% else %}
+                    <p>Nie stwierdzono (co nie znaczy, że żadnych nie ma).</p>
                   {% endfor %}
                   </ul>
+              </div>
+              </div>
+              <div class="row alert alert-info">
+                  <h4>Używasz tego kotła? Podziel się wrażeniami!</h4>
+                  <p>Pomóż innym poznać praktyczne zalety i wady tego kotła. <a href="{{ path('ranking_review', {boilerId: boiler.id}) }}"><strong>Dodaj opinię o kotle {{ boiler }}</strong></a>.</p>
               </div>
           </div>
           <div role="tabpanel" class="tab-pane fade" id="details" aria-labelledby="details-tab">
@@ -167,21 +184,27 @@
                   {% for change in boiler.changes %}
                       <dt>{{ change.date|date('d.m.Y') }}: {{ change.content }}</dt>
                       <dd>{% if change.oldRating %}Zmiana oceny: <strong>{{ change.oldRating }}</strong> &rarr; <strong>{{ change.newRating }}</strong>{% else %}Ocena bez zmian.{% endif %}</dd>
+                  {% else %}
+                      <dt>Tutaj pojawią się informacje kiedy, co i dlaczego było zmieniane w opisie kotła oraz jego ocenie.</dt>
+                      <dd>Na razie nic tutaj nie ma.</dd>
                   {% endfor %}
                   </dl>
               {% endif %}
           </div>
           <div role="tabpanel" class="tab-pane fade" id="reviews" aria-labelledby="reviews-tab">
               <h2>Doświadczenia użytkowników</h2>
-              {{ boiler.ratingExplanation|raw }}
-              {% if boiler.changes %}
-                  <h3>Historia zmian</h3>
+              {% if boiler.reviews|length > 1 %}
+                  <h3>Ogólna ocena</h3>
+                  <p><strong>3,5/5</strong> (45 osób)
+                  <h3>Doświadczenia użytkowników</h3>
                   <dl>
-                  {% for change in boiler.changes %}
-                      <dt>{{ change.date|date('d.m.Y') }}: {{ change.content }}</dt>
-                      <dd>{% if change.oldRating %}Zmiana oceny: <strong>{{ change.oldRating }}</strong> &rarr; <strong>{{ change.newRating }}</strong>{% else %}Ocena bez zmian.{% endif %}</dd>
+                  {% for exp in experiences %}
+                      <dt>{{ exp.title }} ({{ exp.countConfirmations }}xTAK, {{ exp.countNegations }}xNIE)</dt>
+                      <dd>{{ exp.content }}</dd>
                   {% endfor %}
                   </dl>
+              {% else %}
+                  <p>Nikt jeszcze nie dodał opinii. <a href="{{ path('ranking_review', {boilerId: boiler.id}) }}"><strong>Zrób to jako pierwszy!</strong></a></p>
               {% endif %}
           </div>
         </div>

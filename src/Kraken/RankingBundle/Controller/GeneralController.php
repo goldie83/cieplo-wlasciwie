@@ -119,8 +119,8 @@ class GeneralController extends BaseController
         $query = $qb
             ->select('b')
             ->from('KrakenRankingBundle:Boiler', 'b')
-            ->where('b.rejected = :rejected')
-            ->setParameter('rejected', true);
+            ->where('b.rejected = 1')
+            ->andWhere('b.published = 1');
 
         if ($uid > 0) {
             if ($searchRecord->getModelName() != '') {
@@ -154,9 +154,9 @@ class GeneralController extends BaseController
     }
 
     /**
-     * @Route("/dodaj-opinie-o-kotle", name="ranking_review")
+     * @Route("/dodaj-opinie-o-kotle/{boilerId}", name="ranking_review", defaults={"boilerId" = ""})
      */
-    public function reviewAction(Request $request)
+    public function reviewAction(Request $request, $boilerId)
     {
         $em = $this->getDoctrine()->getManager();
 
@@ -168,11 +168,19 @@ class GeneralController extends BaseController
                     'class' => 'KrakenRankingBundle:Boiler',
                     'label' => 'Wybierz kocioł',
                     'placeholder' => '--- wybierz ---',
-                    'query_builder' => function (EntityRepository $er) {
-                        return $er->createQueryBuilder('b')
+                    'query_builder' => function (EntityRepository $er) use ($boilerId) {
+                        $qb = $er->createQueryBuilder('b')
                             ->where('b.rejected = false')
                             ->andWhere('b.published = true')
                             ->orderBy('b.name', 'ASC');
+
+                        if ($boilerId) {
+                            $qb->andWhere('b.id = :boilerId')
+                                ->setParameter('boilerId', $boilerId)
+                            ;
+                        }
+
+                        return $qb;
                     },
                 ])
                 ->add('email', 'text', [
@@ -182,6 +190,14 @@ class GeneralController extends BaseController
             $form->handleRequest($request);
 
             if ($form->isValid()) {
+                $reviewsPerEmail = $this->getDoctrine()->getRepository('KrakenRankingBundle:Review')->findByEmail($form->get('email')->getData());
+
+                if (count($reviewsPerEmail) > 1) {
+                    $this->addFlash('error', 'Z tego adresu e-mail dodane zostały już opinie o dwóch różnych kotłach.');
+
+                    return $this->redirectToRoute('ranking_review');
+                }
+
                 $em->persist($review);
                 $em->flush();
 
@@ -246,7 +262,7 @@ class GeneralController extends BaseController
         $em = $this->getDoctrine()->getManager();
 
         if ($uid == 0) {
-            $form = $this->createForm(new SearchForm(), null);
+            $form = $this->createForm(new SearchForm(), null, ['vertical' => true]);
             $form->handleRequest($request);
 
             if ($form->isValid()) {
@@ -270,17 +286,18 @@ class GeneralController extends BaseController
         $searchRecord = $this->getDoctrine()
             ->getRepository('KrakenRankingBundle:Search')
             ->findOneBy(['id' => intval($uid, 36)]);
-        $form = $this->createForm(new SearchForm(), $searchRecord);
+        $form = $this->createForm(new SearchForm(), $searchRecord, ['vertical' => true]);
 
         $qb = $em->createQueryBuilder();
         $query = $qb
             ->select('b')
-            ->from('KrakenRankingBundle:Boiler', 'b');
+            ->from('KrakenRankingBundle:Boiler', 'b')
+            ->andWhere('b.published = 1');
 
         if ($searchRecord->getModelName() != '') {
             $query
                 ->innerJoin('b.manufacturer', 'm')
-                ->where($qb->expr()->orX(
+                ->andWhere($qb->expr()->orX(
                     $qb->expr()->like('b.name', ':model_name'),
                     $qb->expr()->like('m.name', ':model_name')
                 ))
@@ -378,13 +395,14 @@ class GeneralController extends BaseController
         $search = new Search();
         $search->setManufacturer($manufacturer);
 
-        $form = $this->createForm(new SearchForm(), $search);
+        $form = $this->createForm(new SearchForm(), $search, ['vertical' => true]);
 
         $query = $this->getDoctrine()->getManager()
             ->createQueryBuilder()
             ->select('b')
             ->from('KrakenRankingBundle:Boiler', 'b')
             ->where('b.manufacturer = :manufacturer')
+            ->andWhere('b.published = 1')
             ->setParameter('manufacturer', $manufacturer->getId());
 
         if ($sort == 'najtansze') {
@@ -413,16 +431,17 @@ class GeneralController extends BaseController
         $search = new Search();
         $search->setCategory($category);
 
-        $form = $this->createForm(new SearchForm(), $search);
+        $form = $this->createForm(new SearchForm(), $search, ['vertical' => true]);
+        $categories = $category->getChildrenIds();
+        $categories[] = $category->getId();
 
         $query = $this->getDoctrine()->getManager()
             ->createQueryBuilder()
             ->select('b')
             ->from('KrakenRankingBundle:Boiler', 'b')
-            ->where('b.category = :category')
-            ->orWhere('b.category IN (:subcategories)')
-            ->setParameter('category', $category->getId())
-            ->setParameter('subcategories', $category->getChildrenIds());
+            ->where('b.published = 1')
+            ->andWhere('b.category IN (:categories)')
+            ->setParameter('categories', $categories);
 
         if ($sort == 'najtansze') {
             $query->addOrderBy('b.typicalModelPrice', 'ASC');
@@ -448,9 +467,20 @@ class GeneralController extends BaseController
      */
     public function boilerAction(Category $category, Boiler $boiler)
     {
-        $templateName = $boiler->isRejected() ? 'boilerRejected' : 'boiler';
+        $em = $this->getDoctrine()->getManager();
 
-        return $this->render('KrakenRankingBundle:Ranking:'.$templateName.'.html.twig', ['boiler' => $boiler]);
+        if (!$boiler->isPublished()) {
+            throw $this->createNotFoundException('Nie ma takiego kotła :/');
+        }
+
+        $templateName = $boiler->isRejected() ? 'boilerRejected' : 'boiler';
+        //TODO tylko zatwierdzone
+        $experiences = $em->getRepository('KrakenRankingBundle:Experience')->findByBoiler($boiler);
+
+        return $this->render('KrakenRankingBundle:Ranking:'.$templateName.'.html.twig', [
+            'boiler' => $boiler,
+            'experiences' => $experiences
+        ]);
     }
 
     /**

@@ -18,17 +18,13 @@ class BoilerAdmin extends Admin
             ->add('manufacturer', null, ['label' => 'Producent'])
             ->add('manufacturerSite', null, ['label' => 'Strona producenta z tym kotłem', 'required' => true])
             ->add('rejected', null, ['label' => 'Do salonu odrzuconych'])
-            ->add('needsFixing', null, ['label' => 'Wymaga drobnych poprawek'])
             ->add('material', 'choice', ['choices' => ['steel' => 'Stal', 'cast_iron' => 'Żeliwo'], 'label' => 'Materiał konstrukcyjny wymiennika'])
             ->add('imageFile', 'vich_file', ['label' => 'Główny obrazek', 'required' => false])
             ->add('crossSectionFile', 'vich_file', ['label' => 'Przekrój', 'required' => false])
-            ->add('propertyValues', 'sonata_type_collection', ['label' => 'Lista cech'], [
-                'edit' => 'inline',
-                'inline' => 'table',
-            ])
             ->add('boilerPowers', 'sonata_type_collection', ['label' => 'Lista mocy', 'by_reference' => false], [
                 'edit' => 'inline',
                 'inline' => 'table',
+                'allow_delete' => true,
             ])
             ->add('boilerFuelTypes', 'sonata_type_collection', ['label' => 'Lista paliw'], [
                 'edit' => 'inline',
@@ -45,7 +41,7 @@ class BoilerAdmin extends Admin
             ->add('normClass', null, ['label' => 'Klasa wg PN-EN 303-5:2012'])
             ->add('typicalModelPower', null, ['label' => 'Moc wzorcowego modelu'])
             ->add('typicalModelExchanger', null, ['label' => 'Pow. wymiennika'])
-            ->add('typicalModelCapacity', null, ['label' => 'Poj. zasypowa'])
+            ->add('typicalModelCapacity', null, ['label' => 'Poj. zasypowa / zasobnika (l)'])
             ->add('typicalModelPrice', null, ['label' => 'Cena'])
             ->add('warranty', null, ['label' => 'Długość gwarancji (miesiące)'])
             ->add('userManual', null, ['label' => 'Link do DTR'])
@@ -54,6 +50,7 @@ class BoilerAdmin extends Admin
                 'edit' => 'inline',
                 'inline' => 'table',
             ])
+            ->add('published')
         ;
     }
 
@@ -63,6 +60,7 @@ class BoilerAdmin extends Admin
             ->add('name', null, ['label' => 'Model'])
             ->add('category', null, ['label' => 'Rodzaj'])
             ->add('manufacturer', null, ['label' => 'Producent'])
+            ->add('published', null, ['label' => 'Opublikowany'])
         ;
     }
 
@@ -72,6 +70,7 @@ class BoilerAdmin extends Admin
             ->addIdentifier('name', null, ['label' => 'Model'])
             ->add('category', null, ['label' => 'Rodzaj'])
             ->add('manufacturer', null, ['label' => 'Producent'])
+            ->add('published', null, ['label' => 'Opublikowany'])
         ;
     }
 
@@ -80,5 +79,54 @@ class BoilerAdmin extends Admin
         return $object instanceof Boiler
             ? $object->getName()
             : 'Kocioł';
+    }
+
+    public function prePersist($boiler)
+    {
+        foreach ($boiler->getBoilerPowers() as $bp) {
+            $bp->setBoiler($boiler);
+        }
+
+        foreach ($boiler->getBoilerFuelTypes() as $bf) {
+            $bf->setBoiler($boiler);
+        }
+
+        foreach ($boiler->getChanges() as $c) {
+            $c->setBoiler($boiler);
+        }
+
+        foreach ($boiler->getNotices() as $n) {
+            $n->setBoiler($boiler);
+        }
+    }
+
+    public function preUpdate($boiler)
+    {
+        foreach ($boiler->getBoilerPowers() as $bp) {
+            $bp->setBoiler($boiler);
+        }
+
+        $boiler->setBoilerPowers($boiler->getBoilerPowers());
+
+
+        foreach ($boiler->getBoilerFuelTypes() as $bf) {
+            $bf->setBoiler($boiler);
+        }
+
+        $boiler->setBoilerFuelTypes($boiler->getBoilerFuelTypes());
+
+
+        foreach ($boiler->getChanges() as $c) {
+            $c->setBoiler($boiler);
+        }
+
+        $boiler->setChanges($boiler->getChanges());
+
+
+        foreach ($boiler->getNotices() as $n) {
+            $n->setBoiler($boiler);
+        }
+
+        $boiler->setNotices($boiler->getNotices());
     }
 }
