@@ -212,7 +212,7 @@ class GeneralController extends BaseController
             ]);
         } else {
             $review = $em->getRepository('KrakenRankingBundle:Review')->find($this->get('session')->get('review_id'));
-            $experiences = $em->getRepository('KrakenRankingBundle:Experience')->findByBoiler($review->getBoiler()->getId());
+            $experiences = $em->getRepository('KrakenRankingBundle:Experience')->findBy(['boiler' => $review->getBoiler()->getId(), 'accepted' => true]);
 
             foreach ($experiences as $e) {
                 $re = new ReviewExperience();
@@ -233,6 +233,9 @@ class GeneralController extends BaseController
                     $em->persist($ownExp);
                 }
 
+                $review->setIp($_SERVER['REMOTE_ADDR']);
+                $review->setUserAgent($_SERVER['HTTP_USER_AGENT']);
+
                 $em->persist($review);
                 $em->flush();
 
@@ -240,7 +243,7 @@ class GeneralController extends BaseController
 
                 $this->addFlash(
                     'success',
-                    'OK. Twoja opinia została przesłana do poczekalni. Dostaniesz wiadomość jak tylko zostanie dodana do zestawienia.'
+                    'OK. Twoja opinia została przesłana do poczekalni. Dostaniesz wiadomość jak tylko wejdzie do zestawienia lub skontaktujemy się z tobą gdyby były jakieś wątpliwości.'
                 );
 
                 return $this->redirectToRoute('ranking_review');
@@ -474,12 +477,11 @@ class GeneralController extends BaseController
         }
 
         $templateName = $boiler->isRejected() ? 'boilerRejected' : 'boiler';
-        //TODO tylko zatwierdzone
-        $experiences = $em->getRepository('KrakenRankingBundle:Experience')->findByBoiler($boiler);
+        $experiences = $em->getRepository('KrakenRankingBundle:Experience')->findMostConfirmed($boiler);
 
         return $this->render('KrakenRankingBundle:Ranking:'.$templateName.'.html.twig', [
             'boiler' => $boiler,
-            'experiences' => $experiences
+            'experiences' => $experiences,
         ]);
     }
 

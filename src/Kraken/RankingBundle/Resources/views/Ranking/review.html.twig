@@ -23,9 +23,10 @@
         {% if selectedBoiler %}
             <div class="row">
                 <div class="col-md-12">
+                    {% if experiences|length > 0 %}
                     <div class="form-group">
                         <h3>Doświadczenia innych użytkowników</h3>
-                        <p>Na początek zobacz, co zauważyli inni użytkownicy tego kotła i zaznacz przy każdej z obserwacji, czy również miałeś podobne doświadczenie.</p>
+                        <p>Na początek zobacz, co zauważyli inni użytkownicy tego kotła i zaznacz przy każdej z obserwacji, czy coś podobnego zdarzało się także u ciebie.</p>
                         <table class="table table-striped">
                         {% for exp in experiences %}
                             <tr>
@@ -37,46 +38,45 @@
                                     {{ form_widget(form.reviewExperiences[loop.index0].confirmed) }}
                                 </td>
                             </tr>
-                        {% else %}
-                            <tr><td>
-                                <p><em>Dla tego kotła nie dodano jeszcze żadnych obserwacji.</em></p>
-                            </td></tr>
                         {% endfor %}
                         </table>
                     </div>
+                    {% else %}
                     <div class="form-group">
-                        <h3>Twoje doświadczenia</h3>
-                        <p>Tutaj możesz dodać to, czego nie znajdujesz na powyższej liście lub rozwinąć obserwacje poprzedników.</p>
+                        <h3>Doświadczenia innych użytkowników</h3>
+                        <p>Na razie brak &mdash; oceniasz ten kocioł jako pierwszy!</p>
+                        <div style="display:none">{{ form_row(form.reviewExperiences) }}</div>
+                    </div>
+                    {% endif %}
+                    <div class="form-group">
+                        <h3>Twoje doświadczenia z tym kotłem</h3>
+                        <p>Masz konkretne uwagi co do tego kotła? Coś nie działa jak powinno, a może ten kocioł jest najlepszym w twojej karierze? Śmiało pisz o wszystkim!</p>
                         {{ form_row(form.ownExperiences) }}
                     </div>
                     <div class="form-group">
                         <h3>Twój staż</h3>
                         {{ form_row(form.practice) }}
-                        {{ form_row(form.boiler_practice) }}
+                        {{ form_row(form.boilerPractice) }}
                     </div>
                     <div class="form-group">
                         <h3>Wykonanie i trwałość</h3>
                         <p>Lipsum.</p>
-                        {{ form_row(form.quality_rating) }}
-                        {{ form_row(form.quality_comment) }}
-                        {{ form_row(form.warranty_rating) }}
-                        {{ form_row(form.warranty_comment) }}
+                        {{ form_row(form.qualityRating) }}
+                        {{ form_row(form.qualityComment) }}
+                        {{ form_row(form.warrantyRating) }}
+                        {{ form_row(form.warrantyComment) }}
                     </div>
                     <div class="form-group">
                         <h3>Obsługa</h3>
                         <p>Czy nie ma problemów z czyszczeniem?</p>
-                        {{ form_row(form.controller_rating) }}
-                    </div>
-                    <div class="form-group">
-                        <h3>Paliwa</h3>
-                        <p>Lipsum.</p>
-                        {{ form_row(form.boiler_power) }}
-                        {{ form_row(form.fuels_comment) }}
+                        {{ form_row(form.boilerPower) }}
+                        {{ form_row(form.operationRating) }}
+                        {{ form_row(form.operationComment) }}
                     </div>
                     <div class="form-group">
                         <h3>Budynek</h3>
-                        {{ form_row(form.house_area) }}
-                        {{ form_row(form.house_standard) }}
+                        {{ form_row(form.houseArea) }}
+                        {{ form_row(form.houseStandard) }}
                     </div>
                     <div class="form-group">
                         <h3>Podsumowanie</h3>
@@ -107,8 +107,8 @@
         <p>Po kolei:</p>
         <ul>
             <li>Wybierasz kocioł, z którym miałeś do czynienia.</li>
-            <li>Podajesz swój adres e-mail &mdash; posłuży on jako twój identyfikator oraz ewentualnie droga kontaktu w sprawie treści opinii.</li>
-            <li>Przeglądasz to, co zauważyli inni użytkownicy kotła i potwierdzasz ich obserwacje lub nie oraz możesz dodać własne.</li>
+            <li>Podajesz swój adres e-mail &mdash; posłuży on jako twój identyfikator oraz ewentualnie droga kontaktu w sprawie treści opinii. Nie będzie wykorzystywany do innego celu ani nikomu udostępniany.</li>
+            <li>Przeglądasz to, co zauważyli inni użytkownicy kotła i potwierdzasz ich obserwacje (lub nie) oraz możesz dodać własne.</li>
             <li>Oceniasz ogólne działanie kotła pod najważniejszymi względami.</li>
         </ul>
         <p>Twoja opinia <strong>nigdy nie będzie widoczna publicznie</strong>, lecz posłuży do przygotowania zbiorczej statystyki i podsumowania cech kotła, które potwierdziła największa część użytkowników. To dla czytelności, ale też abyś mógł sobie pozwolić na szczerość.</p>

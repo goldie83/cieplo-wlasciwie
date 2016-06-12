@@ -32,6 +32,7 @@ class BoilerPower
     public function __toString()
     {
         $power = (double) $this->power == (int) $this->power ? number_format($this->power) : number_format($this->power, 1);
+
         return $power . 'kW';
     }
 
@@ -40,13 +41,6 @@ class BoilerPower
         return $this->id;
     }
 
-    /**
-     * Set power.
-     *
-     * @param string $power
-     *
-     * @return BoilerPower
-     */
     public function setPower($power)
     {
         $this->power = $power;
@@ -54,11 +48,6 @@ class BoilerPower
         return $this;
     }
 
-    /**
-     * Get power.
-     *
-     * @return string
-     */
     public function getPower()
     {
         return $this->power;

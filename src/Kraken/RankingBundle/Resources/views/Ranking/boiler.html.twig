@@ -193,16 +193,35 @@
           </div>
           <div role="tabpanel" class="tab-pane fade" id="reviews" aria-labelledby="reviews-tab">
               <h2>Doświadczenia użytkowników</h2>
-              {% if boiler.reviews|length > 1 %}
-                  <h3>Ogólna ocena</h3>
-                  <p><strong>3,5/5</strong> (45 osób)
-                  <h3>Doświadczenia użytkowników</h3>
-                  <dl>
-                  {% for exp in experiences %}
-                      <dt>{{ exp.title }} ({{ exp.countConfirmations }}xTAK, {{ exp.countNegations }}xNIE)</dt>
-                      <dd>{{ exp.content }}</dd>
-                  {% endfor %}
-                  </dl>
+              {% if boiler.reviewSummary and boiler.reviewSummary.rating > 0 %}
+                  <h3>Ogólna ocena: <span class="label label-success">{{ boiler.reviewSummary.ratingString }}/5</span> <small>(ocen: {{ boiler.reviewSummary.reviewsNumber }})</small></h3>
+                  <p>{{ boiler.reviewSummary.comment|raw }}&nbsp;</p>
+
+                  <h4>Jakość wykonania: <span class="label label-success">{{ boiler.reviewSummary.qualityRatingString }}/5</span></h4>
+                  <p>{{ boiler.reviewSummary.qualityComment|raw }}&nbsp;</p>
+
+                  {% if boiler.reviewSummary.warrantyReviewsNumber > 0 %}
+                      <h4>Gwarancja i serwis: <span class="label label-success">{{ boiler.reviewSummary.warrantyRatingString }}/5</span> <small>(ocen: {{ boiler.reviewSummary.warrantyReviewsNumber }})</small></h4>
+                  {% else %}
+                  <h4>Gwarancja i serwis: <small>jeszcze nikt nie korzystał z gwarancji ani serwisu</small></h4>
+                  {% endif %}
+                  <p>{{ boiler.reviewSummary.warrantyComment|raw }}&nbsp;</p>
+
+                  <h4>Obsługa: <span class="label label-success">{{ boiler.reviewSummary.operationRatingString }}/5</span></h4>
+                  <p>{{ boiler.reviewSummary.operationComment|raw }}&nbsp;</p>
+
+                  <h3>Co zauważyli użytkownicy</h3>
+                  {% if experiences|length > 0 %}
+                      <dl>
+                      {% for exp in experiences %}
+                          <dt>{{ exp.title }} ({{ exp.countConfirmations == 1 ? '1 głos' : exp.countConfirmations ~ ' głosów' }} na TAK, {{ exp.countNegations == 1 ? '1 głos' : exp.countNegations ~ ' głosów' }} na NIE)</dt>
+                          <dd>{{ exp.content }}</dd>
+                      {% endfor %}
+                      </dl>
+                  {% else %}
+                      <div class="alert alert-info">Na razie nie ma żadnych spostrzeżeń użytkowników odnośnie tego kotła.</div>
+                  {% endif %}
+
               {% else %}
                   <p>Nikt jeszcze nie dodał opinii. <a href="{{ path('ranking_review', {boilerId: boiler.id}) }}"><strong>Zrób to jako pierwszy!</strong></a></p>
               {% endif %}

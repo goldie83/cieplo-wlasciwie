@@ -13,7 +13,18 @@ class ReviewAdmin extends Admin
     {
         $formMapper
             ->add('boiler', null, ['label' => 'Kocioł'])
+            ->add('rating', null, ['label' => 'Ogólna ocena'])
+            ->add('comment', 'textarea', ['label' => 'Ogólny komentarz', 'required' => false])
+            ->add('qualityRating', null, ['label' => 'Ocena jakości wykonania'])
+            ->add('qualityComment', 'textarea', ['label' => 'Komentarz odnośnie jakości wykonania', 'required' => false])
+            ->add('warrantyRating', null, ['label' => 'Ocena serwisu i gwarancji'])
+            ->add('warrantyComment', 'textarea', ['label' => 'Komentarz odnośnie gwarancji i serwisu', 'required' => false])
+            ->add('operationRating', null, ['label' => 'Ocena obsługi'])
+            ->add('operationComment', 'textarea', ['label' => 'Komentarz odnośnie obsługi', 'required' => false])
             ->add('email', null, ['label' => 'E-mail'])
+            ->add('ip', null, ['label' => 'IP'])
+            ->add('userAgent', null, ['label' => 'Klient'])
+            ->add('accepted', null, ['label' => 'Zaakceptowany'])
         ;
     }
 
@@ -31,6 +42,7 @@ class ReviewAdmin extends Admin
             ->add('boiler')
             ->add('email')
             ->add('created')
+            ->add('accepted')
         ;
     }
 }

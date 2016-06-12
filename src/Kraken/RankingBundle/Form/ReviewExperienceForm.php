@@ -11,8 +11,6 @@ class ReviewExperienceForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-//             ->add('review')
-//             ->add('experience')
             ->add('confirmed', 'choice', [
                 'choices' => [0 => 'Nie potwierdzam', 1 => 'Potwierdzam'],
                 'expanded' => true,

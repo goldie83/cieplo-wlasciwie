@@ -7,7 +7,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="Kraken\RankingBundle\Repository\ExperienceRepository")
  * @ORM\Table(name="experiences")
  */
 class Experience
@@ -50,6 +50,12 @@ class Experience
      * @ORM\OneToMany(targetEntity="ReviewExperience", mappedBy="experience", cascade={"all"}, orphanRemoval=true)
      */
     protected $reviewExperiences;
+
+
+    public function __toString()
+    {
+        return $this->getBoiler()->getName().': '.$this->getTitle();
+    }
 
     public function getId()
     {
@@ -103,6 +109,36 @@ class Experience
 
         return $this;
     }
+
+    public function isAccepted()
+    {
+        return $this->accepted;
+    }
+
+    public function setAccepted($accepted)
+    {
+        $this->accepted = $accepted;
+
+        return $this;
+    }
+
+    public function getReviewExperiences()
+    {
+        return $this->reviewExperiences;
+    }
+
+    public function addReviewExperience(ReviewExperience $reviewExperience)
+    {
+        $this->reviewExperiences[] = $reviewExperience;
+
+        return $this;
+    }
+
+    public function removeReviewExperience(ReviewExperience $reviewExperience)
+    {
+        $this->reviewExperiences->removeElement($reviewExperience);
+    }
+
 
     public function countConfirmations()
     {

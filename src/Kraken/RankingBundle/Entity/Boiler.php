@@ -102,6 +102,12 @@ class Boiler
     protected $notices;
 
     /**
+     * @ORM\OneToOne(targetEntity="ReviewSummary", cascade={"all"})
+     * @ORM\JoinColumn(name="review_summary_id", referencedColumnName="id")
+     */
+    protected $reviewSummary;
+
+    /**
      * @ORM\Column(type="text", nullable=true)
      */
     protected $lead;
@@ -197,9 +203,8 @@ class Boiler
      * @Gedmo\Timestampable(on="update")
      */
     protected $updated;
-    /**
-     * Constructor.
-     */
+
+
     public function __construct()
     {
         $this->changes = new \Doctrine\Common\Collections\ArrayCollection();
@@ -207,6 +212,7 @@ class Boiler
         $this->notices = new \Doctrine\Common\Collections\ArrayCollection();
         $this->boilerPowers = new \Doctrine\Common\Collections\ArrayCollection();
         $this->boilerFuelTypes = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->reviewSummary = new ReviewSummary();
     }
 
     public function __toString()
@@ -219,13 +225,6 @@ class Boiler
         return $this->id;
     }
 
-    /**
-     * Set name.
-     *
-     * @param string $name
-     *
-     * @return Boiler
-     */
     public function setName($name)
     {
         $this->name = $name;
@@ -233,23 +232,11 @@ class Boiler
         return $this;
     }
 
-    /**
-     * Get name.
-     *
-     * @return string
-     */
     public function getName()
     {
         return $this->name;
     }
 
-    /**
-     * Set slug.
-     *
-     * @param string $slug
-     *
-     * @return Boiler
-     */
     public function setSlug($slug)
     {
         $this->slug = $slug;
@@ -257,11 +244,6 @@ class Boiler
         return $this;
     }
 
-    /**
-     * Get slug.
-     *
-     * @return string
-     */
     public function getSlug()
     {
         return $this->slug;
@@ -343,11 +325,6 @@ class Boiler
         return $this;
     }
 
-    /**
-     * Get crossSection.
-     *
-     * @return string
-     */
     public function getCrossSection()
     {
         return $this->crossSection;
@@ -734,6 +711,18 @@ class Boiler
     public function removeNotice(\Kraken\RankingBundle\Entity\Notice $notices)
     {
         $this->notices->removeElement($notices);
+    }
+
+    public function setReviewSummary($reviewSummary)
+    {
+        $this->reviewSummary = $reviewSummary;
+
+        return $this;
+    }
+
+    public function getReviewSummary()
+    {
+        return $this->reviewSummary;
     }
 
     public function addBoilerFuelType(\Kraken\RankingBundle\Entity\BoilerFuelType $boilerFuelTypes)

@@ -49,8 +49,18 @@ services:
         arguments: [~, Kraken\RankingBundle\Entity\Review, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, label: Opinie }
+    admin.review_summary:
+        class: Kraken\RankingBundle\Admin\ReviewSummaryAdmin
+        arguments: [~, Kraken\RankingBundle\Entity\ReviewSummary, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Podsumowania opinii, show_in_dashboard: false }
     admin.experience:
         class: Kraken\RankingBundle\Admin\ExperienceAdmin
         arguments: [~, Kraken\RankingBundle\Entity\Experience, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, label: Doświadczenia }
+
+    ranking.review_listener:
+        class: Kraken\RankingBundle\Listener\ReviewListener
+        tags:
+            - { name: doctrine.event_subscriber }

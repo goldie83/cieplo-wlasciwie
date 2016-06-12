@@ -50,6 +50,7 @@ class BoilerAdmin extends Admin
                 'edit' => 'inline',
                 'inline' => 'table',
             ])
+            ->add('reviewSummary', 'sonata_type_admin', ['label' => 'Podsumowanie ocen'])
             ->add('published')
         ;
     }

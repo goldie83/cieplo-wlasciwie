@@ -39,6 +39,12 @@ class ReviewExperience
      */
     protected $confirmed = false;
 
+
+    public function __toString()
+    {
+        return $this->getExperience()->getTitle();
+    }
+
     public function getReview()
     {
         return $this->review;

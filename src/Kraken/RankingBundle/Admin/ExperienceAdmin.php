@@ -13,6 +13,9 @@ class ExperienceAdmin extends Admin
     {
         $formMapper
             ->add('boiler', null, ['label' => 'Kocioł'])
+            ->add('title', null, ['label' => 'Tytuł'])
+            ->add('content', null, ['label' => 'Treść'])
+            ->add('accepted', null, ['label' => 'Zaakceptowany'])
         ;
     }
 
@@ -23,6 +26,11 @@ class ExperienceAdmin extends Admin
 
     protected function configureListFields(ListMapper $listMapper)
     {
-        $listMapper->addIdentifier('boiler');
+        $listMapper
+            ->addIdentifier('id')
+            ->add('boiler')
+            ->add('title')
+            ->add('accepted')
+        ;
     }
 }

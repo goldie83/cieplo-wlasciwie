@@ -46,11 +46,10 @@ class ReviewForm extends AbstractType
                     '5-10 lat',
                     'Ponad 10 lat',
                 ],
-                'help_block' => 'Nie wstydź się przyznać, jeśli dopiero zaczynasz. Tym bardziej twoja opinia będzie cenna, bo masz świeże spojrzenie na temat.',
-                'mapped' => false,
+                'help_block' => 'Nie bój się przyznać, jeśli dopiero zaczynasz. Tym bardziej twoja opinia będzie cenna, bo masz świeże spojrzenie na temat.',
                 'expanded' => true,
             ])
-            ->add('boiler_practice', 'choice', [
+            ->add('boilerPractice', 'choice', [
                 'label' => 'Jak długo używasz tego kotła?',
                 'choices' => [
                     'Nie więcej jak jeden sezon',
@@ -59,58 +58,62 @@ class ReviewForm extends AbstractType
                     '5-10 lat',
                     'Ponad 10 lat',
                 ],
-                'mapped' => false,
                 'expanded' => true,
             ])
-            ->add('quality_rating', 'choice', [
-                'label' => 'Jak oceniasz jakość wykonania?',
+            ->add('qualityRating', 'choice', [
+                'label' => 'Jak oceniasz jakość wykonania kotła?',
                 'choices' => [
-                    5 => '5 - nie mam zastrzeżeń',
-                    4 => '4 - drobne niedociągnięcia co najwyżej estetyczne',
-                    3 => '3 - są upierdliwe niedoróbki',
-                    2 => '2 - wat?',
-                    1 => '1 - dopłacę byle to ode mnie zabrali',
+                    5 => '5 - wszystko w porządku',
+                    4 => '4 - nie wszystkie kanty doszlifowane, ale kocioł to nie lodówka',
+                    3 => '3 - czasem coś się odkręci, urwie, rozszczelni, ale daje się naprawić',
+                    2 => '2 - są elementy, które regularnie się psują',
+                    1 => '1 - cud techniki: kocioł który ulega biodegradacji',
                 ],
-                'mapped' => false,
                 'expanded' => true,
             ])
-            ->add('quality_comment', 'textarea', [
-                'label' => 'Szczegóły',
+            ->add('qualityComment', 'textarea', [
+                'label' => 'Komentarz odnośnie jakości wykonania',
+                'help_block' => 'Pisz tutaj jeśli masz coś do dodania',
                 'attr' => ['rows' => 8],
-                'mapped' => false,
+                'required' => false,
             ])
-            ->add('warranty_rating', 'choice', [
+            ->add('warrantyRating', 'choice', [
                 'label' => 'Jak oceniasz serwis gwarancyjny?',
                 'choices' => [
                     0 => 'Nie było okazji skorzystać',
                     5 => '5 - nie mam zastrzeżeń',
-                    4 => '4 - drobne niedociągnięcia co najwyżej estetyczne',
-                    3 => '3 - są upierdliwe niedoróbki',
-                    2 => '2 - wat?',
-                    1 => '1 - dopłacę byle to ode mnie zabrali',
+                    4 => '4 - długo trzeba było czekać, ale swoje zrobili',
+                    3 => '3 - nie wszystko mi się podobało, ale swoje zrobili',
+                    2 => '2 - naprawili tak, że trzeba było poprawiać',
+                    1 => '1 - w ogóle nie chcieli ze mną gadać',
                 ],
-                'mapped' => false,
                 'expanded' => true,
             ])
-            ->add('warranty_comment', 'textarea', [
-                'label' => 'Szczegóły',
+            ->add('warrantyComment', 'textarea', [
+                'label' => 'Komentarz odnośnie gwarancji i serwisu',
+                'help_block' => 'Pisz tutaj jeśli masz coś do dodania',
                 'attr' => ['rows' => 8],
-                'mapped' => false,
+                'required' => false,
             ])
-            ->add('controller_rating', 'choice', [
-                'label' => 'Jak oceniasz łatwość obsługi sterownika?',
+            ->add('operationRating', 'choice', [
+                'label' => 'Jak oceniasz łatwość codziennej obsługi?',
                 'choices' => [
-                    5 => '5 - nie mam zastrzeżeń',
-                    4 => '4 - drobne niedociągnięcia co najwyżej estetyczne',
-                    3 => '3 - są upierdliwe niedoróbki',
-                    2 => '2 - wat?',
-                    1 => '1 - dopłacę byle to ode mnie zabrali',
+                    5 => '5 - nie mam z niczym problemu',
+                    4 => '4 - na początku były długie wieczory w kotłowni, ale teraz ogarniam',
+                    3 => '3 - czasem trzeba się z czymś dłużej pomęczyć',
+                    2 => '2 - mało kiedy pali się bez problemów',
+                    1 => '1 - obsługa kotłowni to koszmar',
                 ],
                 'data' => 0,
-                'mapped' => false,
                 'expanded' => true,
             ])
-            ->add('boiler_power', 'entity', [
+            ->add('operationComment', 'textarea', [
+                'label' => 'Komentarz odnośnie obsługi kotła',
+                'help_block' => 'Pisz tutaj jeśli masz coś do dodania',
+                'attr' => ['rows' => 8],
+                'required' => false,
+            ])
+            ->add('boilerPower', 'entity', [
                 'class' => 'KrakenRankingBundle:BoilerPower',
                 'label' => 'Której mocy kocioł masz u siebie?',
                 'query_builder' => function (EntityRepository $er) use ($options) {
@@ -119,21 +122,14 @@ class ReviewForm extends AbstractType
                         ->setParameter('boiler', $options['boiler_id'])
                     ;
                 },
-                'mapped' => false,
             ])
-            ->add('fuels_comment', 'textarea', [
-                'label' => 'Doświadczenia z paliwami',
-                'attr' => ['rows' => 8],
-                'mapped' => false,
-            ])
-            ->add('house_area', 'number', [
-                'label' => 'Jaki metraż ogrzewasz?',
+            ->add('houseArea', 'number', [
+                'label' => 'Jaki mniej więcej metraż ogrzewasz?',
                 'widget_addon_append' => [
                     'text' => 'mkw.',
                 ],
-                'mapped' => false,
             ])
-            ->add('house_standard', 'choice', [
+            ->add('houseStandard', 'choice', [
                 'label' => 'Jak docieplony jest dom?',
                 'label_attr' => ['style' => 'text-align:left'],
                 'choices' => [
@@ -144,7 +140,6 @@ class ReviewForm extends AbstractType
                     'Prawie wcale - jedynie pustka powietrzna w murze, w dachu/podłodze żużel/trociny lub coś podobnego z epoki przedstyropianowej',
                     'Ani trochę - goły mur i beton, względnie drewno',
                 ],
-                'mapped' => false,
                 'expanded' => true,
             ])
             ->add('rating', 'choice', [
@@ -157,14 +152,13 @@ class ReviewForm extends AbstractType
                     2 => '2 - jedyna zaleta: jako tako grzeje',
                     1 => '1 - dopłacę byle to ode mnie zabrali',
                 ],
-                'mapped' => false,
                 'expanded' => true,
             ])
             ->add('comment', 'textarea', [
-                'label' => 'Luźny komentarz',
+                'label' => 'Ogólny komentarz',
                 'help_block' => 'Pisz tutaj jeśli masz coś jeszcze do dodania, co nie zmieściło się lub nie pasowało gdzie indziej. Ten tekst nie będzie opublikowany.',
                 'attr' => ['rows' => 8],
-                'mapped' => false,
+                'required' => false,
             ])
         ;
     }
