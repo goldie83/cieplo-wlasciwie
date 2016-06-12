@@ -1,6 +1,6 @@
 $(document).ready(function () {
     if (window.location.hash != '') {
-        $('#boilerTabs a[href="' + hash + '"]').tab('show');
+        $('#boilerTabs a[href="' + window.location.hash + '"]').tab('show');
     }
 
     $('#boilerTabs a').click(function (e) {
