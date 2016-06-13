@@ -44,7 +44,7 @@
         {% if boiler.isHandFueled %}
             <tr>
               <th scope="row">Przeciętna stałopalność</th>
-              <td>{{ boiler.typicalModelWorkTime }}h<sup>1</sup></td>
+              <td>~{{ boiler.typicalModelWorkTime }}h<sup>1</sup></td>
             </tr>
         {% endif %}
             <tr>
@@ -104,7 +104,7 @@
             </tr>
           </tbody>
         </table>
-        <p><sup>1</sup> - orientacyjny czas pracy na pełnym załadunku przy 60%&nbsp;mocy nominalnej</p>
+        <p><sup>1</sup> - orientacyjny czas pracy na pełnym załadunku paliwa podstawowego przy 60%&nbsp;mocy nominalnej</p>
         <p>Ostatnia aktualizacja: {{ boiler.updated|date('d.m.Y') }}</p>
     </div>
     <div class="col-sm-8">

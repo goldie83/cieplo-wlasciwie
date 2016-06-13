@@ -40,9 +40,7 @@ class AppKernel extends Kernel
             new Sonata\EasyExtendsBundle\SonataEasyExtendsBundle(),
             new Sonata\IntlBundle\SonataIntlBundle(),
             new JMS\SerializerBundle\JMSSerializerBundle(),
-            new Application\Sonata\ClassificationBundle\ApplicationSonataClassificationBundle(),
             new Application\Sonata\MediaBundle\ApplicationSonataMediaBundle(),
-            new Sonata\ClassificationBundle\SonataClassificationBundle(),
             new Kraken\WarmBundle\KrakenWarmBundle(),
             new Kraken\RankingBundle\KrakenRankingBundle(),
         );

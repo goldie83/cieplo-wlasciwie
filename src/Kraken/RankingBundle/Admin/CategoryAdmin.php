@@ -14,8 +14,9 @@ class CategoryAdmin extends Admin
         $formMapper
             ->add('name', null, ['label' => 'Nazwa kategorii'])
             ->add('singularName', null, ['label' => 'Nazwa w formie pojedynczej'])
-            ->add('description', 'textarea', ['label' => 'Opis'])
+            ->add('description', 'textarea', ['label' => 'Opis', 'required' => false])
             ->add('parent', null, ['label' => 'Kategoria nadrzędna'])
+            ->add('sort', null, ['label' => 'Kolejność'])
         ;
     }
 
@@ -33,6 +34,7 @@ class CategoryAdmin extends Admin
             ->addIdentifier('name')
             ->add('parent')
             ->add('description')
+            ->add('sort')
         ;
     }
 }

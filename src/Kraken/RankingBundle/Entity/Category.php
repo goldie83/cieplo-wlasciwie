@@ -64,9 +64,7 @@ class Category
      */
     protected $searches;
 
-    /**
-     * Constructor.
-     */
+
     public function __construct()
     {
         $this->boilers = new \Doctrine\Common\Collections\ArrayCollection();
