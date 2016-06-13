@@ -41,23 +41,11 @@ class Proposal
      */
     protected $content;
 
-    /**
-     * Get id.
-     *
-     * @return int
-     */
     public function getId()
     {
         return $this->id;
     }
 
-    /**
-     * Set url.
-     *
-     * @param string $url
-     *
-     * @return Proposal
-     */
     public function setUrl($url)
     {
         $this->url = $url;
@@ -65,23 +53,11 @@ class Proposal
         return $this;
     }
 
-    /**
-     * Get url.
-     *
-     * @return string
-     */
     public function getUrl()
     {
         return $this->url;
     }
 
-    /**
-     * Set content.
-     *
-     * @param string $content
-     *
-     * @return Proposal
-     */
     public function setContent($content)
     {
         $this->content = $content;
@@ -89,23 +65,11 @@ class Proposal
         return $this;
     }
 
-    /**
-     * Get content.
-     *
-     * @return string
-     */
     public function getContent()
     {
         return $this->content;
     }
 
-    /**
-     * Set email.
-     *
-     * @param string $email
-     *
-     * @return Proposal
-     */
     public function setEmail($email)
     {
         $this->email = $email;
@@ -113,11 +77,6 @@ class Proposal
         return $this;
     }
 
-    /**
-     * Get email.
-     *
-     * @return string
-     */
     public function getEmail()
     {
         return $this->email;

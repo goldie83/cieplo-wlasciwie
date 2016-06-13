@@ -19,15 +19,9 @@ class User extends BaseUser
     protected $id;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     protected $name;
-
-    public function __construct()
-    {
-        parent::__construct();
-        // your own logic
-    }
 
     public function setName($name)
     {

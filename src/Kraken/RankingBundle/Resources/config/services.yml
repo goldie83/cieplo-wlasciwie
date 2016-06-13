@@ -59,6 +59,16 @@ services:
         arguments: [~, Kraken\RankingBundle\Entity\Experience, ~]
         tags:
             - { name: sonata.admin, manager_type: orm, label: Doświadczenia }
+    admin.proposal:
+        class: Kraken\RankingBundle\Admin\ProposalAdmin
+        arguments: [~, Kraken\RankingBundle\Entity\Proposal, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Propozycje do rankingu }
+    admin.category:
+        class: Kraken\RankingBundle\Admin\CategoryAdmin
+        arguments: [~, Kraken\RankingBundle\Entity\Category, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Kategorie }
 
     ranking.review_listener:
         class: Kraken\RankingBundle\Listener\ReviewListener
