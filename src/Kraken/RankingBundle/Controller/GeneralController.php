@@ -156,7 +156,7 @@ class GeneralController extends BaseController
     /**
      * @Route("/dodaj-opinie-o-kotle/{boilerId}", name="ranking_review", defaults={"boilerId" = ""})
      */
-    public function reviewAction(Request $request, $boilerId)
+    public function reviewAction($boilerId, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 

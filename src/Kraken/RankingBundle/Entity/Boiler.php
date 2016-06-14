@@ -375,7 +375,14 @@ class Boiler
 
     public function getTypicalModelPower()
     {
-        return (double) $this->typicalModelPower == (int) $this->typicalModelPower ? $this->typicalModelPower : number_format($this->typicalModelPower, 1);
+        return $this->typicalModelPower;
+    }
+
+    public function getTypicalModelPowerString()
+    {
+        return ((double) $this->typicalModelPower) - ((int) $this->typicalModelPower) == 0
+            ? (int) $this->typicalModelPower
+            : number_format($this->typicalModelPower, 1, ',', '');
     }
 
     public function setTypicalModelExchanger($typicalModelExchanger)

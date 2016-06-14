@@ -12,7 +12,7 @@ class NoticeAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('noticePrototype', 'sonata_type_admin', ['label' => 'Prototyp'])
+            ->add('noticePrototype', 'entity', ['label' => 'Prototyp', 'class' => 'KrakenRankingBundle:NoticePrototype'])
             ->add('importance', null, ['label' => 'Ważność'])
             ->add('valuation', 'choice', [
                 'label' => 'Rodzaj',

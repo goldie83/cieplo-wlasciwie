@@ -24,6 +24,7 @@ class Review
     /**
      * @ORM\ManyToOne(targetEntity="Boiler", inversedBy="reviews")
      * @ORM\JoinColumn(name="boiler_id", referencedColumnName="id", nullable=false)
+     * @Assert\NotBlank()
      */
     protected $boiler;
 
@@ -105,6 +106,7 @@ class Review
 
     /**
      * @ORM\Column(type="string")
+     * @Assert\NotBlank()
      * @Assert\Email(
      *    message = "To nie jest prawidłowy adres e-mail"
      * )

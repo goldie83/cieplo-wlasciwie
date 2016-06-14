@@ -33,6 +33,11 @@ class NoticePrototype
     protected $label;
 
 
+    public function __toString()
+    {
+        return '['.$this->type.'] '.$this->label;
+    }
+
     public function getId()
     {
         return $this->id;

@@ -38,7 +38,7 @@ services:
         class: Kraken\RankingBundle\Admin\NoticePrototypeAdmin
         arguments: [~, Kraken\RankingBundle\Entity\NoticePrototype, ~]
         tags:
-            - { name: sonata.admin, manager_type: orm, label: Prototyp, show_in_dashboard: false }
+            - { name: sonata.admin, manager_type: orm, label: Prototypy cech }
     admin.manufacturer:
         class: Kraken\RankingBundle\Admin\ManufacturerAdmin
         arguments: [~, Kraken\RankingBundle\Entity\Manufacturer, ~]

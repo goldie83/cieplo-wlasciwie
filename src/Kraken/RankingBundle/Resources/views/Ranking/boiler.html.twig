@@ -44,7 +44,7 @@
         {% if boiler.isHandFueled %}
             <tr>
               <th scope="row">Przeciętna stałopalność</th>
-              <td>~{{ boiler.typicalModelWorkTime }}h<sup>1</sup></td>
+              <td>~{{ boiler.typicalModelWorkTime }}h<sup>(1)</sup></td>
             </tr>
         {% endif %}
             <tr>
@@ -52,7 +52,7 @@
               <td><span class="label label-{{ boiler.forClosedSystem ? 'success' : 'danger' }}">{{ boiler.forClosedSystem ? 'tak' : 'nie' }}</span></td>
             </tr>
             <tr>
-              <th scope="row">Paliwa</th>
+              <th scope="row">Paliwa podstawowe<sup>(2)</sup></th>
               <td>
                   <ul>
                   {% for bft in boiler.boilerFuelTypes %}
@@ -96,7 +96,7 @@
               <th scope="row">Orientacyjna cena</th>
               <td>
                   {% if boiler.typicalModelPrice %}
-                      od {{ boiler.typicalModelPrice|number_format(0, ',', ' ') }}zł ({{ boiler.typicalModelPower|number_format(1, ',', ' ') }}kW)
+                      od {{ boiler.typicalModelPrice|number_format(0, ',', ' ') }}zł ({{ boiler.typicalModelPowerString }}kW)
                   {% else %}
                       <em>nieznana</em>
                   {% endif %}
@@ -104,7 +104,8 @@
             </tr>
           </tbody>
         </table>
-        <p><sup>1</sup> - orientacyjny czas pracy na pełnym załadunku paliwa podstawowego przy 60%&nbsp;mocy nominalnej</p>
+        <p><sup>(1)</sup> - orientacyjny czas pracy na pełnym załadunku paliwa podstawowego przy 60%&nbsp;mocy nominalnej</p>
+        <p><sup>(2)</sup> - paliwa podstawowe określa producent; to takie, na których kocioł jest w stanie osiągnąć moc nominalną</p>
         <p>Ostatnia aktualizacja: {{ boiler.updated|date('d.m.Y') }}</p>
     </div>
     <div class="col-sm-8">
