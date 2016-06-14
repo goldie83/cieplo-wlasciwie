@@ -6,9 +6,10 @@ set :repo_url, 'git@github.com:juzefwt/cieplo-wlasciwie.git'
 set :assets_install_flags, '--symlink --relative'
 
 set :linked_files, fetch(:linked_files, []).push('app/config/parameters.yml')
-set :linked_dirs, [fetch(:log_path), 'web/uploads', 'node_modules', 'bower']
+set :linked_dirs, [fetch(:log_path), 'web/uploads', 'web/media', 'node_modules', 'bower']
 
 set :use_set_permissions, true
+set :webserver_user,    "www-data"
 set :use_sudo, true
 set :permission_method, :acl
 

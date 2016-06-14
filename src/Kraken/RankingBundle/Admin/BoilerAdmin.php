@@ -35,7 +35,26 @@ class BoilerAdmin extends Admin
                 'inline' => 'table',
             ])
             ->add('lead', 'ckeditor', ['label' => 'Wstęp'])
-            ->add('content', 'ckeditor', ['label' => 'Artykuł'])
+            ->add('content', 'ckeditor', [
+                'label' => 'Artykuł',
+                'config' => array(
+                'extraPlugins' => 'lineutils,widget,image2',
+                ),
+                'plugins' => array(
+                    'image2' => array(
+                        'path'     => 'bundles/sonataformatter/vendor/ckeditor/plugins/image2/',
+                        'filename' => 'plugin.js',
+                    ),
+                    'widget' => array(
+                        'path'     => 'bundles/sonataformatter/vendor/ckeditor/plugins/widget/',
+                        'filename' => 'plugin.js',
+                    ),
+                    'lineutils' => array(
+                        'path'     => 'bundles/sonataformatter/vendor/ckeditor/plugins/lineutils/',
+                        'filename' => 'plugin.js',
+                    ),
+                ),
+            ])
             ->add('ratingExplanation', 'ckeditor', ['label' => 'Wyjaśnienie oceny'])
             ->add('rating', null, ['label' => 'Ocena'])
             ->add('normClass', null, ['label' => 'Klasa wg PN-EN 303-5:2012'])
