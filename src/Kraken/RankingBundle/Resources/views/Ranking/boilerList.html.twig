@@ -21,7 +21,7 @@
                     <h3 style="margin:10px"><span class="label label-default pull-right" style="font-size:60%">Poza rankingiem</span> <a href="{{ url('ranking_boiler_overview', {'category': boiler.category.slug, 'boiler': boiler.slug}) }}">{{ boiler.name }}</a></h3>
                 </td>
             {% else %}
-                <td class="col-sm-2">
+                <td class="col-sm-2" style="text-align:center">
                     <img src="{{ vich_uploader_asset(boiler, 'imageFile')|imagine_filter('thumbnail') }}" />
                 </td>
                 <td class="col-sm-7">
