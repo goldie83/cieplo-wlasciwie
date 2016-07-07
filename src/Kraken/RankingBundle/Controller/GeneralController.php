@@ -308,9 +308,11 @@ class GeneralController extends BaseController
         }
 
         if ($searchRecord->getCategory() != '') {
+            $categories = array_merge($searchRecord->getCategory()->getChildrenIds(), [$searchRecord->getCategory()->getId()]);
+
             $query
-                ->andWhere('b.category = :category')
-                ->setParameter('category', $searchRecord->getCategory()->getId());
+                ->andWhere('b.category IN (:categories)')
+                ->setParameter('categories', $categories);
         }
 
         if ($searchRecord->getManufacturer() != '') {
@@ -364,12 +366,6 @@ class GeneralController extends BaseController
             $query
                 ->andWhere('b.forClosedSystem = :for_closed_system')
                 ->setParameter('for_closed_system', true);
-        }
-
-        if ($searchRecord->needsFixing()) {
-            $query
-                ->andWhere('b.needsFixing = :needs_fixing')
-                ->setParameter('needs_fixing', !$searchRecord->needsFixing());
         }
 
         if ($sort == 'najtansze') {

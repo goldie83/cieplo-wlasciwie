@@ -57,7 +57,7 @@ class SearchForm extends AbstractType
                 'horizontal_label_class' => $options['vertical'] ? ' ' : 'col-sm-4',
             ])
             ->add('normClass', 'choice', [
-                'choices' => [3, 4, 5],
+                'choices' => [3 => 3, 4 => 4, 5 => 5],
                 'label' => 'Klasa',
                 'help_block' => 'wg normy PN-EN 303-5:2012',
                 'placeholder' => 'dowolna',

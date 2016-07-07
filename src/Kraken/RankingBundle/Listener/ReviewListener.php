@@ -35,6 +35,8 @@ class ReviewListener implements EventSubscriber
             return;
         }
 
+        //TODO powiadamiać autora po publikacji opinii
+
         $em = $args->getEntityManager();
 
         $summary = $entity->getBoiler()->getReviewSummary();

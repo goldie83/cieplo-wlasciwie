@@ -629,23 +629,29 @@ class Boiler
     public function getWarrantyYears()
     {
         if ($this->warranty == 12) {
-            return 'rok';
+            return '1 rok';
         }
 
-        if ($this->warranty % 12 == 0) {
-            $years = $this->warranty / 12;
+        $years = $this->warranty / 12;
+        $months = $this->warranty % 12;
 
-            if ($years < 5) {
-                return sprintf('%d lata', $years);
-            }
+        $text = '';
 
-            return sprintf('%d lat', $years);
+        if ($years < 5) {
+            $text = sprintf('%d lata', $years);
         } else {
-            $years = $this->warranty / 12;
-            $fraction = ($this->warranty % 12) / 12 * 10;
-
-            return sprintf('%d,%d roku', $years, $fraction);
+            $text = sprintf('%d lat', $years);
         }
+
+        if ($months == 1) {
+            $text .= ' i 1 miesiąc';
+        } elseif ($months > 0 && $months < 5) {
+            $text .= sprintf(' i %d miesiące', $months);
+        } elseif ($months >= 5) {
+            $text .= sprintf(' i %d miesięcy', $months);
+        }
+
+        return $text;
     }
 
     public function getExchangerNormPercent()
