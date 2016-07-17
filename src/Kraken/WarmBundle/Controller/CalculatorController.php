@@ -287,7 +287,7 @@ class CalculatorController extends Controller
                 $em->refresh($topIsolationData);
                 $em->remove($topIsolationData);
 
-                if (!$shouldHaveBottomIsolation) {
+                if ($shouldHaveBottomIsolation || $bottomIsolationData == null) {
                     $em->flush();
                 }
             }
