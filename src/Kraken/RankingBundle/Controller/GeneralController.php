@@ -329,7 +329,7 @@ class GeneralController extends BaseController
 
             $query
                 ->innerJoin('b.boilerFuelTypes', 'f')
-                ->andWhere('f.id IN (:fuels)')
+                ->andWhere('f.fuelType IN (:fuels)')
                 ->setParameter('fuels', $fuels);
         }
 

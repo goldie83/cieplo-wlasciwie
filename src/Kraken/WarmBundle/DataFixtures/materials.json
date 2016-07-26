@@ -132,7 +132,16 @@
     },
     {
         "name": "Styropian",
-        "lambda": 0.038,
+        "lambda": 0.04,
+        "for_wall_construction_layer": true,
+        "for_wall_internal_layer": true,
+        "for_wall_isolation_layer": true,
+        "for_ceiling": true,
+        "for_floor": true
+    },
+    {
+        "name": "Styropian grafitowy",
+        "lambda": 0.034,
         "for_wall_construction_layer": true,
         "for_wall_internal_layer": true,
         "for_wall_isolation_layer": true,
