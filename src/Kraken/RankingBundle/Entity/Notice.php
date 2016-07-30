@@ -24,7 +24,7 @@ class Notice
     protected $boiler;
 
     /**
-     * @ORM\ManyToOne(targetEntity="NoticePrototype", inversedBy="notices", cascade={"all"})
+     * @ORM\ManyToOne(targetEntity="NoticePrototype", inversedBy="notices", cascade={"persist"})
      * @ORM\JoinColumn(name="prototype_id", referencedColumnName="id", nullable=false)
      */
     protected $noticePrototype;

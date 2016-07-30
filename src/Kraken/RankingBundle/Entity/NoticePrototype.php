@@ -18,7 +18,7 @@ class NoticePrototype
     protected $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="Notice", mappedBy="noticePrototype", cascade={"all"}, orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="Notice", mappedBy="noticePrototype", cascade={"all"})
      */
     protected $notices;
 
