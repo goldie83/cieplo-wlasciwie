@@ -15,6 +15,7 @@ class ProposalAdmin extends Admin
             ->add('url', null, ['label' => 'Adres'])
             ->add('content', null, ['label' => 'Opis'])
             ->add('email', null, ['label' => 'Autor'])
+            ->add('boiler', null, ['label' => 'Kocioł'])
         ;
     }
 
@@ -32,6 +33,7 @@ class ProposalAdmin extends Admin
             ->addIdentifier('url')
             ->add('content')
             ->add('email')
+            ->add('boiler')
         ;
     }
 }

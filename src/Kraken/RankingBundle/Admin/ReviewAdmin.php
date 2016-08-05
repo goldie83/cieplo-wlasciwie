@@ -25,6 +25,7 @@ class ReviewAdmin extends Admin
             ->add('ip', null, ['label' => 'IP'])
             ->add('userAgent', null, ['label' => 'Klient'])
             ->add('accepted', null, ['label' => 'Zaakceptowany'])
+            ->add('revoked', null, ['label' => 'Odwołany'])
         ;
     }
 
@@ -43,6 +44,7 @@ class ReviewAdmin extends Admin
             ->add('email')
             ->add('created')
             ->add('accepted')
+            ->add('revoked')
         ;
     }
 }

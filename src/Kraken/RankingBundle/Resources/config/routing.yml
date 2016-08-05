@@ -1,3 +1,6 @@
-app:
-    resource: "@KrakenRankingBundle/Controller/"
+app_review:
+    resource: "@KrakenRankingBundle/Controller/ReviewController.php"
+    type:     annotation
+app_general:
+    resource: "@KrakenRankingBundle/Controller/GeneralController.php"
     type:     annotation

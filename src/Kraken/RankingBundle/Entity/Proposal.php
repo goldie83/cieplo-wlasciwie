@@ -19,6 +19,12 @@ class Proposal
     protected $id;
 
     /**
+     * @ORM\OneToOne(targetEntity="Boiler", cascade={"persist"})
+     * @ORM\JoinColumn(name="boiler_id", referencedColumnName="id")
+     */
+    protected $boiler = null;
+
+    /**
      * @Assert\Url(
      *    checkDNS = true,
      *    dnsMessage = "Wygląda na to, że taka strona nie istnieje",
@@ -80,5 +86,17 @@ class Proposal
     public function getEmail()
     {
         return $this->email;
+    }
+
+    public function setBoiler($boiler)
+    {
+        $this->boiler = $boiler;
+
+        return $this;
+    }
+
+    public function getBoiler()
+    {
+        return $this->boiler;
     }
 }

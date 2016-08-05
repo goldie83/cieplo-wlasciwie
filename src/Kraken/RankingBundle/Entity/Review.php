@@ -135,6 +135,11 @@ class Review
      */
     protected $accepted = false;
 
+    /**
+     * @ORM\Column(type="boolean", name="is_revoked")
+     */
+    protected $revoked = false;
+
 
     public function __construct()
     {
@@ -405,6 +410,18 @@ class Review
     public function setAccepted($accepted)
     {
         $this->accepted = $accepted;
+
+        return $this;
+    }
+
+    public function isRevoked()
+    {
+        return $this->revoked;
+    }
+
+    public function setRevoked($revoked)
+    {
+        $this->revoked = $revoked;
 
         return $this;
     }
