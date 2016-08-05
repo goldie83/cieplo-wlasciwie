@@ -10,27 +10,29 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class ReviewListener implements EventSubscriber
 {
+    private $container;
     private $mailer;
 
     public function __construct(ContainerInterface $container)
     {
+        $this->container = $container;
         $this->mailer = $container->get('mailer');
     }
 
     public function getSubscribedEvents()
     {
         return [
-            'prePersist',
-            'preUpdate',
+            'postPersist',
+            'postUpdate',
         ];
     }
 
-    public function prePersist(LifecycleEventArgs $args)
+    public function postPersist(LifecycleEventArgs $args)
     {
         $this->updateReviewSummary($args);
     }
 
-    public function preUpdate(LifecycleEventArgs $args)
+    public function postUpdate(LifecycleEventArgs $args)
     {
         $this->updateReviewSummary($args);
     }
@@ -45,9 +47,11 @@ class ReviewListener implements EventSubscriber
         }
 
         $boiler = $entity->getBoiler();
-        $actualReview = $em->getRepository('KrakenRankingBundle:Review')->find($entity->getId());
+        $uow = $em->getUnitOfWork();
+        $changeset = $uow->getEntityChangeSet($entity);
 
-        if ($actualReview && !$actualReview->isAccepted() && $entity->isAccepted()) {
+
+        if (isset($changeset['accepted']) && $changeset['accepted'][0] == 0 && $changeset['accepted'][1] == 1) {
             $mailBody = <<<BODY
 Witaj<br>
 <br>
@@ -60,7 +64,7 @@ CzysteOgrzewanie.pl
 BODY;
             $message = \Swift_Message::newInstance()
                 ->setSubject(sprintf('Twoja opinia o kotle %s została opublikowana', $boiler->getName()))
-                ->setFrom([$this->getParameter('mailer_user') => 'CieploWlasciwie.pl'])
+                ->setFrom([$this->container->getParameter('mailer_user') => 'CieploWlasciwie.pl'])
                 ->setTo($entity->getEmail())
                 ->setContentType('text/html')
                 ->setBody(sprintf($mailBody,
@@ -115,7 +119,7 @@ BODY;
 
         $boiler->setReviewSummary($summary);
 
-        $em->persist($entity);
+        $em->persist($summary);
         $em->flush();
     }
 }

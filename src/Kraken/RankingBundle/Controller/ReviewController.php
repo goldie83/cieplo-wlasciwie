@@ -130,6 +130,8 @@ class ReviewController extends BaseController
      */
     public function revokeReviewAction(Review $review, Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
+
         $review->setRevoked(true);
         $em->persist($review);
         $em->flush();

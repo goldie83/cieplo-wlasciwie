@@ -114,7 +114,7 @@ class Review
     protected $email;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\Ip
      */
     protected $ip;
