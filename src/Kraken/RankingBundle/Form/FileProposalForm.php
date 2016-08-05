@@ -24,9 +24,7 @@ class FileProposalForm extends AbstractType
             ])
             ->add('email', null, [
                 'label' => 'Twój adres e-mail (opcjonalnie)',
-                'attr' => array(
-                    'help_text' => 'Jeśli chcesz otrzymać informację gdy tylko kocioł zostanie dodany do rankingu, zostaw tutaj swój e-mail. Adres będzie użyty wyłącznie do tego celu i nie zostanie nigdzie udostępniony.',
-                ),
+                'help_block' => 'Jeśli chcesz otrzymać informację gdy tylko kocioł zostanie dodany do rankingu, zostaw tutaj swój e-mail. Adres będzie użyty wyłącznie do tego celu i nie zostanie nigdzie udostępniony.',
                 'required' => false,
                 'horizontal_label_class' => '',
             ])

@@ -5,11 +5,72 @@
 {% block body %}
 <div class="row">
     <div class="col-sm-12">
-        <h2>Co to jest?</h2>
-        <p></p>
-        <h2>Jak oceniane są kotły w rankingu?</h2>
-        <p>Niestety niemożliwym jest, by wszystkie kotły przetestować na żywo. Można natomiast przeanalizować informacje o ich konstrukcji i wyposażeniu, i na tej podstawie odsiać ewidentne buble.
-        Choć kotły zasypowe zdają się różnić co najwyżej kolorem pudła, faktycznie różni je znacznie więcej. Są takie rodzaje i modele, w których spalanie bez dymu i wypuszczania w komin niedopału jest utrudnione lub niemożliwe.</p>
+        <p>Ranking kotłów jest subiektywnym przeglądem polskiego rynku kotłów na węgiel i drewno, głównie tych najtańszych i najprostszych. Ma na celu wyszukanie wśród dziesiątek pozornie identycznych blaszanych pudeł tych,
+            które dają szanse na jak najbardziej bezproblemową, czystą i efektywną pracę.</p>
+        <h2>Czyja to robota?</h2>
+        <p>Ranking prowadzi <a href="http://czysteogrzewanie.pl/o-nas/kontakt/" target="_blank">autor serwisu CzysteOgrzewanie.pl</a>. <a href="{{ path('ranking_proposal') }}" target="_blank">Propozycję nowego kotła do oceny</a> oraz <a href="{{ path('ranking_review') }}" target="_blank">opinię o swoim kotle, który jest w rankingu</a> może dodać każdy.</p>
+        <h2>Ile kosztuje pochlebniejsza opinia?</h2>
+        <p>Ranking jest na ten moment przedsięwzięciem w całości <strong>non-profit</strong>. Nikt nie płaci za umieszczenie kotła w rankingu czy też za przemilczenie go albo za pochlebniejszą opinię. Jeśli w przyszłości miałby na siebie zarabiać,
+            to tylko w sposób nie kolidujący ze szczerością oceny. Zresztą ocena w dużej mierze jest oparta na obecności bądź braku konkretnych technicznych rozwiązań w danym kotle, więc każdy może sam ocenić, czy to, co dany kocioł oferuje, jemu najlepiej odpowiada. Efektywny i możliwie tani kocioł na powszechnie dostępne paliwa &mdash; oto sposób, by okupować czołówkę rankingu!
+        </p>
+        <h2>W jaki sposób oceniane są kotły?</h2>
+        <p>Ideałem byłoby wypowiadać się o jakości kotłów po przetestowaniu każdego osobiście. Niestety to wymagałoby znacznych nakładów czasu i pieniędzy, co czyni taki scenariusz mało realnym.
+          Dlatego kotły oceniane są <strong>na podstawie dostępnych danych technicznych o ich budowie i wyposażeniu</strong>. Taka ocena mówi o kotle dosyć dużo &mdash; czy wyposażenie pozwala na palenie bez wypuszczania w komin nadmiaru niedopału i/lub ciepła,
+          jakie paliwa może spalać, do jakich budynków się nadaje a do jakich nie, czy gwarancja zawiera pułapki itd.  Ale też nie mówi wszystkiego, np. jak będzie się zachowywał w eksploatacji na różnych paliwach.
+          Stąd dodatkowo jest <a href="{{ path('ranking_review') }}" target="_blank">możliwość dodawania opinii przez użytkowników danego kotła</a>. To oni oglądają go na żywo i testują na co dzień, dlatego najlepiej będą w stanie wskazać jego dobre i złe strony.
+        </p>
+        <h2>Jakie są kryteria oceny?</h2>
+        <p>Nadrzędne kryteria oceny kotłów to:</p>
+        <ul>
+            <li><strong>efektywne spalanie</strong> &mdash; czyli np. w kotłach zasypowych doprowadzenie powietrza wtórnego (tutaj odpadają kotły górno-dolne, które <em>programowo</em> dymią mniej lub bardziej, niezależnie od chęci palacza),</li>
+            <li><strong>efektywny odbiór ciepła</strong> &mdash; czyli powierzchnia wymiennika pozwalająca osiągać efektywność odbioru ciepła na miarę dzisiejszych niepisanych standardów (<a href="http://www.ien.com.pl/tl_files/pliki/CUE/Prezentacja_statutowa_2013.pdf" target="_blank">łódzkie laboratorium badające kotły mówi</a>, że 1m<sup>2</sup> powinien przypadać na każde 8-9kW mocy kotła; tymczasem w sprzedaży pełno jest wciąż <em>ogrzewaczy kominów</em>, które mają wymiennik o 30-40% mniejszy!).</li>
+            <li><strong>wygoda obsługi</strong> &mdash; czyli sprawy takie jak dostęp do kanałów spalinowych celem ich czyszczenia, ruchomy ruszt w kotłach dolnego spalania itp.</strong></li>
+        </ul>
+        <p>Oceniana jest głównie <strong>budowa i wyposażenie kotła</strong> na podstawie materiałów udostępnianych przez producenta. Pod uwagę mogą być wzięte także:</p>
+        <ul>
+            <li>powtarzające się opinie użytkowników, zarówno dodawane tutaj, jak i w innych zakątkach internetu,</li>
+            <li>stosunek firmy do klienta &mdash; np. gdy informacji o kotle jest mało, są niechlujne i nieaktualne, albo przeciwnie &mdash; wszystko jest opisane przejrzyście i wyczerpująco oraz stale aktualizowane,</li>
+            <li>mniej lub bardziej subtelne pułapki na klienta &mdash; np. wymaganie płatnych przeglądów dla dłuższej gwarancji, o czym klient dowie się tylko z małego druczku w DTR.</li>
+        </ul>
+        <h2>Które rozwiązania są promowane i dlaczego?</h2>
+        <p>W kotłach zasypowych:</p>
+        <ul>
+            <li>możliwość pracy na naturalnym ciągu &mdash; prawidłowy ciąg kominowy w zupełności wystarcza do spalania znakomitej większości paliw (nie poradzi sobie tylko z bardzo drobnymi paliwami w grubej warstwie, np. z miałem, i dopiero wtedy konieczny jest nadmuch).
+                W porównaniu z poprawnie obsługiwanym kotłem sterowanym miarkownikiem ciągu, wentylator i sterownik ani istotnie nie podnoszą efektywności spalania, ani nie polepszają wygody obsługi, ale za to podnoszą cenę zakupu kotła o ok. 500zł. Jeśli twój najczęstszy problem w kotłowni nazywa się <em>nie chce się palić</em>, to ostre dmuchanie w palenisko nie jest wcale jego rozwiązaniem (a w każdym razie nie najbardziej ekonomicznym).
+            </li>
+            <li>doprowadzenie powietrza wtórnego &mdash; w kotłach pracujących na naturalnym ciągu jest ono konieczne, aby palne gazy nad paleniskiem miały szansę się spalić nim ulecą w komin.</li>
+            <li>ruchomy ruszt &mdash; w kotłach dolnego spalania w zasadzie konieczność gdy zamierza się palić na okrągło węglem</li>
+            <li>możliwość montażu mechanicznego miarkownika ciągu &mdash; niepokojąco prosty mechaniczny miarkownik wachlujący dolotem powietrza to wszystko, czego potrzeba, aby kocioł pracował stabilnie.</li>
+            <li>palnik i ceramiczna strefa dopalania w kotłach dolnego spalania &mdash; to elementy konieczne, aby dobrze wykorzystać zaletę kotłów dolnego spalania: możliwość znacznie lepszego niż w kotłach górnego spalania dopalenia wszelkich palnych składników spalin.</li>
+        </ul>
+        <p>W kotłach podajnikowych:</p>
+        <ul>
+            <li>możliwie <em>autonomiczny</em> sterownik &mdash; podstawową zaletą sterownika w kotle podajnikowym nie jest milion funkcji, ale jedna podstawowa: jak najbardziej automatyczny dobór parametrów spalania. W wielu sterownikach tych ustawień dokonuje nadal człowiek, co dla nie-pasjonatów kotlarstwa może być powodem przedwczesnego osiwienia.</li>
+            <li>palnik retortowy najlepiej II generacji &mdash; palniki II generacji wymyślono aby spalać gorsze węgle: lekko spiekające i koksujące oraz miał. Nie są ograniczone tylko do najlepszego (czyli zawsze najdroższego) ekogroszku, więc kocioł z takim palnikiem ma spore szanse być tańszy w eksploatacji.</li>
+        </ul>
+        <h2>Które rozwiązania są uważane za złe i dlaczego?</h2>
+        <p>Na minus oceniany jest brak wyżej wymienionych pozytywnych rozwiązań. Poza tym, w kotłach zasypowych:</p>
+        <ul>
+            <li>kotły górno-dolne z definicji lądują w Salonie Odrzuconych &mdash; <a href="http://czysteogrzewanie.pl/kociol/rodzaje-kotlow-weglowych/#Koty_uniwersalne_grno-dolne" target="_blank">jest to hybryda kotła górnego i dolnego spalania</a>, która stale mniej lub bardziej dymi niezależnie od wysiłków palacza i trzymania się instrukcji obsługi.</li>
+        </ul>
+        <p>W kotłach podajnikowych:</p>
+        <ul>
+            <li>kotły z awaryjnym rusztem wodnym z definicji lądują w Salonie Odrzuconych &mdash; ruszt wodny powoduje mniej lub bardziej intensywne (a niepotrzebne) zarastanie kotła sadzą. <a href="https://zawijan.wordpress.com/poradnik-uzytkownika/kotly-retortowe/ruszt-wodny-tak-czy-nie/" target="_blank">Tutaj można zobaczyć wnętrze kotła z rusztem wodnym i bez niego</a>. Takich problemów nie stwarza awaryjny ruszt żeliwny, więc bierz taki, jeśli go potrzebujesz.</li>
+        </ul>
+        <h2>Jaka jest skala ocen?</h2>
+        <p>Skala ocen jest trójstopniowa i mówi o tym, na ile dany kocioł jest wart zakupu zdaniem autora rankingu:</p>
+        <ul>
+        <li><strong>A</strong> &mdash; kotły w których nie stwierdzono żadnych istotnych uchybień,</li>
+        <li><strong>B</strong> &mdash; kotły z niewielkimi problemami ale wciąż warte zakupu jeśli dany minus nie jest dla ciebie krytyczny,</li>
+        <li><strong>C</strong> &mdash; kotły przeciętne, kupuj tylko jeśli nie znajdujesz nic lepszego</li>
+        </ul>
+        <p>Rzadko zdarzają się modele, które nie mieściłyby się w tej skali ocen. Jeśli taki się trafi, ląduje w Salonie Odrzuconych. Trafiają tam kotły, które z jakiejś istotnej przyczyny nie są zdaniem
+        autora rankingu warte zakupu. Każdy rezydent Salonu Odrzuconych jest opisany co do przyczyny, dla której tam wylądował. Prócz jakichś naprawdę kiepskich cech może to być też totalny brak informacji o kotle.</p>
+        <p>Ocena z konieczności przyznawana jest w sposób <strong>dość subiektywny</strong>. Dwa kotły tego samego rodzaju z taką samą oceną mogą się dość znacznie różnić. Dwa podobne z pozoru kotły mogą
+            otrzymać bardzo różne oceny, bowiem trudno obiektywnie wartościować różne kombinacje wielu cech. Ponadto istotność danej zalety lub wady może być dla każdego różna. Np. brak powietrza wtórnego sprawia, że kocioł wypuszcza więcej niedopalonego paliwa w komin. Osoba o minimalnych umiejętnościach warsztatowych łatwo go samodzielnie naprawi, ale ktoś, kto nie chce lub nie umie tego zrobić, będzie z tym żyć i niepotrzebnie kopcić. Dlatego sama ocena jest tylko wskaźnikiem co do całokształtu tego, co dany kocioł oferuje. Zawsze warto czytać uzasadnienie oceny, brać pod uwagę podane parametry kotła i
+            decydować o zakupie pod kątem własnych wymagań.</p>
+        <h2>Aktualność informacji</h2>
+        <p>Dane zawarte w opisie kotła takie jak ceny, moce, wymiary itp. należy traktować jako <strong>przybliżone i niekoniecznie aktualne</strong>. Po pierwsze pochodzą one z materiałów producentów, które mogą się różnić od aktualnej oferty. Po drugie materiały producenta mogły się zmienić od czasu ostatniej aktualizacji artykułu.
     </div>
 </div>
 {% endblock body %}
