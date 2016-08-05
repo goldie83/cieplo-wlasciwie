@@ -46,7 +46,7 @@ Feature: Energy balance calculation
      Then I should see "A.D. lata 80-te, 170m2 ogrzewane, Otwock i okolice"
       And I should see "50cm, konstrukcja: cegła pełna, izolacja: styropian 15cm"
       And I should see "Dach, Wełna mineralna 30cm"
-      And I should see "7kW to niezbędna moc grzewcza (C.O. bez CWU)"
+      And I should see "kW to niezbędna moc grzewcza (C.O. bez CWU)"
      When I follow "Wróć do formularza danych budynku"
       And I press "Dalej"
       And I press "Dalej"
