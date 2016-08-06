@@ -28,7 +28,19 @@ class GeneralController extends BaseController
     {
         $form = $this->createForm(new SearchForm(), new Search());
 
-        return $this->render('KrakenRankingBundle:Ranking:index.html.twig', ['searchForm' => $form->createView()]);
+        $qb = $this->getDoctrine()->getManager()->createQueryBuilder();
+        $latestBoilers = $qb
+            ->select('b')
+            ->from('KrakenRankingBundle:Boiler', 'b')
+            ->where('b.published = 1')
+            ->andWhere('b.rating IN (:ratings)')
+            ->addOrderBy('b.created', 'DESC')
+            ->setParameter('ratings', ['A', 'B', 'C'])
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult();
+
+        return $this->render('KrakenRankingBundle:Ranking:index.html.twig', ['searchForm' => $form->createView(), 'latestBoilers' => $latestBoilers]);
     }
 
     /**
@@ -104,7 +116,7 @@ class GeneralController extends BaseController
             }
         }
 
-        if ($uid > 0) {
+        if ($uid) {
             $searchRecord = $this->getDoctrine()
                 ->getRepository('KrakenRankingBundle:Search')
                 ->findOneBy(['id' => intval($uid, 36)]);
@@ -122,7 +134,7 @@ class GeneralController extends BaseController
             ->where('b.rejected = 1')
             ->andWhere('b.published = 1');
 
-        if ($uid > 0) {
+        if ($uid) {
             if ($searchRecord->getModelName() != '') {
                 $query
                     ->innerJoin('b.manufacturer', 'm')
@@ -149,6 +161,7 @@ class GeneralController extends BaseController
         }
 
         $boilers = $query
+            ->addOrderBy('b.name')
             ->getQuery()
             ->getResult();
 

@@ -19,6 +19,10 @@ class SearchForm extends AbstractType
             ])
             ->add('manufacturer', null, [
                 'label' => 'Producent',
+                'query_builder' => function (EntityRepository $er) use ($options) {
+                    return $er->createQueryBuilder('m')
+                        ->orderBy('m.name');
+                },
                 'placeholder' => 'dowolny',
                 'required' => false,
                 'horizontal_label_class' => $options['vertical'] ? ' ' : 'col-sm-4',

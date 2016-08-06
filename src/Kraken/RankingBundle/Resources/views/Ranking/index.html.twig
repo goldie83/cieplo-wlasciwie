@@ -48,5 +48,13 @@
         <h2>Zaproponuj kocioł do&nbsp;rankingu</h2>
         <p>Stale poszukujemy nowych, zwłaszcza dobrych modeli. Nie ma tu kotła, który cię interesuje? Podrzuć nam namiary, a przyjrzymy się mu.</p>
         <a class="btn btn-raised btn-default btn-lg" href="{{ path('ranking_proposal') }}">Prześlij propozycję do rankingu</a>
+        <h2>Nowości w rankingu</h2>
+        <ul>
+        {% for boiler in latestBoilers %}
+            <li>
+                <h5><a href="{{ url('ranking_boiler_overview', {'category': boiler.category.slug, 'boiler': boiler.slug}) }}">{{ boiler.name }}</a> <span class="boiler-class {{ boiler.rating|lower }}-class">{{ boiler.rating }}</span></h5>
+            </li>
+        {% endfor %}
+        </ul>
     </div>
 {% endblock body %}

@@ -19,6 +19,10 @@ class SearchRejectedForm extends AbstractType
             ])
             ->add('manufacturer', null, [
                 'label' => 'Producent',
+                'query_builder' => function (EntityRepository $er) use ($options) {
+                    return $er->createQueryBuilder('m')
+                        ->orderBy('m.name');
+                },
                 'placeholder' => 'dowolny',
                 'required' => false,
             ])
