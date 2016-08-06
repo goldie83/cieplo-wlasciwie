@@ -56,7 +56,7 @@ class ReviewListener implements EventSubscriber
 Witaj<br>
 <br>
 Twoja opinia o kotle %s została uwzględniona w publicznym podsumowaniu.<br>
-Adres strony z kotłem to: http://ranking.czysteogrzewanie.pl/%s/%s<br>
+Adres strony z kotłem to: http://ranking.czysteogrzewanie.pl/%s/kociol/%s<br>
 Jeśli kiedyś zechcesz usunąć swoją opinię: http://ranking.czysteogrzewanie.pl/%s/%s<br>
 <br>
 --<br>
@@ -64,7 +64,7 @@ CzysteOgrzewanie.pl
 BODY;
             $message = \Swift_Message::newInstance()
                 ->setSubject(sprintf('Twoja opinia o kotle %s została opublikowana', $boiler->getName()))
-                ->setFrom([$this->container->getParameter('mailer_user') => 'CieploWlasciwie.pl'])
+                ->setFrom([$this->container->getParameter('mailer_user') => 'Ranking kotłów CzysteOgrzewanie.pl'])
                 ->setTo($entity->getEmail())
                 ->setContentType('text/html')
                 ->setBody(sprintf($mailBody,

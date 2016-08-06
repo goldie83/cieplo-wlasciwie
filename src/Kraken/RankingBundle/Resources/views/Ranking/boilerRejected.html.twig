@@ -5,7 +5,7 @@
 {% block page_title %}{{ boiler.name }} <small>(odrzucony)</small>{% endblock page_title %}
 
 {% block body %}
-<div class="row">
+<div class="row" style="min-height:600px">
     <div class="col-sm-4">
         <table class="table table-striped">
           <tbody>
@@ -19,7 +19,7 @@
             </tr>
             <tr>
               <th scope="row">Strona producenta</th>
-              <td><a href="{{ boiler.manufacturerSite }}" target="_blank">przejdź do strony producenta</a></td>
+              <td><a href="{{ boiler.manufacturerSite }}" target="_blank" rel="nofollow">przejdź do strony producenta</a></td>
             </tr>
           </tbody>
         </table>

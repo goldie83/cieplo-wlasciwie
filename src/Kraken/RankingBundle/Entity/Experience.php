@@ -54,7 +54,9 @@ class Experience
 
     public function __toString()
     {
-        return $this->getBoiler()->getName().': '.$this->getTitle();
+        $boilerName = $this->getBoiler() ? $this->getBoiler()->getName() : '[?]';
+
+        return $boilerName.': '.$this->getTitle();
     }
 
     public function getId()
