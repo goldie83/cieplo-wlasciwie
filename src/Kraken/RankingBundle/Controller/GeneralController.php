@@ -200,6 +200,9 @@ class GeneralController extends BaseController
         $searchRecord = $this->getDoctrine()
             ->getRepository('KrakenRankingBundle:Search')
             ->findOneBy(['id' => intval($uid, 36)]);
+
+        $this->get('session')->set('actual_search_slug', $uid);
+
         $form = $this->createForm(new SearchForm(), $searchRecord, ['vertical' => true]);
 
         $qb = $em->createQueryBuilder();
@@ -366,6 +369,8 @@ class GeneralController extends BaseController
      */
     public function categoryAction(Category $category, $sort)
     {
+        $this->get('session')->remove('actual_search_slug');
+
         $search = new Search();
         $search->setCategory($category);
 

@@ -7,8 +7,7 @@
 {% block body %}
 
 <ul class="pager">
-  {# TODO #}
-  {% set back = backLink is defined ? backLink : path('ranking_boiler_category', {'category': boiler.category.slug }) %}
+  {% set back = app.session.get('actual_search_slug') ? path('ranking_search', {'uid': app.session.get('actual_search_slug')}) : path('ranking_boiler_category', {'category': boiler.category.slug }) %}
   <li class="previous"><a href="{{ back }}">← Powrót do listy kotłów</a></li>
 </ul>
 
