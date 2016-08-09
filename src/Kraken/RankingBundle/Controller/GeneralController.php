@@ -33,9 +33,9 @@ class GeneralController extends BaseController
             ->select('b')
             ->from('KrakenRankingBundle:Boiler', 'b')
             ->where('b.published = 1')
-            ->andWhere('b.rating IN (:ratings)')
+            ->andWhere('b.rating <> :rating')
             ->addOrderBy('b.created', 'DESC')
-            ->setParameter('ratings', ['A', 'B', 'C'])
+            ->setParameter('rating', 'Z')
             ->setMaxResults(10)
             ->getQuery()
             ->getResult();

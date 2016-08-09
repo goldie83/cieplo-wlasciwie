@@ -13,6 +13,33 @@
         </form>
     </div>
     <div class="col-sm-8">
+        {% if category.slug == 'kotly-zasypowe' %}
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                      <div class="panel-heading"><h4><a href="{{ url('ranking_boiler_category', {category: 'kotly-gornego-spalania'}) }}">Kotły górnego spalania</a></h4></div>
+                      <div class="panel-body" style="min-height:180px">
+                        <ul>
+                            <li>Niepoprawnie obsługiwane kopcą jak wściekłe</li>
+                            <li>Jest <a href="http://czysteogrzewanie.pl/jak-palic" target="_blank">kilka sposobów, by palić w nich czysto</a>, najlepszy to <a href="http://czysteogrzewanie.pl/jak-palic-w-piecu/jak-palic-czysto-weglem/#Metoda_III:_rozpalanie_od_gory" target="_blank">rozpalanie od góry</a> (choć wymaga cyklicznego rozpalania od nowa)</li>
+                            <li>Przełkną każdy węgiel i drewno, ale paliwa bardziej <em>gazowe</em> (drewno) trudno jest w pełni dopalić</li>
+                        </ul>
+                      </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="panel panel-default">
+                      <div class="panel-heading"><h4><a href="{{ url('ranking_boiler_category', {category: 'kotly-dolnego-spalania'}) }}">Kotły dolnego spalania</a></h4></div>
+                      <div class="panel-body" style="min-height:180px">
+                        <ul>
+                            <li>Mogą pracować na okrągło a jednocześnie spalać co najmniej tak czysto jak kocioł górnego spalania rozpalony od góry</li>
+                            <li>Nadają się do spalania drewna i węgla niespiekającego od groszku wzwyż</li>
+                        </ul>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
         {% include('KrakenRankingBundle:Ranking:boilerList.html.twig') with {boilers: boilers} %}
     </div>
 </div>
