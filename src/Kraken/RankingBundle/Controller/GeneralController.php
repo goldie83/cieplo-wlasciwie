@@ -333,6 +333,30 @@ class GeneralController extends BaseController
     }
 
     /**
+     * @Route("/legacy/{slug}/", name="ranking_legacy_boiler_overview")
+     */
+    public function legacyBoilerAction($slug)
+    {
+        $boiler = $this->getDoctrine()
+            ->getRepository('KrakenRankingBundle:Boiler')
+            ->findOneBy(['slug' => $slug]);
+
+        if (!$boiler) {
+            throw $this->createNotFoundException('Lippa');
+        }
+
+        return $this->redirectToRoute('ranking_boiler_overview', ['category' => $boiler->getCategory()->getSlug(), 'boiler' => $slug], 301);
+    }
+
+    /**
+     * @Route("/kotly/{slug}/", name="ranking_legacy_boiler_category")
+     */
+    public function legacyCategoryAction($slug)
+    {
+        return $this->redirectToRoute('ranking_boiler_category', ['category' => $slug], 301);
+    }
+
+    /**
      * @Route("/{category}/{sort}", name="ranking_boiler_category", defaults={"sort" = ""})
      * @ParamConverter("category", class="KrakenRankingBundle:Category", options={"repository_method" = "findOneBySlug"})
      */
@@ -390,13 +414,5 @@ class GeneralController extends BaseController
             'boiler' => $boiler,
             'experiences' => $experiences,
         ]);
-    }
-
-    /**
-     * @Route("/kotly/{slug}/", name="ranking_legacy_boiler_category")
-     */
-    public function legacyCategoryAction($slug)
-    {
-        return $this->redirectToRoute('boiler_category', ['category' => $slug], 301);
     }
 }
