@@ -252,6 +252,10 @@ class GeneralController extends BaseController
                 $query
                     ->andWhere('bp.power > :power')
                     ->setParameter('power', (int) $searchRecord->getPower());
+            } else {
+                $query
+                    ->andWhere('bp.power <= :power')
+                    ->setParameter('power', 1.2 * ((int) $searchRecord->getPower()));
             }
         }
 
