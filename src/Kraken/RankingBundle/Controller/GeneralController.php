@@ -175,7 +175,7 @@ class GeneralController extends BaseController
     {
         $em = $this->getDoctrine()->getManager();
 
-        if ($uid == 0) {
+        if (!$uid) {
             $form = $this->createForm(new SearchForm(), null, ['vertical' => true]);
             $form->handleRequest($request);
 
