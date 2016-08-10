@@ -194,6 +194,8 @@ class GeneralController extends BaseController
                 $em->flush();
 
                 return $this->redirectToRoute('ranking_search', ['uid' => base_convert($searchRecord->getId(), 10, 36)]);
+            } else {
+                return $this->render('KrakenRankingBundle:Ranking:search.html.twig', ['form' => $form->createView(), 'boilers' => [], 'search' => new Search()]);
             }
         }
 
