@@ -31,6 +31,7 @@ class Proposal
      *    message = "Podany adres jest nieprawidłowy"
      * )
      * @ORM\Column(type="string")
+     * @Assert\NotNull(message="Trzeba wypełnić to pole")
      */
     protected $url;
 
