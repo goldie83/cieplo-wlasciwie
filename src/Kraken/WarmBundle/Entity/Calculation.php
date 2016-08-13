@@ -65,7 +65,10 @@ class Calculation
 
     /**
      * @ORM\Column(type="string", nullable=true)
-     * @Assert\Email
+     * @Assert\Email(
+     *    checkHost = true,
+     *    message = "Adres jest nieprawidłowy lub nie istnieje"
+     * )
      */
     protected $email;
 

@@ -38,7 +38,8 @@ class Proposal
     /**
      * @ORM\Column(type="string", nullable=true)
      * @Assert\Email(
-     *    message = "To nie jest prawidłowy adres e-mail"
+     *    checkHost = true,
+     *    message = "Adres jest nieprawidłowy lub nie istnieje"
      * )
      */
     protected $email;
