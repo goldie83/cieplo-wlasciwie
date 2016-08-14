@@ -54,7 +54,7 @@ class Review
     protected $qualityRating;
 
     /**
-     * @ORM\Column(type="string", name="quality_comment", nullable=true)
+     * @ORM\Column(type="text", name="quality_comment", nullable=true)
      */
     protected $qualityComment;
 
@@ -64,7 +64,7 @@ class Review
     protected $warrantyRating;
 
     /**
-     * @ORM\Column(type="string", name="warranty_comment", nullable=true)
+     * @ORM\Column(type="text", name="warranty_comment", nullable=true)
      */
     protected $warrantyComment;
 
@@ -74,7 +74,7 @@ class Review
     protected $operationRating;
 
     /**
-     * @ORM\Column(type="string", name="operation_comment", nullable=true)
+     * @ORM\Column(type="text", name="operation_comment", nullable=true)
      */
     protected $operationComment;
 
@@ -100,7 +100,7 @@ class Review
     protected $rating;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
     protected $comment;
 
