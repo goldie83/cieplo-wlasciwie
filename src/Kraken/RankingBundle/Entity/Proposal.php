@@ -49,6 +49,11 @@ class Proposal
      */
     protected $content;
 
+    /**
+     * @ORM\Column(type="boolean", name="is_done")
+     */
+    protected $done = false;
+
     public function getId()
     {
         return $this->id;
@@ -100,5 +105,17 @@ class Proposal
     public function getBoiler()
     {
         return $this->boiler;
+    }
+
+    public function isDone()
+    {
+        return $this->done;
+    }
+
+    public function setDone($done)
+    {
+        $this->done = $done;
+
+        return $this;
     }
 }

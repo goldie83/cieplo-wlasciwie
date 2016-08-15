@@ -16,6 +16,7 @@ class ProposalAdmin extends Admin
             ->add('content', null, ['label' => 'Opis'])
             ->add('email', null, ['label' => 'Autor'])
             ->add('boiler', null, ['label' => 'Kocioł'])
+            ->add('done', null, ['label' => 'Obsłużone'])
         ;
     }
 
@@ -24,6 +25,7 @@ class ProposalAdmin extends Admin
         $datagridMapper
             ->add('url')
             ->add('content')
+            ->add('done')
         ;
     }
 
@@ -34,6 +36,7 @@ class ProposalAdmin extends Admin
             ->add('content')
             ->add('email')
             ->add('boiler')
+            ->add('done')
         ;
     }
 }
