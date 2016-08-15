@@ -65,6 +65,6 @@ class WallService
 
         $wallResistance = $size / $lambda;
 
-        return 1/$wallResistance;
+        return 1 / $wallResistance;
     }
 }

@@ -317,8 +317,8 @@ class HouseDescriptionService
                 $name = 'attic';
                 $label = 'Poddasze';
             } else {
-                $name = 'regular_floor_'.($floorIndex-1);
-                $label = ($floorIndex-1).'. piętro';
+                $name = 'regular_floor_'.($floorIndex - 1);
+                $label = ($floorIndex - 1).'. piętro';
             }
 
             $floors[] = [

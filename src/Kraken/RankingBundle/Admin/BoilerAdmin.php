@@ -42,15 +42,15 @@ class BoilerAdmin extends Admin
                 ),
                 'plugins' => array(
                     'image2' => array(
-                        'path'     => 'bundles/sonataformatter/vendor/ckeditor/plugins/image2/',
+                        'path' => 'bundles/sonataformatter/vendor/ckeditor/plugins/image2/',
                         'filename' => 'plugin.js',
                     ),
                     'widget' => array(
-                        'path'     => 'bundles/sonataformatter/vendor/ckeditor/plugins/widget/',
+                        'path' => 'bundles/sonataformatter/vendor/ckeditor/plugins/widget/',
                         'filename' => 'plugin.js',
                     ),
                     'lineutils' => array(
-                        'path'     => 'bundles/sonataformatter/vendor/ckeditor/plugins/lineutils/',
+                        'path' => 'bundles/sonataformatter/vendor/ckeditor/plugins/lineutils/',
                         'filename' => 'plugin.js',
                     ),
                 ),
@@ -128,20 +128,17 @@ class BoilerAdmin extends Admin
 
         $boiler->setBoilerPowers($boiler->getBoilerPowers());
 
-
         foreach ($boiler->getBoilerFuelTypes() as $bf) {
             $bf->setBoiler($boiler);
         }
 
         $boiler->setBoilerFuelTypes($boiler->getBoilerFuelTypes());
 
-
         foreach ($boiler->getChanges() as $c) {
             $c->setBoiler($boiler);
         }
 
         $boiler->setChanges($boiler->getChanges());
-
 
         foreach ($boiler->getNotices() as $n) {
             $n->setBoiler($boiler);

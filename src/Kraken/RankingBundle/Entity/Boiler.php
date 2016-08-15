@@ -204,7 +204,6 @@ class Boiler
      */
     protected $updated;
 
-
     public function __construct()
     {
         $this->changes = new \Doctrine\Common\Collections\ArrayCollection();
@@ -774,7 +773,7 @@ class Boiler
         $averageEfficiency = 0.6;
 
         if ($fuelAmount && $this->typicalModelPower) {
-            return round(($fuelAmount * $fuelHeatingValue * $averageEfficiency)/(0.6 * $this->typicalModelPower));
+            return round(($fuelAmount * $fuelHeatingValue * $averageEfficiency) / (0.6 * $this->typicalModelPower));
         }
 
         return 0;

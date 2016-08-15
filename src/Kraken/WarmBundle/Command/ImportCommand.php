@@ -39,12 +39,12 @@ class ImportCommand extends ContainerAwareCommand
             $calc = $row[0];
 
             if (!$calc->getHouse() instanceof House) {
-//                 $em->remove($calc);
+                //                 $em->remove($calc);
                 continue;
             }
 
             if ($calc->getBuildingType() == 'apartment' && !$calc->getHouse()->getApartment() instanceof Apartment) {
-//                 $em->remove($calc);
+                //                 $em->remove($calc);
                 continue;
             }
 
@@ -100,17 +100,16 @@ class ImportCommand extends ContainerAwareCommand
             $totalFloors = $floorsNumber;
 
             if (!$calc->isApartment() && $calc->getHouse()->hasBasement()) {
-                $totalFloors--;
+                --$totalFloors;
             }
 
             if (!$calc->isApartment() && in_array($calc->getHouse()->getRoofType(), ['oblique', 'steep'])) {
-                $totalFloors--;
+                --$totalFloors;
             }
 
             $totalFloors = max(1, $totalFloors);
 
             $calc->getHouse()->setBuildingFloors($totalFloors);
-
 
             $heatedFloors = [];
 
@@ -128,17 +127,17 @@ class ImportCommand extends ContainerAwareCommand
                 $currentFloor = 1;
                 while ($currentFloor <= $floorsAboveGround) {
                     if ($currentFloor == 1 && $whatsUnheated == 'ground_floor') {
-                        $currentFloor++;
+                        ++$currentFloor;
                         continue;
                     }
                     if ($currentFloor > 1 && $whatsUnheated == 'floor') {
-                        $currentFloor++;
+                        ++$currentFloor;
                         continue;
                     }
 
                     $heatedFloors[] = $currentFloor;
 
-                    $currentFloor++;
+                    ++$currentFloor;
                 }
 
                 if (!$calc->isApartment() && in_array($calc->getHouse()->getRoofType(), ['oblique', 'steep']) && ($whatsUnheated != 'attic' || $floorsNumber == $heatedFloorsNumber) && $calc->getHouse()->getNumberHeatedFloors() > count($heatedFloors)) {
@@ -151,7 +150,7 @@ class ImportCommand extends ContainerAwareCommand
             }
 
             while (count($heatedFloors) > $calc->getHouse()->getNumberHeatedFloors()) {
-                unset($heatedFloors[count($heatedFloors)-1]);
+                unset($heatedFloors[count($heatedFloors) - 1]);
             }
 
             $calc->getHouse()->setBuildingHeatedFloors($heatedFloors);
@@ -159,12 +158,11 @@ class ImportCommand extends ContainerAwareCommand
             $calc->getHouse()->setBuildingRoof($calc->getHouse()->getRoofType() == 'flat' ? 'flat' : 'steep');
             $calc->getHouse()->setBuildingShape('regular');
 
-
             $wall = $calc->getHouse()->getWalls()->first();
             $wallSize = 0;
 
             if (!$wall instanceof Wall) {
-//                 $em->remove($calc);
+                //                 $em->remove($calc);
 
                 continue;
             }
@@ -191,14 +189,13 @@ class ImportCommand extends ContainerAwareCommand
 
             if ($wallSize == 0) {
                 $output->writeln(sprintf(
-                    "<error>kraken:import</error> #%s ŚCIANA U CYGANA",
+                    '<error>kraken:import</error> #%s ŚCIANA U CYGANA',
                     base_convert($calc->getId(), 10, 36)
                 ));
                 continue;
             }
 
             $calc->getHouse()->setWallSize($wallSize);
-
 
             if ($calc->getHouse()->getBasementFloorIsolationLayer()) {
                 $calc->getHouse()->setBottomIsolationLayer($calc->getHouse()->getBasementFloorIsolationLayer());
@@ -232,7 +229,7 @@ class ImportCommand extends ContainerAwareCommand
             if (!$calc->getHouse()->hasGarage() && abs($calculator->getMaxHeatingPower() - $calc->getHeatingPower()) > 0.3 * $calc->getHeatingPower()) {
                 $em->flush();
                 $output->writeln(sprintf(
-                    "<error>kraken:import</error> #%s Moc się sypnęła: było %dkW a jest %dkW",
+                    '<error>kraken:import</error> #%s Moc się sypnęła: było %dkW a jest %dkW',
                     base_convert($calc->getId(), 10, 36), $calc->getHeatingPower(), $calculator->getMaxHeatingPower()
                 ));
             }

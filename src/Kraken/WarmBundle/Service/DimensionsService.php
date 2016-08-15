@@ -44,7 +44,7 @@ class DimensionsService
         $w = $this->getExternalBuildingWidth();
 
         if ($this->getInstance()->getHouse()->getBuildingShape() == 'irregular') {
-            $addon = 0.5*floor(sqrt($this->getInstance()->getHouse()->getBuildingContourFreeArea()));
+            $addon = 0.5 * floor(sqrt($this->getInstance()->getHouse()->getBuildingContourFreeArea()));
             $l += $addon;
             $w += $addon;
         }
@@ -142,7 +142,7 @@ class DimensionsService
             $w = $this->getInternalBuildingWidth();
 
             if ($house->getBuildingShape() == 'irregular') {
-                return ($l * $w - $house->getBuildingContourFreeArea());
+                return $l * $w - $house->getBuildingContourFreeArea();
             }
 
             return $l * $w;

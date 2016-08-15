@@ -87,7 +87,7 @@ class SearchForm extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => 'Kraken\RankingBundle\Entity\Search',
-            'vertical' => false
+            'vertical' => false,
         ]);
     }
 

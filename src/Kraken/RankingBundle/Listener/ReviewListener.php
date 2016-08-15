@@ -50,7 +50,6 @@ class ReviewListener implements EventSubscriber
         $uow = $em->getUnitOfWork();
         $changeset = $uow->getEntityChangeSet($entity);
 
-
         if (isset($changeset['accepted']) && $changeset['accepted'][0] == 0 && $changeset['accepted'][1] == 1) {
             $mailBody = <<<BODY
 Witaj<br>
@@ -106,16 +105,16 @@ BODY;
             $ratings['operation'] += $r->getOperationRating();
 
             if ($r->getWarrantyRating() > 0) {
-                $warrantyReviewsNumber++;
+                ++$warrantyReviewsNumber;
             }
         }
 
         $summary->setReviewsNumber($reviewsNumber);
         $summary->setWarrantyReviewsNumber($warrantyReviewsNumber);
-        $summary->setRating($ratings['general']/$reviewsNumber);
-        $summary->setQualityRating($ratings['quality']/$reviewsNumber);
-        $summary->setWarrantyRating($ratings['warranty']/$reviewsNumber);
-        $summary->setOperationRating($ratings['operation']/$reviewsNumber);
+        $summary->setRating($ratings['general'] / $reviewsNumber);
+        $summary->setQualityRating($ratings['quality'] / $reviewsNumber);
+        $summary->setWarrantyRating($ratings['warranty'] / $reviewsNumber);
+        $summary->setOperationRating($ratings['operation'] / $reviewsNumber);
 
         $boiler->setReviewSummary($summary);
 

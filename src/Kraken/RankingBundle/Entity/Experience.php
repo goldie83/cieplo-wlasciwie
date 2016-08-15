@@ -3,8 +3,6 @@
 namespace Kraken\RankingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="Kraken\RankingBundle\Repository\ExperienceRepository")
@@ -50,7 +48,6 @@ class Experience
      * @ORM\OneToMany(targetEntity="ReviewExperience", mappedBy="experience", cascade={"all"}, orphanRemoval=true)
      */
     protected $reviewExperiences;
-
 
     public function __toString()
     {
@@ -141,14 +138,13 @@ class Experience
         $this->reviewExperiences->removeElement($reviewExperience);
     }
 
-
     public function countConfirmations()
     {
         $count = 0;
 
         foreach ($this->reviewExperiences as $re) {
             if ($re->isConfirmed() == true) {
-                $count++;
+                ++$count;
             }
         }
 

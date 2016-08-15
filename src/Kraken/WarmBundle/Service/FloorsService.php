@@ -37,7 +37,7 @@ class FloorsService
 
         // attic under steep roof is not a regular floor actually
         if (!$this->getInstance()->isApartment() && $this->getHouse()->getBuildingRoof() == 'steep') {
-            $atticFloor++;
+            ++$atticFloor;
         }
 
         return in_array($atticFloor, $this->getHouse()->getBuildingHeatedFloors());
@@ -69,7 +69,7 @@ class FloorsService
         }
 
         $i = 1;
-        for (; $i <= $floorsNumber; $i++) {
+        for (; $i <= $floorsNumber; ++$i) {
             $allFloors[] = $i;
         }
 

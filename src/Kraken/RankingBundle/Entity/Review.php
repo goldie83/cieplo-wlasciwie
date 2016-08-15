@@ -140,7 +140,6 @@ class Review
      */
     protected $revoked = false;
 
-
     public function __construct()
     {
         $this->reviewExperiences = new \Doctrine\Common\Collections\ArrayCollection();

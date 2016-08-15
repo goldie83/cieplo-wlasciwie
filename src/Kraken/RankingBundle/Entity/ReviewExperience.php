@@ -3,8 +3,6 @@
 namespace Kraken\RankingBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Gedmo\Mapping\Annotation as Gedmo;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -38,7 +36,6 @@ class ReviewExperience
      * @ORM\Column(type="boolean", name="confirmed")
      */
     protected $confirmed = false;
-
 
     public function __toString()
     {

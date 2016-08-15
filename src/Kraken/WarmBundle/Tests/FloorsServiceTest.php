@@ -4,7 +4,6 @@ namespace Kraken\WarmBundle\Tests\Service;
 
 use Kraken\WarmBundle\Entity\Calculation;
 use Kraken\WarmBundle\Entity\House;
-use Kraken\WarmBundle\Entity\Material;
 use Kraken\WarmBundle\Service\InstanceService;
 use Kraken\WarmBundle\Service\FloorsService;
 use Mockery;
@@ -91,7 +90,6 @@ class FloorsServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Piwnica', $fs->getBottomLabel());
         $this->assertEquals('Izolacja podłogi piwnicy', $fs->getBottomIsolationLabel());
     }
-
 
     public function testOneFloorNoBasementSteepRoofAtticNotHeated()
     {
@@ -208,7 +206,6 @@ class FloorsServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Izolacja podłogi piwnicy', $fs->getBottomIsolationLabel());
     }
 
-
     public function testTwoFloorsNoBasementFlatRoofAtticNotHeated()
     {
         $house = new House();
@@ -278,7 +275,6 @@ class FloorsServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Izolacja stropu nad parterem', $fs->getBottomIsolationLabel());
     }
 
-
     public function testTwoFloorsNoBasementSteepRoofAtticNotHeated()
     {
         $house = new House();
@@ -306,7 +302,7 @@ class FloorsServiceTest extends \PHPUnit_Framework_TestCase
     {
         $house = new House();
         $house->setBuildingFloors(2);
-        $house->setBuildingHeatedFloors([2,3]);
+        $house->setBuildingHeatedFloors([2, 3]);
         $house->setBuildingRoof('steep');
         $house->setHasBasement(false);
 
@@ -347,7 +343,6 @@ class FloorsServiceTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('Piwnica', $fs->getBottomLabel());
         $this->assertEquals('Izolacja podłogi piwnicy', $fs->getBottomIsolationLabel());
     }
-
 
     public function testThreeFloorsWithBasementFlatRoofOneHeated()
     {

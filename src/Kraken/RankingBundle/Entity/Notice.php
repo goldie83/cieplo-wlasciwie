@@ -49,7 +49,6 @@ class Notice
      */
     protected $content;
 
-
     public function __toString()
     {
         return $this->noticePrototype->getLabel();

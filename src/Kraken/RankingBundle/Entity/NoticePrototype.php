@@ -32,7 +32,6 @@ class NoticePrototype
      */
     protected $label;
 
-
     public function __toString()
     {
         return '['.$this->type.'] '.$this->label;

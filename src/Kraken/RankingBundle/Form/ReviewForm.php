@@ -3,11 +3,8 @@
 namespace Kraken\RankingBundle\Form;
 
 use Doctrine\ORM\EntityRepository;
-use Kraken\RankingBundle\Entity\Experience;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
-use Symfony\Component\Form\FormEvent;
-use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class ReviewForm extends AbstractType

@@ -5,19 +5,12 @@ namespace Kraken\RankingBundle\Controller;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller as BaseController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Kraken\RankingBundle\Entity\Boiler;
-use Kraken\RankingBundle\Entity\Category;
-use Kraken\RankingBundle\Entity\Manufacturer;
 use Kraken\RankingBundle\Entity\Experience;
 use Kraken\RankingBundle\Entity\Review;
 use Kraken\RankingBundle\Entity\ReviewExperience;
-use Kraken\RankingBundle\Entity\Search;
-use Kraken\RankingBundle\Form\FileProposalForm;
 use Kraken\RankingBundle\Form\ReviewForm;
-use Kraken\RankingBundle\Form\SearchForm;
-use Kraken\RankingBundle\Form\SearchRejectedForm;
 
 class ReviewController extends BaseController
 {
@@ -76,7 +69,7 @@ class ReviewController extends BaseController
 
             return $this->render('KrakenRankingBundle:Ranking:review.html.twig', [
                 'form' => $form->createView(),
-                'selectedBoiler' => false
+                'selectedBoiler' => false,
             ]);
         } else {
             $review = $em->getRepository('KrakenRankingBundle:Review')->find($this->get('session')->get('review_id'));
