@@ -283,7 +283,7 @@ class CalculatorController extends Controller
             $shouldHaveTopIsolation = $form->get('has_top_isolation')->getData() == 'yes' || $form->get('has_top_isolation')->getData() === true;
             $shouldHaveBottomIsolation = $form->get('has_bottom_isolation')->getData() == 'yes' || $form->get('has_bottom_isolation')->getData() === true;
 
-            if ($topIsolationData != null && $topIsolationData->getId() != null && !$shouldHaveTopIsolation) {
+            if ($topIsolationData != null && $topIsolationData->getId() != null && (!$shouldHaveTopIsolation || $topIsolationData->getMaterial() == null || !$topIsolationData->getSize())) {
                 $em->refresh($topIsolationData);
                 $em->remove($topIsolationData);
 
@@ -292,7 +292,7 @@ class CalculatorController extends Controller
                 }
             }
 
-            if ($bottomIsolationData != null && $bottomIsolationData->getId() != null && !$shouldHaveBottomIsolation) {
+            if ($bottomIsolationData != null && $bottomIsolationData->getId() != null && (!$shouldHaveBottomIsolation || $bottomIsolationData->getMaterial() == null || !$bottomIsolationData->getSize())) {
                 $em->refresh($bottomIsolationData);
                 $em->remove($bottomIsolationData);
                 $em->flush();
