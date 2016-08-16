@@ -52,7 +52,11 @@
         <ul>
         {% for boiler in latestBoilers %}
             <li>
-                <h4><span class="boiler-class {{ boiler.rating|lower }}-class">{{ boiler.rating }}</span> <a href="{{ url('ranking_boiler_overview', {'category': boiler.category.slug, 'boiler': boiler.slug}) }}">{{ boiler.name }}</a></h4>
+                <h4>
+                    <span class="boiler-class {{ boiler.rating|lower }}-class">{{ boiler.rating }}</span> <a href="{{ url('ranking_boiler_overview', {'category': boiler.category.slug, 'boiler': boiler.slug}) }}">{{ boiler.name }}</a>
+                    {% if boiler.normClass == 4 %}<small><span class="label label-info">4. klasa</span></small>{% endif %}
+                    {% if boiler.normClass == 5 %}<small><span class="label label-success">5. klasa</span></small>{% endif %}
+                </h4>
             </li>
         {% endfor %}
         </ul>
