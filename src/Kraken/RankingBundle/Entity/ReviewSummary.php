@@ -105,7 +105,7 @@ class ReviewSummary
     {
         $rating = $this->qualityRating;
 
-        return ((double) $rating) - ((int) $rating) == 0 ? (int) $rating : number_format($rating, 1, ',');
+        return ((double) $rating) - ((int) $rating) == 0 ? (int) $rating : number_format($rating, 1, ',', ' ');
     }
 
     public function setQualityRating($qualityRating)

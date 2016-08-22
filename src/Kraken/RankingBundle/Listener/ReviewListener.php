@@ -101,10 +101,10 @@ BODY;
         foreach ($reviews as $r) {
             $ratings['general'] += $r->getRating();
             $ratings['quality'] += $r->getQualityRating();
-            $ratings['warranty'] += $r->getWarrantyRating();
             $ratings['operation'] += $r->getOperationRating();
 
             if ($r->getWarrantyRating() > 0) {
+                $ratings['warranty'] += $r->getWarrantyRating();
                 ++$warrantyReviewsNumber;
             }
         }
