@@ -83,7 +83,7 @@ BODY;
             $summary = new ReviewSummary();
         }
 
-        $reviews = $em->getRepository('KrakenRankingBundle:Review')->findBy(['boiler' => $boiler, 'accepted' => true]);
+        $reviews = $em->getRepository('KrakenRankingBundle:Review')->findBy(['boiler' => $boiler, 'accepted' => true, 'revoked' => false]);
         $reviewsNumber = count($reviews);
 
         if ($reviewsNumber == 0) {
