@@ -167,7 +167,9 @@
               <h2>Detale techniczne</h2>
               {% if boiler.hasCrossSectionImage %}
               <div class="thumbnail">
-                  <img src="{{ vich_uploader_asset(boiler, 'crossSectionFile') }}" style="max-width:480px;max-height:640px;margin:0 auto" />
+                  <a href="{{ vich_uploader_asset(boiler, 'crossSectionFile') }}" target="_blank">
+                      <img src="{{ vich_uploader_asset(boiler, 'crossSectionFile') }}" style="max-width:480px;max-height:640px;margin:0 auto" />
+                  </a>
                   <div class="caption text-center">
                       <p>Przekrój kotła {{ boiler.name }}</p>
                   </div>
