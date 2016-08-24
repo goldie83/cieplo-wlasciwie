@@ -38,12 +38,24 @@
             {% endif %}
             <tr>
               <th scope="row">{{ boiler.handFueled ? 'Pojemność zasypowa' : 'Pojemność zasobnika' }}</th>
-              <td>~{{ boiler.typicalModelCapacityInKilograms|round }}kg</td>
+              <td>
+                  {% if boiler.typicalModelCapacityInKilograms > 0 %}
+                      ~{{ boiler.typicalModelCapacityInKilograms|round }}kg
+                  {% else %}
+                      <em>nieznana</em>
+                  {% endif %}
+              </td>
             </tr>
         {% if boiler.isHandFueled %}
             <tr>
               <th scope="row">Przeciętna stałopalność</th>
-              <td>~{{ boiler.typicalModelWorkTime }}h<sup>(1)</sup></td>
+              <td>
+                  {% if boiler.typicalModelCapacityInKilograms > 0 %}
+                      ~{{ boiler.typicalModelWorkTime }}h<sup>(1)</sup>
+                  {% else %}
+                      <em>nieznana</em>
+                  {% endif %}
+              </td>
             </tr>
         {% endif %}
             <tr>
