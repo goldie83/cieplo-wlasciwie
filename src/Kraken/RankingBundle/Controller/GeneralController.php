@@ -48,6 +48,14 @@ class GeneralController extends BaseController
     }
 
     /**
+     * @Route("/co-i-jak", name="ranking_faq")
+     */
+    public function faqAction()
+    {
+        return $this->render('KrakenRankingBundle:Ranking:faq.html.twig');
+    }
+
+    /**
      * @Route("/kryteria", name="ranking_criteria")
      */
     public function criteriaAction()

@@ -33,11 +33,11 @@
             {% if boiler.exchangerNormPercent > 0 %}
             <tr>
               <th scope="row">Powierzchnia wymiennika</th>
-              <td><strong>{{ boiler.exchangerNormPercent|round }}%</strong> współczesnego standardu</td>
+              <td><strong>{{ boiler.exchangerNormPercent|round }}%</strong> <a href="{{ path('ranking_faq') }}#StandardPowierzchniWymiennika" target="_blank">współczesnego standardu</a></td>
             </tr>
             {% endif %}
             <tr>
-              <th scope="row">{{ boiler.handFueled ? 'Pojemność zasypowa' : 'Pojemność zasobnika' }}</th>
+              <th scope="row"><a href="{{ path('ranking_faq') }}#PojemnoscZasypowa" target="_blank">{{ boiler.handFueled ? 'Pojemność zasypowa' : 'Pojemność zasobnika' }}</a></th>
               <td>
                   {% if boiler.typicalModelCapacityInKilograms > 0 %}
                       ~{{ boiler.typicalModelCapacityInKilograms|round }}kg
@@ -59,11 +59,11 @@
             </tr>
         {% endif %}
             <tr>
-              <th scope="row">Do układu zamkniętego</th>
+              <th scope="row"><a href="{{ path('ranking_faq') }}#UkladZamkniety" target="_blank">Do układu zamkniętego</a></th>
               <td><span class="label label-{{ boiler.forClosedSystem ? 'success' : 'danger' }}">{{ boiler.forClosedSystem ? 'tak' : 'nie' }}</span></td>
             </tr>
             <tr>
-              <th scope="row">Paliwa podstawowe<sup>(2)</sup></th>
+              <th scope="row"><a href="{{ path('ranking_faq') }}#PaliwaPodstawowe" target="_blank">Paliwa podstawowe</a><sup>(2)</sup></th>
               <td>
                   <ul>
                   {% for bft in boiler.boilerFuelTypes %}

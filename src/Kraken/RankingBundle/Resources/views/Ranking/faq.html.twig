@@ -1,0 +1,36 @@
+{% extends '::base_ranking.html.twig' %}
+
+{% block page_title %}Co i jak{% endblock %}
+
+{% block body %}
+<div class="row">
+    <div class="col-sm-12">
+        <p>Znajdziesz tu wyjaśnienia niektórych kwestii technicznych poruszanych w rankingu, których zrozumienie jest przydatne, aby dobrze wybrać kocioł.</p>
+
+        <h2>Parametry kotłów w rankingu</h2>
+        <h3><a href="#StandardPowierzchniWymiennika">Standard powierzchni wymiennika</a></h3>
+        <p>Ten parametr należy rozumieć jako: <em>im więcej i bliżej 100% tym lepiej</em>.</p>
+        <p>Nie ma żadnego oficjalnego standardu co do powierzchni wymiennika, jaką kocioł powinien posiadać. Za punkt odniesienia do porównania wymiennika w różnych kotłach przyjęta została
+        <a href="http://www.ien.com.pl/tl_files/pliki/CUE/Prezentacja_statutowa_2013.pdf" target="_blank">rekomendacja łódzkiego laboratorium badającego kotły</a>, aby 1m<sup>2</sup> wymiennika przypadał na każde 8-9kW mocy kotła.
+        Taka wartość umożliwia osiąganie sprawności wymaganych w dzisiejszych badaniach. Większość kotłów podajnikowych w tych rejonach się sytuuje. Kotły zasypowe zwykle nie przekraczają 80%
+        tej wielkości a nietrudno o truchła, które nie mają nawet 60% z tego (!) i zachodzi wątpliwość, czy bardziej grzeją dom czy komin.
+        </p>
+        <h3><a href="#PojemnoscZasypowa">Pojemność zasypowa lub zasobnika</a></h3>
+        <p>Pojemność komory kotła zasypowego lub pojemność zasobnika w kotłach podajnikowych podawana jest w kilogramach paliwa. Wartości te są wyliczane na podstawie pojemności podawanych przez
+        producentów (zwykle w litrach) oraz dla gęstości nasypowej paliwa 800kg/m<sup>3</sup> – to wartość odpowiednia mniej więcej dla węgla groszku.</p>
+        <h3><a href="#UkladZamkniety">Dopuszczenie do układu zamkniętego</a></h3>
+        <p>Informacja o dopuszczeniu kotła do pracy w układzie zamkniętym jest umieszczana tylko wtedy, gdy producent jasno i wyraźnie zadeklaruje taką możliwość w DTR. Jeśli poszukujesz kotła do układu zamkniętego,
+        to tylko taka pisemna deklaracja powinna się liczyć. Chodzi tu o odpowiedzialność producenta w razie "w". Jeśli kocioł w układzie zamkniętym narobi jakichś szkód albo "tylko" się rozszczelni, to producent
+        zawsze może powiedzieć, że cię nie zna a w DTR nie zezwolił na instalowanie kotła w układzi zamkniętym.
+        </p>
+        <p>Mimo że układ zamknięty nie jest w Polsce nowością, wiele firm wciąż ma dziwne problemy z pisemnym postawieniem tej sprawy jasno. Przyszły klient jedynie przez telefon słyszy zapewnienia, że
+        kocioł nadaje się do układu zamkniętego a w DTR nie ma o tym ani słowa a bywa nawet, że jest wyraźny zakaz takiego montażu. Dlatego w imię własnego dobrze pojętego interesu dobrze jest wyjaśnić sprawę na piśmie przed zakupem kotła.
+        </p>
+        <h3><a href="#PaliwaPodstawowe">Paliwa podstawowe</a></h3>
+        <p>Lista paliw podstawowych brana jest z DTR kotła. Co do nich można mieć pewność, że kocioł da sobie z nimi radę. Przeważnie nie będzie to jednak pełna lista paliw, które dany kocioł jest w stanie spalić.
+        Na przykład kotły górnego spalania zazwyczaj mają na liście paliw tylko węgiel kamienny natomiast zapakować (z różnym skutkiem) można do nich węgiel czeski, brunatny czy drewno. Szczególnie uważać trzeba na koks:
+        kotły, które nie mają go na liście paliw, raczej nie są przystosowane do ekstra wysokich temperatur towarzyszących jego spalaniu.
+        </p>
+    </div>
+</div>
+{% endblock body %}
