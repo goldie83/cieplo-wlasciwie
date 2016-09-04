@@ -97,6 +97,8 @@ mopa_bootstrap:
         horizontal_input_wrapper_class: col-sm-8
         collection:
             widget_remove_btn:
+                wrapper_div:
+                    class: col-sm-12
                 attr:
                     class: btn btn-danger
                 label: Usuń tę pozycję z listy
