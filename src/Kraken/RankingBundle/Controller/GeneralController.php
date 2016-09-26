@@ -275,9 +275,10 @@ class GeneralController extends BaseController
         }
 
         if ($searchRecord->getRating() != '') {
+            $ratings = ['A', 'B', 'C', 'D', 'E'];
             $query
                 ->andWhere('b.rating = :rating')
-                ->setParameter('rating', $searchRecord->getRating());
+                ->setParameter('rating', $ratings[$searchRecord->getRating()]);
         }
 
         if ($searchRecord->getMaterial() != '') {
