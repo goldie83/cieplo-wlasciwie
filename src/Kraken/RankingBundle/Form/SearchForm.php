@@ -17,16 +17,6 @@ class SearchForm extends AbstractType
                 'required' => false,
                 'horizontal_label_class' => $options['vertical'] ? ' ' : 'col-sm-4',
             ])
-            ->add('manufacturer', null, [
-                'label' => 'Producent',
-                'query_builder' => function (EntityRepository $er) use ($options) {
-                    return $er->createQueryBuilder('m')
-                        ->orderBy('m.name');
-                },
-                'placeholder' => 'dowolny',
-                'required' => false,
-                'horizontal_label_class' => $options['vertical'] ? ' ' : 'col-sm-4',
-            ])
             ->add('category', null, [
                 'choice_label' => 'indentedName',
                 'label' => 'Rodzaj',
@@ -36,6 +26,16 @@ class SearchForm extends AbstractType
                     return $er->createQueryBuilder('c')
                         ->orderBy('c.sort');
                 },
+                'horizontal_label_class' => $options['vertical'] ? ' ' : 'col-sm-4',
+            ])
+            ->add('manufacturer', null, [
+                'label' => 'Producent',
+                'query_builder' => function (EntityRepository $er) use ($options) {
+                    return $er->createQueryBuilder('m')
+                        ->orderBy('m.name');
+                },
+                'placeholder' => 'dowolny',
+                'required' => false,
                 'horizontal_label_class' => $options['vertical'] ? ' ' : 'col-sm-4',
             ])
             ->add('fuelType', null, [
