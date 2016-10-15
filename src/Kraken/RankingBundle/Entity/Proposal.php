@@ -50,6 +50,11 @@ class Proposal
     protected $content;
 
     /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $meta;
+
+    /**
      * @ORM\Column(type="boolean", name="is_done")
      */
     protected $done = false;
@@ -81,6 +86,18 @@ class Proposal
     public function getContent()
     {
         return $this->content;
+    }
+
+    public function setMeta($meta)
+    {
+        $this->meta = $meta;
+
+        return $this;
+    }
+
+    public function getMeta()
+    {
+        return $this->meta;
     }
 
     public function setEmail($email)

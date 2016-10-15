@@ -16,6 +16,7 @@ class ProposalAdmin extends Admin
             ->add('content', null, ['label' => 'Opis'])
             ->add('email', null, ['label' => 'Autor'])
             ->add('boiler', null, ['label' => 'Kocioł'])
+            ->add('meta', null, ['label' => 'Komentarz'])
             ->add('done', null, ['label' => 'Obsłużone'])
         ;
     }
@@ -36,7 +37,7 @@ class ProposalAdmin extends Admin
             ->add('content')
             ->add('email')
             ->add('boiler')
-            ->add('done')
+            ->add('done', 'boolean')
         ;
     }
 }

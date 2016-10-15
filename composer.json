@@ -43,7 +43,8 @@
         "beyerz/open-graph-protocol-bundle": "^1.0",
         "incenteev/composer-parameter-handler": "^2.0",
         "doctrine/doctrine-fixtures-bundle": "2.2.*",
-        "hannesvdvreken/pip": "dev-master"
+        "hannesvdvreken/pip": "dev-master",
+        "guzzlehttp/guzzle": "6.*"
     },
     "require-dev": {
         "behat/behat": "3.0.*@dev",
