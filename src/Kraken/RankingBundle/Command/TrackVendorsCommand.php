@@ -43,7 +43,11 @@ class TrackVendorsCommand extends ContainerAwareCommand
             try {
                 $res = $client->request('GET', $pageUrl);
             } catch (\GuzzleHttp\Exception\ConnectException $e) {
-                continue;
+                $output->writeln(sprintf(
+                    '<error>%s</error> Zdechł link do strony!',
+                    $boiler->getName()
+                ));
+                $problems['site'][] = $boiler;
             }
 
             $code = $res->getStatusCode();
@@ -63,26 +67,32 @@ class TrackVendorsCommand extends ContainerAwareCommand
             }
 
 
-            try {
-                $res = $client->request('GET', $userManualUrl);
-            } catch (\GuzzleHttp\Exception\ConnectException $e) {
-                continue;
-            }
+            if ($userManualUrl) {
+                try {
+                    $res = $client->request('GET', $userManualUrl);
+                } catch (\Exception $e) {
+                    $output->writeln(sprintf(
+                        '<error>%s</error> Zdechł link do DTR!',
+                        $boiler->getName()
+                    ));
+                    $problems['manual'][] = $boiler;
+                }
 
-            $code = $res->getStatusCode();
-            $body = $res->getBody();
+                $code = $res->getStatusCode();
+                $body = $res->getBody();
 
-            if ($code != 200 || !in_array($res->getHeader('Content-Type'), ['application/pdf'])) {
-                $output->writeln(sprintf(
-                    '<error>%s</error> Zdechł link do DTR!',
-                    $boiler->getName()
-                ));
-                $problems['manual'][] = $boiler;
-            } else {
-                $output->writeln(sprintf(
-                    '<info>%s</info> link do DTR żyje',
-                    $boiler->getName()
-                ));
+                if ($code != 200 || !stristr($res->getHeader('Content-Type'), 'pdf')) {
+                    $output->writeln(sprintf(
+                        '<error>%s</error> Zdechł link do DTR!',
+                        $boiler->getName()
+                    ));
+                    $problems['manual'][] = $boiler;
+                } else {
+                    $output->writeln(sprintf(
+                        '<info>%s</info> link do DTR żyje',
+                        $boiler->getName()
+                    ));
+                }
             }
         }
 
