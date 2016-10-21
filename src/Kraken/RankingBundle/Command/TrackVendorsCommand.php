@@ -33,7 +33,7 @@ class TrackVendorsCommand extends ContainerAwareCommand
         foreach ($iterableResult as $row) {
             $boiler = $row[0];
             $name = explode(' ' , $boiler->getName());
-            $boilerModel = $name[1];
+            $boilerModel = isset($name[1]) ? $name[1] : $name[0];
 
             $pageUrl = $boiler->getManufacturerSite();
             $userManualUrl = $boiler->getUserManual();
