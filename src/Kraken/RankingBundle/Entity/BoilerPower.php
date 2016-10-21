@@ -24,7 +24,7 @@ class BoilerPower
     protected $boiler;
 
     /**
-     * @ORM\Column(type="decimal", precision=3, scale=1)
+     * @ORM\Column(type="decimal", precision=4, scale=1)
      */
     protected $power;
 
