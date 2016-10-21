@@ -3,6 +3,7 @@
 namespace Kraken\RankingBundle\Command;
 
 use GuzzleHttp\Client as Guzzle;
+use GuzzleHttp\Exception\GuzzleException;
 use Kraken\WarmBundle\Entity\Apartment;
 use Kraken\WarmBundle\Entity\House;
 use Kraken\WarmBundle\Entity\Wall;
@@ -25,7 +26,7 @@ class TrackVendorsCommand extends ContainerAwareCommand
     {
         $em = $this->getContainer()->get('doctrine.orm.entity_manager');
 
-        $q = $em->createQuery('select b from KrakenRankingBundle:Boiler b');
+        $q = $em->createQuery('select b from KrakenRankingBundle:Boiler b where b.rejected = false');
         $iterableResult = $q->iterate();
 
         $problems = ['site' => [], 'manual' => []];
@@ -42,7 +43,7 @@ class TrackVendorsCommand extends ContainerAwareCommand
 
             try {
                 $res = $client->request('GET', $pageUrl);
-            } catch (\GuzzleHttp\Exception\ConnectException $e) {
+            } catch (GuzzleException $e) {
                 $output->writeln(sprintf(
                     '<error>%s</error> Zdechł link do strony!',
                     $boiler->getName()
@@ -70,7 +71,7 @@ class TrackVendorsCommand extends ContainerAwareCommand
             if ($userManualUrl) {
                 try {
                     $res = $client->request('GET', $userManualUrl);
-                } catch (\Exception $e) {
+                } catch (GuzzleException $e) {
                     $output->writeln(sprintf(
                         '<error>%s</error> Zdechł link do DTR!',
                         $boiler->getName()
@@ -80,8 +81,10 @@ class TrackVendorsCommand extends ContainerAwareCommand
 
                 $code = $res->getStatusCode();
                 $body = $res->getBody();
+                $contentType = $res->getHeader('Content-Type');
+                $contentType = is_array($contentType) ? $contentType[0] : $contentType;
 
-                if ($code != 200 || !stristr($res->getHeader('Content-Type'), 'pdf')) {
+                if ($code != 200 || !stristr($contentType, 'pdf')) {
                     $output->writeln(sprintf(
                         '<error>%s</error> Zdechł link do DTR!',
                         $boiler->getName()
