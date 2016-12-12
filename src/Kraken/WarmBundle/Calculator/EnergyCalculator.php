@@ -242,4 +242,17 @@ class EnergyCalculator
 
         return $amount;
     }
+    
+    public function getOptimalHeatBufferCapacity()
+    {
+        $kilowattsPerHectoLitre = 5.8;
+        $kilowattsPerHour = round($this->getMaxHeatingPower()/1000);
+        
+        return round(($kilowattsPerHour * 24)/$kilowattsPerHectoLitre) * 100;
+    }
+    
+    public function getMinimalHeatBufferCapacity()
+    {
+        return round(($this->getOptimalHeatBufferCapacity() / 2) / 100) * 100;
+    }
 }

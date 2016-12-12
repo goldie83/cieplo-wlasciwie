@@ -233,6 +233,18 @@
             <div id="heat_loss_breakdown"></div>
           </div>
           <div class="col-md-6">
+            <h3>Dobór bufora ciepła</h3>
+            <h4>
+                <span class="label label-warning">{{ calculator.optimalHeatBufferCapacity|number_format(0, ',', ' ') ~ 'l' }}</span> to minimalna "luksusowa" pojemność bufora
+            </h4>
+            <p>Z takim buforem w najgorszym razie (przy średniej dobowej {{ climate.designOutdoorTemperature }}&deg;C) trzeba będzie rozpalać raz na dobę a w przeciętny zimowy dzień (średnia dobowa {{ heatingSeason.getAverageTemperature()|number_format(1, ',', ' ') }}&deg;C) – co około dwa dni.</p>
+            <h4>
+                <span class="label label-warning">{{ calculator.minimalHeatBufferCapacity|number_format(0, ',', ' ') ~ 'l' }}</span> to minimalna sensowna pojemność bufora
+            </h4>
+            <p>Taka pojemność zapewni rozpalanie dwa razy na dobę w najzimniejsze dni oraz raz na dobę w przeciętny zimowy dzień.</p>
+            <div class="alert alert-info">
+                Podane tutaj pojemności są oszacowane dla sytuacji gdy bufor zasila tylko ogrzewanie budynku a grzejniki są w stanie ogrzać dom wodą o temperaturze 40&deg;C. <a href="http://czysteogrzewanie.pl/instalacja-grzewcza/bufor-ciepla/#Jaka_pojemnosc_bufora?" target="_blank">W artykule o buforze ciepła</a> znajdziesz dokładniejsze wyjaśnienia odnośnie wyliczania pojemności bufora np. dla podłogówki czy przygotowania CWU.
+            </div>
             <h3>W co zainwestować, by taniej ogrzewać?</h3>
             {% set variants = upgrade.variants %}
             {% if variants %}
