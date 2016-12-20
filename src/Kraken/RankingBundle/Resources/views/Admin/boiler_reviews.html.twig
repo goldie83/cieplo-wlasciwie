@@ -1,0 +1,31 @@
+{% extends 'SonataAdminBundle::standard_layout.html.twig' %}
+
+{% block sonata_admin_content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>Kocioł {{ boiler }} – Recenzje</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Kto</th>
+                    <th>Ogólnie</th>
+                    <th>Gwarancja</th>
+                    <th>Jakość</th>
+                    <th>Obsługa</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for review in boiler.reviews %}
+                <tr>
+                    <td>{{ review.created|date }}<br>{{ review.email }}<br>{{ review.userAgent|truncate(30) }}</td>
+                    <td>{{ review.comment }}</td>
+                    <td>{{ review.qualityComment }}</td>
+                    <td>{{ review.operationComment }}</td>
+                    <td>{{ review.warrantyComment }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

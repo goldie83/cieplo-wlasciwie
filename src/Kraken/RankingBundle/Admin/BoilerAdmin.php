@@ -7,9 +7,15 @@ use Sonata\AdminBundle\Admin\Admin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Route\RouteCollection;
 
 class BoilerAdmin extends Admin
 {
+    protected function configureRoutes(RouteCollection $collection)
+    {
+        $collection->add('reviews', $this->getRouterIdParameter().'/reviews');
+    }
+
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
@@ -91,6 +97,14 @@ class BoilerAdmin extends Admin
             ->add('category', null, ['label' => 'Rodzaj'])
             ->add('manufacturer', null, ['label' => 'Producent'])
             ->add('published', null, ['label' => 'Opublikowany'])
+            ->add('_action', null, [
+                'actions' => [
+                    'edit' => [],
+                    'reviews' => [
+                        'template' => 'KrakenRankingBundle:Admin:boiler_reviews_action.html.twig'
+                    ]
+                ]
+            ]);
         ;
     }
 
