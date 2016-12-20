@@ -103,7 +103,7 @@ BODY;
             $ratings['quality'] += $r->getQualityRating();
             $ratings['operation'] += $r->getOperationRating();
 
-            if ($r->getWarrantyRating() > 0) {
+            if ($r->getWarrantyRating() > 0 && $r->getWarrantyComment() != '') {
                 $ratings['warranty'] += $r->getWarrantyRating();
                 ++$warrantyReviewsNumber;
             }
