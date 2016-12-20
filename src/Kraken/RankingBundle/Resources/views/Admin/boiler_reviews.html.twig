@@ -18,10 +18,10 @@
                 {% for review in boiler.reviews %}
                 <tr>
                     <td>{{ review.created|date }}<br>{{ review.email }}<br>{{ review.userAgent|truncate(30) }}</td>
-                    <td>{{ review.comment }}</td>
-                    <td>{{ review.qualityComment }}</td>
-                    <td>{{ review.operationComment }}</td>
-                    <td>{{ review.warrantyComment }}</td>
+                    <td>{{ review.rating }} – {{ review.comment }}</td>
+                    <td>{{ review.qualityRating }} – {{ review.qualityComment }}</td>
+                    <td>{{ review.operationRating }} – {{ review.operationComment }}</td>
+                    <td>{{ review.warrantyRating }} – {{ review.warrantyComment }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
