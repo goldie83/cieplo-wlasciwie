@@ -113,7 +113,7 @@ BODY;
         $summary->setWarrantyReviewsNumber($warrantyReviewsNumber);
         $summary->setRating($ratings['general'] / $reviewsNumber);
         $summary->setQualityRating($ratings['quality'] / $reviewsNumber);
-        $summary->setWarrantyRating($ratings['warranty'] / $reviewsNumber);
+        $summary->setWarrantyRating($ratings['warranty'] / $warrantyReviewsNumber);
         $summary->setOperationRating($ratings['operation'] / $reviewsNumber);
 
         $boiler->setReviewSummary($summary);
