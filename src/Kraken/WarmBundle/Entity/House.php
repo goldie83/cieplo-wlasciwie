@@ -992,7 +992,11 @@ class House
     public function getBuildingHeatedFloors()
     {
         // sometimes it's stored in db as associative array while we need plain array
-        return array_values($this->building_heated_floors);
+        $heatedFloors = array_values($this->building_heated_floors);
+        // + it may be not ordered properly
+        sort($heatedFloors);
+
+        return $heatedFloors;
     }
 
     /**
