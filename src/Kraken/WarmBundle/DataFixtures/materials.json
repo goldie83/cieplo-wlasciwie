@@ -226,6 +226,30 @@
         "for_floor": true
     },
     {
+        "name": "Ytong",
+        "lambda": 0.12,
+        "for_wall_construction_layer": true,
+        "for_wall_isolation_layer": true
+    },
+    {
+        "name": "Termalica 300/400",
+        "lambda": 0.1,
+        "for_wall_construction_layer": true,
+        "for_wall_isolation_layer": true
+    },
+    {
+        "name": "Termalica 600/650",
+        "lambda": 0.16,
+        "for_wall_construction_layer": true,
+        "for_wall_isolation_layer": true
+    },
+    {
+        "name": "Thermomur",
+        "lambda": 0.05,
+        "for_wall_construction_layer": true,
+        "for_wall_isolation_layer": true
+    },
+    {
         "name": "Ekofiber",
         "lambda": 0.042,
         "for_wall_internal_layer": true,
