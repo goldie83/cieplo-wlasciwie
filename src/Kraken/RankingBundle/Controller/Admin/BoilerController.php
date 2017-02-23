@@ -17,8 +17,6 @@ class BoilerController extends Controller
             throw new NotFoundHttpException(sprintf('unable to find the object with id : %s', $object->getId()));
         }
 
-        $this->addFlash('sonata_flash_success', 'Reviews done!');
-
         return $this->render('KrakenRankingBundle:Admin:boiler_reviews.html.twig', ['boiler' => $object]);
     }
 }

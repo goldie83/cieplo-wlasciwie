@@ -64,6 +64,7 @@ class BoilerAdmin extends Admin
             ->add('ratingExplanation', 'ckeditor', ['label' => 'Wyjaśnienie oceny'])
             ->add('rating', null, ['label' => 'Ocena'])
             ->add('normClass', null, ['label' => 'Klasa wg PN-EN 303-5:2012'])
+            ->add('ecodesign', null, ['label' => 'Spełnia kryteria Ecodesign'])
             ->add('typicalModelPower', null, ['label' => 'Moc wzorcowego modelu'])
             ->add('typicalModelExchanger', null, ['label' => 'Pow. wymiennika'])
             ->add('typicalModelCapacity', null, ['label' => 'Poj. zasypowa / zasobnika (l)'])

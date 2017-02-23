@@ -274,6 +274,12 @@ class GeneralController extends BaseController
                 ->setParameter('class', $searchRecord->getNormClass());
         }
 
+        if ($searchRecord->isEcodesign()) {
+            $query
+                ->andWhere('b.ecodesign = :e')
+                ->setParameter('e', true);
+        }
+
         if ($searchRecord->getRating() != '') {
             $ratings = ['A', 'B', 'C', 'D', 'E'];
             $query

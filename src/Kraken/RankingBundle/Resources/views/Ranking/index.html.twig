@@ -10,15 +10,6 @@
             </div>
         </div>
         <div class="row">
-            <h3>Na skróty</h3>
-            <div class="row">
-                <div class="col-sm-6">
-                    <a class="btn btn-raised btn-info btn-lg" style="width:100%" href="http://ranking.czysteogrzewanie.pl/szukaj/1aq3">Kotły 5. klasy – zasypowe</a>
-                </div>
-                <div class="col-sm-6">
-                    <a class="btn btn-raised btn-info btn-lg" style="width:100%" href="http://ranking.czysteogrzewanie.pl/szukaj/1aq5">Kotły 5. klasy – automatyczne</a>
-                </div>
-            </div>
             <form class="form-horizontal" method="POST" action="{{ url('ranking_search')}}">
             <div class="row">
                 <div class="col-sm-12">
@@ -37,6 +28,7 @@
                           {{ form_row(searchForm.category) }}
                           {{ form_row(searchForm.manufacturer) }}
                           {{ form_row(searchForm.normClass) }}
+                          {{ form_row(searchForm.ecodesign) }}
                           {{ form_row(searchForm.fuelType) }}
                           {{ form_row(searchForm.forClosedSystem) }}
                           {{ form_row(searchForm.power) }}
@@ -51,6 +43,10 @@
         </div>
     </div>
     <div class="col-sm-4">
+        <h3>Na skróty</h3>
+        <a class="btn btn-raised btn-info btn-lg" style="width:100%" href="http://ranking.czysteogrzewanie.pl/szukaj/1aq3">Kotły 5. klasy – zasypowe</a>
+        <a class="btn btn-raised btn-info btn-lg" style="width:100%" href="http://ranking.czysteogrzewanie.pl/szukaj/1aq5">Kotły 5. klasy – automatyczne</a>
+        <a class="btn btn-raised btn-success btn-lg" style="width:100%" href="http://ranking.czysteogrzewanie.pl/szukaj/1aq5">Małopolski RPO / PONE</a>
         <h2>Oceń swój kocioł</h2>
         <p>Najwięcej o jakości pracy kotła mówi jego codzienne użytkowanie. Twoje doświadczenia pomogą innym w&nbsp;wyborze kotła odpowiedniego do ich potrzeb.</p>
         <a class="btn btn-raised btn-warning btn-lg" href="{{ path('ranking_review') }}">Dodaj opinię</a>

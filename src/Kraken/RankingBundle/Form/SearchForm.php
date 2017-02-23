@@ -38,6 +38,19 @@ class SearchForm extends AbstractType
                 'required' => false,
                 'horizontal_label_class' => $options['vertical'] ? ' ' : 'col-sm-4',
             ])
+            ->add('normClass', 'choice', [
+                'choices' => [3 => 3, 4 => 4, 5 => 5],
+                'label' => 'Klasa',
+                'help_block' => 'wg normy PN-EN 303-5:2012',
+                'placeholder' => 'dowolna',
+                'required' => false,
+                'horizontal_label_class' => $options['vertical'] ? ' ' : 'col-sm-4',
+            ])
+            ->add('ecodesign', null, [
+                'label' => 'Spełnia kryteria Ecodesign',
+                'required' => false,
+                'horizontal_label_class' => $options['vertical'] ? ' ' : 'col-sm-4',
+            ])
             ->add('fuelType', null, [
                 'label' => 'Paliwa',
                 'widget_type' => 'inline',
@@ -57,14 +70,6 @@ class SearchForm extends AbstractType
                 'placeholder' => 'dowolny',
                 'choices' => ['steel' => 'stal', 'cast_iron' => 'żeliwo'],
                 'label' => 'Materiał',
-                'required' => false,
-                'horizontal_label_class' => $options['vertical'] ? ' ' : 'col-sm-4',
-            ])
-            ->add('normClass', 'choice', [
-                'choices' => [3 => 3, 4 => 4, 5 => 5],
-                'label' => 'Klasa',
-                'help_block' => 'wg normy PN-EN 303-5:2012',
-                'placeholder' => 'dowolna',
                 'required' => false,
                 'horizontal_label_class' => $options['vertical'] ? ' ' : 'col-sm-4',
             ])

@@ -59,6 +59,11 @@ class Search
     protected $normClass;
 
     /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    protected $ecodesign;
+
+    /**
      * @ORM\Column(type="string", nullable=true)
      */
     protected $rating;
@@ -200,6 +205,18 @@ class Search
     public function getNormClass()
     {
         return $this->normClass;
+    }
+
+    public function setEcodesign($ecodesign)
+    {
+        $this->ecodesign = $ecodesign;
+
+        return $this;
+    }
+
+    public function isEcodesign()
+    {
+        return $this->ecodesign;
     }
 
     /**

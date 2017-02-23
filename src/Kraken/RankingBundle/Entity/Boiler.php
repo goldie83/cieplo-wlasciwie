@@ -133,6 +133,11 @@ class Boiler
     protected $normClass;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $ecodesign = false;
+
+    /**
      * @ORM\Column(type="decimal", name="typical_model_power", precision=3, scale=1, nullable=true)
      */
     protected $typicalModelPower;
@@ -363,6 +368,18 @@ class Boiler
     public function getNormClass()
     {
         return $this->normClass;
+    }
+
+    public function setEcodesign($ecodesign)
+    {
+        $this->ecodesign = $ecodesign;
+
+        return $this;
+    }
+
+    public function isEcodesign()
+    {
+        return $this->ecodesign;
     }
 
     public function setTypicalModelPower($typicalModelPower)
