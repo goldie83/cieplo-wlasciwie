@@ -60,8 +60,11 @@
                 <h4>
                     <span class="boiler-class {{ boiler.rating|lower }}-class">{{ boiler.rating }}</span> <a href="{{ url('ranking_boiler_overview', {'category': boiler.category.slug, 'boiler': boiler.slug}) }}">{{ boiler.name }}</a>
                     {% if boiler.normClass == 4 %}<small><span class="label label-info">4.kl.</span></small>{% endif %}
-                    {% if boiler.normClass == 5 %}<small><span class="label label-success">5.kl.</span></small>{% endif %}
-                    {% if boiler.ecodesign %}<small><span class="label label-success">ecodesign</span></small>{% endif %}
+                    {% if boiler.normClass == 5 %}
+                        <small><span class="label label-success">5.kl.</span></small>
+                    {% elseif boiler.ecodesign %}
+                        <small><span class="label label-success">ecodesign</span></small>
+                    {% endif %}
                 </h4>
             </li>
         {% endfor %}
