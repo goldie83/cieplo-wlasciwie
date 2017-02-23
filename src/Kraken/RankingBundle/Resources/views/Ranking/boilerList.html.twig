@@ -28,10 +28,10 @@
                     <h3><a href="{{ url('ranking_boiler_overview', {'category': boiler.category.slug, 'boiler': boiler.slug}) }}">{{ boiler.name }}</a></h3>
                     <p>{{ boiler.category.singularName }}&nbsp;
                         {% if boiler.normClass == 4 %}<small><span class="label label-info">4.kl.</span></small>{% endif %}
-                        {% if boiler.normClass == 5 %}
-                            <small><span class="label label-success">5.kl.</span></small>
-                        {% elseif boiler.ecodesign %}
+                        {% if boiler.ecodesign %}
                             <small><span class="label label-success">ecodesign</span></small>
+                        {% elseif boiler.normClass == 5 %}
+                            <small><span class="label label-success">5.kl.</span></small>
                         {% endif %}
                     </p>
                     <p>Producent: <a href="{{ path('ranking_boiler_manufacturer', {'manufacturer': boiler.manufacturer.slug }) }}">{{ boiler.manufacturer.name }}</a></p>
