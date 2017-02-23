@@ -23,36 +23,6 @@
         {% if selectedBoiler %}
             <div class="row">
                 <div class="col-md-12">
-                    {% if experiences|length > 0 %}
-                    <div class="form-group">
-                        <h3>Doświadczenia innych użytkowników</h3>
-                        <p>Na początek zobacz, co zauważyli inni użytkownicy tego kotła i zaznacz przy każdej z obserwacji, czy coś podobnego zdarzało się także u ciebie.</p>
-                        <table class="table table-striped">
-                        {% for exp in experiences %}
-                            <tr>
-                                <td class="col-sm-8">
-                                    <h4>{{ exp.title }}</h4>
-                                    <p>{{ exp.content }}</p>
-                                </td>
-                                <td class="col-sm-4">
-                                    {{ form_widget(form.reviewExperiences[loop.index0].confirmed) }}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </table>
-                    </div>
-                    {% else %}
-                    <div class="form-group">
-                        <h3>Doświadczenia innych użytkowników</h3>
-                        <p>Na razie brak &mdash; oceniasz ten kocioł jako pierwszy!</p>
-                        <div style="display:none">{{ form_row(form.reviewExperiences) }}</div>
-                    </div>
-                    {% endif %}
-                    <div class="form-group">
-                        <h3>Twoje doświadczenia z tym kotłem</h3>
-                        <p>Masz konkretne uwagi co do tego kotła? Coś nie działa jak powinno, a może ten kocioł jest najlepszym w twojej karierze? Śmiało pisz o wszystkim!</p>
-                        {{ form_row(form.ownExperiences) }}
-                    </div>
                     <div class="form-group">
                         <h3>Twój staż</h3>
                         {{ form_row(form.practice) }}
@@ -60,7 +30,7 @@
                     </div>
                     <div class="form-group">
                         <h3>Wykonanie i trwałość</h3>
-                        <p>Lipsum.</p>
+                        <p>Nic nie stuka, nie puka?</p>
                         {{ form_row(form.qualityRating) }}
                         {{ form_row(form.qualityComment) }}
                         {{ form_row(form.warrantyRating) }}

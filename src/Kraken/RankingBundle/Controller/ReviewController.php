@@ -73,27 +73,12 @@ class ReviewController extends BaseController
             ]);
         } else {
             $review = $em->getRepository('KrakenRankingBundle:Review')->find($this->get('session')->get('review_id'));
-            $experiences = $em->getRepository('KrakenRankingBundle:Experience')->findBy(['boiler' => $review->getBoiler()->getId(), 'accepted' => true]);
-
-            foreach ($experiences as $e) {
-                $re = new ReviewExperience();
-                $re->setReview($review);
-                $re->setExperience($e);
-
-                $review->addReviewExperience($re);
-            }
 
             $form = $this->createForm(new ReviewForm(), $review, ['boiler_id' => $review->getBoiler()->getId()]);
 
             $form->handleRequest($request);
 
             if ($form->isValid()) {
-                foreach ($form->get('ownExperiences')->getData() as $ownExp) {
-                    $ownExp->setBoiler($review->getBoiler());
-                    $ownExp->setParentReview($review);
-                    $em->persist($ownExp);
-                }
-
                 $review->setIp($_SERVER['REMOTE_ADDR']);
                 $review->setUserAgent($_SERVER['HTTP_USER_AGENT']);
 
@@ -113,7 +98,6 @@ class ReviewController extends BaseController
             return $this->render('KrakenRankingBundle:Ranking:review.html.twig', [
                 'form' => $form->createView(),
                 'selectedBoiler' => $review->getBoiler(),
-                'experiences' => $experiences,
             ]);
         }
     }

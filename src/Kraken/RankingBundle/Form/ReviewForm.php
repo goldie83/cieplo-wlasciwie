@@ -12,28 +12,6 @@ class ReviewForm extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('reviewExperiences', 'collection', [
-                'label' => 'Doświadczenia ludzi',
-                'entry_type' => 'Kraken\RankingBundle\Form\ReviewExperienceForm',
-            ])
-            ->add('ownExperiences', 'collection', [
-                'label' => ' ',
-                'entry_type' => 'Kraken\RankingBundle\Form\ExperienceForm',
-                'allow_add' => true,
-                'allow_delete' => true,
-                'by_reference' => false,
-                'widget_add_btn' => [
-                    'label' => 'Dodaj doświadczenie',
-                ],
-                'horizontal_label_class' => ' ',
-                'horizontal_input_wrapper_class' => 'col-sm-12',
-                'show_legend' => false,
-                'options' => [
-                    'horizontal' => true,
-                    'label_render' => false,
-                ],
-                'required' => false,
-            ])
             ->add('practice', 'choice', [
                 'label' => 'Twój ogólny staż w kotłowni',
                 'choices' => [
